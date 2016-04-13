@@ -32,15 +32,9 @@ namespace Synapse.Tester
 			actions.Add( ac0 );
 			actions.Add( ac2 );
 
-			//Design pr = new Design()
-			//{
-			//	Actions = actions
-			//};
-
 			Plan p = new Plan()
 			{
 				Name = "plan0",
-				//Process = pr,
 				Actions = actions,
 				Description = "planDesc",
 				IsActive = true

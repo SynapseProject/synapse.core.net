@@ -9,15 +9,9 @@ namespace Synapse.Core
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }
-		//public Design Process { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		public bool IsActive { get; set; }
 	}
-
-	//public class Design
-	//{
-	//	public List<ActionItem> Actions { get; set; }
-	//}
 
 	public class ActionItem
 	{
@@ -52,11 +46,5 @@ namespace Synapse.Core
 		public string Type { get; set; }
 		public string ConfigKey { get; set; }
 		public string ConfigValues { get; set; }
-	}
-
-	public enum ActionType
-	{
-		Action,
-		Group
 	}
 }
