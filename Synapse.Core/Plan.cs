@@ -18,7 +18,7 @@ namespace Synapse.Core
 		public string Name { get; set; }
 		public string GroupKey { get; set; }
 		public string ResultCase { get; set; }
-		public Handler Handler { get; set; }
+		public HandlerRef Handler { get; set; }
 		public Parameters Parameters { get; set; }
 		public List<ActionItem> Actions { get; set; }
 
@@ -28,7 +28,7 @@ namespace Synapse.Core
 			{
 				Name = name,
 				GroupKey = "meow",
-				Handler = new Handler() { Type = "yyy", ConfigKey = "zzz" },
+				Handler = new HandlerRef() { Type = "yyy", ConfigKey = "zzz" },
 				Parameters = new Parameters() { Values = "foo" },
 				Actions = new List<ActionItem>()
 			};
@@ -41,10 +41,21 @@ namespace Synapse.Core
 		public object Values { get; set; }
 	}
 
-	public class Handler
+	public class HandlerRef
 	{
 		public string Type { get; set; }
 		public string ConfigKey { get; set; }
 		public string ConfigValues { get; set; }
+	}
+
+	public class HandlerLibrary
+	{
+		public string Name { get; set; }
+		public List<IHandlerConfig> Configs { get; set; }
+	}
+
+	public interface IHandlerConfig
+	{
+		string Key { get; set; }
 	}
 }
