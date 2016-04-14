@@ -7,16 +7,11 @@ namespace Synapse.Core.Runtime
 {
 	public class Engine
 	{
-		Plan _p = null;
+		public Engine() { }
 
-		public Engine(Plan plan)
+		public void Process(Plan plan)
 		{
-			_p = plan;
-		}
-
-		public void Process()
-		{
-			ProcessRecursive( _p.Actions, HandlerResult.Emtpy );
+			ProcessRecursive( plan.Actions, HandlerResult.Emtpy );
 		}
 
 		public void ProcessRecursive(List<ActionItem> actions, HandlerResult result)
@@ -28,13 +23,29 @@ namespace Synapse.Core.Runtime
 			}
 			foreach( ActionItem a in actionList )
 			{
+				string parms = GetParameters( a.Parameters );
 				HandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
-				HandlerResult r = rt.Execute();
+				HandlerResult r = rt.Execute( parms );
 				if( a.HasActions )
 				{
 					ProcessRecursive( a.Actions, r );
 				}
 			}
+		}
+
+		string GetParameters(Parameters p)
+		{
+			string parms = string.Empty;
+			if( p.HasValues )
+			{
+				parms = p.Values.ToString();
+			}
+			if( p.HasUri )
+			{
+				parms = string.Empty; //make rest call
+				//merge parms
+			}
+			return parms;
 		}
 	}
 }

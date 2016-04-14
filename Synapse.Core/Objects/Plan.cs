@@ -23,7 +23,7 @@ namespace Synapse.Core
 		public List<ActionItem> Actions { get; set; }
 		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
 
-		public static ActionItem Create(string name = "xxx")
+		public static ActionItem CreateDummy(string name = "xxx")
 		{
 			return new ActionItem()
 			{
@@ -39,6 +39,8 @@ namespace Synapse.Core
 	public class Parameters
 	{
 		public string Uri { get; set; }
+		public bool HasUri { get { return !string.IsNullOrWhiteSpace( Uri ); } }
 		public object Values { get; set; }
+		public bool HasValues { get { return Values != null; } }
 	}
 }

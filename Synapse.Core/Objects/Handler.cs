@@ -12,10 +12,10 @@ namespace Synapse.Core
 		public string ConfigValues { get; set; }
 	}
 
-	public class HandlerRuntime
+	public abstract class HandlerRuntime
 	{
 		abstract public bool Activate(string config);
-		abstract public HandlerResult Execute();
+		abstract public HandlerResult Execute(string parms);
 	}
 
 	public interface IHandlerConfig
