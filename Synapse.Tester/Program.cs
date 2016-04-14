@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Synapse.Core;
+using Synapse.Core.Runtime;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -20,30 +21,34 @@ namespace Synapse.Tester
 				{
 					Deserializer deserializer = new Deserializer( ignoreUnmatched: false );
 					Plan plan = deserializer.Deserialize<Plan>( sr );
+					Engine engine = new Engine();
+					HandlerResult result = engine.Process( plan );
 				}
 			}
-
-			ActionItem ac2 = ActionItem.CreateDummy( "ac2" );
-			ActionItem ac1 = ActionItem.CreateDummy( "ac1" );
-			ActionItem ac0 = ActionItem.CreateDummy( "ac0" );
-			ac0.Actions = new List<ActionItem>();
-			ac0.Actions.Add( ac1 );
-			List<ActionItem> actions = new List<ActionItem>();
-			actions.Add( ac0 );
-			actions.Add( ac2 );
-
-			Plan p = new Plan()
+			else
 			{
-				Name = "plan0",
-				Actions = actions,
-				Description = "planDesc",
-				IsActive = true
-			};
+				ActionItem ac2 = ActionItem.CreateDummy( "ac2" );
+				ActionItem ac1 = ActionItem.CreateDummy( "ac1" );
+				ActionItem ac0 = ActionItem.CreateDummy( "ac0" );
+				ac0.Actions = new List<ActionItem>();
+				ac0.Actions.Add( ac1 );
+				List<ActionItem> actions = new List<ActionItem>();
+				actions.Add( ac0 );
+				actions.Add( ac2 );
 
-			using( StreamWriter file = new StreamWriter( @"yaml.txt" ) )
-			{
-				Serializer serializer = new Serializer();
-				serializer.Serialize( file, p );
+				Plan p = new Plan()
+				{
+					Name = "plan0",
+					Actions = actions,
+					Description = "planDesc",
+					IsActive = true
+				};
+
+				using( StreamWriter file = new StreamWriter( @"yaml.txt" ) )
+				{
+					Serializer serializer = new Serializer();
+					serializer.Serialize( file, p );
+				}
 			}
 			Console.Read();
 		}

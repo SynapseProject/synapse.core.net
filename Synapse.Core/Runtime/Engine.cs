@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core.Runtime
 {
@@ -9,28 +11,29 @@ namespace Synapse.Core.Runtime
 	{
 		public Engine() { }
 
-		public void Process(Plan plan)
+		public HandlerResult Process(Plan plan)
 		{
-			ProcessRecursive( plan.Actions, HandlerResult.Emtpy );
+			return ProcessRecursive( plan.Actions, HandlerResult.Emtpy );
 		}
 
-		public void ProcessRecursive(List<ActionItem> actions, HandlerResult result)
+		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result)
 		{
-			IEnumerable<ActionItem> actionList = actions;
-			if( !result.IsEmpty )
-			{
-				actionList = actions.Where( a => a.ResultCase == result.ExitCode );
-			}
+			HandlerResult r = HandlerResult.Emtpy;
+			IEnumerable<ActionItem> actionList = actions.Where( a => a.ResultCase == result.ExitCode );
+
+			//multithread this with task.parallel
 			foreach( ActionItem a in actionList )
 			{
 				string parms = GetParameters( a.Parameters );
-				HandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
-				HandlerResult r = rt.Execute( parms );
+				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
+				r = rt.Execute( parms );
 				if( a.HasActions )
 				{
-					ProcessRecursive( a.Actions, r );
+					r = ProcessRecursive( a.Actions, r );
 				}
 			}
+
+			return r;
 		}
 
 		string GetParameters(Parameters p)
@@ -38,7 +41,12 @@ namespace Synapse.Core.Runtime
 			string parms = string.Empty;
 			if( p.HasValues )
 			{
-				parms = p.Values.ToString();
+				using( StringWriter sw = new StringWriter() )
+				{
+					Serializer serializer = new Serializer();
+					serializer.Serialize( sw, p.Values );
+					parms = sw.ToString();
+				}
 			}
 			if( p.HasUri )
 			{

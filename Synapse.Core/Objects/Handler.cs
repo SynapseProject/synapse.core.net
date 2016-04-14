@@ -12,10 +12,10 @@ namespace Synapse.Core
 		public string ConfigValues { get; set; }
 	}
 
-	public abstract class HandlerRuntime
+	public interface IHandlerRuntime
 	{
-		abstract public bool Activate(string config);
-		abstract public HandlerResult Execute(string parms);
+		bool Activate(string config);
+		HandlerResult Execute(string parms);
 	}
 
 	public interface IHandlerConfig
@@ -25,8 +25,15 @@ namespace Synapse.Core
 
 	public class HandlerResult
 	{
-		public static readonly HandlerResult Emtpy;
+		public HandlerResult()
+		{
+			ExitCode = -1;
+		}
+
+		public static readonly HandlerResult Emtpy = new HandlerResult();
 		public bool IsEmpty { get { return this == HandlerResult.Emtpy; } }
+		public static readonly int DefaultExitCode = -1;
+
 		public bool Success { get; set; }
 		public int ExitCode { get; set; }
 	}
