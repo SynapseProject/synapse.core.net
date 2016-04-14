@@ -8,6 +8,7 @@ namespace Synapse.Core
 	public class Plan
 	{
 		public string Name { get; set; }
+		public string UniqueName { get; set; }
 		public string Description { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		public bool IsActive { get; set; }
