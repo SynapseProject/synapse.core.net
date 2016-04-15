@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -12,48 +14,29 @@ namespace Synapse.Core
 		public string Description { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		public bool IsActive { get; set; }
-	}
 
-	public class ActionItem
-	{
-		public ActionItem()
+		public string ToYaml()
 		{
-			Name = string.Empty;
-			GroupName = string.Empty;
-			ResultCase = HandlerResult.DefaultExitCode;
-		}
-
-		public string Name { get; set; }
-		public string GroupName { get; set; }
-		public int ResultCase { get; set; }
-		public HandlerInfo Handler { get; set; }
-		public Parameters Parameters { get; set; }
-		public List<ActionItem> Actions { get; set; }
-		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
-
-		public static ActionItem CreateDummy(string name = "xxx")
-		{
-			return new ActionItem()
+			string yaml = string.Empty;
+			using( StringWriter s = new StringWriter() )
 			{
-				Name = name,
-				GroupName = "meow",
-				Handler = new HandlerInfo() { Type = "foo", ConfigKey = "zzz" },
-				Parameters = new Parameters() { Values = "foo" },
-				Actions = new List<ActionItem>()
-			};
+				Serializer serializer = new Serializer();
+				serializer.Serialize( s, this );
+				yaml = s.ToString();
+			}
+			return yaml;
 		}
 
-		public override string ToString()
+		public void ToYaml(TextWriter tw)
 		{
-			return string.Format( "{0}-->{1}", Name, Handler.Type );
+			Serializer serializer = new Serializer();
+			serializer.Serialize( tw, this );
 		}
-	}
 
-	public class Parameters
-	{
-		public string Uri { get; set; }
-		public bool HasUri { get { return !string.IsNullOrWhiteSpace( Uri ); } }
-		public object Values { get; set; }
-		public bool HasValues { get { return Values != null; } }
+		public static Plan FromYaml(TextReader reader)
+		{
+			Deserializer deserializer = new Deserializer( ignoreUnmatched: false );
+			return deserializer.Deserialize<Plan>( reader );
+		}
 	}
 }

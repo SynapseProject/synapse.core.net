@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using Synapse.Core;
 using Synapse.Core.Runtime;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 
 namespace Synapse.Tester
@@ -17,10 +15,9 @@ namespace Synapse.Tester
 		{
 			if( args.Length > 0 )
 			{
-				using( StreamReader sr = new StreamReader( @"yaml.txt" ) )
+				using( StreamReader sr = new StreamReader( @"yaml.yml" ) )
 				{
-					Deserializer deserializer = new Deserializer( ignoreUnmatched: false );
-					Plan plan = deserializer.Deserialize<Plan>( sr );
+					Plan plan = Plan.FromYaml( sr );
 					Engine engine = new Engine();
 					HandlerResult result = engine.Process( plan );
 				}
@@ -44,10 +41,9 @@ namespace Synapse.Tester
 					IsActive = true
 				};
 
-				using( StreamWriter file = new StreamWriter( @"yaml.txt" ) )
+				using( StreamWriter file = new StreamWriter( @"yaml.yml" ) )
 				{
-					Serializer serializer = new Serializer();
-					serializer.Serialize( file, p );
+					p.ToYaml( file );
 				}
 			}
 			Console.Read();

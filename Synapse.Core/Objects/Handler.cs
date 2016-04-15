@@ -18,10 +18,10 @@ namespace Synapse.Core
 		HandlerResult Execute(string parms);
 	}
 
-	public interface IHandlerConfig
-	{
-		string Key { get; set; }
-	}
+	//public interface IHandlerConfig
+	//{
+	//	string Key { get; set; }
+	//}
 
 	public class HandlerResult
 	{

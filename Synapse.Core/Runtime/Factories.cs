@@ -9,11 +9,21 @@ namespace Synapse.Core.Runtime
 	{
 		public static IHandlerRuntime Create(HandlerInfo info)
 		{
-			IHandlerRuntime hr = new FooHandler();
-			if( info.Type == "bar" )
+			IHandlerRuntime hr = new EmptyHandler();
+			switch( info.Type.ToLower() )
 			{
-				hr = new BarHandler();
+				case "foo":
+				{
+					hr = new FooHandler();
+					break;
+				}
+				case "bar":
+				{
+					hr = new BarHandler();
+					break;
+				}
 			}
+
 			if( info.ConfigKey != null )
 			{
 				Dal.DataAccessLayer dal = new Dal.DataAccessLayer();
@@ -25,7 +35,7 @@ namespace Synapse.Core.Runtime
 		}
 	}
 
-	public class FooHandler : IHandlerRuntime
+	public class EmptyHandler : IHandlerRuntime
 	{
 		public bool Activate(string config)
 		{
@@ -38,6 +48,19 @@ namespace Synapse.Core.Runtime
 		}
 	}
 
+	public class FooHandler : IHandlerRuntime
+	{
+		public bool Activate(string config)
+		{
+			return true;
+		}
+
+		public HandlerResult Execute(string parms)
+		{
+			return new HandlerResult() { Success = true, ExitCode = 1 };
+		}
+	}
+
 	public class BarHandler : IHandlerRuntime
 	{
 		public bool Activate(string config)
@@ -47,7 +70,7 @@ namespace Synapse.Core.Runtime
 
 		public HandlerResult Execute(string parms)
 		{
-			return new HandlerResult() { Success = false, ExitCode = 1 };
+			return new HandlerResult() { Success = false, ExitCode = 2 };
 		}
 	}
 }
