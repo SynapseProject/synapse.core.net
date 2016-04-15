@@ -48,6 +48,7 @@
     <Compile Include="Dal\Dal.cs" />
     <Compile Include="Objects\Parameters.cs" />
     <Compile Include="Objects\ActionItem.cs" />
+    <Compile Include="Objects\SerializationType.cs" />
     <Compile Include="Runtime\Engine.cs" />
     <Compile Include="Objects\Handler.cs" />
     <Compile Include="Objects\Plan.cs" />

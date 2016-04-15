@@ -24,7 +24,7 @@ namespace Synapse.Core.Runtime
 			//multithread this with task.parallel
 			foreach( ActionItem a in actionList )
 			{
-				string parms = GetParameters( a.Parameters );
+				string parms = a.Parameters.Resolve();
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
 				r = rt.Execute( parms );
 				if( a.HasActions )
@@ -34,26 +34,6 @@ namespace Synapse.Core.Runtime
 			}
 
 			return r;
-		}
-
-		string GetParameters(Parameters p)
-		{
-			string parms = string.Empty;
-			if( p.HasValues )
-			{
-				using( StringWriter sw = new StringWriter() )
-				{
-					Serializer serializer = new Serializer();
-					serializer.Serialize( sw, p.Values );
-					parms = sw.ToString();
-				}
-			}
-			if( p.HasUri )
-			{
-				parms = string.Empty; //make rest call
-				//merge parms
-			}
-			return parms;
 		}
 	}
 }
