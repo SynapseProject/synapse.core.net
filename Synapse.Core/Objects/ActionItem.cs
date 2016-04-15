@@ -10,14 +10,14 @@ namespace Synapse.Core
 		public ActionItem()
 		{
 			Name = string.Empty;
-			//GroupName = string.Empty;
 			ResultCase = HandlerResult.DefaultExitCode;
 		}
 
 		public string Name { get; set; }
-		//public string GroupName { get; set; }
 		public int ResultCase { get; set; }
 		public HandlerInfo Handler { get; set; }
+		public HandlerResult ExecuteResult { get; set; }
+		//List<int> ErrorCodes { get; set; }
 		public Parameters Parameters { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
@@ -27,7 +27,6 @@ namespace Synapse.Core
 			return new ActionItem()
 			{
 				Name = name,
-				//GroupName = "meow",
 				Handler = new HandlerInfo() { Type = "foo", ConfigKey = "zzz" },
 				Parameters = new Parameters() { Values = "foo" },
 				Actions = new List<ActionItem>()

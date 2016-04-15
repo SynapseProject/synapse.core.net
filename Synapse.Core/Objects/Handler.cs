@@ -15,7 +15,7 @@ namespace Synapse.Core
 	public interface IHandlerRuntime
 	{
 		bool Activate(string config);
-		HandlerResult Execute(string parms);
+		HandlerResult Execute(string parms); //maybe should be object
 	}
 
 	//public interface IHandlerConfig
