@@ -19,7 +19,7 @@ namespace Synapse.Core.Runtime
 		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result)
 		{
 			HandlerResult returnResult = HandlerResult.Emtpy;
-			IEnumerable<ActionItem> actionList = actions.Where( a => a.ResultCase == result.Status );
+			IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
 
 			//multithread this with task.parallel
 			foreach( ActionItem a in actionList )

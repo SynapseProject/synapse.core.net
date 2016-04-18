@@ -27,14 +27,14 @@ namespace Synapse.Core
 	{
 		public HandlerResult()
 		{
-			Status = HandlerStatus.None;
+			Status = ActionStatus.None;
 		}
 
 		public static readonly HandlerResult Emtpy = new HandlerResult();
 		public bool IsEmpty { get { return this == HandlerResult.Emtpy; } }
 		public static readonly int DefaultExitCode = -1;
 
-		public HandlerStatus Status { get; set; }
+		public ActionStatus Status { get; set; }
 		public object ExitData { get; set; }
 
 		public override string ToString()

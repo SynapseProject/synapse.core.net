@@ -2,7 +2,7 @@
 
 namespace Synapse.Core
 {
-	public enum HandlerStatus
+	public enum ActionStatus
 	{
 		None = 0,
 		New = 1,

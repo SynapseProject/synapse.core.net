@@ -10,11 +10,11 @@ namespace Synapse.Core
 		public ActionItem()
 		{
 			Name = string.Empty;
-			ResultCase = HandlerStatus.None;
+			ExecuteCase = ActionStatus.None;
 		}
 
 		public string Name { get; set; }
-		public HandlerStatus ResultCase { get; set; }
+		public ActionStatus ExecuteCase { get; set; }
 		public HandlerInfo Handler { get; set; }
 		public HandlerResult ExecuteResult { get; set; }
 		public Parameters Parameters { get; set; }
