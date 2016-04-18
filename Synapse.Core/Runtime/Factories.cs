@@ -44,7 +44,7 @@ namespace Synapse.Core.Runtime
 
 		public HandlerResult Execute(string parms)
 		{
-			return new HandlerResult() { Success = true, ExitCode = 0 };
+			return new HandlerResult() { Status = HandlerStatus.None };
 		}
 	}
 
@@ -57,7 +57,7 @@ namespace Synapse.Core.Runtime
 
 		public HandlerResult Execute(string parms)
 		{
-			return new HandlerResult() { Success = true, ExitCode = 1 };
+			return new HandlerResult() { Status = HandlerStatus.Failed };
 		}
 	}
 
@@ -70,7 +70,7 @@ namespace Synapse.Core.Runtime
 
 		public HandlerResult Execute(string parms)
 		{
-			return new HandlerResult() { Success = false, ExitCode = 2 };
+			return new HandlerResult() { Status = HandlerStatus.Complete };
 		}
 	}
 }

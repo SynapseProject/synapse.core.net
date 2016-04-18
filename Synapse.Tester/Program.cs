@@ -20,6 +20,7 @@ namespace Synapse.Tester
 					Plan plan = Plan.FromYaml( sr );
 					Engine engine = new Engine();
 					HandlerResult result = engine.Process( plan );
+					Console.WriteLine( result );
 				}
 			}
 			else

@@ -18,22 +18,24 @@ namespace Synapse.Core.Runtime
 
 		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result)
 		{
-			HandlerResult r = HandlerResult.Emtpy;
-			IEnumerable<ActionItem> actionList = actions.Where( a => a.ResultCase == result.ExitCode );
+			HandlerResult returnResult = HandlerResult.Emtpy;
+			IEnumerable<ActionItem> actionList = actions.Where( a => a.ResultCase == result.Status );
 
 			//multithread this with task.parallel
 			foreach( ActionItem a in actionList )
 			{
 				string parms = a.Parameters.Resolve();
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
-				r = rt.Execute( parms );
+				HandlerResult r = rt.Execute( parms );
+				if( r.Status > returnResult.Status ) { returnResult = r; }
 				if( a.HasActions )
 				{
 					r = ProcessRecursive( a.Actions, r );
+					if( r.Status > returnResult.Status ) { returnResult = r; }
 				}
 			}
 
-			return r;
+			return returnResult;
 		}
 	}
 }

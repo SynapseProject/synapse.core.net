@@ -10,14 +10,13 @@ namespace Synapse.Core
 		public ActionItem()
 		{
 			Name = string.Empty;
-			ResultCase = HandlerResult.DefaultExitCode;
+			ResultCase = HandlerStatus.None;
 		}
 
 		public string Name { get; set; }
-		public int ResultCase { get; set; }
+		public HandlerStatus ResultCase { get; set; }
 		public HandlerInfo Handler { get; set; }
 		public HandlerResult ExecuteResult { get; set; }
-		//List<int> ErrorCodes { get; set; }
 		public Parameters Parameters { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
