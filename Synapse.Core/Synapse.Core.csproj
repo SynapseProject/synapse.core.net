@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\Dal.cs" />
-    <Compile Include="Objects\Enums\ActionStatus.cs" />
+    <Compile Include="Objects\Enums\StatusType.cs" />
     <Compile Include="Objects\Enums\MessageType.cs" />
     <Compile Include="Objects\Parameters.cs" />
     <Compile Include="Objects\ActionItem.cs" />

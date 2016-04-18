@@ -11,5 +11,10 @@ namespace Synapse.Core.Dal
 		{
 			return string.Empty;
 		}
+
+		public int UpdateActionStatus(ActionItem item, HandlerResult result)
+		{
+			return 0;
+		}
 	}
 }

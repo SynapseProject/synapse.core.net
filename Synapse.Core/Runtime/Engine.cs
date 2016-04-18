@@ -9,6 +9,8 @@ namespace Synapse.Core.Runtime
 {
 	public class Engine
 	{
+		Dal.DataAccessLayer _dal = new Dal.DataAccessLayer();
+
 		public Engine() { }
 
 		public HandlerResult Process(Plan plan)
@@ -27,7 +29,10 @@ namespace Synapse.Core.Runtime
 				string parms = a.Parameters.Resolve();
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
 				HandlerResult r = rt.Execute( parms );
+				_dal.UpdateActionStatus( a, r );
+
 				if( r.Status > returnResult.Status ) { returnResult = r; }
+
 				if( a.HasActions )
 				{
 					r = ProcessRecursive( a.Actions, r );
