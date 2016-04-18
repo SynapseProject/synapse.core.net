@@ -26,7 +26,7 @@ namespace Synapse.Core.Runtime
 			//multithread this with task.parallel
 			foreach( ActionItem a in actionList )
 			{
-				string parms = a.Parameters.Resolve();
+				string parms = a.HasParameters ? a.Parameters.Resolve() : null;
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
 				HandlerResult r = rt.Execute( parms );
 				_dal.UpdateActionStatus( a, r );

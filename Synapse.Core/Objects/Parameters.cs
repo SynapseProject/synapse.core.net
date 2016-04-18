@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Xml;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -47,14 +48,34 @@ namespace Synapse.Core
 		{
 			string parms = string.Empty;
 
-			if( HasValues )
-			{
-			}
+			XmlDocument xml = null;
 
 			if( HasUri )
 			{
+				xml = new XmlDocument();
+				xml.LoadXml( @"<xml attr='value1'><data>foo1</data><inner attri='foo' /></xml>" );
+
 				parms = string.Empty; //make rest call
-				//merge parms
+			}
+
+			if( HasValues )
+			{
+				if( xml != null )
+				{
+					XmlNode sourceNode = xml.ChildNodes[0];
+
+					XmlDocument config = new XmlDocument();
+					config.LoadXml( Values.ToString() );
+
+					Utilities.MergeHelpers.MergeXml( ref xml, config );
+
+					Utilities.MergeHelpers.MergeXml( ref sourceNode, config.ChildNodes[0] );
+				}
+				else
+				{
+					xml = new XmlDocument();
+					xml.LoadXml( Values.ToString() );
+				}
 			}
 
 			if( HasDynamic )
