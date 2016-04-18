@@ -17,6 +17,7 @@ namespace Synapse.Core
 		public StatusType ExecuteCase { get; set; }
 		public HandlerInfo Handler { get; set; }
 		public Parameters Parameters { get; set; }
+		public bool HasParameters { get { return Parameters != null; } }
 		public HandlerResult ExecuteResult { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
