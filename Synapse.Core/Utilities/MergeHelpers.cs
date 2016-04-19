@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,14 +12,16 @@ namespace Synapse.Core.Utilities
 {
 	public class MergeHelpers
 	{
+		//works, but is horrifically inefficient.
+		//todo: rewrite to calc all xpaths upfront, then select/update from source
 		public static void MergeXml(ref XmlDocument source, XmlDocument patch)
 		{
-			Stack<XmlNodeList> lists = new Stack<XmlNodeList>();
+			Stack<IEnumerable> lists = new Stack<IEnumerable>();
 			lists.Push( patch.ChildNodes );
 
 			while( lists.Count > 0 )
 			{
-				XmlNodeList list = lists.Pop();
+				IEnumerable list = lists.Pop();
 				foreach( XmlNode node in list )
 				{
 					string xpath = FindXPath( node );
@@ -36,15 +39,7 @@ namespace Synapse.Core.Utilities
 					}
 					if( node.Attributes != null )
 					{
-						foreach( XmlNode attr in node.Attributes )
-						{
-							string xpathAttr = FindXPath( attr );
-							XmlNode srcAttr = source.SelectSingleNode( xpathAttr );
-							if( srcAttr != null && srcAttr.Value != attr.Value )
-							{
-								srcAttr.Value = attr.Value;
-							}
-						}
+						lists.Push( node.Attributes );
 					}
 					if( node.ChildNodes.Count > 0 )
 					{
@@ -115,6 +110,10 @@ namespace Synapse.Core.Utilities
 		}
 
 
+
+
+		//reference: https://msdn.microsoft.com/en-us/library/aa302295.aspx
+		//source:	 https://msdn.microsoft.com/en-us/library/aa302294.aspx
 		public static void MergeXml(ref XmlNode sourceNode, XmlNode changedNode)
 		{
 			XmlDiff xmldiff = new XmlDiff( XmlDiffOptions.IgnoreComments | XmlDiffOptions.IgnoreXmlDecl |
@@ -134,8 +133,6 @@ namespace Synapse.Core.Utilities
 			diffgramWriter.Close();
 		}
 
-		//reference: https://msdn.microsoft.com/en-us/library/aa302295.aspx
-		//source:	 https://msdn.microsoft.com/en-us/library/aa302294.aspx
 		public void GenerateDiffGram(string originalFile, string finalFile, XmlWriter diffgramWriter)
 		{
 			XmlDiff xmldiff = new XmlDiff( XmlDiffOptions.IgnoreComments | XmlDiffOptions.IgnoreXmlDecl |

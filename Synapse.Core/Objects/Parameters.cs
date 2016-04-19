@@ -68,8 +68,6 @@ namespace Synapse.Core
 					config.LoadXml( Values.ToString() );
 
 					Utilities.MergeHelpers.MergeXml( ref xml, config );
-
-					Utilities.MergeHelpers.MergeXml( ref sourceNode, config.ChildNodes[0] );
 				}
 				else
 				{
