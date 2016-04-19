@@ -23,11 +23,30 @@ namespace Synapse.Core.Utilities
 				{
 					string xpath = FindXPath( node );
 					XmlNode src = source.SelectSingleNode( xpath );
-					if( src != null && src.Value != node.Value)
+					if( src != null && src.Value != node.Value )
 					{
-						src.Value = node.Value;
+						if( src.NodeType == XmlNodeType.Element )
+						{
+							src.InnerText = node.InnerText;
+						}
+						else
+						{
+							src.Value = node.Value;
+						}
 					}
-					if(node.ChildNodes.Count>0)
+					if( node.Attributes != null )
+					{
+						foreach( XmlNode attr in node.Attributes )
+						{
+							string xpathAttr = FindXPath( attr );
+							XmlNode srcAttr = source.SelectSingleNode( xpathAttr );
+							if( srcAttr != null && srcAttr.Value != attr.Value )
+							{
+								srcAttr.Value = attr.Value;
+							}
+						}
+					}
+					if( node.ChildNodes.Count > 0 )
 					{
 						lists.Push( node.ChildNodes );
 					}

@@ -53,7 +53,7 @@ namespace Synapse.Core
 			if( HasUri )
 			{
 				xml = new XmlDocument();
-				xml.LoadXml( @"<xml attr='value1'><data>foo1</data><inner attri='foo' /></xml>" );
+				xml.LoadXml( @"<xml attr='value0'><inner attri='foo001' /><data>foo0</data><data>foo0</data><inner attri='foo00' /></xml>" );
 
 				parms = string.Empty; //make rest call
 			}
