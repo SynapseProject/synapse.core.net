@@ -15,7 +15,7 @@ namespace Synapse.Tester
 		{
 			if( args.Length > 0 )
 			{
-				using( StreamReader sr = new StreamReader( @"yaml.yml" ) )
+				using( StreamReader sr = new StreamReader( @"example.yml" ) )
 				{
 					Plan plan = Plan.FromYaml( sr );
 					Engine engine = new Engine();
@@ -42,7 +42,7 @@ namespace Synapse.Tester
 					IsActive = true
 				};
 
-				using( StreamWriter file = new StreamWriter( @"yaml.yml" ) )
+				using( StreamWriter file = new StreamWriter( @"example.yml" ) )
 				{
 					p.ToYaml( file );
 				}

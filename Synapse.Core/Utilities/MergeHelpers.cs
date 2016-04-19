@@ -110,8 +110,34 @@ namespace Synapse.Core.Utilities
 		}
 
 
+		public static void MergeYaml(ref object source, object patch)
+		{
+			Dictionary<object, object> s = source as Dictionary<object, object>;
+			Dictionary<object, object> p = patch as Dictionary<object, object>;
+			RecurseYaml( s, p );
+		}
+
+		static void RecurseYaml(Dictionary<object, object> source, Dictionary<object, object> patch)
+		{
+			foreach( object key in patch.Keys )
+			{
+				if( source.ContainsKey( key ) )
+				{
+					if( patch[key] is Dictionary<object, object> )
+					{
+						RecurseYaml( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+					}
+					else
+					{
+						source[key] = patch[key];
+					}
+				}
+			}
+		}
 
 
+
+		#region doesn't work as-is, need to try file-->fragments
 		//reference: https://msdn.microsoft.com/en-us/library/aa302295.aspx
 		//source:	 https://msdn.microsoft.com/en-us/library/aa302294.aspx
 		public static void MergeXml(ref XmlNode sourceNode, XmlNode changedNode)
@@ -158,5 +184,6 @@ namespace Synapse.Core.Utilities
 				}
 			}
 		}
+		#endregion
 	}
 }

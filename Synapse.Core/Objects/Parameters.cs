@@ -46,33 +46,32 @@ namespace Synapse.Core
 
 		string ResolveXmlParameters()
 		{
-			string parms = string.Empty;
+			XmlDocument parms = null;
 
-			XmlDocument xml = null;
-
+			//make rest call
 			if( HasUri )
 			{
-				xml = new XmlDocument();
-				xml.LoadXml( @"<xml attr='value0'><inner attri='foo001' /><data>foo0</data><data>foo0</data><inner attri='foo00' /></xml>" );
-
-				parms = string.Empty; //make rest call
+				string uri = @"<xml attr='value0'><inner attri='foo001' /><data>foo0</data><data>foo0</data><inner attri='foo00' /></xml>";
+				parms = new XmlDocument();
+				parms.LoadXml( uri );
 			}
 
+			//merge parms
 			if( HasValues )
 			{
-				if( xml != null )
+				if( parms != null )
 				{
-					XmlNode sourceNode = xml.ChildNodes[0];
+					XmlNode sourceNode = parms.ChildNodes[0];
 
-					XmlDocument config = new XmlDocument();
-					config.LoadXml( Values.ToString() );
+					XmlDocument values = new XmlDocument();
+					values.LoadXml( Values.ToString() );
 
-					Utilities.MergeHelpers.MergeXml( ref xml, config );
+					Utilities.MergeHelpers.MergeXml( ref parms, values );
 				}
 				else
 				{
-					xml = new XmlDocument();
-					xml.LoadXml( Values.ToString() );
+					parms = new XmlDocument();
+					parms.LoadXml( Values.ToString() );
 				}
 			}
 
@@ -81,21 +80,29 @@ namespace Synapse.Core
 				//kv_replace
 			}
 
-			return parms;
+			//todo: XmlSerializer
+			return parms.ToString();
 		}
 
 		string ResolveJsonParameters()
 		{
-			string parms = string.Empty;
+			object parms = null;
 
-			if( HasValues )
-			{
-			}
-
+			//make rest call
 			if( HasUri )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				string uri = "{  \"ApplicationName\": \"steve\",  \"EnvironmentName\": \"dev\",  \"Tier\": {    \"Name\": \"webserver\",    \"Type\": \"python\",    \"Version\": \"0.0\"  }}";
+				using( StringReader sr = new StringReader( uri ) )
+				{
+					Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
+					parms = deserializer.Deserialize( sr );
+				}
+			}
+
+			//merge parms
+			if( HasValues )
+			{
+				Utilities.MergeHelpers.MergeYaml( ref parms, Values );
 			}
 
 			if( HasDynamic )
@@ -103,27 +110,41 @@ namespace Synapse.Core
 				//kv_replace
 			}
 
-			return parms;
+			string p = null;
+			using( StringWriter sw = new StringWriter() )
+			{
+				Serializer serializer = new Serializer();
+				serializer.Serialize( sw, parms );
+				p = sw.ToString();
+			}
+
+			return p;
 		}
 
 		string ResolveYamlParameters()
 		{
-			string parms = string.Empty;
+			object parms = null;
 
-			if( HasValues )
+			//make rest call
+			if( HasUri )
 			{
-				using( StringWriter sw = new StringWriter() )
+				string uri =
+@"Magical: Mystery
+Lucy: In the sky
+Kitten:
+  Cat: Tommy
+  Color: Rat";
+				using( StringReader sr = new StringReader( uri ) )
 				{
-					Serializer serializer = new Serializer();
-					serializer.Serialize( sw, Values );
-					parms = sw.ToString();
+					Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
+					parms = deserializer.Deserialize( sr );
 				}
 			}
 
-			if( HasUri )
+			//merge parms
+			if( HasValues )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				Utilities.MergeHelpers.MergeYaml( ref parms, Values );
 			}
 
 			if( HasDynamic )
@@ -131,21 +152,30 @@ namespace Synapse.Core
 				//kv_replace
 			}
 
-			return parms;
+			string p = null;
+			using( StringWriter sw = new StringWriter() )
+			{
+				Serializer serializer = new Serializer();
+				serializer.Serialize( sw, parms );
+				p = sw.ToString();
+			}
+
+			return p;
 		}
 
 		string ResolveUnspecifiedParameters()
 		{
 			string parms = string.Empty;
 
-			if( HasValues )
-			{
-			}
-
+			//make rest call
 			if( HasUri )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				parms = string.Empty; 
+			}
+
+			//merge parms
+			if( HasValues )
+			{
 			}
 
 			if( HasDynamic )
