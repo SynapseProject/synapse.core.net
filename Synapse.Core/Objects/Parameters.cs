@@ -1,18 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
+	public class DynamicValue
+	{
+		public string Name { get; set; }
+		public string Path { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format( "[{0}]::[{1}]", Name, Path );
+		}
+	}
+
 	public class Parameters
 	{
 		public string Uri { get; set; }
 		public bool HasUri { get { return !string.IsNullOrWhiteSpace( Uri ); } }
 		public object Values { get; set; }
 		public bool HasValues { get { return Values != null; } }
-		public string Dynamic { get; set; }
-		public bool HasDynamic { get { return !string.IsNullOrWhiteSpace( Dynamic ); } }
+		public List<DynamicValue> Dynamic { get; set; }
+		public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 		public SerializationType Type { get; set; }
 
 		public string Resolve()
@@ -105,9 +117,10 @@ namespace Synapse.Core
 				Utilities.MergeHelpers.MergeYaml( ref parms, Values );
 			}
 
+			//kv_replace
 			if( HasDynamic )
 			{
-				//kv_replace
+				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic );
 			}
 
 			string p = null;
@@ -147,9 +160,10 @@ Kitten:
 				Utilities.MergeHelpers.MergeYaml( ref parms, Values );
 			}
 
+			//kv_replace
 			if( HasDynamic )
 			{
-				//kv_replace
+				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic );
 			}
 
 			string p = null;

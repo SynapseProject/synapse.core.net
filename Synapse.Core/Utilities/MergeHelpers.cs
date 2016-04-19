@@ -117,6 +117,31 @@ namespace Synapse.Core.Utilities
 			RecurseYaml( s, p );
 		}
 
+		public static void MergeYaml(ref object source, List<DynamicValue> patch)
+		{
+			Dictionary<object, object> s = source as Dictionary<object, object>;
+			Dictionary<object, object> p = ConvertDynamicValuestoDict( patch );
+			RecurseYaml( s, p );
+		}
+
+		static Dictionary<object, object> ConvertDynamicValuestoDict(List<DynamicValue> patch)
+		{
+			Dictionary<object, object> d = new Dictionary<object, object>();
+
+			foreach( DynamicValue v in patch )
+			{
+				string[] keys = v.Name.ToString().Split( ':' );
+				foreach( string key in keys )
+				{
+					if( d.ContainsKey( key ) )
+					{
+					}
+				}
+			}
+
+			return d;
+		}
+
 		static void RecurseYaml(Dictionary<object, object> source, Dictionary<object, object> patch)
 		{
 			foreach( object key in patch.Keys )
