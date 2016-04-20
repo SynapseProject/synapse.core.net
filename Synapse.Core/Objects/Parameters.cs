@@ -27,8 +27,12 @@ namespace Synapse.Core
 		public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 		public SerializationType Type { get; set; }
 
-		public string Resolve()
+		private Dictionary<string, string> _dynamicParameters = null;
+
+		public string Resolve(Dictionary<string, string> dynamicParameters)
 		{
+			_dynamicParameters = dynamicParameters ?? new Dictionary<string, string>();
+
 			string parms = string.Empty;
 			switch( Type )
 			{
@@ -87,9 +91,10 @@ namespace Synapse.Core
 				}
 			}
 
+			//kv_replace
 			if( HasDynamic )
 			{
-				//kv_replace
+				Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicParameters );
 			}
 
 			//todo: XmlSerializer
@@ -120,7 +125,7 @@ namespace Synapse.Core
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic );
+				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic, _dynamicParameters );
 			}
 
 			string p = null;
@@ -163,7 +168,7 @@ Kitten:
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic );
+				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic, _dynamicParameters );
 			}
 
 			string p = null;
@@ -184,7 +189,7 @@ Kitten:
 			//make rest call
 			if( HasUri )
 			{
-				parms = string.Empty; 
+				parms = string.Empty;
 			}
 
 			//merge parms

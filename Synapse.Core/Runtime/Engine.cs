@@ -13,12 +13,12 @@ namespace Synapse.Core.Runtime
 
 		public Engine() { }
 
-		public HandlerResult Process(Plan plan)
+		public HandlerResult Process(Plan plan, Dictionary<string,string> dynamicParameters)
 		{
-			return ProcessRecursive( plan.Actions, HandlerResult.Emtpy );
+			return ProcessRecursive( plan.Actions, HandlerResult.Emtpy, dynamicParameters );
 		}
 
-		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result)
+		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicParameters)
 		{
 			HandlerResult returnResult = HandlerResult.Emtpy;
 			IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
@@ -26,7 +26,7 @@ namespace Synapse.Core.Runtime
 			//multithread this with task.parallel
 			foreach( ActionItem a in actionList )
 			{
-				string parms = a.HasParameters ? a.Parameters.Resolve() : null;
+				string parms = a.HasParameters ? a.Parameters.Resolve( dynamicParameters ) : null;
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
 				HandlerResult r = rt.Execute( parms );
 				_dal.UpdateActionStatus( a, r );
@@ -35,7 +35,7 @@ namespace Synapse.Core.Runtime
 
 				if( a.HasActions )
 				{
-					r = ProcessRecursive( a.Actions, r );
+					r = ProcessRecursive( a.Actions, r, dynamicParameters );
 					if( r.Status > returnResult.Status ) { returnResult = r; }
 				}
 			}

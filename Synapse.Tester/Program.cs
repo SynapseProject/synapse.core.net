@@ -17,9 +17,12 @@ namespace Synapse.Tester
 			{
 				using( StreamReader sr = new StreamReader( @"example.yml" ) )
 				{
+					Dictionary<string, string> parms = new Dictionary<string, string>();
+					parms["app"] = "someApp";
+					parms["type"] = "someType";
 					Plan plan = Plan.FromYaml( sr );
 					Engine engine = new Engine();
-					HandlerResult result = engine.Process( plan );
+					HandlerResult result = engine.Process( plan, parms );
 					Console.WriteLine( result );
 				}
 			}

@@ -12,6 +12,7 @@ namespace Synapse.Core.Utilities
 {
 	public class MergeHelpers
 	{
+		#region xml
 		//works, but is horrifically inefficient.
 		//todo: rewrite to calc all xpaths upfront, then select/update from source
 		public static void MergeXml(ref XmlDocument source, XmlDocument patch)
@@ -48,6 +49,7 @@ namespace Synapse.Core.Utilities
 				}
 			}
 		}
+
 		static string FindXPath(XmlNode node)
 		{
 			StringBuilder builder = new StringBuilder();
@@ -109,40 +111,72 @@ namespace Synapse.Core.Utilities
 			throw new ArgumentException( "Couldn't find element within parent" );
 		}
 
+		public static void MergeXml(ref XmlDocument source, List<DynamicValue> patch, Dictionary<string, string> values)
+		{
+			foreach( DynamicValue v in patch )
+			{
+				if( values.ContainsKey( v.Name ) )
+				{
+					XmlNode src = source.SelectSingleNode( v.Path );
+					if( src != null )
+					{
+						if( src.NodeType == XmlNodeType.Element )
+						{
+							src.InnerText = values[v.Name];
+						}
+						else
+						{
+							src.Value = values[v.Name];
+						}
+					}
+				}
+			}
+		}
+		#endregion
 
+		#region yaml/json
 		public static void MergeYaml(ref object source, object patch)
 		{
 			Dictionary<object, object> s = source as Dictionary<object, object>;
 			Dictionary<object, object> p = patch as Dictionary<object, object>;
-			RecurseYaml( s, p );
+			ApplyPatchValuesYaml( s, p );
 		}
 
-		public static void MergeYaml(ref object source, List<DynamicValue> patch)
+		public static void MergeYaml(ref object source, List<DynamicValue> patch, Dictionary<string, string> values)
 		{
 			Dictionary<object, object> s = source as Dictionary<object, object>;
-			Dictionary<object, object> p = ConvertDynamicValuestoDict( patch );
-			RecurseYaml( s, p );
+			Dictionary<object, object> p = ConvertDynamicValuestoDict( patch, values );
+			ApplyPatchValuesYaml( s, p );
 		}
 
-		static Dictionary<object, object> ConvertDynamicValuestoDict(List<DynamicValue> patch)
+		static Dictionary<object, object> ConvertDynamicValuestoDict(List<DynamicValue> patch, Dictionary<string, string> values)
 		{
-			Dictionary<object, object> d = new Dictionary<object, object>();
+			Dictionary<object, object> dict = new Dictionary<object, object>();
 
+			Dictionary<object, object> d = dict;
 			foreach( DynamicValue v in patch )
 			{
-				string[] keys = v.Name.ToString().Split( ':' );
-				foreach( string key in keys )
+				string[] keys = v.Path.ToString().Split( ':' );
+				int lastIndex = keys.Length - 1;
+				for( int i = 0; i < lastIndex; i++ )
 				{
-					if( d.ContainsKey( key ) )
+					string key = keys[i];
+					if( !d.ContainsKey( key ) )
 					{
+						d[key] = new Dictionary<object, object>();
 					}
+					d = (Dictionary<object, object>)d[key];
+				}
+				if( values.ContainsKey( v.Name ) )
+				{
+					d[keys[lastIndex]] = values[v.Name];
 				}
 			}
 
-			return d;
+			return dict;
 		}
 
-		static void RecurseYaml(Dictionary<object, object> source, Dictionary<object, object> patch)
+		static void ApplyPatchValuesYaml(Dictionary<object, object> source, Dictionary<object, object> patch)
 		{
 			foreach( object key in patch.Keys )
 			{
@@ -150,7 +184,7 @@ namespace Synapse.Core.Utilities
 				{
 					if( patch[key] is Dictionary<object, object> )
 					{
-						RecurseYaml( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+						ApplyPatchValuesYaml( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
 					}
 					else
 					{
@@ -159,7 +193,7 @@ namespace Synapse.Core.Utilities
 				}
 			}
 		}
-
+		#endregion
 
 
 		#region doesn't work as-is, need to try file-->fragments
