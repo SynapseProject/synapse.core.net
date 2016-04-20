@@ -1,21 +1,38 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
+	public class DynamicValue
+	{
+		public string Name { get; set; }
+		public string Path { get; set; }
+
+		public override string ToString()
+		{
+			return string.Format( "[{0}]::[{1}]", Name, Path );
+		}
+	}
+
 	public class Parameters
 	{
 		public string Uri { get; set; }
 		public bool HasUri { get { return !string.IsNullOrWhiteSpace( Uri ); } }
 		public object Values { get; set; }
 		public bool HasValues { get { return Values != null; } }
-		public string Dynamic { get; set; }
-		public bool HasDynamic { get { return !string.IsNullOrWhiteSpace( Dynamic ); } }
+		public List<DynamicValue> Dynamic { get; set; }
+		public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 		public SerializationType Type { get; set; }
 
-		public string Resolve()
+		private Dictionary<string, string> _dynamicParameters = null;
+
+		public string Resolve(Dictionary<string, string> dynamicParameters)
 		{
+			_dynamicParameters = dynamicParameters ?? new Dictionary<string, string>();
+
 			string parms = string.Empty;
 			switch( Type )
 			{
@@ -45,88 +62,143 @@ namespace Synapse.Core
 
 		string ResolveXmlParameters()
 		{
-			string parms = string.Empty;
+			XmlDocument parms = null;
 
-			if( HasValues )
-			{
-			}
-
+			//make rest call
 			if( HasUri )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				string uri = @"<xml attr='value0'><inner attri='foo001' /><data>foo0</data><data>foo0</data><inner attri='foo00' /></xml>";
+				parms = new XmlDocument();
+				parms.LoadXml( uri );
 			}
 
+			//merge parms
+			if( HasValues )
+			{
+				if( parms != null )
+				{
+					XmlNode sourceNode = parms.ChildNodes[0];
+
+					XmlDocument values = new XmlDocument();
+					values.LoadXml( Values.ToString() );
+
+					Utilities.MergeHelpers.MergeXml( ref parms, values );
+				}
+				else
+				{
+					parms = new XmlDocument();
+					parms.LoadXml( Values.ToString() );
+				}
+			}
+
+			//kv_replace
 			if( HasDynamic )
 			{
-				//kv_replace
+				Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicParameters );
 			}
 
-			return parms;
+			//todo: XmlSerializer
+			return parms.ToString();
 		}
 
 		string ResolveJsonParameters()
 		{
-			string parms = string.Empty;
+			object parms = null;
 
-			if( HasValues )
-			{
-			}
-
+			//make rest call
 			if( HasUri )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				string uri = "{  \"ApplicationName\": \"steve\",  \"EnvironmentName\": \"dev\",  \"Tier\": {    \"Name\": \"webserver\",    \"Type\": \"python\",    \"Version\": \"0.0\"  }}";
+				using( StringReader sr = new StringReader( uri ) )
+				{
+					Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
+					parms = deserializer.Deserialize( sr );
+				}
 			}
 
+			Dictionary<object, object> p = (Dictionary<object, object>)parms;
+
+			//merge parms
+			if( HasValues )
+			{
+				Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
+			}
+
+			//kv_replace
 			if( HasDynamic )
 			{
-				//kv_replace
+				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicParameters );
 			}
 
-			return parms;
+			string v = null;
+			using( StringWriter sw = new StringWriter() )
+			{
+				Serializer serializer = new Serializer();
+				serializer.Serialize( sw, parms );
+				v = sw.ToString();
+			}
+
+			return v;
 		}
 
 		string ResolveYamlParameters()
 		{
-			string parms = string.Empty;
+			object parms = null;
 
-			if( HasValues )
+			//make rest call
+			if( HasUri )
 			{
-				using( StringWriter sw = new StringWriter() )
+				string uri =
+@"Magical: Mystery
+Lucy: In the sky
+Kitten:
+  Cat: Tommy
+  Color: Rat";
+				using( StringReader sr = new StringReader( uri ) )
 				{
-					Serializer serializer = new Serializer();
-					serializer.Serialize( sw, Values );
-					parms = sw.ToString();
+					Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
+					parms = deserializer.Deserialize( sr );
 				}
 			}
 
-			if( HasUri )
+			Dictionary<object, object> p = (Dictionary<object, object>)parms;
+
+			//merge parms
+			if( HasValues )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
 			}
 
+			//kv_replace
 			if( HasDynamic )
 			{
-				//kv_replace
+				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicParameters );
 			}
 
-			return parms;
+			string v = null;
+			using( StringWriter sw = new StringWriter() )
+			{
+				Serializer serializer = new Serializer();
+				serializer.Serialize( sw, parms );
+				v = sw.ToString();
+			}
+
+			return v;
 		}
 
 		string ResolveUnspecifiedParameters()
 		{
 			string parms = string.Empty;
 
-			if( HasValues )
-			{
-			}
-
+			//make rest call
 			if( HasUri )
 			{
-				parms = string.Empty; //make rest call
-				//merge parms
+				parms = string.Empty;
+			}
+
+			//merge parms
+			if( HasValues )
+			{
 			}
 
 			if( HasDynamic )

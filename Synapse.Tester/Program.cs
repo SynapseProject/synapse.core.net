@@ -15,11 +15,14 @@ namespace Synapse.Tester
 		{
 			if( args.Length > 0 )
 			{
-				using( StreamReader sr = new StreamReader( @"yaml.yml" ) )
+				using( StreamReader sr = new StreamReader( @"example.yml" ) )
 				{
+					Dictionary<string, string> parms = new Dictionary<string, string>();
+					parms["app"] = "someApp";
+					parms["type"] = "someType";
 					Plan plan = Plan.FromYaml( sr );
 					Engine engine = new Engine();
-					HandlerResult result = engine.Process( plan );
+					HandlerResult result = engine.Process( plan, parms );
 					Console.WriteLine( result );
 				}
 			}
@@ -42,7 +45,7 @@ namespace Synapse.Tester
 					IsActive = true
 				};
 
-				using( StreamWriter file = new StreamWriter( @"yaml.yml" ) )
+				using( StreamWriter file = new StreamWriter( @"example.yml" ) )
 				{
 					p.ToYaml( file );
 				}
