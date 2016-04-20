@@ -135,18 +135,15 @@ namespace Synapse.Core.Utilities
 		#endregion
 
 		#region yaml/json
-		public static void MergeYaml(ref object source, object patch)
+		public static void MergeYaml(ref Dictionary<object, object> source, Dictionary<object, object> patch)
 		{
-			Dictionary<object, object> s = source as Dictionary<object, object>;
-			Dictionary<object, object> p = patch as Dictionary<object, object>;
-			ApplyPatchValuesYaml( s, p );
+			ApplyPatchValuesYaml( source, patch );
 		}
 
-		public static void MergeYaml(ref object source, List<DynamicValue> patch, Dictionary<string, string> values)
+		public static void MergeYaml(ref Dictionary<object, object> source, List<DynamicValue> patch, Dictionary<string, string> values)
 		{
-			Dictionary<object, object> s = source as Dictionary<object, object>;
 			Dictionary<object, object> p = ConvertDynamicValuestoDict( patch, values );
-			ApplyPatchValuesYaml( s, p );
+			ApplyPatchValuesYaml( source, p );
 		}
 
 		static Dictionary<object, object> ConvertDynamicValuestoDict(List<DynamicValue> patch, Dictionary<string, string> values)

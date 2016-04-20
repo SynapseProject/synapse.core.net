@@ -116,27 +116,29 @@ namespace Synapse.Core
 				}
 			}
 
+			Dictionary<object, object> p = (Dictionary<object, object>)parms;
+
 			//merge parms
 			if( HasValues )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref parms, Values );
+				Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
 			}
 
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic, _dynamicParameters );
+				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicParameters );
 			}
 
-			string p = null;
+			string v = null;
 			using( StringWriter sw = new StringWriter() )
 			{
 				Serializer serializer = new Serializer();
 				serializer.Serialize( sw, parms );
-				p = sw.ToString();
+				v = sw.ToString();
 			}
 
-			return p;
+			return v;
 		}
 
 		string ResolveYamlParameters()
@@ -159,27 +161,29 @@ Kitten:
 				}
 			}
 
+			Dictionary<object, object> p = (Dictionary<object, object>)parms;
+
 			//merge parms
 			if( HasValues )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref parms, Values );
+				Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
 			}
 
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref parms, Dynamic, _dynamicParameters );
+				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicParameters );
 			}
 
-			string p = null;
+			string v = null;
 			using( StringWriter sw = new StringWriter() )
 			{
 				Serializer serializer = new Serializer();
 				serializer.Serialize( sw, parms );
-				p = sw.ToString();
+				v = sw.ToString();
 			}
 
-			return p;
+			return v;
 		}
 
 		string ResolveUnspecifiedParameters()
