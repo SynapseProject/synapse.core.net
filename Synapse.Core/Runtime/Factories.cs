@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Synapse.Core.Runtime
@@ -10,19 +11,12 @@ namespace Synapse.Core.Runtime
 		public static IHandlerRuntime Create(HandlerInfo info)
 		{
 			IHandlerRuntime hr = new EmptyHandler();
-			switch( info.Type.ToLower() )
-			{
-				case "foo":
-				{
-					hr = new FooHandler();
-					break;
-				}
-				case "bar":
-				{
-					hr = new BarHandler();
-					break;
-				}
-			}
+
+			string[] typeInfo = info.Type.Split( ':' );
+			AssemblyName an = new AssemblyName( typeInfo[0] );
+			Assembly hrAsm = Assembly.Load( an );
+			Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
+			hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
 
 			if( info.ConfigKey != null )
 			{
@@ -30,14 +24,15 @@ namespace Synapse.Core.Runtime
 				string values = dal.GetHandlerConfig( info.ConfigKey );
 				//merge values & info.ConfigValues
 			}
-			hr.Activate( info.ConfigValues );
+			hr.Initialize( info.ConfigValues );
+
 			return hr;
 		}
 	}
 
 	public class EmptyHandler : IHandlerRuntime
 	{
-		public bool Activate(string config)
+		public bool Initialize(string config)
 		{
 			return true;
 		}
@@ -50,7 +45,7 @@ namespace Synapse.Core.Runtime
 
 	public class FooHandler : IHandlerRuntime
 	{
-		public bool Activate(string config)
+		public bool Initialize(string config)
 		{
 			return true;
 		}
@@ -63,7 +58,7 @@ namespace Synapse.Core.Runtime
 
 	public class BarHandler : IHandlerRuntime
 	{
-		public bool Activate(string config)
+		public bool Initialize(string config)
 		{
 			return true;
 		}
