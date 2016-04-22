@@ -8,8 +8,7 @@ namespace Synapse.Core
 	public class HandlerInfo
 	{
 		public string Type { get; set; }
-		public string ConfigKey { get; set; }
-		public string ConfigValues { get; set; }
+		public Config Config { get; set; }
 	}
 
 	public interface IHandlerRuntime

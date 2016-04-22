@@ -52,6 +52,7 @@
     <Compile Include="Dal\Dal.cs" />
     <Compile Include="Objects\Enums\StatusType.cs" />
     <Compile Include="Objects\Enums\MessageType.cs" />
+    <Compile Include="Objects\Config.cs" />
     <Compile Include="Objects\Parameters.cs" />
     <Compile Include="Objects\ActionItem.cs" />
     <Compile Include="Objects\Enums\SerializationType.cs" />
