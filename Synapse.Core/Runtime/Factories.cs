@@ -18,13 +18,8 @@ namespace Synapse.Core.Runtime
 			Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
 			hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
 
-			if( info.ConfigKey != null )
-			{
-				Dal.DataAccessLayer dal = new Dal.DataAccessLayer();
-				string values = dal.GetHandlerConfig( info.ConfigKey );
-				//merge values & info.ConfigValues
-			}
-			hr.Initialize( info.ConfigValues );
+			string config = info.HasConfig ? info.Config.Resolve() : null;
+			hr.Initialize( config );
 
 			return hr;
 		}

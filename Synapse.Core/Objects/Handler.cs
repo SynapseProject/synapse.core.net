@@ -9,6 +9,7 @@ namespace Synapse.Core
 	{
 		public string Type { get; set; }
 		public Config Config { get; set; }
+		public bool HasConfig { get { return Config != null; } }
 	}
 
 	public interface IHandlerRuntime

@@ -9,7 +9,7 @@ namespace Synapse.Core.Runtime
 {
 	public class Engine
 	{
-		Dal.DataAccessLayer _dal = new Dal.DataAccessLayer();
+		//Dal.DataAccessLayer _dal = new Dal.DataAccessLayer();
 
 		public Engine() { }
 
@@ -29,7 +29,7 @@ namespace Synapse.Core.Runtime
 				string parms = a.HasParameters ? a.Parameters.Resolve( dynamicParameters ) : null;
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
 				HandlerResult r = rt.Execute( parms );
-				_dal.UpdateActionStatus( a, r );
+				//_dal.UpdateActionStatus( a, r );
 
 				if( r.Status > returnResult.Status ) { returnResult = r; }
 

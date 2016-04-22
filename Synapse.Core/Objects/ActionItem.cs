@@ -27,7 +27,7 @@ namespace Synapse.Core
 			return new ActionItem()
 			{
 				Name = name,
-				Handler = new HandlerInfo() { Type = "foo", ConfigKey = "zzz" },
+				Handler = new HandlerInfo() { Type = "foo" },
 				Parameters = new Parameters() { Values = "foo" },
 				Actions = new List<ActionItem>()
 			};

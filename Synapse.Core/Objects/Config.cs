@@ -21,29 +21,29 @@ namespace Synapse.Core
 			{
 				case SerializationType.Xml:
 				{
-					parms = ResolveXmlConfig();
+					parms = ResolveXml();
 					break;
 				}
 				case SerializationType.Json:
 				{
-					parms = ResolveJsonConfig();
+					parms = ResolveJson();
 					break;
 				}
 				case SerializationType.Yaml:
 				{
-					parms = ResolveYamlConfig();
+					parms = ResolveYaml();
 					break;
 				}
 				case SerializationType.Unspecified:
 				{
-					parms = ResolveUnspecifiedConfig();
+					parms = ResolveUnspecified();
 					break;
 				}
 			}
 			return parms;
 		}
 
-		string ResolveXmlConfig()
+		string ResolveXml()
 		{
 			XmlDocument parms = null;
 
@@ -78,7 +78,7 @@ namespace Synapse.Core
 			return parms.ToString();
 		}
 
-		string ResolveJsonConfig()
+		string ResolveJson()
 		{
 			object parms = null;
 
@@ -112,7 +112,7 @@ namespace Synapse.Core
 			return v;
 		}
 
-		string ResolveYamlConfig()
+		string ResolveYaml()
 		{
 			object parms = null;
 
@@ -151,7 +151,7 @@ Kitten:
 			return v;
 		}
 
-		string ResolveUnspecifiedConfig()
+		string ResolveUnspecified()
 		{
 			string parms = string.Empty;
 

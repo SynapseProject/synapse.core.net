@@ -5,7 +5,15 @@ Actions:
 - Name: ac0
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-    ConfigKey: phoo
+    Config:
+      Type: Yaml
+      Uri: http://foo
+      Values:
+        Magical: Mystery1
+        Lucy: In the sky1
+        Kitten:
+          Cat: Tommy1
+          Color: Rat1
   Parameters:
     Type: Yaml
     Uri: http://foo
@@ -29,7 +37,9 @@ Actions:
     - Name: ac0.1.1
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-        ConfigKey: pho
+        Config:
+          Type: Xml
+          Uri: http://foo
       Parameters:
         Type: Xml
         Uri: http://foo
@@ -43,7 +53,9 @@ Actions:
     - Name: ac0.1.2
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-        ConfigKey: car
+        Config:
+          Type: Xml
+          Uri: http://foo
       Parameters:
         Type: Xml
         Uri: http://foo
@@ -58,14 +70,18 @@ Actions:
   ExecuteCase: 4
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-    ConfigKey: gho
+    Config:
+      Type: Xml
+      Uri: http://foo
   Parameters:
     Values: foo
   Actions: []
 - Name: ac2
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-    ConfigKey: jar
+    Config:
+      Type: Xml
+      Uri: http://foo
   Parameters:
     Uri: http://foo
     Type: Json
