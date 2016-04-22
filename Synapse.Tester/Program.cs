@@ -13,9 +13,10 @@ namespace Synapse.Tester
 	{
 		static void Main(string[] args)
 		{
+			string path = @"..\..\yaml\example.yml";
 			if( args.Length > 0 )
 			{
-				using( StreamReader sr = new StreamReader( @"example.yml" ) )
+				using( StreamReader sr = new StreamReader( path ) )
 				{
 					Dictionary<string, string> parms = new Dictionary<string, string>();
 					parms["app"] = "someApp";
@@ -45,7 +46,7 @@ namespace Synapse.Tester
 					IsActive = true
 				};
 
-				using( StreamWriter file = new StreamWriter( @"example.yml" ) )
+				using( StreamWriter file = new StreamWriter( path ) )
 				{
 					p.ToYaml( file );
 				}

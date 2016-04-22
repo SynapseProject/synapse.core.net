@@ -1,0 +1,87 @@
+Name: plan0
+Description: planDesc
+IsActive: true
+Actions:
+- Name: ac0
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+    ConfigKey: phoo
+  Parameters:
+    Type: Yaml
+    Uri: http://foo
+    Values:
+      Magical: Mystery1
+      Lucy: In the sky1
+      Kitten:
+        Cat: Tommy1
+        Color: Rat1
+    Dynamic:
+    - Name: app
+      Path: Magical
+    - Name: type
+      Path: Kitten:Color
+  Actions:
+  - Name: ac0.1
+    ExecuteCase: Failed
+    Handler:
+      Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+    Actions:
+    - Name: ac0.1.1
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+        ConfigKey: pho
+      Parameters:
+        Type: Xml
+        Uri: http://foo
+        Values: <xml attr="value1"><data>foo1</data></xml>
+        Dynamic:
+        - Name: app
+          Path: /xml[1]/data[1]
+        - Name: type
+          Path: /xml[1]/@attr
+      Actions: []
+    - Name: ac0.1.2
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
+        ConfigKey: car
+      Parameters:
+        Type: Xml
+        Uri: http://foo
+        Values: <xml attr="value1"><data>foo1</data></xml>
+        Dynamic:
+        - Name: app
+          Path: /xml[1]/data[1]
+        - Name: type
+          Path: /xml[1]/@attr
+      Actions: []
+- Name: ac1
+  ExecuteCase: 4
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+    ConfigKey: gho
+  Parameters:
+    Values: foo
+  Actions: []
+- Name: ac2
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
+    ConfigKey: jar
+  Parameters:
+    Uri: http://foo
+    Type: Json
+    Values:
+      {
+        "ApplicationName": "steve1",
+        "EnvironmentName": "dev1",
+        "Tier": {
+            "Name": "webserver1",
+            "Type": "python1",
+            "Version": "1.0"
+        },
+      }
+    Dynamic:
+    - Name: app
+      Path: ApplicationName
+    - Name: type
+      Path: Tier:Type
+  Actions: []
