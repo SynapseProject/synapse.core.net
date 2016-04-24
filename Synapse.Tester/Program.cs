@@ -14,17 +14,23 @@ namespace Synapse.Tester
 		static void Main(string[] args)
 		{
 			string path = @"..\..\yaml\example.yml";
+			string outpath = @"..\..\yaml\example.out.yml";
 			if( args.Length > 0 )
 			{
+				Dictionary<string, string> parms = new Dictionary<string, string>();
+				parms["app"] = "someApp";
+				parms["type"] = "someType";
+				Plan plan = null;
 				using( StreamReader sr = new StreamReader( path ) )
 				{
-					Dictionary<string, string> parms = new Dictionary<string, string>();
-					parms["app"] = "someApp";
-					parms["type"] = "someType";
-					Plan plan = Plan.FromYaml( sr );
-					Engine engine = new Engine();
-					HandlerResult result = engine.Process( plan, parms );
-					Console.WriteLine( result );
+					plan = Plan.FromYaml( sr );
+				}
+				Engine engine = new Engine();
+				HandlerResult result = engine.Process( plan, parms );
+				Console.WriteLine( result );
+				using( StreamWriter file = new StreamWriter( outpath ) )
+				{
+					plan.ToYaml( file );
 				}
 			}
 			else

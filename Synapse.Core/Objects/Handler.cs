@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -9,6 +10,7 @@ namespace Synapse.Core
 	{
 		public string Type { get; set; }
 		public Config Config { get; set; }
+		[YamlIgnore]
 		public bool HasConfig { get { return Config != null; } }
 	}
 
