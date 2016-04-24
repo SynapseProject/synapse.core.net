@@ -9,7 +9,10 @@ namespace Synapse.Core
 	interface IConfigData
 	{
 		string Name { get; set; }
+		bool HasName { get; }
+		SerializationType Type { get; set; }
 		string InheritFrom { get; set; }
+		bool HasInheritFrom { get; }
 		object InheritedValues { get; set; }
 		bool HasInheritedValues { get; }
 		string Uri { get; set; }
@@ -18,7 +21,7 @@ namespace Synapse.Core
 		bool HasValues { get; }
 		List<DynamicValue> Dynamic { get; set; }
 		bool HasDynamic { get; }
-		SerializationType Type { get; set; }
+		string ResolvedValues { get; set; }
 
 		string Resolve(Dictionary<string, string> dynamicParameters = null);
 	}
@@ -27,9 +30,14 @@ namespace Synapse.Core
 	{
 		#region properties
 		public string Name { get; set; }
+		[YamlIgnore]
+		public bool HasName { get { return !string.IsNullOrWhiteSpace( Name ); } }
+
 		public SerializationType Type { get; set; }
 
 		public string InheritFrom { get; set; }
+		[YamlIgnore]
+		public bool HasInheritFrom { get { return !string.IsNullOrWhiteSpace( InheritFrom ); } }
 		[YamlIgnore]
 		public object InheritedValues { get; set; }
 		[YamlIgnore]
@@ -47,6 +55,8 @@ namespace Synapse.Core
 		[YamlIgnore]
 		public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 
+		[YamlIgnore]
+		public string ResolvedValues { get; set; }
 		#endregion
 
 
@@ -80,6 +90,8 @@ namespace Synapse.Core
 					break;
 				}
 			}
+
+			ResolvedValues = parms;
 			return parms;
 		}
 

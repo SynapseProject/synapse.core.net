@@ -18,7 +18,7 @@ namespace Synapse.Core.Runtime
 			Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
 			hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
 
-			string config = info.HasConfig ? info.Config.Resolve() : null;
+			string config = info.HasConfig ? info.Config.ResolvedValues : null;
 			hr.Initialize( config );
 
 			return hr;
