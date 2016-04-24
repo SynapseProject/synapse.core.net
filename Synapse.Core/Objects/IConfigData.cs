@@ -23,7 +23,7 @@ namespace Synapse.Core
 		bool HasDynamic { get; }
 		string ResolvedValues { get; set; }
 
-		string Resolve(Dictionary<string, string> dynamicParameters = null);
+		string Resolve(Dictionary<string, string> dynamicData = null);
 	}
 
 	public abstract class ConfigDataBase
@@ -60,11 +60,11 @@ namespace Synapse.Core
 		#endregion
 
 
-		private Dictionary<string, string> _dynamicParameters = null;
+		private Dictionary<string, string> _dynamicData = null;
 
-		public string Resolve(Dictionary<string, string> dynamicParameters = null)
+		public string Resolve(Dictionary<string, string> dynamicData = null)
 		{
-			_dynamicParameters = dynamicParameters ?? new Dictionary<string, string>();
+			_dynamicData = dynamicData ?? new Dictionary<string, string>();
 
 			string parms = string.Empty;
 			switch( Type )
@@ -143,7 +143,7 @@ namespace Synapse.Core
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicParameters );
+				Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicData );
 			}
 
 			//todo: XmlSerializer
@@ -198,7 +198,7 @@ namespace Synapse.Core
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicParameters );
+				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
 			}
 
 			string v = null;
@@ -243,7 +243,7 @@ Kitten:
 			//kv_replace
 			if( HasDynamic )
 			{
-				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicParameters );
+				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
 			}
 
 			string v = null;

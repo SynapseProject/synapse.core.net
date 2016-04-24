@@ -27,7 +27,7 @@ namespace Synapse.Core.Runtime
 
 			foreach( ActionItem a in actionList )
 			{
-				string parms = ResolveParametersAndConfig( a, dynamicData );
+				string parms = ResolveConfigAndParameters( a, dynamicData );
 
 				IHandlerRuntime rt = HandlerRuntimeFactory.Create( a.Handler );
 				HandlerResult r = rt.Execute( parms );
@@ -44,7 +44,7 @@ namespace Synapse.Core.Runtime
 			return returnResult;
 		}
 
-		string ResolveParametersAndConfig(ActionItem a, Dictionary<string, string> dynamicData)
+		string ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
 		{
 			if( a.Handler.HasConfig )
 			{
