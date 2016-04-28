@@ -108,6 +108,11 @@ Actions:
     Dynamic:
     - Name: app
       Path: ApplicationName
+      Options:
+      - Key: 1
+        Value: TheOne
+      - Key: 2
+        Value: Shoe
     - Name: type
       Path: Tier:Type
   Actions: []

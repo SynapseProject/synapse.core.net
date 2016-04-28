@@ -2,8 +2,7 @@
 
 namespace Synapse.Core
 {
-
-	public class Parameters : ConfigDataBase
+	public class Parameters : ParameterInfoBase
 	{
 	}
 }

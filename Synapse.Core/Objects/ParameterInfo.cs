@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-	interface IConfigData
+	interface IParameterInfo
 	{
 		string Name { get; set; }
 		bool HasName { get; }
@@ -21,12 +21,13 @@ namespace Synapse.Core
 		bool HasValues { get; }
 		List<DynamicValue> Dynamic { get; set; }
 		bool HasDynamic { get; }
-		string ResolvedValues { get; set; }
+		object ResolvedValues { get; set; }
+		string ResolvedValuesSerialized { get; set; }
 
 		string Resolve(Dictionary<string, string> dynamicData = null);
 	}
 
-	public abstract class ConfigDataBase
+	public abstract class ParameterInfoBase : IParameterInfo
 	{
 		#region properties
 		public string Name { get; set; }
@@ -56,7 +57,9 @@ namespace Synapse.Core
 		public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 
 		[YamlIgnore]
-		public string ResolvedValues { get; set; }
+		public object ResolvedValues { get; set; }
+		[YamlIgnore]
+		public string ResolvedValuesSerialized { get; set; }
 		#endregion
 
 
@@ -91,7 +94,7 @@ namespace Synapse.Core
 				}
 			}
 
-			ResolvedValues = parms;
+			ResolvedValuesSerialized = parms;
 			return parms;
 		}
 
@@ -101,8 +104,7 @@ namespace Synapse.Core
 
 			if( HasInheritedValues )
 			{
-				parms = new XmlDocument();
-				parms.LoadXml( InheritedValues.ToString() );
+				parms = (XmlDocument)InheritedValues;
 			}
 
 			//make rest call
