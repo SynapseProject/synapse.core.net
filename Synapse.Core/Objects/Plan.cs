@@ -7,13 +7,13 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-	public class Plan
+	public partial class Plan
 	{
 		public string Name { get; set; }
 		public string UniqueName { get; set; }
 		public string Description { get; set; }
-		public List<ActionItem> Actions { get; set; }
 		public bool IsActive { get; set; }
+		public List<ActionItem> Actions { get; set; }
 
 		public string ToYaml()
 		{

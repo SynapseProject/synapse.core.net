@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -17,9 +18,11 @@ namespace Synapse.Core
 		public StatusType ExecuteCase { get; set; }
 		public HandlerInfo Handler { get; set; }
 		public Parameters Parameters { get; set; }
+		[YamlIgnore]
 		public bool HasParameters { get { return Parameters != null; } }
 		public HandlerResult ExecuteResult { get; set; }
 		public List<ActionItem> Actions { get; set; }
+		[YamlIgnore]
 		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
 
 		public static ActionItem CreateDummy(string name = "xxx")
@@ -27,7 +30,7 @@ namespace Synapse.Core
 			return new ActionItem()
 			{
 				Name = name,
-				Handler = new HandlerInfo() { Type = "foo", ConfigKey = "zzz" },
+				Handler = new HandlerInfo() { Type = "foo" },
 				Parameters = new Parameters() { Values = "foo" },
 				Actions = new List<ActionItem>()
 			};

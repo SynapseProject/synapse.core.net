@@ -39,10 +39,8 @@ Actions:
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
         Config:
-          Type: Xml
           Uri: http://foo
       Parameters:
-        Type: Xml
         Uri: http://foo
         Values: <xml attr="value1"><data>foo1</data></xml>
         Dynamic:
@@ -55,10 +53,8 @@ Actions:
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
         Config:
-          Type: Xml
           Uri: http://foo
       Parameters:
-        Type: Xml
         Uri: http://foo
         Values: <xml attr="value1"><data>foo1</data></xml>
         Dynamic:
@@ -71,7 +67,6 @@ Actions:
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
         Config:
-          Type: Xml
           Uri: http://foo
       Parameters:
         Type: Yaml
@@ -81,7 +76,6 @@ Actions:
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
-      Type: Xml
       Uri: http://foo
   Parameters:
     Values: foo
@@ -90,21 +84,17 @@ Actions:
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
     Config:
-      Type: Xml
       Uri: http://foo
   Parameters:
     Type: Json
     Uri: http://foo
     Values:
-      {
-        "ApplicationName": "steve1",
-        "EnvironmentName": "dev1",
-        "Tier": {
-            "Name": "webserver1",
-            "Type": "python1",
-            "Version": "1.0"
-        },
-      }
+      ApplicationName: steve1
+      EnvironmentName: dev1
+      Tier:
+        Name: webserver1
+        Type: python1
+        Version: 1.0
     Dynamic:
     - Name: app
       Path: ApplicationName
