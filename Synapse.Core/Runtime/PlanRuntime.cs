@@ -12,30 +12,31 @@ namespace Synapse.Core
 	public partial class Plan
 	{
 		#region events
-		public event EventHandler<HandlerProgressCancelEventArgs> Progress;
-		/// <summary>
-		/// Notify of step start. If return value is True, then cancel operation.
-		/// </summary>
-		/// <param name="context">The method name or workflow activty.</param>
-		/// <param name="message">Descriptive message.</param>
-		/// <param name="status">Overall Package status indicator.</param>
-		/// <param name="id">Message Id.</param>
-		/// <param name="severity">Message/error severity.</param>
-		/// <param name="ex">Current exception (optional).</param>
-		/// <returns>HandlerProgressCancelEventArgs.Cancel value.</returns>
-		protected virtual bool OnProgress(string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
-		{
-			HandlerProgressCancelEventArgs e =
-				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex );
-			OnProgress( e );
+		public event EventHandler<HandlerProgressEventArgs> Progress;
 
-			return e.Cancel;
-		}
+		///// <summary>
+		///// Notify of step start. If return value is True, then cancel operation.
+		///// </summary>
+		///// <param name="context">The method name or workflow activty.</param>
+		///// <param name="message">Descriptive message.</param>
+		///// <param name="status">Overall Package status indicator.</param>
+		///// <param name="id">Message Id.</param>
+		///// <param name="severity">Message/error severity.</param>
+		///// <param name="ex">Current exception (optional).</param>
+		///// <returns>HandlerProgressCancelEventArgs.Cancel value.</returns>
+		//protected virtual bool OnProgress(string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+		//{
+		//	HandlerProgressCancelEventArgs e =
+		//		new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex );
+		//	OnProgress( e );
+
+		//	return e.Cancel;
+		//}
 
 		/// <summary>
 		/// Notify of step start. If e.Cancel is True, then cancel operation.
 		/// </summary>
-		protected virtual void OnProgress(HandlerProgressCancelEventArgs e)
+		protected virtual void OnProgress(HandlerProgressEventArgs e)
 		{
 			if( Progress != null )
 			{
@@ -43,6 +44,8 @@ namespace Synapse.Core
 			}
 		}
 		#endregion
+
+		bool _wantsCancel = false;
 
 		Dictionary<string, Config> _configSets = new Dictionary<string, Config>();
 		Dictionary<string, Parameters> _paramSets = new Dictionary<string, Parameters>();
@@ -52,9 +55,9 @@ namespace Synapse.Core
 			return ProcessRecursive( this.Actions, HandlerResult.Emtpy, dynamicData, dryRun );
 		}
 
-		public void Stop() { }
-
 		public void Pause() { }
+
+		public void Stop() { _wantsCancel = true; }
 
 		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
 		{
@@ -65,7 +68,10 @@ namespace Synapse.Core
 			{
 				string parms = ResolveConfigAndParameters( a, dynamicData );
 
-				IHandlerRuntime rt = CreateHandlerRuntime( a.Handler );
+				IHandlerRuntime rt = CreateHandlerRuntime( a );
+				rt.StepStarting += rt_StepStarting;
+				rt.StepProgress += rt_StepProgress;
+				rt.StepFinished += rt_StepFinished;
 				HandlerResult r = rt.Execute( parms );
 
 				if( r.Status > returnResult.Status ) { returnResult = r; }
@@ -78,6 +84,22 @@ namespace Synapse.Core
 			}
 
 			return returnResult;
+		}
+
+		void rt_StepStarting(object sender, HandlerProgressCancelEventArgs e)
+		{
+			e.Cancel = _wantsCancel;
+			OnProgress( e );
+		}
+
+		void rt_StepProgress(object sender, HandlerProgressEventArgs e)
+		{
+			OnProgress( e );
+		}
+
+		void rt_StepFinished(object sender, HandlerProgressEventArgs e)
+		{
+			OnProgress( e );
 		}
 
 		string ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
@@ -116,17 +138,18 @@ namespace Synapse.Core
 			return parms;
 		}
 
-		IHandlerRuntime CreateHandlerRuntime(HandlerInfo info)
+		IHandlerRuntime CreateHandlerRuntime(ActionItem a)
 		{
 			IHandlerRuntime hr = new Runtime.EmptyHandler();
 
-			string[] typeInfo = info.Type.Split( ':' );
+			string[] typeInfo = a.Handler.Type.Split( ':' );
 			AssemblyName an = new AssemblyName( typeInfo[0] );
 			Assembly hrAsm = Assembly.Load( an );
 			Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
 			hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
+			hr.ActionName = a.Name;
 
-			string config = info.HasConfig ? info.Config.ResolvedValuesSerialized : null;
+			string config = a.Handler.HasConfig ? a.Handler.Config.ResolvedValuesSerialized : null;
 			hr.Initialize( config );
 
 			return hr;

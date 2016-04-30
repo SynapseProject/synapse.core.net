@@ -25,6 +25,7 @@ namespace Synapse.Tester
 				{
 					plan = Plan.FromYaml( sr );
 				}
+				plan.Progress += plan_Progress;
 				HandlerResult result = plan.Start( parms );
 				Console.WriteLine( result );
 				using( StreamWriter file = new StreamWriter( outpath ) )
@@ -57,6 +58,15 @@ namespace Synapse.Tester
 				}
 			}
 			Console.Read();
+		}
+
+		static void plan_Progress(object sender, HandlerProgressEventArgs e)
+		{
+			if( e.ActionName == "ac0.1.3" && e is HandlerProgressCancelEventArgs )
+			{
+				((HandlerProgressCancelEventArgs)e).Cancel = true;
+			}
+			Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}", e.ActionName, e.Context, e.Message );
 		}
 	}
 }

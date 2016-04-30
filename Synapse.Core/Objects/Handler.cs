@@ -16,6 +16,8 @@ namespace Synapse.Core
 
 	public interface IHandlerRuntime
 	{
+		string ActionName { get; set; }
+
 		IHandlerRuntime Initialize(string config);
 		HandlerResult Execute(string parms); //maybe should be object
 
@@ -26,6 +28,8 @@ namespace Synapse.Core
 
 	public abstract class HandlerRuntimeBase : IHandlerRuntime
 	{
+		public string ActionName { get; set; }
+
 		//public abstract string Parameters { get; set; }
 		public abstract HandlerResult Execute(string parms);
 
@@ -64,6 +68,7 @@ namespace Synapse.Core
 		{
 			if( StepStarting != null )
 			{
+				e.ActionName = this.ActionName;
 				StepStarting( this, e );
 			}
 		}
@@ -81,7 +86,7 @@ namespace Synapse.Core
 		{
 			if( StepProgress != null )
 			{
-				StepProgress( this, new HandlerProgressEventArgs( context, message, status, id, severity, ex ) );
+				StepProgress( this, new HandlerProgressEventArgs( context, message, status, id, severity, ex ) { ActionName = this.ActionName } );
 			}
 		}
 
@@ -98,7 +103,7 @@ namespace Synapse.Core
 		{
 			if( StepFinished != null )
 			{
-				StepFinished( this, new HandlerProgressEventArgs( context, message, status, id, severity, ex ) );
+				StepFinished( this, new HandlerProgressEventArgs( context, message, status, id, severity, ex ) { ActionName = this.ActionName } );
 			}
 		}
 	}
@@ -120,6 +125,7 @@ namespace Synapse.Core
 			Exception = ex;
 		}
 
+		public string ActionName { get; internal set; }
 		public string Context { get; protected set; }
 		public string Message { get; protected set; }
 		public StatusType Status { get; protected set; }

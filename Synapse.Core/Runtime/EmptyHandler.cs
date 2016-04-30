@@ -37,6 +37,16 @@ namespace Synapse.Core.Runtime
 	{
 		override public HandlerResult Execute(string parms)
 		{
+			bool cancel = OnStepStarting( "FooExecute", "Starting" );
+			if( !cancel )
+			{
+				OnStepProgress( "FooExecute", "Progress" );
+				OnStepFinished( "FooExecute", "Finished" );
+			}
+			else
+			{
+				OnStepFinished( "FooExecute", "Cancelled" );
+			}
 			return new HandlerResult() { Status = StatusType.Failed };
 		}
 	}
@@ -45,6 +55,16 @@ namespace Synapse.Core.Runtime
 	{
 		override public HandlerResult Execute(string parms)
 		{
+			bool cancel = OnStepStarting( "BarExecute", "Starting" );
+			if( !cancel )
+			{
+				OnStepProgress( "BarExecute", "Progress" );
+				OnStepFinished( "BarExecute", "Finished" );
+			}
+			else
+			{
+				OnStepFinished( "BarExecute", "Cancelled" );
+			}
 			return new HandlerResult() { Status = StatusType.Complete };
 		}
 	}
