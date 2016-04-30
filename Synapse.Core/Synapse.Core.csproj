@@ -58,11 +58,11 @@
     <Compile Include="Objects\Parameters.cs" />
     <Compile Include="Objects\ActionItem.cs" />
     <Compile Include="Objects\Enums\SerializationType.cs" />
-    <Compile Include="Runtime\Engine.cs" />
+    <Compile Include="Runtime\PlanRuntime.cs" />
     <Compile Include="Objects\Handler.cs" />
     <Compile Include="Objects\Plan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\Factories.cs" />
+    <Compile Include="Runtime\EmptyHandler.cs" />
     <Compile Include="Utilities\MergeHelpers.cs" />
   </ItemGroup>
   <ItemGroup>

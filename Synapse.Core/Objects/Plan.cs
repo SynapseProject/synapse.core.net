@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-	public class Plan
+	public partial class Plan
 	{
 		public string Name { get; set; }
 		public string UniqueName { get; set; }

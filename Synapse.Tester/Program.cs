@@ -25,8 +25,7 @@ namespace Synapse.Tester
 				{
 					plan = Plan.FromYaml( sr );
 				}
-				Engine engine = new Engine();
-				HandlerResult result = engine.Process( plan, parms );
+				HandlerResult result = plan.Start( parms );
 				Console.WriteLine( result );
 				using( StreamWriter file = new StreamWriter( outpath ) )
 				{
