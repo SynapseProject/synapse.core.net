@@ -11,6 +11,7 @@ namespace Synapse.Tester
 {
 	class Program
 	{
+		static Plan plan = null;
 		static void Main(string[] args)
 		{
 			string path = @"..\..\yaml\example.yml";
@@ -20,13 +21,12 @@ namespace Synapse.Tester
 				Dictionary<string, string> parms = new Dictionary<string, string>();
 				parms["app"] = "someApp";
 				parms["type"] = "someType";
-				Plan plan = null;
 				using( StreamReader sr = new StreamReader( path ) )
 				{
 					plan = Plan.FromYaml( sr );
 				}
 				plan.Progress += plan_Progress;
-				HandlerResult result = plan.Start( parms );
+				HandlerResult result = plan.Start( parms, dryRun: true );
 				Console.WriteLine( result );
 				using( StreamWriter file = new StreamWriter( outpath ) )
 				{
@@ -44,7 +44,7 @@ namespace Synapse.Tester
 				actions.Add( ac0 );
 				actions.Add( ac2 );
 
-				Plan p = new Plan()
+				plan = new Plan()
 				{
 					Name = "plan0",
 					Actions = actions,
@@ -54,7 +54,7 @@ namespace Synapse.Tester
 
 				using( StreamWriter file = new StreamWriter( path ) )
 				{
-					p.ToYaml( file );
+					plan.ToYaml( file );
 				}
 			}
 			Console.Read();
@@ -62,9 +62,15 @@ namespace Synapse.Tester
 
 		static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
 		{
-			if( e.ActionName == "ac0.1.3" && e is HandlerProgressCancelEventArgs )
+			if( e.ActionName == "ac0.1.1" && e.Status == StatusType.Initializing )
 			{
-				((HandlerProgressCancelEventArgs)e).Cancel = true;
+				plan.Pause();
+				System.Threading.Thread.Sleep( 5000 );
+				plan.Continue();
+			}
+			else if( e.ActionName == "ac0.1.2" )
+			{
+				e.Cancel = true;
 			}
 			Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}", e.ActionName, e.Context, e.Message );
 		}

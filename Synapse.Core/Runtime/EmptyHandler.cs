@@ -31,41 +31,52 @@ namespace Synapse.Core.Runtime
 		{
 			return new HandlerResult() { Status = StatusType.None };
 		}
-	}
 
-	public class FooHandler : HandlerRuntimeBase
-	{
-		override public HandlerResult Execute(string parms, bool dryRun = false)
+		protected string getMsg(StatusType status, bool dryRun)
 		{
-			bool cancel = OnStepStarting( "FooExecute", "Starting" );
-			if( !cancel )
-			{
-				OnStepProgress( "FooExecute", "Progress" );
-				OnStepFinished( "FooExecute", "Finished" );
-			}
-			else
-			{
-				OnStepFinished( "FooExecute", "Cancelled" );
-			}
-			return new HandlerResult() { Status = StatusType.Failed };
+			return string.Format( "{0}-->dryRun:{1}", status, dryRun );
 		}
 	}
 
-	public class BarHandler : HandlerRuntimeBase
+	public class FooHandler : EmptyHandler
 	{
 		override public HandlerResult Execute(string parms, bool dryRun = false)
 		{
-			bool cancel = OnStepStarting( "BarExecute", "Starting" );
+			StatusType st = StatusType.Failed;
+			bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
 			if( !cancel )
 			{
-				OnStepProgress( "BarExecute", "Progress" );
-				OnStepFinished( "BarExecute", "Finished" );
+				OnProgress( "FooExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running );
+				if( !dryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running ); }
+				OnProgress( "FooExecute", "Finished", st );
 			}
 			else
 			{
-				OnStepFinished( "BarExecute", "Cancelled" );
+				st = StatusType.Cancelled;
+				OnProgress( "FooExecute", "Cancelled", st );
 			}
-			return new HandlerResult() { Status = StatusType.Complete };
+			return new HandlerResult() { Status = st };
+		}
+	}
+
+	public class BarHandler : EmptyHandler
+	{
+		override public HandlerResult Execute(string parms, bool dryRun = false)
+		{
+			StatusType st = StatusType.Complete;
+			bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
+			if( !cancel )
+			{
+				OnProgress( "BarExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running );
+				if( !dryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running ); }
+				OnProgress( "BarExecute", "Finished", st );
+			}
+			else
+			{
+				st = StatusType.Cancelled;
+				OnProgress( "BarExecute", "Cancelled", st );
+			}
+			return new HandlerResult() { Status = st };
 		}
 	}
 }

@@ -21,9 +21,7 @@ namespace Synapse.Core
 		IHandlerRuntime Initialize(string config);
 		HandlerResult Execute(string parms, bool dryRun = false); //maybe should be object
 
-		event EventHandler<HandlerProgressCancelEventArgs> StepStarting;
-		event EventHandler<HandlerProgressCancelEventArgs> StepProgress;
-		event EventHandler<HandlerProgressCancelEventArgs> StepFinished;
+		event EventHandler<HandlerProgressCancelEventArgs> Progress;
 	}
 
 	public abstract class HandlerRuntimeBase : IHandlerRuntime
@@ -38,32 +36,7 @@ namespace Synapse.Core
 			return this;
 		}
 
-		public event EventHandler<HandlerProgressCancelEventArgs> StepStarting;
-		public event EventHandler<HandlerProgressCancelEventArgs> StepProgress;
-		public event EventHandler<HandlerProgressCancelEventArgs> StepFinished;
-
-		/// <summary>
-		/// Notify of step start. If return value is True, then cancel operation.
-		/// </summary>
-		/// <param name="context">The method name or workflow activty.</param>
-		/// <param name="message">Descriptive message.</param>
-		/// <param name="status">Overall Package status indicator.</param>
-		/// <param name="id">Message Id.</param>
-		/// <param name="severity">Message/error severity.</param>
-		/// <param name="ex">Current exception (optional).</param>
-		/// <returns>HandlerProgressCancelEventArgs.Cancel value.</returns>
-		protected virtual bool OnStepStarting(string context, string message,
-			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
-		{
-			HandlerProgressCancelEventArgs e =
-				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
-			if( StepStarting != null )
-			{
-				StepStarting( this, e );
-			}
-
-			return e.Cancel;
-		}
+		public event EventHandler<HandlerProgressCancelEventArgs> Progress;
 
 		/// <summary>
 		/// Notify of step progress.
@@ -74,36 +47,14 @@ namespace Synapse.Core
 		/// <param name="id">Message Id.</param>
 		/// <param name="severity">Message/error severity.</param>
 		/// <param name="ex">Current exception (optional).</param>
-		protected virtual bool OnStepProgress(string context, string message,
+		protected virtual bool OnProgress(string context, string message,
 			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
 		{
 			HandlerProgressCancelEventArgs e =
 				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
-			if( StepProgress != null )
+			if( Progress != null )
 			{
-				StepProgress( this, e );
-			}
-
-			return e.Cancel;
-		}
-
-		/// <summary>
-		/// Notify of step completion.
-		/// </summary>
-		/// <param name="context">The method name or workflow activty.</param>
-		/// <param name="message">Descriptive message.</param>
-		/// <param name="status">Overall Package status indicator.</param>
-		/// <param name="id">Message Id.</param>
-		/// <param name="severity">Message/error severity.</param>
-		/// <param name="ex">Current exception (optional).</param>
-		protected virtual bool OnStepFinished(string context, string message,
-			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
-		{
-			HandlerProgressCancelEventArgs e =
-				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
-			if( StepFinished != null )
-			{
-				StepFinished( this, e );
+				Progress( this, e );
 			}
 
 			return e.Cancel;

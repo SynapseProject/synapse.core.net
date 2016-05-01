@@ -58,22 +58,49 @@ namespace Synapse.Core
 
 		public void Pause() { _wantsPause = true; }
 		public void Continue() { _wantsPause = false; }
+		public bool IsPaused { get { return _wantsPause; } }
+		void CheckPause() //todo: this is just a stub method
+		{
+			if( _wantsPause )
+			{
+				System.Threading.Thread.Sleep( 1000 );
+			}
+		}
+
+		bool CheckStopOrPause()
+		{
+			if( _wantsCancel )
+			{
+				return true;
+			}
+			else
+			{
+				if( _wantsPause )
+				{
+					System.Threading.Thread.Sleep( 1000 );
+				}
+				return false;
+			}
+		}
 
 		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
 		{
+			if( CheckStopOrPause() ) { return result; }
+
 			HandlerResult returnResult = HandlerResult.Emtpy;
 			IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
 
 			foreach( ActionItem a in actionList )
 			{
+				if( CheckStopOrPause() ) { break; }
+
 				string parms = ResolveConfigAndParameters( a, dynamicData );
 
 				IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
-				rt.StepStarting += rt_StepStarting;
-				rt.StepProgress += rt_StepProgress;
-				rt.StepFinished += rt_StepFinished;
+				rt.Progress += rt_Progress;
 
-				HandlerResult r = rt.Execute( parms );
+				if( CheckStopOrPause() ) { break; }
+				HandlerResult r = rt.Execute( parms, dryRun );
 
 				if( r.Status > returnResult.Status ) { returnResult = r; }
 
@@ -87,19 +114,9 @@ namespace Synapse.Core
 			return returnResult;
 		}
 
-		void rt_StepStarting(object sender, HandlerProgressCancelEventArgs e)
+		void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
 		{
 			if( _wantsCancel ) { e.Cancel = true; }
-			OnProgress( e );
-		}
-
-		void rt_StepProgress(object sender, HandlerProgressCancelEventArgs e)
-		{
-			OnProgress( e );
-		}
-
-		void rt_StepFinished(object sender, HandlerProgressCancelEventArgs e)
-		{
 			OnProgress( e );
 		}
 
@@ -148,6 +165,13 @@ namespace Synapse.Core
 
 		IHandlerRuntime CreateHandlerRuntime(string actionName, HandlerInfo info)
 		{
+			bool cancel = OnProgress( actionName, "CreateHandlerRuntime: " + info.Type, "Start" );
+			if( cancel )
+			{
+				_wantsCancel = true;
+				return new Runtime.EmptyHandler();
+			}
+
 			IHandlerRuntime hr = new Runtime.EmptyHandler();
 
 			string[] typeInfo = info.Type.Split( ':' );
