@@ -118,6 +118,7 @@ namespace Synapse.Core
 		{
 			if( _wantsCancel ) { e.Cancel = true; }
 			OnProgress( e );
+			if( e.Cancel ) { _wantsCancel = true; }
 		}
 
 		string ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)

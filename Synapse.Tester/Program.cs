@@ -26,7 +26,7 @@ namespace Synapse.Tester
 					plan = Plan.FromYaml( sr );
 				}
 				plan.Progress += plan_Progress;
-				HandlerResult result = plan.Start( parms, dryRun: true );
+				HandlerResult result = plan.Start( parms, dryRun: false );
 				Console.WriteLine( result );
 				using( StreamWriter file = new StreamWriter( outpath ) )
 				{
@@ -68,7 +68,7 @@ namespace Synapse.Tester
 				System.Threading.Thread.Sleep( 5000 );
 				plan.Continue();
 			}
-			else if( e.ActionName == "ac0.1.2" )
+			else if( e.ActionName == "ac0.1.2" && e.Status == StatusType.Initializing )
 			{
 				e.Cancel = true;
 			}
