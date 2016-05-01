@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -13,6 +10,7 @@ namespace Synapse.Core
 	{
 		#region events
 		public event EventHandler<HandlerProgressCancelEventArgs> Progress;
+
 		/// <summary>
 		/// Notify of step start. If return value is True, then cancel operation.
 		/// </summary>
@@ -23,10 +21,11 @@ namespace Synapse.Core
 		/// <param name="severity">Message/error severity.</param>
 		/// <param name="ex">Current exception (optional).</param>
 		/// <returns>HandlerProgressCancelEventArgs.Cancel value.</returns>
-		protected virtual bool OnProgress(string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+		protected virtual bool OnProgress(string actionName, string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
 		{
 			HandlerProgressCancelEventArgs e =
-				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex );
+				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = actionName };
+			if( _wantsCancel ) { e.Cancel = true; }
 			OnProgress( e );
 
 			return e.Cancel;
@@ -44,6 +43,9 @@ namespace Synapse.Core
 		}
 		#endregion
 
+		bool _wantsCancel = false;
+		bool _wantsPause = false;
+
 		Dictionary<string, Config> _configSets = new Dictionary<string, Config>();
 		Dictionary<string, Parameters> _paramSets = new Dictionary<string, Parameters>();
 
@@ -52,21 +54,53 @@ namespace Synapse.Core
 			return ProcessRecursive( this.Actions, HandlerResult.Emtpy, dynamicData, dryRun );
 		}
 
-		public void Stop() { }
+		public void Stop() { _wantsCancel = true; }
 
-		public void Pause() { }
+		public void Pause() { _wantsPause = true; }
+		public void Continue() { _wantsPause = false; }
+		public bool IsPaused { get { return _wantsPause; } }
+		void CheckPause() //todo: this is just a stub method
+		{
+			if( _wantsPause )
+			{
+				System.Threading.Thread.Sleep( 1000 );
+			}
+		}
+
+		bool CheckStopOrPause()
+		{
+			if( _wantsCancel )
+			{
+				return true;
+			}
+			else
+			{
+				if( _wantsPause )
+				{
+					System.Threading.Thread.Sleep( 1000 );
+				}
+				return false;
+			}
+		}
 
 		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
 		{
+			if( CheckStopOrPause() ) { return result; }
+
 			HandlerResult returnResult = HandlerResult.Emtpy;
 			IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
 
 			foreach( ActionItem a in actionList )
 			{
+				if( CheckStopOrPause() ) { break; }
+
 				string parms = ResolveConfigAndParameters( a, dynamicData );
 
-				IHandlerRuntime rt = CreateHandlerRuntime( a.Handler );
-				HandlerResult r = rt.Execute( parms );
+				IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
+				rt.Progress += rt_Progress;
+
+				if( CheckStopOrPause() ) { break; }
+				HandlerResult r = rt.Execute( parms, dryRun );
 
 				if( r.Status > returnResult.Status ) { returnResult = r; }
 
@@ -80,8 +114,21 @@ namespace Synapse.Core
 			return returnResult;
 		}
 
+		void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
+		{
+			if( _wantsCancel ) { e.Cancel = true; }
+			OnProgress( e );
+		}
+
 		string ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
 		{
+			bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start" );
+			if( cancel )
+			{
+				_wantsCancel = true;
+				return null;
+			}
+
 			if( a.Handler.HasConfig )
 			{
 				Config c = a.Handler.Config;
@@ -116,8 +163,15 @@ namespace Synapse.Core
 			return parms;
 		}
 
-		IHandlerRuntime CreateHandlerRuntime(HandlerInfo info)
+		IHandlerRuntime CreateHandlerRuntime(string actionName, HandlerInfo info)
 		{
+			bool cancel = OnProgress( actionName, "CreateHandlerRuntime: " + info.Type, "Start" );
+			if( cancel )
+			{
+				_wantsCancel = true;
+				return new Runtime.EmptyHandler();
+			}
+
 			IHandlerRuntime hr = new Runtime.EmptyHandler();
 
 			string[] typeInfo = info.Type.Split( ':' );
@@ -125,6 +179,7 @@ namespace Synapse.Core
 			Assembly hrAsm = Assembly.Load( an );
 			Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
 			hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
+			hr.ActionName = actionName;
 
 			string config = info.HasConfig ? info.Config.ResolvedValuesSerialized : null;
 			hr.Initialize( config );
