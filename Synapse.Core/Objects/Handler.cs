@@ -19,11 +19,11 @@ namespace Synapse.Core
 		string ActionName { get; set; }
 
 		IHandlerRuntime Initialize(string config);
-		HandlerResult Execute(string parms); //maybe should be object
+		HandlerResult Execute(string parms, bool dryRun = false); //maybe should be object
 
 		event EventHandler<HandlerProgressCancelEventArgs> StepStarting;
-		event EventHandler<HandlerProgressEventArgs> StepProgress;
-		event EventHandler<HandlerProgressEventArgs> StepFinished;
+		event EventHandler<HandlerProgressCancelEventArgs> StepProgress;
+		event EventHandler<HandlerProgressCancelEventArgs> StepFinished;
 	}
 
 	public abstract class HandlerRuntimeBase : IHandlerRuntime
@@ -31,7 +31,7 @@ namespace Synapse.Core
 		public string ActionName { get; set; }
 
 		//public abstract string Parameters { get; set; }
-		public abstract HandlerResult Execute(string parms);
+		public abstract HandlerResult Execute(string parms, bool dryRun = false);
 
 		public virtual IHandlerRuntime Initialize(string config)
 		{
@@ -39,8 +39,8 @@ namespace Synapse.Core
 		}
 
 		public event EventHandler<HandlerProgressCancelEventArgs> StepStarting;
-		public event EventHandler<HandlerProgressEventArgs> StepProgress;
-		public event EventHandler<HandlerProgressEventArgs> StepFinished;
+		public event EventHandler<HandlerProgressCancelEventArgs> StepProgress;
+		public event EventHandler<HandlerProgressCancelEventArgs> StepFinished;
 
 		/// <summary>
 		/// Notify of step start. If return value is True, then cancel operation.
@@ -52,25 +52,17 @@ namespace Synapse.Core
 		/// <param name="severity">Message/error severity.</param>
 		/// <param name="ex">Current exception (optional).</param>
 		/// <returns>HandlerProgressCancelEventArgs.Cancel value.</returns>
-		protected virtual bool OnStepStarting(string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+		protected virtual bool OnStepStarting(string context, string message,
+			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
 		{
 			HandlerProgressCancelEventArgs e =
-				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex );
-			OnStepStarting( e );
-
-			return e.Cancel;
-		}
-
-		/// <summary>
-		/// Notify of step start. If e.Cancel is True, then cancel operation.
-		/// </summary>
-		protected virtual void OnStepStarting(HandlerProgressCancelEventArgs e)
-		{
+				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
 			if( StepStarting != null )
 			{
-				e.ActionName = this.ActionName;
 				StepStarting( this, e );
 			}
+
+			return e.Cancel;
 		}
 
 		/// <summary>
@@ -82,12 +74,17 @@ namespace Synapse.Core
 		/// <param name="id">Message Id.</param>
 		/// <param name="severity">Message/error severity.</param>
 		/// <param name="ex">Current exception (optional).</param>
-		protected virtual void OnStepProgress(string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, Exception ex = null)
+		protected virtual bool OnStepProgress(string context, string message,
+			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
 		{
+			HandlerProgressCancelEventArgs e =
+				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
 			if( StepProgress != null )
 			{
-				StepProgress( this, new HandlerProgressEventArgs( context, message, status, id, severity, ex ) { ActionName = this.ActionName } );
+				StepProgress( this, e );
 			}
+
+			return e.Cancel;
 		}
 
 		/// <summary>
@@ -99,12 +96,17 @@ namespace Synapse.Core
 		/// <param name="id">Message Id.</param>
 		/// <param name="severity">Message/error severity.</param>
 		/// <param name="ex">Current exception (optional).</param>
-		protected virtual void OnStepFinished(string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, Exception ex = null)
+		protected virtual bool OnStepFinished(string context, string message,
+			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
 		{
+			HandlerProgressCancelEventArgs e =
+				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
 			if( StepFinished != null )
 			{
-				StepFinished( this, new HandlerProgressEventArgs( context, message, status, id, severity, ex ) { ActionName = this.ActionName } );
+				StepFinished( this, e );
 			}
+
+			return e.Cancel;
 		}
 	}
 
@@ -112,10 +114,10 @@ namespace Synapse.Core
 	{
 		bool Cancel { get; set; }
 	}
-	public class HandlerProgressEventArgs : EventArgs
+	public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
 	{
-		public HandlerProgressEventArgs(string context, string message,
-			StatusType status = StatusType.Running, int id = 0, int severity = 0, Exception ex = null)
+		public HandlerProgressCancelEventArgs(string context, string message,
+			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false,Exception ex = null)
 		{
 			Context = context;
 			Message = message;
@@ -131,20 +133,9 @@ namespace Synapse.Core
 		public StatusType Status { get; protected set; }
 		public int Id { get; protected set; }
 		public int Severity { get; protected set; }
+		public bool Cancel { get; set; }
 		public Exception Exception { get; protected set; }
 		public bool HasException { get { return this.Exception != null; } }
-	}
-	public class HandlerProgressCancelEventArgs : HandlerProgressEventArgs, ICancelEventArgs
-	{
-		public HandlerProgressCancelEventArgs(string context, string message,
-			StatusType status = StatusType.Running, int id = 0, int severity = 0,
-			bool cancel = false, Exception ex = null)
-			: base( context, message, status, id, severity, ex )
-		{
-			Cancel = cancel;
-		}
-
-		public bool Cancel { get; set; }
 	}
 
 	//public interface IHandlerConfig

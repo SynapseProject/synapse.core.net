@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -12,7 +9,7 @@ namespace Synapse.Core
 	public partial class Plan
 	{
 		#region events
-		public event EventHandler<HandlerProgressEventArgs> Progress;
+		public event EventHandler<HandlerProgressCancelEventArgs> Progress;
 
 		/// <summary>
 		/// Notify of step start. If return value is True, then cancel operation.
@@ -37,7 +34,7 @@ namespace Synapse.Core
 		/// <summary>
 		/// Notify of step start. If e.Cancel is True, then cancel operation.
 		/// </summary>
-		protected virtual void OnProgress(HandlerProgressEventArgs e)
+		protected virtual void OnProgress(HandlerProgressCancelEventArgs e)
 		{
 			if( Progress != null )
 			{
@@ -96,12 +93,12 @@ namespace Synapse.Core
 			OnProgress( e );
 		}
 
-		void rt_StepProgress(object sender, HandlerProgressEventArgs e)
+		void rt_StepProgress(object sender, HandlerProgressCancelEventArgs e)
 		{
 			OnProgress( e );
 		}
 
-		void rt_StepFinished(object sender, HandlerProgressEventArgs e)
+		void rt_StepFinished(object sender, HandlerProgressCancelEventArgs e)
 		{
 			OnProgress( e );
 		}

@@ -60,7 +60,7 @@ namespace Synapse.Tester
 			Console.Read();
 		}
 
-		static void plan_Progress(object sender, HandlerProgressEventArgs e)
+		static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
 		{
 			if( e.ActionName == "ac0.1.3" && e is HandlerProgressCancelEventArgs )
 			{

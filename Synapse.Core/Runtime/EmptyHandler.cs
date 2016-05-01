@@ -27,7 +27,7 @@ namespace Synapse.Core.Runtime
 
 	public class EmptyHandler : HandlerRuntimeBase
 	{
-		override public HandlerResult Execute(string parms)
+		override public HandlerResult Execute(string parms, bool dryRun = false)
 		{
 			return new HandlerResult() { Status = StatusType.None };
 		}
@@ -35,7 +35,7 @@ namespace Synapse.Core.Runtime
 
 	public class FooHandler : HandlerRuntimeBase
 	{
-		override public HandlerResult Execute(string parms)
+		override public HandlerResult Execute(string parms, bool dryRun = false)
 		{
 			bool cancel = OnStepStarting( "FooExecute", "Starting" );
 			if( !cancel )
@@ -53,7 +53,7 @@ namespace Synapse.Core.Runtime
 
 	public class BarHandler : HandlerRuntimeBase
 	{
-		override public HandlerResult Execute(string parms)
+		override public HandlerResult Execute(string parms, bool dryRun = false)
 		{
 			bool cancel = OnStepStarting( "BarExecute", "Starting" );
 			if( !cancel )
