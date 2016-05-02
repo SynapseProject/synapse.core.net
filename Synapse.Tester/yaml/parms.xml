@@ -1,0 +1,6 @@
+<xml attr='value0'>
+  <inner attri='foo001' />
+    <data>foo0</data>
+    <data>foo0</data>
+  <inner attri='foo00' />
+</xml>

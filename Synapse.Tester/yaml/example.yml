@@ -43,7 +43,7 @@ Actions:
           Uri: http://foo
       Parameters:
         Type: Xml
-        Uri: http://foo
+        Uri: file://C:/Devo/git/Synapse/Synapse.Tester/yaml/parms.xml
         Values: <xml attr="value1"><data>foo1</data></xml>
         Dynamic:
         - Name: app

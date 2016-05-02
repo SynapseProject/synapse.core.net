@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Synapse.Core.Runtime
 {
@@ -35,6 +37,35 @@ namespace Synapse.Core.Runtime
 		protected string getMsg(StatusType status, bool dryRun)
 		{
 			return string.Format( "{0}-->dryRun:{1}", status, dryRun );
+		}
+	}
+
+	public class UriHandler : HandlerRuntimeBase
+	{
+		override public HandlerResult Execute(string parms, bool dryRun = false)
+		{
+			string result = GetUri( parms ).Result;
+			return new HandlerResult() { Status = StatusType.None };
+		}
+
+		async Task<string> GetUri(string uri)
+		{
+			HttpClient client = new HttpClient();
+			return await client.GetStringAsync( uri );
+		}
+
+		async Task<string> GetUri_x(string uri)
+		{
+			string result = null;
+
+			using( HttpClient client = new HttpClient() )
+			using( HttpResponseMessage response = await client.GetAsync( uri ) )
+			using( HttpContent content = response.Content )
+			{
+				result = await content.ReadAsStringAsync();
+			}
+
+			return result;
 		}
 	}
 
