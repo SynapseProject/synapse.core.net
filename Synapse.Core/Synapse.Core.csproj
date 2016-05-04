@@ -53,12 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dal\Dal.cs" />
+    <Compile Include="Objects\SecurityContext.cs" />
     <Compile Include="Objects\DynamicValue.cs" />
     <Compile Include="Objects\Enums\StatusType.cs" />
     <Compile Include="Objects\Enums\MessageType.cs" />
-    <Compile Include="Objects\Config.cs" />
     <Compile Include="Objects\ParameterInfo.cs" />
-    <Compile Include="Objects\Parameters.cs" />
     <Compile Include="Objects\ActionItem.cs" />
     <Compile Include="Objects\Enums\SerializationType.cs" />
     <Compile Include="Runtime\ParameterInfoRuntime.cs" />

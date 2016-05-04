@@ -17,13 +17,16 @@ namespace Synapse.Core
 		public string Name { get; set; }
 		public StatusType ExecuteCase { get; set; }
 		public HandlerInfo Handler { get; set; }
-		public Parameters Parameters { get; set; }
+		public ParameterInfo Parameters { get; set; }
 		[YamlIgnore]
 		public bool HasParameters { get { return Parameters != null; } }
 		public HandlerResult ExecuteResult { get; set; }
 		public List<ActionItem> Actions { get; set; }
 		[YamlIgnore]
 		public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
+		public SecurityContext RunAs { get; set; }
+		[YamlIgnore]
+		public bool HasRunAs { get { return RunAs != null; } }
 
 		public static ActionItem CreateDummy(string name = "xxx")
 		{
@@ -31,7 +34,7 @@ namespace Synapse.Core
 			{
 				Name = name,
 				Handler = new HandlerInfo() { Type = "foo" },
-				Parameters = new Parameters() { Values = "foo" },
+				Parameters = new ParameterInfo() { Values = "foo" },
 				Actions = new List<ActionItem>()
 			};
 		}

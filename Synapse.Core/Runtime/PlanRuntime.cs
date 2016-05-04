@@ -46,8 +46,8 @@ namespace Synapse.Core
 		bool _wantsCancel = false;
 		bool _wantsPause = false;
 
-		Dictionary<string, Config> _configSets = new Dictionary<string, Config>();
-		Dictionary<string, Parameters> _paramSets = new Dictionary<string, Parameters>();
+		Dictionary<string, ParameterInfo> _configSets = new Dictionary<string, ParameterInfo>();
+		Dictionary<string, ParameterInfo> _paramSets = new Dictionary<string, ParameterInfo>();
 
 		public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false)
 		{
@@ -132,7 +132,7 @@ namespace Synapse.Core
 
 			if( a.Handler.HasConfig )
 			{
-				Config c = a.Handler.Config;
+				ParameterInfo c = a.Handler.Config;
 				if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
 				{
 					c.InheritedValues = _configSets[c.InheritFrom];
@@ -148,7 +148,7 @@ namespace Synapse.Core
 			string parms = null;
 			if( a.HasParameters )
 			{
-				Parameters p = a.Parameters;
+				ParameterInfo p = a.Parameters;
 				if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
 				{
 					p.InheritedValues = _paramSets[p.InheritFrom];

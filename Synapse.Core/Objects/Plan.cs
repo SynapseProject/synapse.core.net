@@ -12,6 +12,9 @@ namespace Synapse.Core
 		public string Description { get; set; }
 		public bool IsActive { get; set; }
 		public List<ActionItem> Actions { get; set; }
+		public SecurityContext RunAs { get; set; }
+		[YamlIgnore]
+		public bool HasRunAs { get { return RunAs != null; } }
 
 		public string ToYaml()
 		{

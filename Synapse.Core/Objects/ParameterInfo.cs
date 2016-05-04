@@ -25,8 +25,10 @@ namespace Synapse.Core
 		string Resolve(Dictionary<string, string> dynamicData = null);
 	}
 
-	public abstract partial class ParameterInfoBase : IParameterInfo
+	public partial class ParameterInfo : IParameterInfo
 	{
+		public ParameterInfo() { }
+
 		public string Name { get; set; }
 		[YamlIgnore]
 		public bool HasName { get { return !string.IsNullOrWhiteSpace( Name ); } }

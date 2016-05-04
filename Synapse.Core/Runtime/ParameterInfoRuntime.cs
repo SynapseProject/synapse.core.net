@@ -9,7 +9,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-	public abstract partial class ParameterInfoBase : IParameterInfo
+	public partial class ParameterInfo : IParameterInfo
 	{
 		private Dictionary<string, string> _dynamicData = null;
 

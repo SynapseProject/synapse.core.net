@@ -9,7 +9,7 @@ namespace Synapse.Core
 	public class HandlerInfo
 	{
 		public string Type { get; set; }
-		public Config Config { get; set; }
+		public ParameterInfo Config { get; set; }
 		[YamlIgnore]
 		public bool HasConfig { get { return Config != null; } }
 	}
