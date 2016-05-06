@@ -3,7 +3,7 @@
 Synapse is a lightweight execution engine designed to take data from disparate, federated sources and connect it to a process.  Synapse is built to run as a local or remote process.
 
 <p align="center">
-<img alt="Synapse Engine" src="../images/syn_engine.png" />
+<img alt="Synapse Engine" src="images/syn_engine.png" />
 </p>
 
 ## Elements
@@ -13,12 +13,13 @@ A Synapse workflow, called a `Plan`, is comprised of a hierarhy of Actions.  An 
 ```css
 Action:
 - Name: {string, friendly name}
+  Proxy: {uri, remote Synapse node}
   ExecuteCase: {enum, status value}
   Handler:
     Type: {library}:{module}
     Config: {ParameterInfo}
-    RunAs: {SecurityContext}
   Parameters: {ParameterInfo}
+  RunAs: {SecurityContext}
 ```
 Where, `ParameterInfo` is:
 ```css

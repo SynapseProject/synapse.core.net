@@ -15,6 +15,7 @@ namespace Synapse.Core
 		}
 
 		public string Name { get; set; }
+		public string Proxy { get; set; }
 		public StatusType ExecuteCase { get; set; }
 		public HandlerInfo Handler { get; set; }
 		public ParameterInfo Parameters { get; set; }
