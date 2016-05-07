@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Synapse by steveshortt</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Synapse</h1>
+        <h2>Joining Data with Actions.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/steveshortt/Synapse/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/steveshortt/Synapse/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/steveshortt/Synapse" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="welcome-to-synapse" class="anchor" href="#welcome-to-synapse" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Synapse</h1>
+
+<p>Synapse is a lightweight execution engine designed to take data from disparate, federated sources and connect it to a process.  Synapse is built to run as a local or remote process.</p>
+
+<h2>
+<a id="elements" class="anchor" href="#elements" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Elements</h2>
+
+<p>A Synapse workflow, called a <code>Plan</code>, is comprised of a hierarhy of Actions.  An <code>Action</code> is essentially the definition of a local or remote process and the parameters required to initiate it.  Plans are declared in YAML, as follows:</p>
+
+<div class="highlight highlight-source-css"><pre>Action:
+- Name: {<span class="pl-c1">string</span>, <span class="pl-c1">friendly</span> <span class="pl-c1"><span class="pl-c1">name</span></span>}
+  Proxy: {<span class="pl-c1">uri</span>, <span class="pl-c1">remote</span> S<span class="pl-c1">ynapse</span> <span class="pl-c1">node</span>}
+  ExecuteCase: {<span class="pl-c1">enum</span>, <span class="pl-c1">status</span> <span class="pl-c1">value</span>}
+  Handler:
+    Type: {<span class="pl-c1">library</span>}:{<span class="pl-c1">module</span>}
+    Config: {P<span class="pl-c1">arameter</span>I<span class="pl-c1">nfo</span>}
+  Parameters: {P<span class="pl-c1">arameter</span>I<span class="pl-c1">nfo</span>}
+  RunAs: {S<span class="pl-c1">ecurity</span>C<span class="pl-c1">ontext</span>}</pre></div>
+
+<p>Where, <code>ParameterInfo</code> is:</p>
+
+<div class="highlight highlight-source-css"><pre>    Name: {<span class="pl-c1">string</span>, <span class="pl-c1">friendly</span> <span class="pl-c1"><span class="pl-c1">name</span></span>}
+    Type: {<span class="pl-c1">enum</span>, X<span class="pl-c1">ml</span> | Y<span class="pl-c1">aml</span> | J<span class="pl-c1">son</span>}
+    Uri: {<span class="pl-c1">http</span>:// | file://}
+    Values:
+      {B<span class="pl-c1">lock</span> <span class="pl-c1">of</span> <span class="pl-c1">directly</span> <span class="pl-c1">declared</span> X<span class="pl-c1">ml</span>|Y<span class="pl-c1">aml</span>|J<span class="pl-c1">son</span> <span class="pl-c1">as</span> <span class="pl-c1">specified</span> <span class="pl-c1">by</span> T<span class="pl-c1">ype</span>}
+    Dynamic:
+    - Name: {<span class="pl-c1">friendly</span> <span class="pl-c1"><span class="pl-c1">name</span></span>}
+      Path: {XP<span class="pl-c1">ath</span> <span class="pl-c1">or</span> <span class="pl-c1">root</span>:path<span class="pl-c1">0</span>:path<span class="pl-c1">1</span>}
+      Options:
+      - Key: {<span class="pl-c1">key</span>}
+        Value: {<span class="pl-c1"><span class="pl-c1">display</span></span> <span class="pl-c1">value</span>}</pre></div>
+
+<p>And <code>SecurityContext</code> is:</p>
+
+<div class="highlight highlight-source-css"><pre>    Name: {<span class="pl-c1">string</span>, <span class="pl-c1">friendly</span> <span class="pl-c1"><span class="pl-c1">name</span></span>}
+    Password: {<span class="pl-c1">ecrypted</span> <span class="pl-c1">string</span>}
+    Provider: {A<span class="pl-c1">ctive</span> D<span class="pl-c1">irectory</span> | AWS | A<span class="pl-c1">zure</span>}
+    Config: {P<span class="pl-c1">arameter</span>I<span class="pl-c1">nfo</span>}</pre></div>
+
+<p>Essentially, Synapse takes data from various federated sources, provides the data to an action, and executes the action under a given security context.</p>
+
+<h2>
+<a id="components" class="anchor" href="#components" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Components</h2>
+
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Synapse.Core</td>
+<td>Contains the workflow execution engine and is responsible for initiating calls to sub-processes.</td>
+</tr>
+<tr>
+<td>Synapse.CommandLine</td>
+<td>A CLI wrapper on Synapse.Core for local process execution.</td>
+</tr>
+<tr>
+<td>Synapse.Server</td>
+<td>A server daemon designed to act as remote Synapse.Core agent.</td>
+</tr>
+<tr>
+<td>Synapse.Enterprise</td>
+<td>An API interface to creating, storing, and executing Synapse Plans under an RBAC.  Manages exection log-capture and keeps detailed audit logs.</td>
+</tr>
+</tbody>
+</table>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
