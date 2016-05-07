@@ -45,7 +45,7 @@ And `SecurityContext` is:
 
 Essentially, Synapse takes data from various federated sources, provides the data to an action, and executes the action under a given security context.
 
-A detailed description of Synapse Plan YAML is [here](/plans.html "Plan YAML").
+A detailed description of Synapse Plan YAML is [here](/plan/ "Plan YAML").
 
 ## Components
 
@@ -56,4 +56,4 @@ A detailed description of Synapse Plan YAML is [here](/plans.html "Plan YAML").
 |Synapse.Server|A server daemon designed to act as remote Synapse.Core agent.
 |Synapse.Enterprise|An API interface to creating, storing, and executing Synapse Plans under an RBAC.  Manages exection log-capture and keeps detailed audit logs.
 
-Detailed architectural descriptions and implementations patterns can be found [here](/architecture.html "Architecture").
+Detailed architectural descriptions and implementations patterns can be found [here](/architecture/ "Architecture").
