@@ -3,7 +3,7 @@
 Synapse is a lightweight execution engine designed to take data from disparate, federated sources and connect it to a process.  Synapse is built to run as a local or remote process.
 
 <p align="center">
-<img alt="Synapse Engine" src="images/syn_engine.png" />
+<img alt="Synapse Concept" src="images/syn_concept.png" />
 </p>
 
 ## Elements

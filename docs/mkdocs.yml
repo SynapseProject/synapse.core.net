@@ -1,1 +1,8 @@
 site_name: Synapse
+pages:
+- Synapse: index.md
+- Architecture: architecture.md
+- Plans: plan.md
+- Actions: action.md
+- Engine: engine.md
+- Roadmap: roadmap.md
