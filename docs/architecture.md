@@ -10,7 +10,7 @@ The Synapse Engine processes workflow actions by tasking to a Handler.  Each Han
 
 ### Engines as a Proxy
 
-In order to simplify workflow processing, when considered as an end-to-end logical unit, a Synapse Engine can proxy Actions to other Synapse Engine instances.  This is useful also when crossing network/firewall bourndaries to minimize exposing wide port ranges.
+In order to simplify workflow processing, when considered as an end-to-end logical unit, a Synapse Engine can proxy Actions to other Synapse Engine instances.  This is useful also when crossing network/firewall bourndaries to minimize exposing wide port ranges.  Under this model, Action subtrees are detached from the main Plan and forwarded to a remote Engine for execution.
 
 ### Local Engine Processing Model
 
