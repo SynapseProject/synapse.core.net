@@ -21,12 +21,7 @@ namespace Synapse.Server
 			return "WhosHere from SynapseServer, World!";
 		}
 
-		#endregion
-
-		#region ISynapseServer Members
-
-
-		public HandlerResult StartPlan(Plan plan, bool dryRun)
+		public HandlerResult StartPlan(string planInstanceId, bool dryRun, Plan plan)
 		{
 			return plan.Start( null, dryRun );
 		}

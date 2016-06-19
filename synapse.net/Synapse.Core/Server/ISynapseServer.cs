@@ -4,6 +4,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 
 using Synapse.Core;
+using Synapse.Core.Utilities;
 
 namespace Synapse.Server
 {
@@ -26,8 +27,8 @@ namespace Synapse.Server
 
 		#region
 		[OperationContract]
-		[WebGet( UriTemplate = "/hello" ), Description( "Say, \"hi!\"" )]
-		HandlerResult StartPlan(Plan plan, bool dryRun);
+		[WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/{planInstanceId}/?action=start&dryRun={dryRun}" )]
+		HandlerResult StartPlan(string planInstanceId, bool dryRun, Plan plan);
 		#endregion
 	}
 }
