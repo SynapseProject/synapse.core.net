@@ -99,7 +99,7 @@ namespace Synapse.Core.Runtime
 			if( !cancel )
 			{
 				OnProgress( "BarExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running );
-				if( !dryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running ); }
+				if( !dryRun ) { OnProgress( "BarExecute", "...Progress...", StatusType.Running ); }
 				OnProgress( "BarExecute", "Finished", st );
 			}
 			else

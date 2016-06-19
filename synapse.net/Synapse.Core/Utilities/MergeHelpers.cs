@@ -113,6 +113,10 @@ namespace Synapse.Core.Utilities
 
 		public static void MergeXml(ref XmlDocument source, List<DynamicValue> patch, Dictionary<string, string> values)
 		{
+			if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+			if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+			if( values == null ) { throw new ArgumentException( "Values cannot be null.", "values" ); }
+
 			foreach( DynamicValue v in patch )
 			{
 				if( values.ContainsKey( v.Name ) )
@@ -175,6 +179,9 @@ namespace Synapse.Core.Utilities
 
 		static void ApplyPatchValuesYaml(Dictionary<object, object> source, Dictionary<object, object> patch)
 		{
+			if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+			if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
 			foreach( object key in patch.Keys )
 			{
 				if( source.ContainsKey( key ) )

@@ -88,7 +88,7 @@ namespace Synapse.Core
 			}
 
 			//kv_replace
-			if( HasDynamic )
+			if( HasDynamic && parms != null )
 			{
 				Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicData );
 			}
@@ -114,8 +114,7 @@ namespace Synapse.Core
 				if( parms != null )
 				{
 					object values = null;
-					string uri = "{  \"ApplicationName\": \"steve\",  \"EnvironmentName\": \"dev\",  \"Tier\": {    \"Name\": \"webserver\",    \"Type\": \"python\",    \"Version\": \"0.0\"  }}";
-					using( StringReader sr = new StringReader( uri ) )
+					using( StringReader sr = new StringReader( uriContent ) )
 					{
 						Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
 						values = deserializer.Deserialize( sr );
@@ -127,8 +126,7 @@ namespace Synapse.Core
 				}
 				else
 				{
-					string uri = "{  \"ApplicationName\": \"steve\",  \"EnvironmentName\": \"dev\",  \"Tier\": {    \"Name\": \"webserver\",    \"Type\": \"python\",    \"Version\": \"0.0\"  }}";
-					using( StringReader sr = new StringReader( uri ) )
+					using( StringReader sr = new StringReader( uriContent ) )
 					{
 						Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
 						parms = deserializer.Deserialize( sr );
@@ -139,13 +137,13 @@ namespace Synapse.Core
 			Dictionary<object, object> p = (Dictionary<object, object>)parms;
 
 			//merge parms
-			if( HasValues )
+			if( HasValues && p != null )
 			{
 				Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
 			}
 
 			//kv_replace
-			if( HasDynamic )
+			if( HasDynamic && p != null )
 			{
 				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
 			}
@@ -170,13 +168,7 @@ namespace Synapse.Core
 			{
 				string uriContent = WebRequestClient.GetString( Uri );
 
-				string uri =
-@"Magical: Mystery
-Lucy: In the sky
-Kitten:
-  Cat: Tommy
-  Color: Rat";
-				using( StringReader sr = new StringReader( uri ) )
+				using( StringReader sr = new StringReader( uriContent ) )
 				{
 					Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
 					parms = deserializer.Deserialize( sr );
@@ -186,13 +178,13 @@ Kitten:
 			Dictionary<object, object> p = (Dictionary<object, object>)parms;
 
 			//merge parms
-			if( HasValues )
+			if( HasValues && p != null )
 			{
 				Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
 			}
 
 			//kv_replace
-			if( HasDynamic )
+			if( HasDynamic && p != null )
 			{
 				Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
 			}

@@ -7,7 +7,7 @@ Actions:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
       Type: Yaml
-      Uri: http://foo
+      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
       Values:
         Magical: Mystery1
         Lucy: In the sky1
@@ -17,7 +17,7 @@ Actions:
   Parameters:
     Name: PepeLePew
     Type: Yaml
-    Uri: http://foo
+    Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
     Values:
       Magical: Mystery1
       Lucy: In the sky1
@@ -39,9 +39,9 @@ Actions:
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
         Config:
-          Uri: http://foo
+          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
       Parameters:
-        Uri: http://foo
+        Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
         Values: <xml attr="value1"><data>foo1</data></xml>
         Dynamic:
         - Name: app
@@ -53,9 +53,9 @@ Actions:
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
         Config:
-          Uri: http://foo
+          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
       Parameters:
-        Uri: http://foo
+        Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
         Values: <xml attr="value1"><data>foo1</data></xml>
         Dynamic:
         - Name: app
@@ -67,7 +67,7 @@ Actions:
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
         Config:
-          Uri: http://foo
+          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
       Parameters:
         Type: Yaml
         InheritFrom: PepeLePew
@@ -76,7 +76,7 @@ Actions:
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
-      Uri: http://foo
+      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
   Parameters:
     Values: foo
   Actions: []
@@ -84,10 +84,10 @@ Actions:
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
     Config:
-      Uri: http://foo
+      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
   Parameters:
     Type: Json
-    Uri: http://foo
+    Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.json
     Values:
       ApplicationName: steve1
       EnvironmentName: dev1

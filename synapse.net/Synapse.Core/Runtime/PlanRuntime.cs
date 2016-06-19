@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Synapse.Core
 {
@@ -67,7 +68,7 @@ namespace Synapse.Core
 			}
 		}
 
-		bool CheckStopOrPause()
+		bool WantsStopOrPause()
 		{
 			if( _wantsCancel )
 			{
@@ -83,23 +84,65 @@ namespace Synapse.Core
 			}
 		}
 
-		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
+		HandlerResult ProcessRecursive_(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
 		{
-			if( CheckStopOrPause() ) { return result; }
+			if( WantsStopOrPause() ) { return result; }
 
 			HandlerResult returnResult = HandlerResult.Emtpy;
 			IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
 
 			foreach( ActionItem a in actionList )
 			{
-				if( CheckStopOrPause() ) { break; }
+				if( WantsStopOrPause() ) { break; }
 
 				string parms = ResolveConfigAndParameters( a, dynamicData );
 
 				IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
 				rt.Progress += rt_Progress;
 
-				if( CheckStopOrPause() ) { break; }
+				if( WantsStopOrPause() ) { break; }
+				HandlerResult r = rt.Execute( parms, dryRun );
+
+				if( r.Status > returnResult.Status ) { returnResult = r; }
+
+				if( a.HasActions )
+				{
+					r = ProcessRecursive( a.Actions, r, dynamicData, dryRun );
+					if( r.Status > returnResult.Status ) { returnResult = r; }
+				}
+			}
+
+			return returnResult;
+		}
+
+		HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
+		{
+			if( WantsStopOrPause() ) { return result; }
+
+			HandlerResult returnResult = HandlerResult.Emtpy;
+			IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
+
+			Parallel.ForEach( actionList, actionItem =>
+				{
+					HandlerResult r = ExecuteHandlerProcess( actionItem, dynamicData, dryRun );
+					if( r.Status > returnResult.Status ) { returnResult = r; }
+				}
+				);
+
+			return returnResult;
+		}
+
+		HandlerResult ExecuteHandlerProcess(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+		{
+			HandlerResult returnResult = HandlerResult.Emtpy;
+
+			string parms = ResolveConfigAndParameters( a, dynamicData );
+
+			IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
+			rt.Progress += rt_Progress;
+
+			if( !WantsStopOrPause() )
+			{
 				HandlerResult r = rt.Execute( parms, dryRun );
 
 				if( r.Status > returnResult.Status ) { returnResult = r; }

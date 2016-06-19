@@ -1,0 +1,9 @@
+{
+  "ApplicationName": "steve",
+  "EnvironmentName": "dev",
+  "Tier": {
+      "Name": "webserver",
+      "Type": "python",
+      "Version": "0.0"
+  },
+}

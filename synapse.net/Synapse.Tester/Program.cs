@@ -11,6 +11,7 @@ namespace Synapse.Tester
 {
 	class Program
 	{
+		static int _count = 0;
 		static Plan plan = null;
 		static void Main(string[] args)
 		{
@@ -72,7 +73,8 @@ namespace Synapse.Tester
 			{
 				e.Cancel = true;
 			}
-			Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}", e.ActionName, e.Context, e.Message );
+			//Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}, StatusType:{3}", e.ActionName, e.Context, e.Message, e.Status );
+			Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}, StatusType:{3}, {4}", e.ActionName, e.Context, e.Message, e.Status, ++_count );
 		}
 	}
 }
