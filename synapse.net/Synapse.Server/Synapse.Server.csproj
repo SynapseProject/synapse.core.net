@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4464700A-50BA-4B62-BD7E-16628FDA8B94}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{E33F2132-EE66-42CA-95FB-7C26F561BEDB}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Synapse.Core</RootNamespace>
-    <AssemblyName>Synapse.Core</AssemblyName>
+    <RootNamespace>Synapse.Server</RootNamespace>
+    <AssemblyName>Synapse.Server</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +25,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -35,48 +37,32 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="xmldiffpatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\xmldiffpatch.dll</HintPath>
-    </Reference>
-    <Reference Include="YamlDotNet">
-      <HintPath>..\packages\YamlDotNet.3.8.0\lib\net35\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dal\Dal.cs" />
-    <Compile Include="Objects\SecurityContext.cs" />
-    <Compile Include="Objects\DynamicValue.cs" />
-    <Compile Include="Objects\Enums\StatusType.cs" />
-    <Compile Include="Objects\Enums\MessageType.cs" />
-    <Compile Include="Objects\ParameterInfo.cs" />
-    <Compile Include="Objects\ActionItem.cs" />
-    <Compile Include="Objects\Enums\SerializationType.cs" />
-    <Compile Include="Runtime\ParameterInfoRuntime.cs" />
-    <Compile Include="Runtime\PlanRuntime.cs" />
-    <Compile Include="Objects\Handler.cs" />
-    <Compile Include="Objects\Plan.cs" />
+    <Compile Include="SynapseService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SynapseService.Designer.cs">
+      <DependentUpon>SynapseService.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\EmptyHandler.cs" />
-    <Compile Include="Server\ISynapseServer.cs" />
-    <Compile Include="Server\SynapseServer.cs" />
-    <Compile Include="Utilities\WebRequestClient.cs" />
-    <Compile Include="Utilities\MergeHelpers.cs" />
-    <Compile Include="Utilities\ServiceException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">
+      <Project>{4464700a-50ba-4b62-bd7e-16628fda8b94}</Project>
+      <Name>Synapse.Core</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
