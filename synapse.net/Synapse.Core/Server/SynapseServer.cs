@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Synapse.Core;
+﻿using Synapse.Core;
 
 namespace Synapse.Server
 {
 	public class SynapseServer : ISynapseServer
 	{
+		PlanScheduler _scheduler = null;
+
+		public SynapseServer()
+		{
+			_scheduler = new PlanScheduler( 10 );
+		}
+
 		#region ISynapseServer Members
 
 		public string Hello()
@@ -24,6 +26,11 @@ namespace Synapse.Server
 		public HandlerResult StartPlan(string planInstanceId, bool dryRun, Plan plan)
 		{
 			return plan.Start( null, dryRun );
+		}
+
+		public void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan)
+		{
+			_scheduler.StartPlan( null, dryRun, plan );
 		}
 
 		#endregion
