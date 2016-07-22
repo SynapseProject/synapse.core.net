@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Synapse.Core
 {
-	public class PlanScheduler
+	public class PlanScheduler : IDisposable
 	{
 		// default TaskFactory for starting new Tasks
 		TaskFactory _tf = null;
 
+		// list of current tasks
+		List<Task> _tasks = new List<Task>();
+
 		// handles max threading
 		LimitedConcurrencyLevelTaskScheduler _lcts = new LimitedConcurrencyLevelTaskScheduler( 20 );
+
+		CancellationTokenSource _cts = new CancellationTokenSource();
 
 		public PlanScheduler(int maxThreads = 0)
 		{
@@ -28,10 +30,32 @@ namespace Synapse.Core
 			}
 		}
 
+		/// <summary>
+		/// Queues a new Task onto the TaskFactory
+		/// </summary>
+		/// <param name="planInstanceId"></param>
+		/// <param name="dryRun"></param>
+		/// <param name="plan"></param>
 		public void StartPlan(string planInstanceId, bool dryRun, Plan plan)
 		{
-			Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); } );
+			Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cts.Token );
+			_tasks.Add( t );
 		}
+
+		public void Drainstop()
+		{
+			Task.WaitAll( _tasks.ToArray() );
+		}
+
+		#region IDisposable Members
+
+		public void Dispose()
+		{
+			_cts.Dispose();
+			GC.SuppressFinalize( this );
+		}
+
+		#endregion
 	}
 
 	// https://msdn.microsoft.com/en-us/library/system.threading.tasks.taskscheduler(v=vs.110).aspx

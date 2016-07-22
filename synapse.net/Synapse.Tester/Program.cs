@@ -27,8 +27,12 @@ namespace Synapse.Tester
 					plan = Plan.FromYaml( sr );
 				}
 				plan.Progress += plan_Progress;
-				HandlerResult result = plan.Start( parms, dryRun: false );
-				Console.WriteLine( result );
+
+				PlanScheduler sch = new PlanScheduler( 5 );
+				sch.StartPlan( "1", false, plan );
+
+				//HandlerResult result = plan.Start( parms, dryRun: false );
+				//Console.WriteLine( result );
 				using( StreamWriter file = new StreamWriter( outpath ) )
 				{
 					plan.ToYaml( file );
