@@ -1,4 +1,4 @@
-﻿namespace Synapse.Server
+﻿namespace Synapse.Service.Windows
 {
 	partial class SynapseService
 	{

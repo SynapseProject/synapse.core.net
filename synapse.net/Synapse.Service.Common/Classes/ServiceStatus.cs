@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Synapse.Server
+namespace Synapse.Service.Common
 {
 	public enum ServiceStatus
 	{

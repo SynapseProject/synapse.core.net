@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using log4net;
 using log4net.Appender.Dynamic;
 
-namespace Synapse.Server
+namespace Synapse.Service.Common
 {
 	public enum LogLevel
 	{

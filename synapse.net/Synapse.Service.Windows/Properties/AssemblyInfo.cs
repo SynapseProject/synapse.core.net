@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "Synapse.Server" )]
+[assembly: AssemblyTitle( "Synapse.Service.Windows" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "Synapse.Server" )]
+[assembly: AssemblyProduct( "Synapse.Service.Windows" )]
 [assembly: AssemblyCopyright( "Copyright ©  2016" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
@@ -20,9 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid( "ebbc6240-0b8b-4356-93ce-2f75315c129b" )]
-
-[assembly: log4net.Config.XmlConfigurator( Watch = true )]
+[assembly: Guid( "ec59de08-a3dd-4902-b6ba-e335c10a287f" )]
 
 // Version information for an assembly consists of the following four values:
 //

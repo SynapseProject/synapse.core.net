@@ -2,7 +2,10 @@
 using System.ServiceModel;
 using System.ServiceProcess;
 
-namespace Synapse.Server
+using Synapse.Core.Runtime;
+using Synapse.Service.Common;
+
+namespace Synapse.Service.Windows
 {
 	public partial class SynapseService : ServiceBase
 	{

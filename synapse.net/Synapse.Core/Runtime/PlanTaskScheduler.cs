@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Synapse.Core
+namespace Synapse.Core.Runtime
 {
 	public class PlanScheduler : IDisposable
 	{
@@ -14,10 +14,19 @@ namespace Synapse.Core
 		List<Task> _tasks = new List<Task>();
 
 		// handles max threading
-		LimitedConcurrencyLevelTaskScheduler _lcts = new LimitedConcurrencyLevelTaskScheduler( 20 );
+		LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = new LimitedConcurrencyLevelTaskScheduler( 20 );
 
-		CancellationTokenSource _cts = new CancellationTokenSource();
+		CancellationTokenSource _canellationTokenSvc = new CancellationTokenSource();
 
+		// default ctor
+		public PlanScheduler()
+			: this( 0 )
+		{ }
+
+		/// <summary>
+		/// Initializes a new PlanScheduler with optional MaxThreads
+		/// </summary>
+		/// <param name="maxThreads">Specifies the maximum count for processing threads</param>
 		public PlanScheduler(int maxThreads = 0)
 		{
 			if( maxThreads == 0 )
@@ -26,7 +35,7 @@ namespace Synapse.Core
 			}
 			else
 			{
-				_tf = new TaskFactory( _lcts );
+				_tf = new TaskFactory( _limitedConcurTaskSched );
 			}
 		}
 
@@ -38,7 +47,7 @@ namespace Synapse.Core
 		/// <param name="plan"></param>
 		public void StartPlan(string planInstanceId, bool dryRun, Plan plan)
 		{
-			Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cts.Token );
+			Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _canellationTokenSvc.Token );
 			_tasks.Add( t );
 		}
 
@@ -51,7 +60,7 @@ namespace Synapse.Core
 
 		public void Dispose()
 		{
-			_cts.Dispose();
+			_canellationTokenSvc.Dispose();
 			GC.SuppressFinalize( this );
 		}
 

@@ -1,6 +1,6 @@
 ﻿using Synapse.Core;
 
-namespace Synapse.Server
+namespace Synapse.Core.Runtime
 {
 	public class SynapseServer : ISynapseServer
 	{

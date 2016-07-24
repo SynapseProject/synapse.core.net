@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration.Install;
 
-namespace Synapse.Server
+namespace Synapse.Service.Windows
 {
 	class Utilities
 	{

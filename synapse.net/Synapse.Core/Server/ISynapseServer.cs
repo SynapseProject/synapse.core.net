@@ -6,7 +6,7 @@ using System.ServiceModel.Web;
 using Synapse.Core;
 using Synapse.Core.Utilities;
 
-namespace Synapse.Server
+namespace Synapse.Core.Runtime
 {
 	[ServiceContract( Namespace = "http://Synapse.Server" )]
 	public interface ISynapseServer
