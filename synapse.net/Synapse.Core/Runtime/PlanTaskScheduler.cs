@@ -16,7 +16,7 @@ namespace Synapse.Core.Runtime
 		// handles max threading
 		LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = new LimitedConcurrencyLevelTaskScheduler( 20 );
 
-		CancellationTokenSource _canellationTokenSvc = new CancellationTokenSource();
+		CancellationTokenSource _cancellationTokenSvc = new CancellationTokenSource();
 
 		// default ctor
 		public PlanScheduler()
@@ -47,7 +47,7 @@ namespace Synapse.Core.Runtime
 		/// <param name="plan"></param>
 		public void StartPlan(string planInstanceId, bool dryRun, Plan plan)
 		{
-			Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _canellationTokenSvc.Token );
+			Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cancellationTokenSvc.Token );
 			_tasks.Add( t );
 		}
 
@@ -60,7 +60,7 @@ namespace Synapse.Core.Runtime
 
 		public void Dispose()
 		{
-			_canellationTokenSvc.Dispose();
+			_cancellationTokenSvc.Dispose();
 			GC.SuppressFinalize( this );
 		}
 
