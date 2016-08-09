@@ -78,15 +78,15 @@ ParameterInfo blocks declare start-up configuration for Handlers modules, runtim
 ### Example YAML - YAML Values
 
 ```css
-Name: PepeLePew
+Name: myYamlParms
 Type: Yaml
 Uri: http://foo
 Values:
   Magical: Mystery1
   Lucy: In the sky1
   Kitten:
-    Cat: Tommy1
-    Color: Rat1
+    Cat: Liger
+    Color: Green
 Dynamic:
 - Name: app
   Path: Magical
@@ -113,7 +113,7 @@ Type: Json
 Uri: http://foo
 Values:
   {
-    "ApplicationName": "steve1",
+    "ApplicationName": "fooApp",
     "EnvironmentName": "dev1",
     "Tier": {
         "Name": "webserver1",
