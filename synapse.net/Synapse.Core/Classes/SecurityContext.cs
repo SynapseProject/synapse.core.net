@@ -13,7 +13,8 @@ namespace Synapse.Core
 		{
 		}
 
-		public string UserName { get; set; }
+        public string Domain { get; set; }
+        public string UserName { get; set; }
 		public string Password { get; set; }
 		public string Provider { get; set; } //ad, aws, azure
 		public ParameterInfo Config { get; set; }
