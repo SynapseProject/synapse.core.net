@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Threading.Tasks;
+using Synapse.Core.Utilities;
 
 namespace Synapse.Core
 {
@@ -143,9 +145,14 @@ namespace Synapse.Core
 
 			if( !WantsStopOrPause() )
 			{
-				HandlerResult r = rt.Execute( parms, dryRun );
+                SecurityPrincipalContext spc = new SecurityPrincipalContext(); ;
+                if( a.HasRunAs )
+                    spc.Impersonate( a.RunAs.Domain, a.RunAs.UserName, a.RunAs.Password );
+                HandlerResult r = rt.Execute( parms, dryRun );
+                if( spc.IsImpersonating )
+                    spc.Undo();
 
-				if( r.Status > returnResult.Status ) { returnResult = r; }
+                if( r.Status > returnResult.Status ) { returnResult = r; }
 
 				if( a.HasActions )
 				{

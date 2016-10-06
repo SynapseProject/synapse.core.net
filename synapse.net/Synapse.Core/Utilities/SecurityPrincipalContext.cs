@@ -26,7 +26,7 @@ namespace Synapse.Core.Utilities
         public SecurityPrincipalContext() { }
 
         [PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
-        public void Impersonate(SecureString domain, SecureString userName, SecureString password)
+        public void Impersonate(string domain, string userName, string password)
         {
             if( !IsImpersonating )
             {
@@ -35,12 +35,12 @@ namespace Synapse.Core.Utilities
                 bool ok = LogonUser( userName.ToString(), domain.ToString(), password.ToString(),
                    LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref _token );
 
-                try
-                {
-                    password.Dispose();
-                    userName.Dispose();
-                    domain.Dispose();
-                } catch { }
+                //try
+                //{
+                //    password.Dispose();
+                //    userName.Dispose();
+                //    domain.Dispose();
+                //} catch { }
 
                 if( !ok )
                 {
