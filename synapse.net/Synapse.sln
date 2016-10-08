@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Core", "Synapse.Core\Synapse.Core.csproj", "{4464700A-50BA-4B62-BD7E-16628FDA8B94}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Service.Common", "Synapse.Service.Common\Synapse.Service.Common.csproj", "{683170DE-F380-4F2E-8B91-91C7C9180B2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Service.Windows", "Synapse.Service.Windows\Synapse.Service.Windows.csproj", "{4001A6C5-E5C7-4CFA-8543-263B33BF17C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.cli", "Synapse.cli\Synapse.cli.csproj", "{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4001A6C5-E5C7-4CFA-8543-263B33BF17C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4001A6C5-E5C7-4CFA-8543-263B33BF17C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4001A6C5-E5C7-4CFA-8543-263B33BF17C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -70,6 +70,7 @@
     <Compile Include="Runtime\PlanTaskScheduler.cs" />
     <Compile Include="Runtime\Server\ISynapseServer.cs" />
     <Compile Include="Runtime\Server\SynapseServer.cs" />
+    <Compile Include="Utilities\CrytoHelpers.cs" />
     <Compile Include="Utilities\WebRequestClient.cs" />
     <Compile Include="Utilities\MergeHelpers.cs" />
     <Compile Include="Utilities\ServiceException.cs" />
