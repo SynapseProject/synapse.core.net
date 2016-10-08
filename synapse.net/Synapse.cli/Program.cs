@@ -31,9 +31,9 @@ namespace Synapse.cli
                 if( a.InProc )
                 {
                     Plan plan = null;
-                    plan.Progress += plan_Progress;
                     using( StringReader reader = new StringReader( a.Plan ) )
                         plan = Plan.FromYaml( reader );
+                    plan.Progress += plan_Progress;
                     Task t = Task.Run( () => plan.Start( a.Args, a.DryRun ) );
                     t.Wait();
                 }
@@ -53,7 +53,7 @@ namespace Synapse.cli
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
-            throw new NotImplementedException();
+            Console.WriteLine( e.Message );
         }
 
 
