@@ -80,12 +80,12 @@ namespace Synapse.cli
             Console_WriteLine( $"synapse.cli.exe, Version: {typeof( Program ).Assembly.GetName().Version}\r\n", ConsoleColor.Green );
             Console.WriteLine( "Syntax:" );
             Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1} [/dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
-            Console.WriteLine( "    [/thread:InProc|External] [/render:encode|decode] [dynamic parameters]\r\n" );
+            Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
             Console_WriteLine( "  /plan{0,-8}- filePath: Valid path to plan file.", ConsoleColor.Green, "" );
             Console.WriteLine( "{0,-15}- encodedPlanString: Inline base64 encoded plan string.", "" );
             Console.WriteLine( "  /dryRun{0,-6}Specifies whether to execute the plan as a DryRun only.", "" );
             Console.WriteLine( "{0,-15}  Default is false.", "" );
-            Console.WriteLine( "  /thread{0,-6}Specifies whether to execute the plan on an internal", "" );
+            Console.WriteLine( "  /taskModel{0,-3}Specifies whether to execute the plan on an internal", "" );
             Console.WriteLine( "{0,-15}  thread or shell process.  Default is InProc.", "" );
             Console.WriteLine( "  /render{0,-6}- encode: Returns the base64 encoded value of the", "" );
             Console.WriteLine( "{0,-15}  specifed plan file.", "" );
@@ -114,7 +114,7 @@ namespace Synapse.cli
     {
         const string __plan = "plan";
         const string __dryrun = "dryrun";
-        const string __taskModel = "taskModel";
+        const string __taskmodel = "taskmodel";
         const string __render = "render";
 
         public Arguments(string[] args)
@@ -178,15 +178,15 @@ namespace Synapse.cli
                 #endregion
 
                 #region TaskModel
-                if( Args.Keys.Contains( __taskModel ) )
+                if( Args.Keys.Contains( __taskmodel ) )
                 {
                     TaskModel tm = TaskModel.InProc;
-                    if( Enum.TryParse( Args[__taskModel], true, out tm ) )
+                    if( Enum.TryParse( Args[__taskmodel], true, out tm ) )
                         TaskModel = tm;
                     else
-                        Message += "  * Unable to parse InProc value as bool.\r\n";
+                        Message += "  * Unable to parse TaskModel value as 'inProc' or 'external'.\r\n";
 
-                    Args.Remove( __taskModel );
+                    Args.Remove( __taskmodel );
                 }
                 else
                 {

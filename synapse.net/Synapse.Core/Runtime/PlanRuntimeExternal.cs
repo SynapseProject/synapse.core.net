@@ -15,7 +15,7 @@ namespace Synapse.Core
     {
         public HandlerResult StartExternal(Dictionary<string, string> dynamicData, bool dryRun = false)
         {
-            return ProcessRecursive( Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+            return ProcessRecursiveExternal( Actions, HandlerResult.Emtpy, dynamicData, dryRun );
         }
 
         HandlerResult ProcessRecursiveExternal(List<ActionItem> actions, HandlerResult result,
