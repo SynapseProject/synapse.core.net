@@ -15,45 +15,58 @@ namespace Synapse.cli
     {
         static void Main(string[] args)
         {
+            int exitCode = 11;
+
             Arguments a = new Arguments( args );
             if( !a.IsParsed )
                 WriteHelpAndExit( a.Message );
 
-            if( a.Encode != EncodeAction.None )
+            if( a.Render != RenderAction.None )
             {
-                if( a.Encode == EncodeAction.Encode )
+                if( a.Render == RenderAction.Encode )
                     Console.WriteLine( CrytoHelpers.Encode( a.Plan ) );
                 else
                     Console.WriteLine( a.Plan );
             }
             else
             {
-                if( a.InProc )
+                HandlerResult result = null;
+
+                Plan plan = null;
+                using( StringReader reader = new StringReader( a.Plan ) )
+                    plan = Plan.FromYaml( reader );
+                plan.Progress += plan_Progress;
+
+                switch( a.TaskModel )
                 {
-                    Plan plan = null;
-                    using( StringReader reader = new StringReader( a.Plan ) )
-                        plan = Plan.FromYaml( reader );
-                    plan.Progress += plan_Progress;
-                    Task t = Task.Run( () => plan.Start( a.Args, a.DryRun ) );
-                    t.Wait();
-                }
-                else
-                {
-                    Console.WriteLine( $"Execute Plan with dryrun:{a.DryRun},  inproc:{a.InProc}\r\nParams:" );
-                    foreach( string key in a.Args.Keys )
+                    case TaskModel.InProc:
                     {
-                        Console.WriteLine( $"Key: {key}, Value: {a.Args[key]}" );
+                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun ) );
+                        t.Wait();
+                        break;
                     }
-                    Console.WriteLine( a.Plan );
+                    case TaskModel.External:
+                    {
+                        Task t = Task.Run( () => result = plan.StartExternal( a.Args, a.DryRun ) );
+                        t.Wait();
+                        break;
+                    }
+                    case TaskModel.Single:
+                    {
+                        result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.DryRun );
+                        break;
+                    }
                 }
+                exitCode = (int)result.Status;
             }
 
-            Environment.Exit( 0 );
+            Console.WriteLine( $"exitCode:{exitCode}" );
+            Environment.Exit( exitCode );
         }
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
-            Console.WriteLine( e.Message );
+            Console.WriteLine( $"Action:{e.ActionName}, Context:{e.Context}, Message:{e.Message}" );
         }
 
 
@@ -67,14 +80,14 @@ namespace Synapse.cli
             Console_WriteLine( $"synapse.cli.exe, Version: {typeof( Program ).Assembly.GetName().Version}\r\n", ConsoleColor.Green );
             Console.WriteLine( "Syntax:" );
             Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1} [/dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
-            Console.WriteLine( "    [/inproc:true|false] [/encode:encode|decode] [dynamic parameters]\r\n" );
+            Console.WriteLine( "    [/thread:InProc|External] [/render:encode|decode] [dynamic parameters]\r\n" );
             Console_WriteLine( "  /plan{0,-8}- filePath: Valid path to plan file.", ConsoleColor.Green, "" );
             Console.WriteLine( "{0,-15}- encodedPlanString: Inline base64 encoded plan string.", "" );
             Console.WriteLine( "  /dryRun{0,-6}Specifies whether to execute the plan as a DryRun only.", "" );
             Console.WriteLine( "{0,-15}  Default is false.", "" );
-            Console.WriteLine( "  /inproc{0,-6}Specifies whether to execute the plan on an internal", "" );
-            Console.WriteLine( "{0,-15}  thread.  Default is true.", "" );
-            Console.WriteLine( "  /encode{0,-6}- encode: Returns the base64 encoded value of the", "" );
+            Console.WriteLine( "  /thread{0,-6}Specifies whether to execute the plan on an internal", "" );
+            Console.WriteLine( "{0,-15}  thread or shell process.  Default is InProc.", "" );
+            Console.WriteLine( "  /render{0,-6}- encode: Returns the base64 encoded value of the", "" );
             Console.WriteLine( "{0,-15}  specifed plan file.", "" );
             Console.WriteLine( "{0,-15}- decode: Returns the base64 decoded value of the specified", "" );
             Console.WriteLine( "{0,-15}  encodedPlanString.", "" );
@@ -101,8 +114,8 @@ namespace Synapse.cli
     {
         const string __plan = "plan";
         const string __dryrun = "dryrun";
-        const string __inproc = "inproc";
-        const string __encode = "encode";
+        const string __taskModel = "taskModel";
+        const string __render = "render";
 
         public Arguments(string[] args)
         {
@@ -164,37 +177,37 @@ namespace Synapse.cli
                 }
                 #endregion
 
-                #region InProc
-                if( Args.Keys.Contains( __inproc ) )
+                #region TaskModel
+                if( Args.Keys.Contains( __taskModel ) )
                 {
-                    bool inproc = false;
-                    if( bool.TryParse( Args[__inproc], out inproc ) )
-                        InProc = inproc;
+                    TaskModel tm = TaskModel.InProc;
+                    if( Enum.TryParse( Args[__taskModel], true, out tm ) )
+                        TaskModel = tm;
                     else
                         Message += "  * Unable to parse InProc value as bool.\r\n";
 
-                    Args.Remove( __inproc );
+                    Args.Remove( __taskModel );
                 }
                 else
                 {
-                    InProc = true;
+                    TaskModel = TaskModel.InProc;
                 }
                 #endregion
 
-                #region EncodeAction
-                if( Args.Keys.Contains( __encode ) )
+                #region RenderAction
+                if( Args.Keys.Contains( __render ) )
                 {
-                    EncodeAction parse = EncodeAction.None;
-                    if( Enum.TryParse<EncodeAction>( Args[__encode], true, out parse ) )
-                        Encode = parse;
+                    RenderAction parse = RenderAction.None;
+                    if( Enum.TryParse( Args[__render], true, out parse ) )
+                        Render = parse;
                     else
-                        Message += "  * Unable to parse Encode value as 'encode' or 'decode'.\r\n";
+                        Message += "  * Unable to parse Render value as 'encode' or 'decode'.\r\n";
 
-                    Args.Remove( __encode );
+                    Args.Remove( __render );
                 }
                 else
                 {
-                    Encode = EncodeAction.None;
+                    Render = RenderAction.None;
                 }
                 #endregion
             }
@@ -205,8 +218,8 @@ namespace Synapse.cli
         public Dictionary<string, string> Args { get; internal set; }
         public string Plan { get; set; }
         public bool DryRun { get; set; }
-        public bool InProc { get; set; }
-        public EncodeAction Encode { get; set; }
+        public TaskModel TaskModel { get; set; }
+        public RenderAction Render { get; set; }
         public string Message { get; internal set; }
         public bool IsParsed { get; internal set; }
 
@@ -251,10 +264,24 @@ namespace Synapse.cli
         }
     }
 
-    enum EncodeAction
+    enum TaskModel
+    {
+        InProc,
+        External,
+        Single
+    }
+    enum RenderAction
     {
         None,
         Encode,
         Decode
     }
 }
+
+
+//Console.WriteLine( $"Execute Plan with dryrun:{a.DryRun}, inproc:{a.InProc}\r\nParams:" );
+//foreach( string key in a.Args.Keys )
+//{
+//    Console.WriteLine( $"Key: {key}, Value: {a.Args[key]}" );
+//}
+//Console.WriteLine( a.Plan );

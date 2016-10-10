@@ -7,6 +7,11 @@ namespace Synapse.Core
 {
 	public partial class Plan
 	{
+        public Plan()
+        {
+            Actions = new List<ActionItem>();
+        }
+
 		public string Name { get; set; }
 		public string UniqueName { get; set; }
 		public string Description { get; set; }

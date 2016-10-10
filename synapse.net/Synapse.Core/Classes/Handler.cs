@@ -6,110 +6,108 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-	public class HandlerInfo
-	{
-		public string Type { get; set; }
-		public ParameterInfo Config { get; set; }
-		[YamlIgnore]
-		public bool HasConfig { get { return Config != null; } }
-	}
+    public class HandlerInfo
+    {
+        public string Type { get; set; }
+        public ParameterInfo Config { get; set; }
+        [YamlIgnore]
+        public bool HasConfig { get { return Config != null; } }
+    }
 
-	public interface IHandlerRuntime
-	{
-		string ActionName { get; set; }
+    public interface IHandlerRuntime
+    {
+        string ActionName { get; set; }
 
-		IHandlerRuntime Initialize(string config);
-		HandlerResult Execute(string parms, bool dryRun = false); //maybe should be object
+        IHandlerRuntime Initialize(string config);
+        HandlerResult Execute(string parms, bool dryRun = false); //maybe should be object
 
-		event EventHandler<HandlerProgressCancelEventArgs> Progress;
-	}
+        event EventHandler<HandlerProgressCancelEventArgs> Progress;
+    }
 
-	public abstract class HandlerRuntimeBase : IHandlerRuntime
-	{
-		public string ActionName { get; set; }
+    public abstract class HandlerRuntimeBase : IHandlerRuntime
+    {
+        public string ActionName { get; set; }
 
-		//public abstract string Parameters { get; set; }
-		public abstract HandlerResult Execute(string parms, bool dryRun = false);
+        //public abstract string Parameters { get; set; }
+        public abstract HandlerResult Execute(string parms, bool dryRun = false);
 
-		public virtual IHandlerRuntime Initialize(string config)
-		{
-			return this;
-		}
+        public virtual IHandlerRuntime Initialize(string config)
+        {
+            return this;
+        }
 
-		public event EventHandler<HandlerProgressCancelEventArgs> Progress;
+        public event EventHandler<HandlerProgressCancelEventArgs> Progress;
 
-		/// <summary>
-		/// Notify of step progress.
-		/// </summary>
-		/// <param name="context">The method name or workflow activty.</param>
-		/// <param name="message">Descriptive message.</param>
-		/// <param name="status">Overall Package status indicator.</param>
-		/// <param name="id">Message Id.</param>
-		/// <param name="severity">Message/error severity.</param>
-		/// <param name="ex">Current exception (optional).</param>
-		protected virtual bool OnProgress(string context, string message,
-			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
-		{
-			HandlerProgressCancelEventArgs e =
-				new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
-			if( Progress != null )
-			{
-				Progress( this, e );
-			}
+        /// <summary>
+        /// Notify of step progress.
+        /// </summary>
+        /// <param name="context">The method name or workflow activty.</param>
+        /// <param name="message">Descriptive message.</param>
+        /// <param name="status">Overall Package status indicator.</param>
+        /// <param name="id">Message Id.</param>
+        /// <param name="severity">Message/error severity.</param>
+        /// <param name="ex">Current exception (optional).</param>
+        protected virtual bool OnProgress(string context, string message,
+            StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+        {
+            HandlerProgressCancelEventArgs e =
+                new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
 
-			return e.Cancel;
-		}
-	}
+            Progress?.Invoke( this, e );
 
-	public interface ICancelEventArgs
-	{
-		bool Cancel { get; set; }
-	}
-	public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
-	{
-		public HandlerProgressCancelEventArgs(string context, string message,
-			StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false,Exception ex = null)
-		{
-			Context = context;
-			Message = message;
-			Status = status;
-			Id = id;
-			Severity = severity;
-			Exception = ex;
-		}
+            return e.Cancel;
+        }
+    }
 
-		public string ActionName { get; internal set; }
-		public string Context { get; protected set; }
-		public string Message { get; protected set; }
-		public StatusType Status { get; protected set; }
-		public int Id { get; protected set; }
-		public int Severity { get; protected set; }
-		public bool Cancel { get; set; }
-		public Exception Exception { get; protected set; }
-		public bool HasException { get { return this.Exception != null; } }
-	}
+    public interface ICancelEventArgs
+    {
+        bool Cancel { get; set; }
+    }
+    public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
+    {
+        public HandlerProgressCancelEventArgs(string context, string message,
+            StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+        {
+            Context = context;
+            Message = message;
+            Status = status;
+            Id = id;
+            Severity = severity;
+            Exception = ex;
+        }
 
-	//public interface IHandlerConfig
-	//{
-	//	string Key { get; set; }
-	//}
+        public string ActionName { get; internal set; }
+        public string Context { get; protected set; }
+        public string Message { get; protected set; }
+        public StatusType Status { get; protected set; }
+        public int Id { get; protected set; }
+        public int Severity { get; protected set; }
+        public bool Cancel { get; set; }
+        public Exception Exception { get; protected set; }
+        public bool HasException { get { return Exception != null; } }
+    }
 
-	public class HandlerResult
-	{
-		public HandlerResult()
-		{
-			Status = StatusType.None;
-		}
+    //public interface IHandlerConfig
+    //{
+    //	string Key { get; set; }
+    //}
 
-		public static readonly HandlerResult Emtpy = new HandlerResult();
-		public bool IsEmpty { get { return this == HandlerResult.Emtpy; } }
+    public class HandlerResult
+    {
+        public HandlerResult()
+        {
+            Status = StatusType.None;
+        }
 
-		public StatusType Status { get; set; }
-		public object ExitData { get; set; }
+        public static readonly HandlerResult Emtpy = new HandlerResult();
+        public bool IsEmpty { get { return this == HandlerResult.Emtpy; } }
 
-		public override string ToString()
-		{
-			return Status.ToString();
-		}
-	}
+        public StatusType Status { get; set; }
+        public object ExitData { get; set; }
+
+        public override string ToString()
+        {
+            return Status.ToString();
+        }
+    }
 }
