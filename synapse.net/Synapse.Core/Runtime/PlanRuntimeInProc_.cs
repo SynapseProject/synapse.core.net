@@ -17,7 +17,7 @@ namespace Synapse.Core
             if( inProc )
                 return ProcessRecursive_( RunAs, null, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
             else
-                return ProcessRecursiveExternal( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+                return ProcessRecursiveExternal( RunAs, null, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
         }
 
         HandlerResult ProcessRecursive_(SecurityContext parentSecurityContext, ActionItem actionGroup, List<ActionItem> actions, HandlerResult result,

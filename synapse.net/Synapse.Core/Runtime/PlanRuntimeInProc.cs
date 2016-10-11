@@ -88,7 +88,7 @@ namespace Synapse.Core
             if( inProc )
                 return ProcessRecursive( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
             else
-                return ProcessRecursiveExternal( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+                return ProcessRecursiveExternal( RunAs, null, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
         }
 
         HandlerResult ProcessRecursive(SecurityContext parentSecurityContext, List<ActionItem> actions, HandlerResult result,
@@ -213,36 +213,3 @@ namespace Synapse.Core
         }
     }
 }
-
-
-//HandlerResult ProcessRecursive_(List<ActionItem> actions, HandlerResult result, Dictionary<string, string> dynamicData, bool dryRun = false)
-//{
-//    if( WantsStopOrPause() ) { return result; }
-
-//    HandlerResult returnResult = HandlerResult.Emtpy;
-//    IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == result.Status );
-
-//    foreach( ActionItem a in actionList )
-//    {
-//        if( WantsStopOrPause() ) { break; }
-
-//        string parms = ResolveConfigAndParameters( a, dynamicData );
-
-//        IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
-//        rt.Progress += rt_Progress;
-
-//        if( WantsStopOrPause() ) { break; }
-//        HandlerResult r = rt.Execute( parms, dryRun );
-
-//        if( r.Status > returnResult.Status ) { returnResult = r; }
-
-//        if( a.HasActions )
-//        {
-//            r = ProcessRecursive( a.Actions, r, dynamicData, dryRun );
-//            if( r.Status > returnResult.Status ) { returnResult = r; }
-//        }
-//    }
-
-//    return returnResult;
-//}
-
