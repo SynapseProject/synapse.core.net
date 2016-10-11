@@ -38,6 +38,21 @@ namespace Synapse.Core
             };
         }
 
+        public ActionItem Clone()
+        {
+            ActionItem a = new ActionItem()
+            {
+                Name = Name,
+                Proxy = Proxy,
+                ExecuteCase = ExecuteCase,
+                Handler = Handler,
+                Parameters = Parameters,
+                RunAs = RunAs
+            };
+
+            return a;
+        }
+
         public override string ToString()
         {
             return string.Format( "{0}-->{1}", Name, Handler.Type );

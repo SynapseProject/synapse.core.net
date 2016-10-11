@@ -2,23 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Security;
-using System.Text;
 using System.Threading.Tasks;
+
 using Synapse.Core.Utilities;
 
 namespace Synapse.Core
 {
-    //todo: multithread this with task.parallel, ensure thread safety on dicts
     public partial class Plan
     {
-        public HandlerResult StartExternal(Dictionary<string, string> dynamicData, bool dryRun = false)
-        {
-            return ProcessRecursiveExternal( Actions, HandlerResult.Emtpy, dynamicData, dryRun );
-        }
-
-        HandlerResult ProcessRecursiveExternal(List<ActionItem> actions, HandlerResult result,
+        HandlerResult ProcessRecursiveExternal(SecurityContext parentSecurityContext, List<ActionItem> actions, HandlerResult result,
             Dictionary<string, string> dynamicData, bool dryRun = false)
         {
             if( WantsStopOrPause() ) { return result; }
@@ -28,7 +20,7 @@ namespace Synapse.Core
 
             Parallel.ForEach( actionList, actionItem =>
                 {
-                    HandlerResult r = ExecuteHandlerProcessExternal( actionItem, dynamicData, dryRun );
+                    HandlerResult r = ExecuteHandlerProcessExternal( parentSecurityContext, actionItem, dynamicData, dryRun );
                     if( r.Status > returnResult.Status )
                         returnResult = r;
                 } );
@@ -36,19 +28,22 @@ namespace Synapse.Core
             return returnResult;
         }
 
-        HandlerResult ExecuteHandlerProcessExternal(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        HandlerResult ExecuteHandlerProcessExternal(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
             HandlerResult returnResult = HandlerResult.Emtpy;
 
             if( !WantsStopOrPause() )
             {
+                if( !a.HasRunAs )
+                    a.RunAs = parentSecurityContext;
                 HandlerResult r = SpawnExternal( a, dynamicData, dryRun );
 
-                if( r.Status > returnResult.Status ) { returnResult = r; }
+                if( r.Status > returnResult.Status )
+                    returnResult = r;
 
                 if( a.HasActions )
                 {
-                    r = ProcessRecursiveExternal( a.Actions, r, dynamicData, dryRun );
+                    r = ProcessRecursiveExternal( a.RunAs, a.Actions, r, dynamicData, dryRun );
                     if( r.Status > returnResult.Status )
                         returnResult = r;
                 }
@@ -63,19 +58,19 @@ namespace Synapse.Core
 
             Plan container = new Plan();
             container.Name = $"{this.Name}:{a.Name}";
-            container.Actions.Add( a );
+            container.Actions.Add( a.Clone() );
 
+            string planYaml = CrytoHelpers.Encode( container.ToYaml() );
+            args.Add( $"/plan:{planYaml}" );
             args.Add( $"/dryRun:{dryRun}" );
             args.Add( $"/thread:single" );
             foreach( string key in dynamicData.Keys )
                 args.Add( $"/{key}:{dynamicData[key]}" );
+            string arguments = string.Join( " ", args );
 
-            OnProgress( $" --> external --> {container.Name}", "external", string.Join( " ", args ) );
+            //OnProgress( $" --> external --> {container.Name}", "external", arguments );
             Console.WriteLine( $" --> external --> {container.Name}" );
 
-            string planYaml = CrytoHelpers.Encode( container.ToYaml() );
-            args.Add( $"/plan:{planYaml}" );
-            string arguments = string.Join( " ", args );
 
             Process p = new Process();
             p.StartInfo.Arguments = arguments;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -41,13 +40,13 @@ namespace Synapse.cli
                 {
                     case TaskModel.InProc:
                     {
-                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun ) );
+                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: true ) );
                         t.Wait();
                         break;
                     }
                     case TaskModel.External:
                     {
-                        Task t = Task.Run( () => result = plan.StartExternal( a.Args, a.DryRun ) );
+                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: false ) );
                         t.Wait();
                         break;
                     }

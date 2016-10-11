@@ -41,7 +41,8 @@ namespace Synapse.Core.Runtime
 
         protected void WriteFile(string handler, string message)
         {
-            string fn = $"{handler}_{Guid.NewGuid()}";
+            string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split( '\\' )[1];
+            string fn = $"{ActionName}_{user}_{handler}_{DateTime.Now.Ticks}_{Guid.NewGuid()}";
             System.IO.File.AppendAllText( fn, message ); ;
         }
     }
@@ -93,7 +94,7 @@ namespace Synapse.Core.Runtime
                 st = StatusType.Cancelled;
                 OnProgress( "FooExecute", "Cancelled", st );
             }
-            WriteFile( "FooHandler", $"parms:{parms}\r\nstatus:{st}CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
+            WriteFile( "FooHandler", $"parms:{parms}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new HandlerResult() { Status = st };
         }
     }
@@ -116,7 +117,7 @@ namespace Synapse.Core.Runtime
                 st = StatusType.Cancelled;
                 OnProgress( "BarExecute", "Cancelled", st );
             }
-            WriteFile( "BarHandler", $"parms:{parms}\r\nstatus:{st}\r\nCurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
+            WriteFile( "BarHandler", $"parms:{parms}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new HandlerResult() { Status = st };
         }
     }

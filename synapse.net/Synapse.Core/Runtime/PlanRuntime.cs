@@ -10,7 +10,6 @@ using Synapse.Core.Utilities;
 
 namespace Synapse.Core
 {
-    //todo: multithread this with task.parallel, ensure thread safety on dicts
     public partial class Plan
     {
         #region events
@@ -54,9 +53,12 @@ namespace Synapse.Core
         Dictionary<string, ParameterInfo> _configSets = new Dictionary<string, ParameterInfo>();
         Dictionary<string, ParameterInfo> _paramSets = new Dictionary<string, ParameterInfo>();
 
-        public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false)
+        public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
         {
-            return ProcessRecursive( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+            if( inProc )
+                return ProcessRecursive( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+            else
+                return ProcessRecursiveExternal( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
         }
 
         public void Stop() { _wantsCancel = true; }
@@ -122,7 +124,8 @@ namespace Synapse.Core
                 HandlerResult r = rt.Execute( parms, dryRun );
                 sc?.Undo();
 
-                if( r.Status > returnResult.Status ) { returnResult = r; }
+                if( r.Status > returnResult.Status )
+                    returnResult = r;
 
                 if( a.HasActions )
                 {
