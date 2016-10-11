@@ -1,8 +1,16 @@
 Name: plan0
 Description: planDesc
 IsActive: true
+RunAs:
+  Domain: ss-mekhano
+  UserName: user1
+  Password: password111
 Actions:
 - Name: ac0
+  RunAs:
+    Domain: ss-mekhano
+    UserName: user0
+    Password: password000
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
@@ -36,6 +44,10 @@ Actions:
       Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
     Actions:
     - Name: ac0.1.1
+      RunAs:
+        Domain: ss-mekhano
+        UserName: user2
+        Password: password222
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
         Config:

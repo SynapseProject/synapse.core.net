@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\IActionContainer.cs" />
     <Compile Include="Dal\Dal.cs" />
     <Compile Include="Classes\SecurityContext.cs" />
     <Compile Include="Classes\DynamicValue.cs" />

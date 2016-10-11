@@ -56,7 +56,7 @@ namespace Synapse.Core
 
         public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false)
         {
-            return ProcessRecursive( Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+            return ProcessRecursive( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
         }
 
         public void Stop() { _wantsCancel = true; }
@@ -88,7 +88,7 @@ namespace Synapse.Core
             }
         }
 
-        HandlerResult ProcessRecursive(List<ActionItem> actions, HandlerResult result,
+        HandlerResult ProcessRecursive(SecurityContext parentSecurityContext, List<ActionItem> actions, HandlerResult result,
             Dictionary<string, string> dynamicData, bool dryRun = false)
         {
             if( WantsStopOrPause() ) { return result; }
@@ -98,7 +98,7 @@ namespace Synapse.Core
 
             Parallel.ForEach( actionList, actionItem =>
                 {
-                    HandlerResult r = ExecuteHandlerProcess( actionItem, dynamicData, dryRun );
+                    HandlerResult r = ExecuteHandlerProcess( parentSecurityContext, actionItem, dynamicData, dryRun );
                     if( r.Status > returnResult.Status )
                         returnResult = r;
                 } );
@@ -106,7 +106,7 @@ namespace Synapse.Core
             return returnResult;
         }
 
-        HandlerResult ExecuteHandlerProcess(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        HandlerResult ExecuteHandlerProcess(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
             HandlerResult returnResult = HandlerResult.Emtpy;
 
@@ -117,15 +117,16 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                a.RunAs?.Impersonate();
+                SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
+                sc?.Impersonate();
                 HandlerResult r = rt.Execute( parms, dryRun );
-                a.RunAs?.Undo();
+                sc?.Undo();
 
                 if( r.Status > returnResult.Status ) { returnResult = r; }
 
                 if( a.HasActions )
                 {
-                    r = ProcessRecursive( a.Actions, r, dynamicData, dryRun );
+                    r = ProcessRecursive( sc, a.Actions, r, dynamicData, dryRun );
                     if( r.Status > returnResult.Status ) { returnResult = r; }
                 }
             }
