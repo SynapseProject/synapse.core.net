@@ -53,16 +53,8 @@ namespace Synapse.Core
         Dictionary<string, ParameterInfo> _configSets = new Dictionary<string, ParameterInfo>();
         Dictionary<string, ParameterInfo> _paramSets = new Dictionary<string, ParameterInfo>();
 
-        public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
-        {
-            if( inProc )
-                return ProcessRecursive( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
-            else
-                return ProcessRecursiveExternal( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
-        }
-
+        #region control methods
         public void Stop() { _wantsCancel = true; }
-
         public void Pause() { _wantsPause = true; }
         public void Continue() { _wantsPause = false; }
         public bool IsPaused { get { return _wantsPause; } }
@@ -88,6 +80,15 @@ namespace Synapse.Core
                 }
                 return false;
             }
+        }
+        #endregion
+
+        public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
+        {
+            if( inProc )
+                return ProcessRecursive( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
+            else
+                return ProcessRecursiveExternal( RunAs, Actions, HandlerResult.Emtpy, dynamicData, dryRun );
         }
 
         HandlerResult ProcessRecursive(SecurityContext parentSecurityContext, List<ActionItem> actions, HandlerResult result,

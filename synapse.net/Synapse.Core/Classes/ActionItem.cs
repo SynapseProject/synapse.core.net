@@ -20,9 +20,10 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
         public HandlerResult ExecuteResult { get; set; }
+        public ActionItem ActionGroup { get; set; }
         public List<ActionItem> Actions { get; set; }
         [YamlIgnore]
-        public bool HasActions { get { return Actions != null && Actions.Count > 0; } }
+        public bool HasActions { get { return ActionGroup != null || (Actions != null && Actions.Count > 0); } }
         public SecurityContext RunAs { get; set; }
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }

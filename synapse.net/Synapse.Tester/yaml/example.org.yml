@@ -2,15 +2,15 @@ Name: plan0
 Description: planDesc
 IsActive: true
 RunAs:
-  Domain: x
-  UserName: x0
-  Password: x0
+  Domain: ss-mekhano
+  UserName: synapse0
+  Password: syn0
 Actions:
 - Name: ac0
   RunAs:
-    Domain: x
-    UserName: x1
-    Password: x1
+    Domain: ss-mekhano
+    UserName: synapse1
+    Password: syn1
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
@@ -37,48 +37,6 @@ Actions:
       Path: Magical
     - Name: type
       Path: Kitten:Color
-  ActionGroup:
-    Name: ac0.g
-    ExecuteCase: Failed
-    Handler:
-      Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-      Config:
-        Type: Yaml
-        Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
-        Values:
-          Magical: Mystery1
-          Lucy: In the sky1
-          Kitten:
-            Cat: Tommy1
-            Color: Rat1
-    Parameters:
-      Name: PepeLePew
-      Type: Yaml
-      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
-    RunAs:
-      Domain: x
-      UserName: x1
-      Password: x1
-    Actions:
-    - Name: ac0.g.0
-      ExecuteCase: Failed
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Yaml
-        InheritFrom: PepeLePew
-    - Name: ac0.g.1
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Yaml
-        InheritFrom: PepeLePew
   Actions:
   - Name: ac0.1
     ExecuteCase: Failed
@@ -87,9 +45,9 @@ Actions:
     Actions:
     - Name: ac0.1.1
       RunAs:
-        Domain: x
-        UserName: x2
-        Password: x2
+        Domain: ss-mekhano
+        UserName: synapse2
+        Password: syn2
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
         Config:
@@ -107,9 +65,9 @@ Actions:
       Actions: []
     - Name: ac0.1.2
       RunAs:
-        Domain: x
-        UserName: x0
-        Password: x0
+        Domain: ss-mekhano
+        UserName: synapse0
+        Password: syn0
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
         Config:

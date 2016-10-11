@@ -105,6 +105,12 @@ namespace Synapse.Core
         public StatusType Status { get; set; }
         public object ExitData { get; set; }
 
+        public void SetStatusChecked(StatusType status)
+        {
+            if( status > Status )
+                Status = status;
+        }
+
         public override string ToString()
         {
             return Status.ToString();

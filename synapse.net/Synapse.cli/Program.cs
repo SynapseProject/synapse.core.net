@@ -40,7 +40,7 @@ namespace Synapse.cli
                 {
                     case TaskModel.InProc:
                     {
-                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: true ) );
+                        Task t = Task.Run( () => result = plan.Start_( a.Args, a.DryRun, inProc: true ) );
                         t.Wait();
                         break;
                     }
