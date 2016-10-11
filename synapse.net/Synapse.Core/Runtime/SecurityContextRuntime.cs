@@ -5,10 +5,10 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Principal;
 
-namespace Synapse.Core.Utilities
+namespace Synapse.Core
 {
     //adapted from https://msdn.microsoft.com/en-us/library/w070t6ka(v=vs.110).aspx
-    public class SecurityPrincipalContext
+    public partial class SecurityContext
     {
         [DllImport( "advapi32.dll", SetLastError = true )]
         public static extern bool LogonUser(String lpszUsername, String lpszDomain,
@@ -23,24 +23,17 @@ namespace Synapse.Core.Utilities
         private IntPtr _token;
         private WindowsImpersonationContext _impContext = null;
 
-        public SecurityPrincipalContext() { }
-
         [PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
-        public void Impersonate(string domain, string userName, string password)
+        public void Impersonate()
         {
             if( !IsImpersonating )
             {
                 _token = IntPtr.Zero;
 
-                bool ok = LogonUser( userName.ToString(), domain.ToString(), password.ToString(),
+                bool ok = LogonUser( UserName, Domain, Password,
                    LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref _token );
 
-                //try
-                //{
-                //    password.Dispose();
-                //    userName.Dispose();
-                //    domain.Dispose();
-                //} catch { }
+                //try { password.Dispose(); } catch { }
 
                 if( !ok )
                 {

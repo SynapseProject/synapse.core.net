@@ -79,7 +79,7 @@ namespace Synapse.Core.Runtime
     {
         override public HandlerResult Execute(string parms, bool dryRun = false)
         {
-            System.Threading.Thread.Sleep( 9000 );
+            System.Threading.Thread.Sleep( 5000 );
             StatusType st = StatusType.Failed;
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
             if( !cancel )
@@ -93,7 +93,7 @@ namespace Synapse.Core.Runtime
                 st = StatusType.Cancelled;
                 OnProgress( "FooExecute", "Cancelled", st );
             }
-            WriteFile( "FooHandler", $"parms:{parms}\r\nstatus:{st}" );
+            WriteFile( "FooHandler", $"parms:{parms}\r\nstatus:{st}CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new HandlerResult() { Status = st };
         }
     }
@@ -102,7 +102,7 @@ namespace Synapse.Core.Runtime
     {
         override public HandlerResult Execute(string parms, bool dryRun = false)
         {
-            System.Threading.Thread.Sleep( 9000 );
+            System.Threading.Thread.Sleep( 5000 );
             StatusType st = StatusType.Complete;
             bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
             if( !cancel )
@@ -116,7 +116,7 @@ namespace Synapse.Core.Runtime
                 st = StatusType.Cancelled;
                 OnProgress( "BarExecute", "Cancelled", st );
             }
-            WriteFile( "BarHandler", $"parms:{parms}\r\nstatus:{st}" );
+            WriteFile( "BarHandler", $"parms:{parms}\r\nstatus:{st}\r\nCurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new HandlerResult() { Status = st };
         }
     }

@@ -117,12 +117,9 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                SecurityPrincipalContext spc = new SecurityPrincipalContext(); ;
-                if( a.HasRunAs )
-                    spc.Impersonate( a.RunAs.Domain, a.RunAs.UserName, a.RunAs.Password );
+                a.RunAs?.Impersonate();
                 HandlerResult r = rt.Execute( parms, dryRun );
-                if( spc.IsImpersonating )
-                    spc.Undo();
+                a.RunAs?.Undo();
 
                 if( r.Status > returnResult.Status ) { returnResult = r; }
 

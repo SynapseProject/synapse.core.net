@@ -87,6 +87,15 @@ namespace Synapse.Core
             p.StartInfo.CreateNoWindow = true;
             p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             p.EnableRaisingEvents = true;
+            //if( a.HasRunAs )
+            //{
+            //    p.StartInfo.Domain = a.RunAs.Domain;
+            //    p.StartInfo.UserName = a.RunAs.UserName;
+            //    SecureString pw = new SecureString();
+            //    foreach( char c in a.RunAs.Password )
+            //        pw.AppendChar( c );
+            //    p.StartInfo.Password = pw;
+            //}
 
             p.OutputDataReceived += p_OutputDataReceived;
 
@@ -141,7 +150,9 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
+                a.RunAs?.Impersonate();
                 HandlerResult r = rt.Execute( parms, dryRun );
+                a.RunAs?.Undo();
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;

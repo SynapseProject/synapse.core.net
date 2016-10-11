@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using YamlDotNet.Serialization;
+using System.Security;
+
 
 namespace Synapse.Core
 {
 	//todo: resolve config, use config to get decryption info, use u/p to auth to provider for impersonation thread
-	public class SecurityContext
+	public partial class SecurityContext
 	{
 		public SecurityContext()
 		{

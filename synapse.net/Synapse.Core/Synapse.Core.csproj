@@ -75,7 +75,7 @@
     <Compile Include="Utilities\WebRequestClient.cs" />
     <Compile Include="Utilities\MergeHelpers.cs" />
     <Compile Include="Utilities\ServiceException.cs" />
-    <Compile Include="Utilities\SecurityPrincipalContext.cs" />
+    <Compile Include="Runtime\SecurityContextRuntime.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
