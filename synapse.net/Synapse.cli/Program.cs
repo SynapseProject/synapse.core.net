@@ -40,7 +40,7 @@ namespace Synapse.cli
                 {
                     case TaskModel.InProc:
                     {
-                        Task t = Task.Run( () => result = plan.Start_( a.Args, a.DryRun, inProc: true ) );
+                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: true ) );
                         t.Wait();
                         break;
                     }
@@ -250,19 +250,6 @@ namespace Synapse.cli
         }
     }
 
-    class KeyComparer : IEqualityComparer<string>
-    {
-        public bool Equals(string x, string y)
-        {
-            return x.Equals( y, StringComparison.OrdinalIgnoreCase );
-        }
-
-        public int GetHashCode(string obj)
-        {
-            return obj.GetHashCode();
-        }
-    }
-
     enum TaskModel
     {
         InProc,
@@ -276,11 +263,3 @@ namespace Synapse.cli
         Decode
     }
 }
-
-
-//Console.WriteLine( $"Execute Plan with dryrun:{a.DryRun}, inproc:{a.InProc}\r\nParams:" );
-//foreach( string key in a.Args.Keys )
-//{
-//    Console.WriteLine( $"Key: {key}, Value: {a.Args[key]}" );
-//}
-//Console.WriteLine( a.Plan );

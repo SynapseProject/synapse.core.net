@@ -62,9 +62,7 @@
     <Compile Include="Classes\ActionItem.cs" />
     <Compile Include="Classes\Enums\SerializationType.cs" />
     <Compile Include="Runtime\ParameterInfoRuntime.cs" />
-    <Compile Include="Runtime\PlanRuntimeExternal.cs" />
-    <Compile Include="Runtime\PlanRuntimeInProc.cs" />
-    <Compile Include="Runtime\PlanRuntimeInProc_.cs" />
+    <Compile Include="Runtime\PlanRuntime.cs" />
     <Compile Include="Classes\Handler.cs" />
     <Compile Include="Classes\Plan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
