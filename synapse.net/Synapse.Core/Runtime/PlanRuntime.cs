@@ -116,6 +116,7 @@ namespace Synapse.Core
             }
 
             IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == queryStatus );
+            //foreach( ActionItem a in actionList )
             Parallel.ForEach( actionList, a =>
             {
                 HandlerResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
@@ -191,7 +192,7 @@ namespace Synapse.Core
             string planYaml = CrytoHelpers.Encode( container.ToYaml() );
             args.Add( $"/plan:{planYaml}" );
             args.Add( $"/dryRun:{dryRun}" );
-            args.Add( $"/thread:single" );
+            args.Add( $"/taskModel:single" );
             foreach( string key in dynamicData.Keys )
                 args.Add( $"/{key}:{dynamicData[key]}" );
             string arguments = string.Join( " ", args );
