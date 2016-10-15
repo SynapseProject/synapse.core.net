@@ -169,9 +169,12 @@ namespace Synapse.Core
                 if( !a.HasRunAs )
                     a.RunAs = parentSecurityContext;
                 a.Result = SpawnExternal( a, dynamicData, dryRun );
+                return a.Result;
             }
-
-            return a.Result;
+            else
+            {
+                return ExecuteResult.Emtpy;
+            }
         }
 
         private ExecuteResult SpawnExternal(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun)

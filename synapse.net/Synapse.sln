@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Service.Windows", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.cli", "Synapse.cli\Synapse.cli.csproj", "{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Wpf", "Synapse.Wpf\Synapse.Wpf.csproj", "{C3F810C9-7388-49F8-9548-392F37228975}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3A05D1B-E89F-49F3-9DD7-E0B25756FA33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3F810C9-7388-49F8-9548-392F37228975}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3F810C9-7388-49F8-9548-392F37228975}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3F810C9-7388-49F8-9548-392F37228975}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3F810C9-7388-49F8-9548-392F37228975}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
