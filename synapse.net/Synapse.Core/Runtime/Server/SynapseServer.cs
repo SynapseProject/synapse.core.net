@@ -23,7 +23,7 @@ namespace Synapse.Core.Runtime
             return "WhosHere from SynapseServer, World!";
         }
 
-        public HandlerResult StartPlan(string planInstanceId, bool dryRun, Plan plan)
+        public ExecuteResult StartPlan(string planInstanceId, bool dryRun, Plan plan)
         {
             return plan.Start( null, dryRun );
         }

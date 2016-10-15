@@ -83,43 +83,46 @@ namespace Synapse.Core
         }
         #endregion
 
-        public HandlerResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
+        public ExecuteResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
         {
             if( inProc )
-                return ProcessRecursive( RunAs, null, Actions, HandlerResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
+                Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
             else
-                return ProcessRecursive( RunAs, null, Actions, HandlerResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
+                Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
+
+            return Result;
         }
 
-        HandlerResult ProcessRecursive(SecurityContext parentSecurityContext, ActionItem actionGroup, List<ActionItem> actions, HandlerResult result,
+        ExecuteResult ProcessRecursive(SecurityContext parentSecurityContext, ActionItem actionGroup, List<ActionItem> actions, ExecuteResult result,
             Dictionary<string, string> dynamicData, bool dryRun,
-            Func<SecurityContext, ActionItem, Dictionary<string, string>, bool, HandlerResult> executeHandlerMethod)
+            Func<SecurityContext, ActionItem, Dictionary<string, string>, bool, ExecuteResult> executeHandlerMethod)
         {
             if( WantsStopOrPause() ) { return result; }
 
-            HandlerResult returnResult = HandlerResult.Emtpy;
+            ExecuteResult returnResult = ExecuteResult.Emtpy;
 
             StatusType queryStatus = result.Status;
             if( actionGroup != null && actionGroup.ExecuteCase == result.Status )
             {
-                HandlerResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, dryRun );
+                ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, dryRun );
                 if( r.Status > returnResult.Status )
                     returnResult = r;
 
                 if( actionGroup.HasActions )
+                {
                     r = ProcessRecursive( parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
-                if( r.Status > returnResult.Status )
-                    returnResult = r;
+                    if( r.Status > returnResult.Status )
+                        returnResult = r;
+                }
 
                 if( r.Status > queryStatus )
                     queryStatus = r.Status;
             }
 
             IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == queryStatus );
-            //foreach( ActionItem a in actionList )
-            Parallel.ForEach( actionList, a =>
+            Parallel.ForEach( actionList, a =>   //foreach( ActionItem a in actionList )
             {
-                HandlerResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
+                ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
                 if( a.HasActions )
                     r = ProcessRecursive( a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
 
@@ -127,14 +130,12 @@ namespace Synapse.Core
                     returnResult = r;
             } );
 
-            return returnResult;
+            return returnResult.Clone();
         }
 
         #region InProc
-        HandlerResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        ExecuteResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
-            HandlerResult returnResult = HandlerResult.Emtpy;
-
             string parms = ResolveConfigAndParameters( a, dynamicData );
 
             IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
@@ -144,14 +145,11 @@ namespace Synapse.Core
             {
                 SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                 sc?.Impersonate();
-                HandlerResult r = rt.Execute( parms, dryRun );
+                a.Result = rt.Execute( parms, dryRun );
                 sc?.Undo();
-
-                if( r.Status > returnResult.Status )
-                    returnResult = r;
             }
 
-            return returnResult;
+            return a.Result;
         }
 
         void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
@@ -164,25 +162,21 @@ namespace Synapse.Core
 
 
         #region External
-        HandlerResult ExecuteHandlerProcessExternal(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        ExecuteResult ExecuteHandlerProcessExternal(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
-            HandlerResult returnResult = HandlerResult.Emtpy;
-
             if( !WantsStopOrPause() )
             {
                 if( !a.HasRunAs )
                     a.RunAs = parentSecurityContext;
-                HandlerResult r = SpawnExternal( a, dynamicData, dryRun );
-
-                if( r.Status > returnResult.Status )
-                    returnResult = r;
+                a.Result = SpawnExternal( a, dynamicData, dryRun );
             }
 
-            return returnResult;
+            return a.Result;
         }
 
-        private HandlerResult SpawnExternal(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun)
+        private ExecuteResult SpawnExternal(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun)
         {
+            ExecuteResult result = new ExecuteResult();
             List<string> args = new List<string>();
 
             Plan container = new Plan();
@@ -225,6 +219,8 @@ namespace Synapse.Core
 
             p.Start();
 
+            result.PId = p.Id;
+
             #region read this
             // best practice information on accessing stdout/stderr from mdsn article:
             //  https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput%28v=vs.110%29.aspx
@@ -241,9 +237,7 @@ namespace Synapse.Core
 
             p.WaitForExit();
 
-            int exitCode = p.ExitCode;
-            HandlerResult result = new HandlerResult();
-            result.Status = (StatusType)exitCode;
+            result.Status = (StatusType)p.ExitCode;
             return result;
         }
 
@@ -263,9 +257,9 @@ namespace Synapse.Core
             }
         }
 
-        public HandlerResult ExecuteHandlerProcess_SingleAction(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        public ExecuteResult ExecuteHandlerProcess_SingleAction(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
-            HandlerResult returnResult = HandlerResult.Emtpy;
+            ExecuteResult returnResult = ExecuteResult.Emtpy;
 
             string parms = ResolveConfigAndParameters( a, dynamicData );
 
@@ -275,7 +269,7 @@ namespace Synapse.Core
             if( !WantsStopOrPause() )
             {
                 a.RunAs?.Impersonate();
-                HandlerResult r = rt.Execute( parms, dryRun );
+                ExecuteResult r = rt.Execute( parms, dryRun );
                 a.RunAs?.Undo();
 
                 if( r.Status > returnResult.Status )

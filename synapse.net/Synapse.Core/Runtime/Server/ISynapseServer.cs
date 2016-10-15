@@ -28,7 +28,7 @@ namespace Synapse.Core.Runtime
         #region
         [OperationContract]
         [WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/{planInstanceId}/?action=start&dryRun={dryRun}" )]
-        HandlerResult StartPlan(string planInstanceId, bool dryRun, Plan plan);
+        ExecuteResult StartPlan(string planInstanceId, bool dryRun, Plan plan);
         #endregion
     }
 }

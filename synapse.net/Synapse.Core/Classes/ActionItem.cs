@@ -16,10 +16,10 @@ namespace Synapse.Core
         public string Proxy { get; set; }
         public StatusType ExecuteCase { get; set; }
         public HandlerInfo Handler { get; set; }
+        public ExecuteResult Result { get; set; }
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
-        public HandlerResult ExecuteResult { get; set; }
         public ActionItem ActionGroup { get; set; }
         public List<ActionItem> Actions { get; set; }
         [YamlIgnore]

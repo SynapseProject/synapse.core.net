@@ -20,6 +20,7 @@ namespace Synapse.Core
         public SecurityContext RunAs { get; set; }
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
+        public ExecuteResult Result { get; set; }
 
         public string ToYaml()
         {

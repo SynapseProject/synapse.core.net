@@ -29,9 +29,9 @@ namespace Synapse.Core.Runtime
 
     public class EmptyHandler : HandlerRuntimeBase
     {
-        override public HandlerResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, bool dryRun = false)
         {
-            return new HandlerResult() { Status = StatusType.None };
+            return new ExecuteResult() { Status = StatusType.None };
         }
 
         protected string getMsg(StatusType status, bool dryRun)
@@ -49,10 +49,10 @@ namespace Synapse.Core.Runtime
 
     public class UriHandler : HandlerRuntimeBase
     {
-        override public HandlerResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, bool dryRun = false)
         {
             string result = GetUri( parms ).Result;
-            return new HandlerResult() { Status = StatusType.None };
+            return new ExecuteResult() { Status = StatusType.None };
         }
 
         async Task<string> GetUri(string uri)
@@ -78,9 +78,9 @@ namespace Synapse.Core.Runtime
 
     public class FooHandler : EmptyHandler
     {
-        override public HandlerResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, bool dryRun = false)
         {
-            System.Threading.Thread.Sleep( 5000 );
+            System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Failed;
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
             if( !cancel )
@@ -95,15 +95,15 @@ namespace Synapse.Core.Runtime
                 OnProgress( "FooExecute", "Cancelled", st );
             }
             WriteFile( "FooHandler", $"parms:{parms}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
-            return new HandlerResult() { Status = st };
+            return new ExecuteResult() { Status = st };
         }
     }
 
     public class BarHandler : EmptyHandler
     {
-        override public HandlerResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, bool dryRun = false)
         {
-            System.Threading.Thread.Sleep( 5000 );
+            System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Complete;
             bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
             if( !cancel )
@@ -118,7 +118,7 @@ namespace Synapse.Core.Runtime
                 OnProgress( "BarExecute", "Cancelled", st );
             }
             WriteFile( "BarHandler", $"parms:{parms}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
-            return new HandlerResult() { Status = st };
+            return new ExecuteResult() { Status = st };
         }
     }
 }

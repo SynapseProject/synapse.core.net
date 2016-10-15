@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ExecuteResult.cs" />
+    <Compile Include="Classes\ICloneable.cs" />
     <Compile Include="Dal\Dal.cs" />
     <Compile Include="Classes\SecurityContext.cs" />
     <Compile Include="Classes\DynamicValue.cs" />

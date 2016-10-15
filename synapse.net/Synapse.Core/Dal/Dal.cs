@@ -12,7 +12,7 @@ namespace Synapse.Core.Dal
 			return string.Empty;
 		}
 
-		public int UpdateActionStatus(ActionItem item, HandlerResult result)
+		public int UpdateActionStatus(ActionItem item, ExecuteResult result)
 		{
 			return 0;
 		}

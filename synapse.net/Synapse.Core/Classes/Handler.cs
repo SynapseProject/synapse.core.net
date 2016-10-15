@@ -19,7 +19,7 @@ namespace Synapse.Core
         string ActionName { get; set; }
 
         IHandlerRuntime Initialize(string config);
-        HandlerResult Execute(string parms, bool dryRun = false); //maybe should be object
+        ExecuteResult Execute(string parms, bool dryRun = false); //maybe should be object
 
         event EventHandler<HandlerProgressCancelEventArgs> Progress;
     }
@@ -29,7 +29,7 @@ namespace Synapse.Core
         public string ActionName { get; set; }
 
         //public abstract string Parameters { get; set; }
-        public abstract HandlerResult Execute(string parms, bool dryRun = false);
+        public abstract ExecuteResult Execute(string parms, bool dryRun = false);
 
         public virtual IHandlerRuntime Initialize(string config)
         {
@@ -91,29 +91,4 @@ namespace Synapse.Core
     //{
     //	string Key { get; set; }
     //}
-
-    public class HandlerResult
-    {
-        public HandlerResult()
-        {
-            Status = StatusType.None;
-        }
-
-        public static readonly HandlerResult Emtpy = new HandlerResult();
-        public bool IsEmpty { get { return this == HandlerResult.Emtpy; } }
-
-        public StatusType Status { get; set; }
-        public object ExitData { get; set; }
-
-        public void SetStatusChecked(StatusType status)
-        {
-            if( status > Status )
-                Status = status;
-        }
-
-        public override string ToString()
-        {
-            return Status.ToString();
-        }
-    }
 }

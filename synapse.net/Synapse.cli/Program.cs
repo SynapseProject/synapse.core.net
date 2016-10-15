@@ -29,7 +29,7 @@ namespace Synapse.cli
             }
             else
             {
-                HandlerResult result = null;
+                ExecuteResult result = null;
 
                 Plan plan = null;
                 using( StringReader reader = new StringReader( a.Plan ) )
