@@ -80,10 +80,16 @@ namespace Synapse.Core.Runtime
     {
         override public ExecuteResult Execute(string parms, bool dryRun = false)
         {
-            Dictionary<object, object> p = Utilities.MergeHelpers.DeserializeYaml( parms );
+            StatusType st = StatusType.Failed;
+
+            try
+            {
+                Dictionary<object, object> p = Utilities.MergeHelpers.DeserializeYaml( parms );
+                st = (StatusType)Enum.Parse( typeof( StatusType ), p.Values.ElementAt( 0 ).ToString() );
+            }
+            catch { }
 
             System.Threading.Thread.Sleep( 500 );
-            StatusType st = (StatusType)Enum.Parse( typeof( StatusType ), p.Values.ElementAt( 0 ).ToString() );
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
             if( !cancel )
             {

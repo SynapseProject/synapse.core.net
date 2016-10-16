@@ -134,6 +134,8 @@ namespace Synapse.Core
                 }
             }
 
+            if( parms == null )
+                parms = new Dictionary<object, object>();
             Dictionary<object, object> p = (Dictionary<object, object>)parms;
 
             //merge parms
