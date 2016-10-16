@@ -21,6 +21,7 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
         public ActionItem ActionGroup { get; set; }
+        public bool HasActionGroup { get { return ActionGroup != null; } }
         public List<ActionItem> Actions { get; set; }
         [YamlIgnore]
         public bool HasActions { get { return ActionGroup != null || (Actions != null && Actions.Count > 0); } }

@@ -22,16 +22,20 @@
                            Foreground="White"
                            Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
 
-                <Grid Grid.Row="1" Margin="7,0,0,0" DataContext="{Binding ActionGroup}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                <Grid Grid.Row="1" Margin="7,0,0,0"
+                      Visibility="{local:FormattedBinding HasActionGroup, ValueIfTrue=Visible, ValueIfFalse=Collapsed}">
+                    <Grid DataContext="{Binding ActionGroup}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Text="{Binding Name}"
-                           Foreground="White"
-                           Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
-                    <TreeView Grid.Row="1" ItemsSource="{Binding Path=Actions}" ItemTemplate="{StaticResource actionItemNode}" />
+                        <TextBlock Text="{Binding Name}"
+                                   Foreground="White"
+                                   Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+                        <TreeView Grid.Row="1" ItemsSource="{Binding Path=Actions}" ItemTemplate="{StaticResource actionItemNode}"
+                                  Background="LightBlue" />
+                    </Grid>
                 </Grid>
             </Grid>
         </HierarchicalDataTemplate>
