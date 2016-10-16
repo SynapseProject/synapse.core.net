@@ -13,6 +13,7 @@ namespace Synapse.Core
 		Waiting = 6,
 		Failed = 7,
 		Cancelling = 8,
-		Cancelled = 9
+		Cancelled = 9,
+        Any = 10
 	}
 }

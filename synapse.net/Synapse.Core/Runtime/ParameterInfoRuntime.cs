@@ -175,17 +175,23 @@ namespace Synapse.Core
                 }
             }
 
+            if( parms == null )
+                parms = new Dictionary<object, object>();
             Dictionary<object, object> p = (Dictionary<object, object>)parms;
 
             //merge parms
-            if( HasValues && p != null )
+            if( HasValues )
             {
+                if( p == null )
+                    p = new Dictionary<object, object>();
                 Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
             }
 
             //kv_replace
-            if( HasDynamic && p != null )
+            if( HasDynamic )
             {
+                if( p == null )
+                    p = new Dictionary<object, object>();
                 Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
             }
 

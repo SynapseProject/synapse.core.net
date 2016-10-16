@@ -17,11 +17,13 @@ namespace Synapse.Core
         public StatusType ExecuteCase { get; set; }
         public HandlerInfo Handler { get; set; }
         public ExecuteResult Result { get; set; }
+        [YamlIgnore]
         public bool HasResult { get { return Result != null; } }
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
         public ActionItem ActionGroup { get; set; }
+        [YamlIgnore]
         public bool HasActionGroup { get { return ActionGroup != null; } }
         public List<ActionItem> Actions { get; set; }
         [YamlIgnore]

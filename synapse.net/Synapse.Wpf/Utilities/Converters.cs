@@ -206,7 +206,7 @@ namespace Synapse.Wpf.Dialogs
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Color color = Colors.Yellow;
+            Color color = Colors.Cyan;
 
             if( value == null )
                 return color;
@@ -215,15 +215,18 @@ namespace Synapse.Wpf.Dialogs
             switch( status )
             {
                 case StatusType.New:
+                {
+                    color = (Color)ColorConverter.ConvertFromString( "#330000FF" );
+                    break;
+                }
                 case StatusType.Initializing:
                 {
-                    color = Colors.LightBlue;
+                    color = (Color)ColorConverter.ConvertFromString( "#770000FF" );
                     break;
                 }
                 case StatusType.Running:
-                case StatusType.Waiting:
                 {
-                    color = Colors.Gray;
+                    color = (Color)ColorConverter.ConvertFromString( "#aa0000FF" );
                     break;
                 }
                 case StatusType.Complete:
@@ -233,12 +236,27 @@ namespace Synapse.Wpf.Dialogs
                 }
                 case StatusType.CompletedWithErrors:
                 {
-                    color = Colors.LightCoral;
+                    color = Colors.Chartreuse;
+                    break;
+                }
+                case StatusType.Waiting:
+                {
+                    color = Colors.Fuchsia;
                     break;
                 }
                 case StatusType.Failed:
                 {
-                    color = Colors.Pink;
+                    color = Colors.OrangeRed;
+                    break;
+                }
+                case StatusType.Cancelling:
+                {
+                    color = Colors.DarkSalmon;
+                    break;
+                }
+                case StatusType.Cancelled:
+                {
+                    color = Colors.Coral;
                     break;
                 }
                 default:

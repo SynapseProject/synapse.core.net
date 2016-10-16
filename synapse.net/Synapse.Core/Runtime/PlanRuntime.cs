@@ -102,7 +102,7 @@ namespace Synapse.Core
             ExecuteResult returnResult = ExecuteResult.Emtpy;
 
             StatusType queryStatus = result.Status;
-            if( actionGroup != null && actionGroup.ExecuteCase == result.Status )
+            if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, dryRun );
                 if( r.Status > returnResult.Status )
@@ -119,8 +119,9 @@ namespace Synapse.Core
                     queryStatus = r.Status;
             }
 
-            IEnumerable<ActionItem> actionList = actions.Where( a => a.ExecuteCase == queryStatus );
-            Parallel.ForEach( actionList, a =>   //foreach( ActionItem a in actionList )
+            IEnumerable<ActionItem> actionList =
+                actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
+            Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
             {
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
                 if( a.HasActions )

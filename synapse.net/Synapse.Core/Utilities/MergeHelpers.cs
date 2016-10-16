@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.XmlDiffPatch;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core.Utilities
 {
@@ -139,6 +140,17 @@ namespace Synapse.Core.Utilities
         #endregion
 
         #region yaml/json
+        public static Dictionary<object, object> DeserializeYaml(string source)
+        {
+            Dictionary<object, object> result = new Dictionary<object, object>();
+            using( StringReader sr = new StringReader( source ) )
+            {
+                Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
+                result = deserializer.Deserialize( sr ) as Dictionary<object, object>;
+            }
+            return result;
+        }
+
         public static void MergeYaml(ref Dictionary<object, object> source, Dictionary<object, object> patch)
         {
             ApplyPatchValuesYaml( source, patch );
@@ -184,17 +196,10 @@ namespace Synapse.Core.Utilities
 
             foreach( object key in patch.Keys )
             {
-                if( source.ContainsKey( key ) )
-                {
-                    if( patch[key] is Dictionary<object, object> )
-                    {
-                        ApplyPatchValuesYaml( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
-                    }
-                    else
-                    {
-                        source[key] = patch[key];
-                    }
-                }
+                if( source.ContainsKey( key ) && patch[key] is Dictionary<object, object> )
+                    ApplyPatchValuesYaml( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                else
+                    source[key] = patch[key];
             }
         }
         #endregion

@@ -1,0 +1,77 @@
+Name: plan0
+Description: planDesc
+IsActive: true
+Actions:
+- Name: ac0
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+  Parameters:
+    Type: Yaml
+    Values:
+      Status: New
+  ActionGroup:
+    Name: ac0.g
+    ExecuteCase: Any
+    Handler:
+      Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+    Parameters:
+      Values:
+        Status: Running
+    Actions:
+    - Name: ac0.g.0
+      ExecuteCase: Any
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+      Parameters:
+        Type: Yaml
+        Values:
+          Status: Failed
+    - Name: ac0.g.1
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+      ExecuteCase: Any
+      Parameters:
+        Type: Yaml
+        Values:
+          Status: Waiting
+  Actions:
+  - Name: ac0.1
+    ExecuteCase: Any
+    Handler:
+      Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+    Actions:
+    - Name: ac0.1.1
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+      Parameters:
+        Type: Yaml
+        Values:
+          Status: Cancelled
+    - Name: ac0.1.2
+      ExecuteCase: Any
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+      Parameters:
+        Values:
+          Status: Initializing
+    - Name: ac0.1.3
+      ExecuteCase: Any
+      Handler:
+        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+      Parameters:
+        Type: Yaml
+        Values:
+          Status: Complete
+- Name: ac1
+  ExecuteCase: Any
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+  Parameters:
+    Values:
+      Status: Cancelling
+- Name: ac2
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+  Parameters:
+    Values:
+      Status: CompletedWithErrors

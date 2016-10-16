@@ -4,9 +4,9 @@ namespace Synapse.Core
 {
 	public enum SerializationType
 	{
-		Xml,
+        Yaml,
+        Xml,
 		Json,
-		Yaml,
 		Unspecified
 	}
 }

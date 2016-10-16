@@ -9,16 +9,30 @@
             <Setter Property="IsExpanded" Value="True"/>
         </Style>
 
+        <!--<Style x:Key="actionText>" TargetType="{x:Type Border}">
+            <Setter Property="Child">
+                <Setter.Value>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"
+                               Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+                        <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' PId: \{0\}'}"/>
+                        <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Result: \{0\}'}"/>
+                    </StackPanel>
+                </Setter.Value>
+            </Setter>
+        </Style>-->
+
         <HierarchicalDataTemplate x:Key="actionItem" ItemsSource="{Binding Path=Actions}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Name}"
-                           Foreground="{local:FormattedBinding HasResult, ValueIfTrue=White, ValueIfFalse=Black}"
-                           Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+                               Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+                    <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}'}"/>
+                    <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Result: \{0\}'}"/>
                 </StackPanel>
 
                 <Grid Grid.Row="1" Margin="7,0,0,0"
@@ -29,9 +43,12 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="{Binding Name}"
-                                   Foreground="{local:FormattedBinding HasResult, ValueIfTrue=White, ValueIfFalse=Black}"
-                                   Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"
+                                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+                            <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}'}"/>
+                            <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Result: \{0\}'}"/>
+                        </StackPanel>
                         <TreeView Grid.Row="1" ItemsSource="{Binding Path=Actions}" ItemTemplate="{DynamicResource actionItem}"/>
                     </Grid>
                 </Grid>
@@ -55,8 +72,11 @@
                     Click="cmdLoadPlan_Click" />
         </Grid>
 
-        <StackPanel Grid.Row="1">
-            <TextBlock Text="{Binding Name}" />
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="{Binding Name}"
+                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
+            <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}'}"/>
+            <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Result: \{0\}'}"/>
         </StackPanel>
 
         <TreeView Grid.Row="2" ItemsSource="{Binding Path=Actions}" ItemTemplate="{StaticResource actionItem}" />
