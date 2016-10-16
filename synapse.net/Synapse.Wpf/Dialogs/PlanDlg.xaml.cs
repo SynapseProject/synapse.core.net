@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,18 +18,26 @@ using Synapse.Core;
 
 namespace Synapse.Wpf.Dialogs
 {
-    /// <summary>
-    /// Interaction logic for PlanDlg.xaml
-    /// </summary>
     public partial class PlanDlg : UserControl
     {
         public PlanDlg()
         {
             InitializeComponent();
+
+            txtName.Text = @"C:\Devo\git\Synapse\synapse.net\Synapse.cli\bin\Debug\plan0.result.yml";
         }
 
         public void LoadPlan(Plan plan)
         {
+            this.DataContext = plan;
+        }
+
+        private void cmdLoadPlan_Click(object sender, RoutedEventArgs e)
+        {
+            string planYaml = File.ReadAllText( txtName.Text );
+            Plan plan = null;
+            using( StringReader reader = new StringReader( planYaml ) )
+                plan = Plan.FromYaml( reader );
             this.DataContext = plan;
         }
     }

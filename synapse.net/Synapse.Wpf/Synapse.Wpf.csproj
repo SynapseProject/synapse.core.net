@@ -60,7 +60,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utilities\Converters.cs" />
-    <Compile Include="ViewModel\PlanView.cs" />
     <Page Include="Dialogs\PlanDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

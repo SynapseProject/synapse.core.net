@@ -17,6 +17,7 @@ namespace Synapse.Core
         public StatusType ExecuteCase { get; set; }
         public HandlerInfo Handler { get; set; }
         public ExecuteResult Result { get; set; }
+        public bool HasResult { get { return Result != null; } }
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }

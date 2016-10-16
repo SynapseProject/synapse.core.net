@@ -10,6 +10,8 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using Synapse.Core;
 
+//all of this code is stolen from Suplex
+//  https://github.com/steveshortt/suplex
 namespace Synapse.Wpf.Dialogs
 {
     public class FormattedBinding : Binding
@@ -204,7 +206,7 @@ namespace Synapse.Wpf.Dialogs
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Color color = Colors.DarkGray;
+            Color color = Colors.Yellow;
 
             if( value == null )
                 return color;
@@ -215,33 +217,33 @@ namespace Synapse.Wpf.Dialogs
                 case StatusType.New:
                 case StatusType.Initializing:
                 {
-                    color = Colors.Blue;
+                    color = Colors.LightBlue;
                     break;
                 }
                 case StatusType.Running:
                 case StatusType.Waiting:
                 {
-                    color = Colors.Black;
+                    color = Colors.Gray;
                     break;
                 }
                 case StatusType.Complete:
                 {
-                    color = Colors.Green;
+                    color = Colors.LightGreen;
                     break;
                 }
                 case StatusType.CompletedWithErrors:
                 {
-                    color = Colors.Orange;
+                    color = Colors.LightCoral;
                     break;
                 }
                 case StatusType.Failed:
                 {
-                    color = Colors.Red;
+                    color = Colors.Pink;
                     break;
                 }
                 default:
                 {
-                    color = Colors.DarkGray;
+                    color = Colors.Yellow;
                     break;
                 }
             }

@@ -25,13 +25,6 @@ namespace Synapse.Wpf
         public MainWindow()
         {
             InitializeComponent();
-
-            Plan plan = null;
-            string planYaml = File.ReadAllText( @"C:\Devo\git\Synapse\synapse.net\Synapse.Tester\yaml\example.yml" );
-            planYaml = File.ReadAllText( @"C:\Devo\git\Synapse\synapse.net\Synapse.cli\bin\Debug\plan0.result.yml" );
-            using( StringReader reader = new StringReader( planYaml ) )
-                plan = Plan.FromYaml( reader );
-            planDlg.LoadPlan( plan );
         }
     }
 }
