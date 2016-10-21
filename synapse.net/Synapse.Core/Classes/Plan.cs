@@ -22,6 +22,12 @@ namespace Synapse.Core
         public bool HasRunAs { get { return RunAs != null; } }
         public ExecuteResult Result { get; set; }
 
+        [YamlIgnore]
+        public int InstanceId { get; set; }
+        [YamlIgnore]
+        public bool IsNew { get { return InstanceId > 0; } }
+
+
         public string ToYaml()
         {
             string yaml = string.Empty;

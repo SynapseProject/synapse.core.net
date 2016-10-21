@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Synapse.Core;
+using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Runtime;
 
 
@@ -15,6 +16,9 @@ namespace Synapse.Tester
         static Plan plan = null;
         static void Main(string[] args)
         {
+            SynapseDal dal = new SynapseDal();
+            dal.CreateDatabase();
+
             string path = @"..\..\yaml\example.yml";
             string outpath = @"..\..\yaml\example.out.yml";
             if( args.Length > 0 )

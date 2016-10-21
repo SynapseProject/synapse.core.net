@@ -58,6 +58,13 @@ namespace Synapse.Core
             return a;
         }
 
+        [YamlIgnore]
+        public int PlanInstanceId { get; set; }
+        [YamlIgnore]
+        public int InstanceId { get; set; }
+        [YamlIgnore]
+        public bool IsNew { get { return InstanceId > 0; } }
+
         public override string ToString()
         {
             return string.Format( "{0}-->{1}", Name, Handler.Type );
