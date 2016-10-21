@@ -7,6 +7,13 @@ using System.Text;
 
 namespace Synapse.Core.DataAccessLayer
 {
+    public struct ActionInstanceFields
+    {
+        public const string InstanceId = "Action_Instance_Id";
+        public const string ActionName = "Action_Instance_Id";
+        public const string ActionDetail = "Action_Instance_Id";
+    }
+
     public partial class SynapseDal
     {
         public ActionItem GetActionById(int instanceId)
@@ -26,6 +33,10 @@ namespace Synapse.Core.DataAccessLayer
 
         private void CreateAction(ref ActionItem action)
         {
+            string sql = $@"insert into Action_Instance 
+                {ActionInstanceFields.ActionName} = {action.Name}
+                ,{ActionInstanceFields.ActionDetail} = {action.ToString()}
+                ";
         }
 
         private void UpdateAction(ref ActionItem action)
