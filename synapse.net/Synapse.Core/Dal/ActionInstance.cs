@@ -33,14 +33,28 @@ namespace Synapse.Core.DataAccessLayer
 
         private void CreateAction(ref ActionItem action)
         {
-            string sql = $@"insert into Action_Instance 
-                {ActionInstanceFields.ActionName} = {action.Name}
-                ,{ActionInstanceFields.ActionDetail} = {action.ToString()}
-                ";
+            string sql =
+$@"insert into Action_Instance
+(
+    {ActionInstanceFields.ActionName}
+    ,{ActionInstanceFields.ActionDetail}
+)
+values
+(
+    {action.Name}
+    ,{action.ToString()}
+)
+";
         }
 
         private void UpdateAction(ref ActionItem action)
         {
+            string sql =
+$@"update Action_Instance
+set
+    {ActionInstanceFields.ActionName} = {action.Name}
+    ,{ActionInstanceFields.ActionDetail} = {action.ToString()}
+";
         }
 
         public void DeleteAction(int instanceId)
