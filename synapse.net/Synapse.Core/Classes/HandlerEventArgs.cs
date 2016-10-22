@@ -47,7 +47,7 @@ namespace Synapse.Core
                 ToYaml( sw );
                 str = sw.ToString().Replace( "\r\n", "|" );
             }
-            return str;
+            return str.TrimEnd( '|' );
         }
 
         public static HandlerProgressCancelEventArgs DeserializeSimple(string s)

@@ -143,7 +143,7 @@ namespace Synapse.Core
         {
             string parms = ResolveConfigAndParameters( a, dynamicData );
 
-            IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
+            IHandlerRuntime rt = CreateHandlerRuntime( a );
             rt.Progress += rt_Progress;
 
             if( !WantsStopOrPause() )
@@ -279,7 +279,7 @@ namespace Synapse.Core
 
             string parms = ResolveConfigAndParameters( a, dynamicData );
 
-            IHandlerRuntime rt = CreateHandlerRuntime( a.Name, a.Handler );
+            IHandlerRuntime rt = CreateHandlerRuntime( a );
             rt.Progress += rt_Progress;
 
             if( !WantsStopOrPause() )
@@ -309,7 +309,7 @@ namespace Synapse.Core
         #region utility methods
         string ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
         {
-            bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start" );
+            bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
             if( cancel )
             {
                 _wantsCancel = true;
@@ -350,9 +350,11 @@ namespace Synapse.Core
             return parms;
         }
 
-        IHandlerRuntime CreateHandlerRuntime(string actionName, HandlerInfo info)
+        IHandlerRuntime CreateHandlerRuntime(ActionItem a)
         {
-            bool cancel = OnProgress( actionName, "CreateHandlerRuntime: " + info.Type, "Start" );
+            HandlerInfo info = a.Handler;
+
+            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + info.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
                 _wantsCancel = true;
@@ -366,7 +368,7 @@ namespace Synapse.Core
             Assembly hrAsm = Assembly.Load( an );
             Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
             hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
-            hr.ActionName = actionName;
+            hr.ActionName = a.Name;
 
             string config = info.HasConfig ? info.Config.ResolvedValuesSerialized : null;
             hr.Initialize( config );

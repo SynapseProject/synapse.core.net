@@ -80,7 +80,7 @@ namespace Synapse.Core.Runtime
     {
         override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
         {
-            int seq = 0;
+            int seq = 1;
             StatusType st = StatusType.Failed;
 
             try
@@ -112,7 +112,7 @@ namespace Synapse.Core.Runtime
     {
         override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
         {
-            int seq = 0;
+            int seq = 1;
             System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Complete;
             bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing, startInfo.InstanceId, seq++ );

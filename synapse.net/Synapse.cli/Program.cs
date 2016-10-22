@@ -62,7 +62,7 @@ namespace Synapse.cli
                     File.WriteAllText( $"{plan.Name}.result.yml", plan.ToYaml() );
             }
 
-            Console.WriteLine( $"exitCode:{exitCode}" );
+            //Console.WriteLine( $"exitCode:{exitCode}" );
             Environment.Exit( exitCode );
         }
 
