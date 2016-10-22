@@ -68,7 +68,7 @@ namespace Synapse.cli
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
-            Console.WriteLine( $"Action:{e.ActionName}, Context:{e.Context}, Message:{e.Message}" );
+            Console.WriteLine( e.SerializeSimple() );
         }
 
 

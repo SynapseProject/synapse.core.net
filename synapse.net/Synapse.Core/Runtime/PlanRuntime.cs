@@ -41,10 +41,7 @@ namespace Synapse.Core
         /// </summary>
         protected virtual void OnProgress(HandlerProgressCancelEventArgs e)
         {
-            if( Progress != null )
-            {
-                Progress( this, e );
-            }
+            Progress?.Invoke( this, e );
         }
         #endregion
 
@@ -127,7 +124,8 @@ namespace Synapse.Core
 
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
-            Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
+            //Parallel.ForEach( actionList, a =>   //
+            foreach( ActionItem a in actionList )
             {
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
                 if( a.HasActions )
@@ -135,7 +133,7 @@ namespace Synapse.Core
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
-            } );
+            } //);
 
             return returnResult.Clone();
         }
@@ -257,8 +255,9 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
+                HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
                 //(new ActionItem() { InstanceId = e.Id }).UpdateInstanceStatus( e.Status, e.Message, e.Sequence );
-                OnProgress( "a", "o", e.Data );
+                OnProgress( args );
             }
         }
 
@@ -266,10 +265,14 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
-                OnProgress( "a", "e", e.Data );
+                HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
+                OnProgress( args );
             }
         }
+        #endregion
 
+
+        #region SingleAction
         public ExecuteResult ExecuteHandlerProcess_SingleAction(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
             ExecuteResult returnResult = ExecuteResult.Emtpy;
@@ -292,6 +295,14 @@ namespace Synapse.Core
 
             return returnResult;
         }
+
+        //void rt_Single_Progress(object sender, HandlerProgressCancelEventArgs e)
+        //{
+        //    if( _wantsCancel ) { e.Cancel = true; }
+        //    (new ActionItem() { InstanceId = e.Id }).UpdateInstanceStatus( e.Status, e.Message, e.Sequence );
+        //    OnProgress( e );
+        //    if( e.Cancel ) { _wantsCancel = true; }
+        //}
         #endregion
 
 

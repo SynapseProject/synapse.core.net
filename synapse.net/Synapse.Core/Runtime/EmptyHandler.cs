@@ -41,9 +41,9 @@ namespace Synapse.Core.Runtime
 
         protected void WriteFile(string handler, string message)
         {
-            string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split( '\\' )[1];
-            string fn = $"{ActionName}_{user}_{handler}_{DateTime.Now.Ticks}_{Guid.NewGuid()}";
-            System.IO.File.AppendAllText( fn, message ); ;
+            //string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split( '\\' )[1];
+            //string fn = $"{ActionName}_{user}_{handler}_{DateTime.Now.Ticks}_{Guid.NewGuid()}";
+            //System.IO.File.AppendAllText( fn, message ); ;
         }
     }
 
