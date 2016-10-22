@@ -16,9 +16,6 @@ namespace Synapse.Tester
         static Plan plan = null;
         static void Main(string[] args)
         {
-            SynapseDal dal = new SynapseDal();
-            dal.CreateDatabase();
-
             string path = @"..\..\yaml\example.yml";
             string outpath = @"..\..\yaml\example.out.yml";
             if( args.Length > 0 )
@@ -29,8 +26,6 @@ namespace Synapse.Tester
 
                 using( StreamReader sr = new StreamReader( path ) )
                     plan = Plan.FromYaml( sr );
-
-                dal.CreatePlanInstance( ref plan );
 
                 plan.Actions[0].ActionGroup = plan.Actions[0].Clone();
                 using( StreamWriter file = new StreamWriter( outpath ) )

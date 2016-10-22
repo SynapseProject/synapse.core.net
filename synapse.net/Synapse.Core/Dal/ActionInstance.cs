@@ -1,25 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Linq;
 using System.Text;
+using Synapse.Core.DataAccessLayer;
 
-namespace Synapse.Core.DataAccessLayer
+namespace Synapse.Core
 {
-    public struct ActionInstance
+    public partial class ActionItem
     {
-        public const string Id = "Action_Instance_Id";
-        public const string Name = "Action_Name";
-        public const string PlanId = "Plan_Instance_Id";
-        public const string PId = "Action_PId";
-        public const string Status = "Action_Status";
-        public const string StatusMsg = "Status_Message";
-        public const string StatusSeq = "Status_Seq";
-        public const string Dttm = "Modified_Dttm";
-        public const string ParentId = "Parent_Id";
+        SynapseDal _dal = new SynapseDal();
 
-        public const string TableDef = @"
+        internal struct Fields
+        {
+            public const string Id = "Action_Instance_Id";
+            public const string Name = "Action_Name";
+            public const string PlanId = "Plan_Instance_Id";
+            public const string PId = "Action_PId";
+            public const string Status = "Action_Status";
+            public const string StatusMsg = "Status_Message";
+            public const string StatusSeq = "Status_Seq";
+            public const string Dttm = "Modified_Dttm";
+            public const string ParentId = "Parent_Id";
+
+            public const string TableDef = @"
 CREATE TABLE `Action_Instance` (
 	`Action_Instance_Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`Action_Name`	TEXT NOT NULL,
@@ -32,89 +36,87 @@ CREATE TABLE `Action_Instance` (
 	`Parent_Id`	INTEGER,
 	FOREIGN KEY(`Plan_Instance_Id`) REFERENCES `Plan_Instance`(`Plan_Instance_Id`)
 );";
-    }
+        }
 
-    public partial class SynapseDal
-    {
-        public ActionItem GetActionById(int instanceId)
+        internal ActionItem GetInstance()
         {
             return null;
         }
 
-        private void CreateAction(ref ActionItem action, long? parentId)
+        internal void CreateInstance(long? parentId)
         {
-            if( !action.HasResult )
-                action.Result = new ExecuteResult();
+            if( !HasResult )
+                Result = new ExecuteResult();
 
-            string parIdFld = parentId.HasValue ? $",{ActionInstance.ParentId}" : "";
+            string parIdFld = parentId.HasValue ? $",{Fields.ParentId}" : "";
             string parIdVal = parentId.HasValue ? $",{parentId.Value}" : "";
 
             string sql =
 $@"insert into Action_Instance
 (
-    {ActionInstance.Name}
-    ,{ActionInstance.PlanId}
-    ,{ActionInstance.PId}
-    ,{ActionInstance.Status}
-    ,{ActionInstance.StatusMsg}
-    ,{ActionInstance.StatusSeq}
-    ,{ActionInstance.Dttm}
+    {Fields.Name}
+    ,{Fields.PlanId}
+    ,{Fields.PId}
+    ,{Fields.Status}
+    ,{Fields.StatusMsg}
+    ,{Fields.StatusSeq}
+    ,{Fields.Dttm}
     {parIdFld}
 )
 values
 (
-    '{action.Name}'
-    ,{action.PlanInstanceId}
-    ,{action.Result.PId}
-    ,{(int)action.Result.Status}
-    ,'{action.Result.Status.ToString()}'
+    '{Name}'
+    ,{PlanInstanceId}
+    ,{Result.PId}
+    ,{(int)Result.Status}
+    ,'{Result.Status.ToString()}'
     ,{0}
-    ,{GetEpoch()}
+    ,{_dal.GetEpoch()}
     {parIdVal}
 )
 ";
 
-            ExecuteNonQuery( sql );
-            action.InstanceId = GetLastRowId().Value;
+            _dal.ExecuteNonQuery( sql );
+            InstanceId = _dal.GetLastRowId().Value;
         }
 
-        private void UpdateActionStatus(int instanceId, StatusType status, string message, int sequence)
+        internal void UpdateInstanceStatus(StatusType status, string message, int sequence)
         {
             string sql = $@"
 update Action_Instance
 set
-    {ActionInstance.Status} = {(int)status}
-    ,{ActionInstance.StatusMsg} = '{message}'
-    ,{ActionInstance.StatusSeq} = {sequence}
-    ,{ActionInstance.Dttm} = {GetEpoch()}
+    {Fields.Status} = {(int)status}
+    ,{Fields.StatusMsg} = '{message}'
+    ,{Fields.StatusSeq} = {sequence}
+    ,{Fields.Dttm} = {_dal.GetEpoch()}
 where
-    {ActionInstance.Id} = {instanceId} and {ActionInstance.StatusSeq} < {sequence}
+    {Fields.Id} = {InstanceId} and {Fields.StatusSeq} < {sequence}
 ";
 
-            ExecuteNonQuery( sql );
+            _dal.ExecuteNonQuery( sql, CommandBehavior.CloseConnection );
         }
 
-        private void UpdateAction(ActionItem action)
+        private void UpdateInstance(ActionItem action)
         {
             string sql = $@"
 update Action_Instance
 set
-    {ActionInstance.Name} = '{action.Name}'
-    ,{ActionInstance.PlanId} = {action.PlanInstanceId}
-    ,{ActionInstance.PId} = {action.Result.PId}
-    ,{ActionInstance.Status} = {(int)action.Result.Status}
-    ,{ActionInstance.StatusMsg} = '{"message"}'
-    ,{ActionInstance.StatusSeq} = {0}
-    ,{ActionInstance.Dttm} = {GetEpoch()}
-    ,{ActionInstance.ParentId} = {0}
+    {Fields.Name} = '{Name}'
+    ,{Fields.PlanId} = {PlanInstanceId}
+    ,{Fields.PId} = {Result.PId}
+    ,{Fields.Status} = {(int)Result.Status}
+    ,{Fields.StatusMsg} = '{"message"}'
+    ,{Fields.StatusSeq} = {0}
+    ,{Fields.Dttm} = {_dal.GetEpoch()}
+    ,{Fields.ParentId} = {0}
 where
-    {ActionInstance.Id} = {action.InstanceId}
+    {Fields.Id} = {InstanceId}
 ";
 
-            ExecuteNonQuery( sql );
+            _dal.ExecuteNonQuery( sql, CommandBehavior.CloseConnection );
         }
 
-        public void DeleteAction(int instanceId)
+        public void DeleteInstance()
         {
         }
     }

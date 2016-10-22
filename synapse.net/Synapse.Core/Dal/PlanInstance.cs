@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
 using System.Linq;
 using System.Text;
+using Synapse.Core.DataAccessLayer;
 
-namespace Synapse.Core.DataAccessLayer
+namespace Synapse.Core
 {
-    public partial class SynapseDal
+    public partial class Plan
     {
-        public struct PlanInstance
+        SynapseDal _dal = new SynapseDal();
+
+        internal struct Fields
         {
             public const string Id = "Plan_Instance_Id";
             public const string Name = "Plan_Name";
@@ -33,59 +35,87 @@ CREATE TABLE `Plan_Instance` (
 );";
         }
 
-        public Plan GetPlanById(int instanceId)
+        internal Plan GetInstance()
         {
             return null;
         }
 
-        private void CreatePlan(ref Plan plan)
+        internal void CreateInstance()
         {
-            if( !plan.HasResult )
-                plan.Result = new ExecuteResult();
+            _dal.OpenConnection();
+            CreateInstanceInternal();
+            RecurseActions( Actions, null, InstanceId );
+            _dal.CloseConnection();
+        }
+        void RecurseActions(List<ActionItem> actions, long? parentId, long planId)
+        {
+            foreach( ActionItem action in actions )
+            {
+                action.PlanInstanceId = planId;
+                action.CreateInstance( parentId );
+
+                if( action.HasActionGroup )
+                {
+                    action.ActionGroup.PlanInstanceId = planId;
+                    action.ActionGroup.CreateInstance( parentId );
+
+                    if( action.ActionGroup.HasActions )
+                        RecurseActions( action.ActionGroup.Actions, action.ActionGroup.InstanceId, planId );
+                }
+
+                if( action.HasActions )
+                    RecurseActions( action.Actions, action.InstanceId, planId );
+            }
+        }
+
+        void CreateInstanceInternal()
+        {
+            if( !HasResult )
+                Result = new ExecuteResult();
 
             string sql =
 $@"insert into Plan_Instance
 (
-    {PlanInstance.Name}
-    ,{PlanInstance.ReqNum}
-    ,{PlanInstance.LogPath}
-    ,{PlanInstance.PId}
-    ,{PlanInstance.Status}
-    ,{PlanInstance.StatusMsg}
-    ,{PlanInstance.Dttm}
+    {Fields.Name}
+    ,{Fields.ReqNum}
+    ,{Fields.LogPath}
+    ,{Fields.PId}
+    ,{Fields.Status}
+    ,{Fields.StatusMsg}
+    ,{Fields.Dttm}
 )
 values
 (
-    '{plan.Name}'
+    '{Name}'
     ,'{"plan.RequestNumber"}'
     ,'{"plan.LogPath"}'
-    ,{plan.Result.PId}
-    ,{(int)plan.Result.Status}
-    ,'{plan.Result.Status.ToString()}'
-    ,{GetEpoch()}
+    ,{Result.PId}
+    ,{(int)Result.Status}
+    ,'{Result.Status.ToString()}'
+    ,{_dal.GetEpoch()}
 )
 ";
 
-            ExecuteNonQuery( sql );
-            plan.InstanceId = GetLastRowId().Value;
+            _dal.ExecuteNonQuery( sql );
+            InstanceId = _dal.GetLastRowId().Value;
         }
 
-        private void UpdatePlanStatus(int instanceId, StatusType status, string message)
+        internal void UpdateInstanceStatus(StatusType status, string message)
         {
             string sql = $@"
 update Action_Instance
 set
-    {PlanInstance.Status} = {(int)status}
-    ,{PlanInstance.StatusMsg} = '{message}'
-    ,{PlanInstance.Dttm} = {GetEpoch()}
+    {Fields.Status} = {(int)status}
+    ,{Fields.StatusMsg} = '{message}'
+    ,{Fields.Dttm} = {_dal.GetEpoch()}
 where
-    {PlanInstance.Id} = {instanceId}
+    {Fields.Id} = {InstanceId}
 ";
 
-            ExecuteNonQuery( sql );
+            _dal.ExecuteNonQuery( sql, CommandBehavior.CloseConnection );
         }
 
-        public void DeletePlan(int instanceId)
+        internal void DeleteInstance(int instanceId)
         {
         }
     }

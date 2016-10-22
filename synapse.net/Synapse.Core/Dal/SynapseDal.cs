@@ -13,75 +13,44 @@ namespace Synapse.Core.DataAccessLayer
         const string _fileName = "synapse.sqlite3";
         SQLiteConnection _connection = new SQLiteConnection( $"Data Source={_fileName};Version=3;" );
 
-        public void CreateDatabase()
+        static public void CreateDatabase()
         {
+            SynapseDal dal = new SynapseDal();
             if( !File.Exists( _fileName ) )
             {
                 SQLiteConnection.CreateFile( _fileName );
-                OpenConnection();
-                ExecuteNonQuery( PlanInstance.TableDef );
-                ExecuteNonQuery( ActionInstance.TableDef );
-                CloseConnection();
+                dal.OpenConnection();
+                dal.ExecuteNonQuery( Plan.Fields.TableDef );
+                dal.ExecuteNonQuery( ActionItem.Fields.TableDef );
+                dal.CloseConnection();
             }
         }
 
-        public void CreatePlanInstance(ref Plan plan)
-        {
-            OpenConnection();
-            CreatePlan( ref plan );
-            RecurseActions( plan.Actions, null, plan.InstanceId );
-            CloseConnection();
-        }
-        void RecurseActions(List<ActionItem> actions, long? parentId, long planId)
-        {
-            foreach( ActionItem action in actions )
-            {
-                ActionItem a = action;
-                a.PlanInstanceId = planId;
-                CreateAction( ref a, parentId );
-
-                if( a.HasActionGroup )
-                {
-                    ActionItem ag = a.ActionGroup;
-                    ag.PlanInstanceId = planId;
-                    CreateAction( ref ag, parentId );
-
-                    if( ag.HasActions )
-                        RecurseActions( ag.Actions, ag.InstanceId, planId );
-                }
-
-                if( a.HasActions )
-                    RecurseActions( a.Actions, a.InstanceId, planId );
-            }
-        }
-
-        #region utility
-        public void OpenConnection()
+        internal void OpenConnection()
         {
             if( _connection.State != ConnectionState.Open )
                 _connection.Open();
         }
 
-        public void CloseConnection()
+        internal void CloseConnection()
         {
             if( _connection.State != ConnectionState.Closed )
                 _connection.Close();
         }
 
-        public void ExecuteNonQuery(string sql)
+        internal void ExecuteNonQuery(string sql, CommandBehavior commandBehavior = CommandBehavior.Default)
         {
-            new SQLiteCommand( sql, _connection ).ExecuteNonQuery();
+            new SQLiteCommand( sql, _connection ).ExecuteNonQuery( commandBehavior );
         }
 
-        public long? GetLastRowId()
+        internal long? GetLastRowId()
         {
             return (long?)(new SQLiteCommand( "select last_insert_rowid()", _connection ).ExecuteScalar());
         }
 
-        int GetEpoch()
+        internal int GetEpoch()
         {
             return (int)(DateTime.UtcNow - new DateTime( 1970, 1, 1, 0, 0, 0, DateTimeKind.Utc )).TotalSeconds;
         }
-        #endregion
     }
 }

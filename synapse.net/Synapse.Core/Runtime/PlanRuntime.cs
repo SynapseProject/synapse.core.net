@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Utilities;
 
 namespace Synapse.Core
@@ -156,6 +157,7 @@ namespace Synapse.Core
         void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
             if( _wantsCancel ) { e.Cancel = true; }
+            (new ActionItem() { InstanceId = e.Id }).UpdateInstanceStatus( e.Status, e.Message, e.Sequence );
             OnProgress( e );
             if( e.Cancel ) { _wantsCancel = true; }
         }
@@ -249,6 +251,7 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
+                //(new ActionItem() { InstanceId = e.Id }).UpdateInstanceStatus( e.Status, e.Message, e.Sequence );
                 OnProgress( "a", "o", e.Data );
             }
         }

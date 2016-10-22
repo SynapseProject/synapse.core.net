@@ -45,13 +45,13 @@ namespace Synapse.Core
         /// <param name="message">Descriptive message.</param>
         /// <param name="status">Overall Package status indicator.</param>
         /// <param name="id">Message Id.</param>
-        /// <param name="severity">Message/error severity.</param>
+        /// <param name="sequence">Message/error severity.</param>
         /// <param name="ex">Current exception (optional).</param>
         protected virtual bool OnProgress(string context, string message,
-            StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+            StatusType status = StatusType.Running, int id = 0, int sequence = 0, bool cancel = false, Exception ex = null)
         {
             HandlerProgressCancelEventArgs e =
-                new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = this.ActionName };
+                new HandlerProgressCancelEventArgs( context, message, status, id, sequence, cancel, ex ) { ActionName = this.ActionName };
 
             Progress?.Invoke( this, e );
 
@@ -66,13 +66,13 @@ namespace Synapse.Core
     public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
     {
         public HandlerProgressCancelEventArgs(string context, string message,
-            StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+            StatusType status = StatusType.Running, int id = 0, int sequence = 0, bool cancel = false, Exception ex = null)
         {
             Context = context;
             Message = message;
             Status = status;
             Id = id;
-            Severity = severity;
+            Sequence = sequence;
             Exception = ex;
         }
 
@@ -81,7 +81,7 @@ namespace Synapse.Core
         public string Message { get; protected set; }
         public StatusType Status { get; protected set; }
         public int Id { get; protected set; }
-        public int Severity { get; protected set; }
+        public int Sequence { get; protected set; }
         public bool Cancel { get; set; }
         public Exception Exception { get; protected set; }
         public bool HasException { get { return Exception != null; } }

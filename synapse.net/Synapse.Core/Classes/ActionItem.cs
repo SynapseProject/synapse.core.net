@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class ActionItem
+    public partial class ActionItem
     {
         public ActionItem()
         {
