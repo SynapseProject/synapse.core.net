@@ -29,7 +29,7 @@ namespace Synapse.Core.Runtime
 
     public class EmptyHandler : HandlerRuntimeBase
     {
-        override public ExecuteResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
         {
             return new ExecuteResult() { Status = StatusType.None };
         }
@@ -49,7 +49,7 @@ namespace Synapse.Core.Runtime
 
     public class UriHandler : HandlerRuntimeBase
     {
-        override public ExecuteResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
         {
             string result = GetUri( parms ).Result;
             return new ExecuteResult() { Status = StatusType.None };
@@ -78,8 +78,9 @@ namespace Synapse.Core.Runtime
 
     public class FooHandler : EmptyHandler
     {
-        override public ExecuteResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
         {
+            int seq = 0;
             StatusType st = StatusType.Failed;
 
             try
@@ -90,17 +91,17 @@ namespace Synapse.Core.Runtime
             catch { }
 
             System.Threading.Thread.Sleep( 500 );
-            bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
+            bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             if( !cancel )
             {
-                OnProgress( "FooExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running );
-                if( !dryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running ); }
-                OnProgress( "FooExecute", "Finished", st );
+                OnProgress( "FooExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running, startInfo.InstanceId, seq++ );
+                if( !dryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
+                OnProgress( "FooExecute", "Finished", st, startInfo.InstanceId, seq++ );
             }
             else
             {
                 st = StatusType.Cancelled;
-                OnProgress( "FooExecute", "Cancelled", st );
+                OnProgress( "FooExecute", "Cancelled", st, startInfo.InstanceId, seq++ );
             }
             WriteFile( "FooHandler", $"parms:{parms}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new ExecuteResult() { Status = st };
@@ -109,21 +110,22 @@ namespace Synapse.Core.Runtime
 
     public class BarHandler : EmptyHandler
     {
-        override public ExecuteResult Execute(string parms, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
         {
+            int seq = 0;
             System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Complete;
-            bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing );
+            bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, dryRun ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             if( !cancel )
             {
-                OnProgress( "BarExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running );
-                if( !dryRun ) { OnProgress( "BarExecute", "...Progress...", StatusType.Running ); }
-                OnProgress( "BarExecute", "Finished", st );
+                OnProgress( "BarExecute", getMsg( StatusType.Running, dryRun ), StatusType.Running, startInfo.InstanceId, seq++ );
+                if( !dryRun ) { OnProgress( "BarExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
+                OnProgress( "BarExecute", "Finished", st, startInfo.InstanceId, seq++ );
             }
             else
             {
                 st = StatusType.Cancelled;
-                OnProgress( "BarExecute", "Cancelled", st );
+                OnProgress( "BarExecute", "Cancelled", st, startInfo.InstanceId, seq++ );
             }
             WriteFile( "BarHandler", $"parms:{parms}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new ExecuteResult() { Status = st };

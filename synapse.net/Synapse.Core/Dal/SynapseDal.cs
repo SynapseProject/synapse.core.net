@@ -40,11 +40,13 @@ namespace Synapse.Core.DataAccessLayer
 
         internal void ExecuteNonQuery(string sql, CommandBehavior commandBehavior = CommandBehavior.Default)
         {
+            OpenConnection();
             new SQLiteCommand( sql, _connection ).ExecuteNonQuery( commandBehavior );
         }
 
         internal long? GetLastRowId()
         {
+            OpenConnection();
             return (long?)(new SQLiteCommand( "select last_insert_rowid()", _connection ).ExecuteScalar());
         }
 

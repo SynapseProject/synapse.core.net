@@ -23,13 +23,13 @@ namespace Synapse.Core
         /// <param name="message">Descriptive message.</param>
         /// <param name="status">Overall Package status indicator.</param>
         /// <param name="id">Message Id.</param>
-        /// <param name="severity">Message/error severity.</param>
+        /// <param name="sequence">Message/error severity.</param>
         /// <param name="ex">Current exception (optional).</param>
         /// <returns>HandlerProgressCancelEventArgs.Cancel value.</returns>
-        protected virtual bool OnProgress(string actionName, string context, string message, StatusType status = StatusType.Running, int id = 0, int severity = 0, bool cancel = false, Exception ex = null)
+        protected virtual bool OnProgress(string actionName, string context, string message, StatusType status = StatusType.Running, long id = 0, int sequence = 0, bool cancel = false, Exception ex = null)
         {
             HandlerProgressCancelEventArgs e =
-                new HandlerProgressCancelEventArgs( context, message, status, id, severity, cancel, ex ) { ActionName = actionName };
+                new HandlerProgressCancelEventArgs( context, message, status, id, sequence, cancel, ex ) { ActionName = actionName };
             if( _wantsCancel ) { e.Cancel = true; }
             OnProgress( e );
 
@@ -86,10 +86,15 @@ namespace Synapse.Core
 
         public ExecuteResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
         {
+            SynapseDal.CreateDatabase();
+            CreateInstance();
+
             if( inProc )
                 Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
             else
                 Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
+
+            (new Plan() { InstanceId = InstanceId }).UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
 
             return Result;
         }
@@ -145,9 +150,10 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
+                HandlerStartInfo startInfo = new HandlerStartInfo() { InstanceId = a.InstanceId };
                 SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                 sc?.Impersonate();
-                a.Result = rt.Execute( parms, dryRun );
+                a.Result = rt.Execute( parms, startInfo, dryRun );
                 sc?.Undo();
             }
 
@@ -275,8 +281,9 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
+                HandlerStartInfo startInfo = new HandlerStartInfo() { InstanceId = InstanceId };
                 a.RunAs?.Impersonate();
-                ExecuteResult r = rt.Execute( parms, dryRun );
+                ExecuteResult r = rt.Execute( parms, startInfo, dryRun );
                 a.RunAs?.Undo();
 
                 if( r.Status > returnResult.Status )

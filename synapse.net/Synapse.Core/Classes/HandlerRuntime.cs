@@ -6,20 +6,12 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class HandlerInfo
-    {
-        public string Type { get; set; }
-        public ParameterInfo Config { get; set; }
-        [YamlIgnore]
-        public bool HasConfig { get { return Config != null; } }
-    }
-
     public interface IHandlerRuntime
     {
         string ActionName { get; set; }
 
         IHandlerRuntime Initialize(string config);
-        ExecuteResult Execute(string parms, bool dryRun = false); //maybe should be object
+        ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false); //maybe should be object
 
         event EventHandler<HandlerProgressCancelEventArgs> Progress;
     }
@@ -29,7 +21,7 @@ namespace Synapse.Core
         public string ActionName { get; set; }
 
         //public abstract string Parameters { get; set; }
-        public abstract ExecuteResult Execute(string parms, bool dryRun = false);
+        public abstract ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false);
 
         public virtual IHandlerRuntime Initialize(string config)
         {
@@ -48,7 +40,7 @@ namespace Synapse.Core
         /// <param name="sequence">Message/error severity.</param>
         /// <param name="ex">Current exception (optional).</param>
         protected virtual bool OnProgress(string context, string message,
-            StatusType status = StatusType.Running, int id = 0, int sequence = 0, bool cancel = false, Exception ex = null)
+            StatusType status = StatusType.Running, long id = 0, int sequence = 0, bool cancel = false, Exception ex = null)
         {
             HandlerProgressCancelEventArgs e =
                 new HandlerProgressCancelEventArgs( context, message, status, id, sequence, cancel, ex ) { ActionName = this.ActionName };
@@ -57,34 +49,6 @@ namespace Synapse.Core
 
             return e.Cancel;
         }
-    }
-
-    public interface ICancelEventArgs
-    {
-        bool Cancel { get; set; }
-    }
-    public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
-    {
-        public HandlerProgressCancelEventArgs(string context, string message,
-            StatusType status = StatusType.Running, int id = 0, int sequence = 0, bool cancel = false, Exception ex = null)
-        {
-            Context = context;
-            Message = message;
-            Status = status;
-            Id = id;
-            Sequence = sequence;
-            Exception = ex;
-        }
-
-        public string ActionName { get; internal set; }
-        public string Context { get; protected set; }
-        public string Message { get; protected set; }
-        public StatusType Status { get; protected set; }
-        public int Id { get; protected set; }
-        public int Sequence { get; protected set; }
-        public bool Cancel { get; set; }
-        public Exception Exception { get; protected set; }
-        public bool HasException { get { return Exception != null; } }
     }
 
     //public interface IHandlerConfig

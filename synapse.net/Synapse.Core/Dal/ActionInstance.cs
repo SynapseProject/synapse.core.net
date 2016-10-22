@@ -23,6 +23,7 @@ namespace Synapse.Core
             public const string Dttm = "Modified_Dttm";
             public const string ParentId = "Parent_Id";
 
+            public const string TableName = "Action_Instance";
             public const string TableDef = @"
 CREATE TABLE `Action_Instance` (
 	`Action_Instance_Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -52,7 +53,7 @@ CREATE TABLE `Action_Instance` (
             string parIdVal = parentId.HasValue ? $",{parentId.Value}" : "";
 
             string sql =
-$@"insert into Action_Instance
+$@"insert into {Fields.TableName}
 (
     {Fields.Name}
     ,{Fields.PlanId}
@@ -83,7 +84,7 @@ values
         internal void UpdateInstanceStatus(StatusType status, string message, int sequence)
         {
             string sql = $@"
-update Action_Instance
+update {Fields.TableName}
 set
     {Fields.Status} = {(int)status}
     ,{Fields.StatusMsg} = '{message}'
@@ -99,7 +100,7 @@ where
         private void UpdateInstance(ActionItem action)
         {
             string sql = $@"
-update Action_Instance
+update {Fields.TableName}
 set
     {Fields.Name} = '{Name}'
     ,{Fields.PlanId} = {PlanInstanceId}

@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\ExecuteResult.cs" />
+    <Compile Include="Classes\HandlerEventArgs.cs" />
+    <Compile Include="Classes\HandlerStartInfo.cs" />
+    <Compile Include="Classes\HandlerRuntime.cs" />
     <Compile Include="Classes\ICloneable.cs" />
     <Compile Include="Dal\PlanInstance.cs" />
     <Compile Include="Dal\ActionInstance.cs" />
@@ -73,7 +76,7 @@
     <Compile Include="Classes\Enums\SerializationType.cs" />
     <Compile Include="Runtime\ParameterInfoRuntime.cs" />
     <Compile Include="Runtime\PlanRuntime.cs" />
-    <Compile Include="Classes\Handler.cs" />
+    <Compile Include="Classes\HandlerInfo.cs" />
     <Compile Include="Classes\Plan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\EmptyHandler.cs" />

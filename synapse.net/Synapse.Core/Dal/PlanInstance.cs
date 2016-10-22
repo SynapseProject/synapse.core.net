@@ -22,6 +22,7 @@ namespace Synapse.Core
             public const string StatusMsg = "Status_Message";
             public const string Dttm = "Modified_Dttm";
 
+            public const string TableName = "Plan_Instance";
             public const string TableDef = @"
 CREATE TABLE `Plan_Instance` (
 	`Plan_Instance_Id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -74,7 +75,7 @@ CREATE TABLE `Plan_Instance` (
                 Result = new ExecuteResult();
 
             string sql =
-$@"insert into Plan_Instance
+$@"insert into {Fields.TableName}
 (
     {Fields.Name}
     ,{Fields.ReqNum}
@@ -103,7 +104,7 @@ values
         internal void UpdateInstanceStatus(StatusType status, string message)
         {
             string sql = $@"
-update Action_Instance
+update {Fields.TableName}
 set
     {Fields.Status} = {(int)status}
     ,{Fields.StatusMsg} = '{message}'
