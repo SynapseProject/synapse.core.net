@@ -59,9 +59,9 @@ namespace Synapse.Core
         }
 
         [YamlIgnore]
-        public int PlanInstanceId { get; set; }
+        public long PlanInstanceId { get; set; }
         [YamlIgnore]
-        public int InstanceId { get; set; }
+        public long InstanceId { get; set; }
         [YamlIgnore]
         public bool IsNew { get { return InstanceId > 0; } }
 

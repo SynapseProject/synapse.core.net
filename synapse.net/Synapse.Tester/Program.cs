@@ -30,6 +30,8 @@ namespace Synapse.Tester
                 using( StreamReader sr = new StreamReader( path ) )
                     plan = Plan.FromYaml( sr );
 
+                dal.CreatePlanInstance( ref plan );
+
                 plan.Actions[0].ActionGroup = plan.Actions[0].Clone();
                 using( StreamWriter file = new StreamWriter( outpath ) )
                     plan.ToYaml( file );

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -9,8 +10,52 @@ namespace Synapse.Core.DataAccessLayer
 {
     public partial class SynapseDal
     {
-        SQLiteConnection _connection = new SQLiteConnection( "Data Source=synapse.db;Version=3;" );
+        const string _fileName = "synapse.sqlite3";
+        SQLiteConnection _connection = new SQLiteConnection( $"Data Source={_fileName};Version=3;" );
 
+        public void CreateDatabase()
+        {
+            if( !File.Exists( _fileName ) )
+            {
+                SQLiteConnection.CreateFile( _fileName );
+                OpenConnection();
+                ExecuteNonQuery( PlanInstance.TableDef );
+                ExecuteNonQuery( ActionInstance.TableDef );
+                CloseConnection();
+            }
+        }
+
+        public void CreatePlanInstance(ref Plan plan)
+        {
+            OpenConnection();
+            CreatePlan( ref plan );
+            RecurseActions( plan.Actions, null, plan.InstanceId );
+            CloseConnection();
+        }
+        void RecurseActions(List<ActionItem> actions, long? parentId, long planId)
+        {
+            foreach( ActionItem action in actions )
+            {
+                ActionItem a = action;
+                a.PlanInstanceId = planId;
+                CreateAction( ref a, parentId );
+
+                if( a.HasActionGroup )
+                {
+                    ActionItem ag = a.ActionGroup;
+                    ag.PlanInstanceId = planId;
+                    CreateAction( ref ag, parentId );
+
+                    if( ag.HasActions )
+                        RecurseActions( ag.Actions, ag.InstanceId, planId );
+                }
+
+                if( a.HasActions )
+                    RecurseActions( a.Actions, a.InstanceId, planId );
+            }
+        }
+
+        #region utility
         public void OpenConnection()
         {
             if( _connection.State != ConnectionState.Open )
@@ -23,23 +68,20 @@ namespace Synapse.Core.DataAccessLayer
                 _connection.Close();
         }
 
-        public void CreateDatabase()
-        {
-            string planInstance = "CREATE TABLE Plan_Instance ( `Plan_Instance_Id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `Plan_Name` TEXT NOT NULL, `Request_Number` TEXT NOT NULL, `Plan_Status` INTEGER NOT NULL, `Status_Message` TEXT NOT NULL, `Modified_Dttm` INTEGER NOT NULL )";
-            string actionInstance = "CREATE TABLE Action_Instance ( `Action_Instance_Id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `Action_Name` TEXT NOT NULL, `Action_Detail` TEXT NOT NULL, `Plan_Instance_Id` INTEGER NOT NULL, `Log_Path` TEXT NOT NULL, `Action_Status` INTEGER NOT NULL, `Status_Message` TEXT NOT NULL, `Status_Seq` INTEGER NOT NULL, `Modified_Dttm` INTEGER NOT NULL, `Parent_Id` INTEGER, FOREIGN KEY(Plan_Instance_Id) REFERENCES Plan_Instance(Plan_Instance_Id) )";
-            string seq = "CREATE TABLE sqlite_sequence(name,seq)";
-
-            SQLiteConnection.CreateFile( "synapse.db" );
-            OpenConnection();
-            ExecuteNonQuery( planInstance );
-            ExecuteNonQuery( actionInstance );
-            ExecuteNonQuery( seq );
-            CloseConnection();
-        }
-
         public void ExecuteNonQuery(string sql)
         {
             new SQLiteCommand( sql, _connection ).ExecuteNonQuery();
         }
+
+        public long? GetLastRowId()
+        {
+            return (long?)(new SQLiteCommand( "select last_insert_rowid()", _connection ).ExecuteScalar());
+        }
+
+        int GetEpoch()
+        {
+            return (int)(DateTime.UtcNow - new DateTime( 1970, 1, 1, 0, 0, 0, DateTimeKind.Utc )).TotalSeconds;
+        }
+        #endregion
     }
 }
