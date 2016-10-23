@@ -12,6 +12,8 @@ namespace Synapse.cli
 {
     class Program
     {
+        static bool _isSingleTaskModel = false;
+
         static void Main(string[] args)
         {
             int exitCode = 11;
@@ -53,6 +55,7 @@ namespace Synapse.cli
                     }
                     case TaskModel.Single:
                     {
+                        _isSingleTaskModel = true;
                         result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.DryRun );
                         break;
                     }
@@ -69,12 +72,18 @@ namespace Synapse.cli
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
-            Console.WriteLine( e.SerializeSimple() );
+            string msg = e.SerializeSimple();
+            if( _isSingleTaskModel )
+                msg = CrytoHelpers.Encode( msg );
+            Console.WriteLine( msg );
         }
 
         private static void plan_LogMessage(object sender, LogMessageEventArgs e)
         {
-            Console.WriteLine( e.SerializeSimple() );
+            string msg = e.SerializeSimple();
+            if( _isSingleTaskModel )
+                msg = CrytoHelpers.Encode( msg );
+            Console.WriteLine( msg );
         }
 
 

@@ -218,10 +218,6 @@ namespace Synapse.Core
                 args.Add( $"/{key}:{dynamicData[key]}" );
             string arguments = string.Join( " ", args );
 
-            //OnProgress( $" --> external --> {container.Name}", "external", arguments );
-            //Console.WriteLine( $" --> external --> {container.Name}" );
-
-
             Process p = new Process();
             p.StartInfo.Arguments = arguments;
             p.StartInfo.FileName = "synapse.cli.exe";
@@ -273,16 +269,17 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
+                string data = CrytoHelpers.Decode( e.Data );
                 try
                 {
-                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
+                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data );
                     OnProgress( args );
                 }
                 catch
                 {
                     try
                     {
-                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( e.Data );
+                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( data );
                         OnLogMessage( args );
                     }
                     catch
@@ -297,16 +294,17 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
+                string data = CrytoHelpers.Decode( e.Data );
                 try
                 {
-                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
+                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data );
                     OnProgress( args );
                 }
                 catch
                 {
                     try
                     {
-                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( e.Data );
+                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( data );
                         OnLogMessage( args );
                     }
                     catch
