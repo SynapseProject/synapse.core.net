@@ -34,9 +34,9 @@ namespace Synapse.Core.Runtime
             return new ExecuteResult() { Status = StatusType.None };
         }
 
-        protected string getMsg(StatusType status, bool dryRun)
+        protected string getMsg(StatusType status, HandlerStartInfo si)
         {
-            return string.Format( "{0}-->dryRun:{1}", status, dryRun );
+            return $"{status}-->dryRun:{si.IsDryRun}, ReqNum:{si.RequestNumber}";
         }
 
         protected void WriteFile(string handler, string message)
@@ -91,10 +91,10 @@ namespace Synapse.Core.Runtime
             catch { }
 
             System.Threading.Thread.Sleep( 500 );
-            bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo.IsDryRun ), StatusType.Initializing, startInfo.InstanceId, seq++ );
+            bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             if( !cancel )
             {
-                OnProgress( "FooExecute", getMsg( StatusType.Running, startInfo.IsDryRun ), StatusType.Running, startInfo.InstanceId, seq++ );
+                OnProgress( "FooExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );
                 if( !startInfo.IsDryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
                 OnProgress( "FooExecute", "Finished", st, startInfo.InstanceId, seq++ );
             }
@@ -115,10 +115,10 @@ namespace Synapse.Core.Runtime
             int seq = 1;
             System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Complete;
-            bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, startInfo.IsDryRun ), StatusType.Initializing, startInfo.InstanceId, seq++ );
+            bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             if( !cancel )
             {
-                OnProgress( "BarExecute", getMsg( StatusType.Running, startInfo.IsDryRun ), StatusType.Running, startInfo.InstanceId, seq++ );
+                OnProgress( "BarExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );
                 if( !startInfo.IsDryRun ) { OnProgress( "BarExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
                 OnProgress( "BarExecute", "Finished", st, startInfo.InstanceId, seq++ );
             }

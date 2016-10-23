@@ -194,8 +194,9 @@ namespace Synapse.Core
             List<string> args = new List<string>();
 
             Plan container = new Plan();
-            container.Name = $"{this.Name}:{a.Name}";
+            container.Name = $"{Name}:{a.Name}";
             container.Actions.Add( a.Clone() );
+            container.StartInfo = StartInfo;
 
             string planYaml = CrytoHelpers.Encode( container.ToYaml() );
             args.Add( $"/plan:{planYaml}" );
