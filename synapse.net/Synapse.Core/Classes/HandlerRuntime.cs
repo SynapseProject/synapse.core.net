@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -11,7 +7,7 @@ namespace Synapse.Core
         string ActionName { get; set; }
 
         IHandlerRuntime Initialize(string config);
-        ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false); //maybe should be object
+        ExecuteResult Execute(HandlerStartInfo startInfo);
 
         event EventHandler<HandlerProgressCancelEventArgs> Progress;
     }
@@ -21,7 +17,7 @@ namespace Synapse.Core
         public string ActionName { get; set; }
 
         //public abstract string Parameters { get; set; }
-        public abstract ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false);
+        public abstract ExecuteResult Execute(HandlerStartInfo startInfo);
 
         public virtual IHandlerRuntime Initialize(string config)
         {
@@ -50,9 +46,4 @@ namespace Synapse.Core
             return e.Cancel;
         }
     }
-
-    //public interface IHandlerConfig
-    //{
-    //	string Key { get; set; }
-    //}
 }

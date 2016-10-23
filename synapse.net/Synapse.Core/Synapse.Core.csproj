@@ -61,7 +61,7 @@
   <ItemGroup>
     <Compile Include="Classes\ExecuteResult.cs" />
     <Compile Include="Classes\HandlerEventArgs.cs" />
-    <Compile Include="Classes\ExecuteStartInfo.cs" />
+    <Compile Include="Classes\IStartInfo.cs" />
     <Compile Include="Classes\HandlerRuntime.cs" />
     <Compile Include="Classes\ICloneable.cs" />
     <Compile Include="Dal\PlanInstance.cs" />

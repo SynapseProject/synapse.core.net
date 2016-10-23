@@ -10,6 +10,7 @@ namespace Synapse.Core
         public Plan()
         {
             Actions = new List<ActionItem>();
+            StartInfo = new PlanStartInfo();
         }
 
         public string Name { get; set; }
@@ -23,7 +24,7 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
 
-        public ExecuteStartInfo StartInfo { get; set; }
+        public PlanStartInfo StartInfo { get; set; }
         [YamlIgnore]
         public bool HasStartInfo { get { return StartInfo != null; } }
 

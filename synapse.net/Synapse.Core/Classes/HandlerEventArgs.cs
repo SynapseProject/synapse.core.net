@@ -11,6 +11,7 @@ namespace Synapse.Core
     {
         bool Cancel { get; set; }
     }
+
     public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
     {
         public HandlerProgressCancelEventArgs() { }

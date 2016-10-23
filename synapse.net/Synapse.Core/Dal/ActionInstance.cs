@@ -71,7 +71,7 @@ values
     ,{Result.PId}
     ,{(int)Result.Status}
     ,'{Result.Status.ToString()}'
-    ,{0}
+    ,{-100}
     ,{_dal.GetEpoch()}
     {parIdVal}
 )

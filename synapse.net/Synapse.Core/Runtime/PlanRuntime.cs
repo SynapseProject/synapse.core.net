@@ -91,7 +91,7 @@ namespace Synapse.Core
             else
                 Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
 
-            (new Plan() { InstanceId = InstanceId }).UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
+            UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
 
             return Result;
         }
@@ -147,10 +147,15 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                ExecuteStartInfo startInfo = new ExecuteStartInfo() { InstanceId = a.InstanceId };
+                HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
+                {
+                    Parameters = parms,
+                    IsDryRun = dryRun,
+                    InstanceId = a.InstanceId
+                };
                 SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                 sc?.Impersonate();
-                a.Result = rt.Execute( parms, startInfo, dryRun );
+                a.Result = rt.Execute( startInfo );
                 sc?.Undo();
             }
 
@@ -160,7 +165,7 @@ namespace Synapse.Core
         void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
             if( _wantsCancel ) { e.Cancel = true; }
-            (new ActionItem() { InstanceId = e.Id }).UpdateInstanceStatus( e.Status, e.Message, e.Sequence );
+            SynapseDal.UpdateActionInstance( e.Id, e.Status, e.Message, e.Sequence );
             OnProgress( e );
             if( e.Cancel ) { _wantsCancel = true; }
         }
@@ -284,9 +289,14 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                ExecuteStartInfo startInfo = new ExecuteStartInfo() { InstanceId = a.InstanceId };
+                HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
+                {
+                    Parameters = parms,
+                    IsDryRun = dryRun,
+                    InstanceId = a.InstanceId
+                };
                 a.RunAs?.Impersonate();
-                ExecuteResult r = rt.Execute( parms, startInfo, dryRun );
+                ExecuteResult r = rt.Execute( startInfo );
                 a.RunAs?.Undo();
 
                 if( r.Status > returnResult.Status )

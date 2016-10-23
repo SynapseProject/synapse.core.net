@@ -2,7 +2,7 @@
 
 namespace Synapse.Core
 {
-    public class ExecuteResult: ICloneable<ExecuteResult>
+    public class ExecuteResult : ICloneable<ExecuteResult>
     {
         public ExecuteResult()
         {

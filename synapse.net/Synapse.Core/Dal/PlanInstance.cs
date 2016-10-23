@@ -88,7 +88,7 @@ $@"insert into {Fields.TableName}
 values
 (
     '{Name}'
-    ,'{"plan.RequestNumber"}'
+    ,'{StartInfo.RequestNumber}'
     ,'{"plan.LogPath"}'
     ,{Result.PId}
     ,{(int)Result.Status}
