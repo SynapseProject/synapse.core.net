@@ -124,8 +124,7 @@ namespace Synapse.Core
 
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
-            //Parallel.ForEach( actionList, a =>   //
-            foreach( ActionItem a in actionList )
+            Parallel.ForEach( actionList, a =>   //foreach( ActionItem a in actionList )
             {
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
                 if( a.HasActions )
@@ -133,7 +132,7 @@ namespace Synapse.Core
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
-            } //);
+            } );
 
             return returnResult.Clone();
         }
@@ -148,7 +147,7 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                HandlerStartInfo startInfo = new HandlerStartInfo() { InstanceId = a.InstanceId };
+                ExecuteStartInfo startInfo = new ExecuteStartInfo() { InstanceId = a.InstanceId };
                 SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                 sc?.Impersonate();
                 a.Result = rt.Execute( parms, startInfo, dryRun );
@@ -202,7 +201,7 @@ namespace Synapse.Core
             string arguments = string.Join( " ", args );
 
             //OnProgress( $" --> external --> {container.Name}", "external", arguments );
-            Console.WriteLine( $" --> external --> {container.Name}" );
+            //Console.WriteLine( $" --> external --> {container.Name}" );
 
 
             Process p = new Process();
@@ -230,6 +229,7 @@ namespace Synapse.Core
             p.Start();
 
             result.PId = p.Id;
+            a.UpdateInstanceStatus( StatusType.None, "SpawnExternal", 0, p.Id );
 
             #region read this
             // best practice information on accessing stdout/stderr from mdsn article:
@@ -256,7 +256,7 @@ namespace Synapse.Core
             if( e.Data != null )
             {
                 HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
-                //(new ActionItem() { InstanceId = e.Id }).UpdateInstanceStatus( e.Status, e.Message, e.Sequence );
+                //(new ActionItem() { InstanceId = args.Id }).UpdateInstanceStatus( args.Status, args.Message, args.Sequence );
                 OnProgress( args );
             }
         }
@@ -284,7 +284,7 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                HandlerStartInfo startInfo = new HandlerStartInfo() { InstanceId = InstanceId };
+                ExecuteStartInfo startInfo = new ExecuteStartInfo() { InstanceId = a.InstanceId };
                 a.RunAs?.Impersonate();
                 ExecuteResult r = rt.Execute( parms, startInfo, dryRun );
                 a.RunAs?.Undo();

@@ -29,7 +29,7 @@ namespace Synapse.Core.Runtime
 
     public class EmptyHandler : HandlerRuntimeBase
     {
-        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false)
         {
             return new ExecuteResult() { Status = StatusType.None };
         }
@@ -49,7 +49,7 @@ namespace Synapse.Core.Runtime
 
     public class UriHandler : HandlerRuntimeBase
     {
-        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false)
         {
             string result = GetUri( parms ).Result;
             return new ExecuteResult() { Status = StatusType.None };
@@ -78,7 +78,7 @@ namespace Synapse.Core.Runtime
 
     public class FooHandler : EmptyHandler
     {
-        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false)
         {
             int seq = 1;
             StatusType st = StatusType.Failed;
@@ -110,7 +110,7 @@ namespace Synapse.Core.Runtime
 
     public class BarHandler : EmptyHandler
     {
-        override public ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false)
+        override public ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false)
         {
             int seq = 1;
             System.Threading.Thread.Sleep( 500 );

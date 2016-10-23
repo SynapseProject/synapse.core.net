@@ -11,7 +11,7 @@ namespace Synapse.Core
         string ActionName { get; set; }
 
         IHandlerRuntime Initialize(string config);
-        ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false); //maybe should be object
+        ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false); //maybe should be object
 
         event EventHandler<HandlerProgressCancelEventArgs> Progress;
     }
@@ -21,7 +21,7 @@ namespace Synapse.Core
         public string ActionName { get; set; }
 
         //public abstract string Parameters { get; set; }
-        public abstract ExecuteResult Execute(string parms, HandlerStartInfo startInfo, bool dryRun = false);
+        public abstract ExecuteResult Execute(string parms, ExecuteStartInfo startInfo, bool dryRun = false);
 
         public virtual IHandlerRuntime Initialize(string config)
         {

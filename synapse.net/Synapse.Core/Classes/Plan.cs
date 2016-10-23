@@ -16,18 +16,22 @@ namespace Synapse.Core
         public string UniqueName { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
+
         public List<ActionItem> Actions { get; set; }
+
         public SecurityContext RunAs { get; set; }
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
+
+        public ExecuteStartInfo StartInfo { get; set; }
+        [YamlIgnore]
+        public bool HasStartInfo { get { return StartInfo != null; } }
+
         public ExecuteResult Result { get; set; }
         [YamlIgnore]
         public bool HasResult { get { return Result != null; } }
 
-        [YamlIgnore]
         public long InstanceId { get; set; }
-        [YamlIgnore]
-        public bool IsNew { get { return InstanceId > 0; } }
 
 
         public string ToYaml()

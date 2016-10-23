@@ -81,8 +81,9 @@ values
             InstanceId = _dal.GetLastRowId().Value;
         }
 
-        internal void UpdateInstanceStatus(StatusType status, string message, int sequence)
+        internal void UpdateInstanceStatus(StatusType status, string message, int sequence, int? pid = null)
         {
+            string pidsql = pid.HasValue ? $",{Fields.PId} = {pid.Value}" : string.Empty;
             string sql = $@"
 update {Fields.TableName}
 set
@@ -90,6 +91,7 @@ set
     ,{Fields.StatusMsg} = '{message}'
     ,{Fields.StatusSeq} = {sequence}
     ,{Fields.Dttm} = {_dal.GetEpoch()}
+    {pidsql}
 where
     {Fields.Id} = {InstanceId} and {Fields.StatusSeq} < {sequence}
 ";

@@ -52,18 +52,16 @@ namespace Synapse.Core
                 ExecuteCase = ExecuteCase,
                 Handler = Handler,
                 Parameters = Parameters,
-                RunAs = RunAs
+                RunAs = RunAs,
+                InstanceId = InstanceId
             };
 
             return a;
         }
 
-        [YamlIgnore]
         public long PlanInstanceId { get; set; }
-        [YamlIgnore]
+
         public long InstanceId { get; set; }
-        [YamlIgnore]
-        public bool IsNew { get { return InstanceId > 0; } }
 
         public override string ToString()
         {

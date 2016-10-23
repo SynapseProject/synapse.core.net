@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Synapse.Core
 {
-    public class HandlerStartInfo
+    public class ExecuteStartInfo
     {
         public long InstanceId { get; set; }
         public string RequestUser { get; set; }
