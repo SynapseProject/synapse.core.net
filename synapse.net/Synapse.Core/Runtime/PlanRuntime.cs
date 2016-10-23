@@ -15,6 +15,7 @@ namespace Synapse.Core
     {
         #region events
         public event EventHandler<HandlerProgressCancelEventArgs> Progress;
+        public event EventHandler<LogMessageEventArgs> LogMessage;
 
         /// <summary>
         /// Notify of step start. If return value is True, then cancel operation.
@@ -42,6 +43,11 @@ namespace Synapse.Core
         protected virtual void OnProgress(HandlerProgressCancelEventArgs e)
         {
             Progress?.Invoke( this, e );
+        }
+
+        protected virtual void OnLogMessage(LogMessageEventArgs e)
+        {
+            LogMessage?.Invoke( this, e );
         }
         #endregion
 
@@ -144,6 +150,7 @@ namespace Synapse.Core
 
             IHandlerRuntime rt = CreateHandlerRuntime( a );
             rt.Progress += rt_Progress;
+            rt.LogMessage += rt_LogMessage;
 
             if( !WantsStopOrPause() )
             {
@@ -168,6 +175,11 @@ namespace Synapse.Core
             SynapseDal.UpdateActionInstance( e.Id, e.Status, e.Message, e.Sequence );
             OnProgress( e );
             if( e.Cancel ) { _wantsCancel = true; }
+        }
+
+        private void rt_LogMessage(object sender, LogMessageEventArgs e)
+        {
+            OnLogMessage( e );
         }
         #endregion
 
@@ -261,9 +273,23 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
-                HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
-                //(new ActionItem() { InstanceId = args.Id }).UpdateInstanceStatus( args.Status, args.Message, args.Sequence );
-                OnProgress( args );
+                try
+                {
+                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
+                    OnProgress( args );
+                }
+                catch
+                {
+                    try
+                    {
+                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( e.Data );
+                        OnLogMessage( args );
+                    }
+                    catch
+                    {
+                        throw new Exception( "Could not deserialize output into known args type" );
+                    }
+                }
             }
         }
 
@@ -271,8 +297,23 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
-                HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
-                OnProgress( args );
+                try
+                {
+                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( e.Data );
+                    OnProgress( args );
+                }
+                catch
+                {
+                    try
+                    {
+                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( e.Data );
+                        OnLogMessage( args );
+                    }
+                    catch
+                    {
+                        throw new Exception( "Could not deserialize output into known args type" );
+                    }
+                }
             }
         }
         #endregion
@@ -287,6 +328,7 @@ namespace Synapse.Core
 
             IHandlerRuntime rt = CreateHandlerRuntime( a );
             rt.Progress += rt_Progress;
+            rt.LogMessage += rt_LogMessage;
 
             if( !WantsStopOrPause() )
             {

@@ -92,6 +92,7 @@ namespace Synapse.Core.Runtime
 
             System.Threading.Thread.Sleep( 500 );
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
+            OnLogMessage( "FooExecute", "---------- working ----------" );
             if( !cancel )
             {
                 OnProgress( "FooExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );

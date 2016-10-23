@@ -35,6 +35,7 @@ namespace Synapse.cli
                 using( StringReader reader = new StringReader( a.Plan ) )
                     plan = Plan.FromYaml( reader );
                 plan.Progress += plan_Progress;
+                plan.LogMessage += plan_LogMessage;
 
                 switch( a.TaskModel )
                 {
@@ -67,6 +68,11 @@ namespace Synapse.cli
         }
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
+        {
+            Console.WriteLine( e.SerializeSimple() );
+        }
+
+        private static void plan_LogMessage(object sender, LogMessageEventArgs e)
         {
             Console.WriteLine( e.SerializeSimple() );
         }

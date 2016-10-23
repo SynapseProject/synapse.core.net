@@ -10,6 +10,7 @@ namespace Synapse.Core
         ExecuteResult Execute(HandlerStartInfo startInfo);
 
         event EventHandler<HandlerProgressCancelEventArgs> Progress;
+        event EventHandler<LogMessageEventArgs> LogMessage;
     }
 
     public abstract class HandlerRuntimeBase : IHandlerRuntime
@@ -25,6 +26,7 @@ namespace Synapse.Core
         }
 
         public event EventHandler<HandlerProgressCancelEventArgs> Progress;
+        public event EventHandler<LogMessageEventArgs> LogMessage;
 
         /// <summary>
         /// Notify of step progress.
@@ -44,6 +46,12 @@ namespace Synapse.Core
             Progress?.Invoke( this, e );
 
             return e.Cancel;
+        }
+
+        protected virtual void OnLogMessage(string context, string message, LogLevel level = LogLevel.Info, Exception ex = null)
+        {
+            LogMessageEventArgs args = new LogMessageEventArgs( context, message, level, ex );
+            LogMessage?.Invoke( this, args );
         }
     }
 }
