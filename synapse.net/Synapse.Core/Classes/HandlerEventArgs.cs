@@ -46,15 +46,15 @@ namespace Synapse.Core
             using( StringWriter sw = new StringWriter() )
             {
                 ToYaml( sw );
-                str = sw.ToString().Replace( "\r\n", "|" );
+                str = sw.ToString(); //.Replace( "\r\n", "|" );
             }
-            return str.TrimEnd( '|' );
+            return str; //.TrimEnd( '|' );
         }
 
         public static HandlerProgressCancelEventArgs DeserializeSimple(string s)
         {
             HandlerProgressCancelEventArgs hpcev = null;
-            s = s.Replace( "|", "\r\n" );
+            //s = s.Replace( "|", "\r\n" );
             using( StringReader sr = new StringReader( s ) )
                 hpcev = FromYaml( sr );
             return hpcev;

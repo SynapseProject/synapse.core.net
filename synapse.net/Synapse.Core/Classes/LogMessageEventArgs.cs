@@ -33,15 +33,15 @@ namespace Synapse.Core
             using( StringWriter sw = new StringWriter() )
             {
                 ToYaml( sw );
-                str = sw.ToString().Replace( "\r\n", "|" );
+                str = sw.ToString(); //.Replace( "\r\n", "|" );
             }
-            return str.TrimEnd( '|' );
+            return str; //.TrimEnd( '|' );
         }
 
         public static LogMessageEventArgs DeserializeSimple(string s)
         {
             LogMessageEventArgs args = null;
-            s = s.Replace( "|", "\r\n" );
+            //s = s.Replace( "|", "\r\n" );
             using( StringReader sr = new StringReader( s ) )
                 args = FromYaml( sr );
             return args;

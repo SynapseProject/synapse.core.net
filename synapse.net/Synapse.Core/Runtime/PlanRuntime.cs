@@ -284,7 +284,7 @@ namespace Synapse.Core
                     }
                     catch
                     {
-                        throw new Exception( "Could not deserialize output into known args type" );
+                        throw new Exception( $"Could not deserialize output into known args type:\r\n{data}" );
                     }
                 }
             }
