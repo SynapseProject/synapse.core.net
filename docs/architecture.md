@@ -14,7 +14,7 @@ In order to simplify workflow processing, when considered as an end-to-end logic
 
 ### Local Engine Processing Model
 
-When invoked as a local process, such as through Synapse.CommandLine, a Synapse Engine is processing work as an island, but still maintains the capability to proxy Actions to remote Synapse Engines.  The primary difference is the request/response model does not participate in the Enterprise queueing mechanism.
+When invoked as a local process, such as through Synapse.cli, a Synapse Engine is processing work as an island, but still maintains the capability to proxy Actions to remote Synapse Engines.  The primary difference is the request/response model does not participate in the Enterprise queueing mechanism.
 
 ## Synapse Enterprise
 

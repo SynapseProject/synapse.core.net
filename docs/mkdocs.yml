@@ -5,4 +5,5 @@ pages:
 - Plans: plan.md
 - Actions: action.md
 - Engine: engine.md
+- CommandLine: cli.md
 - Roadmap: roadmap.md
