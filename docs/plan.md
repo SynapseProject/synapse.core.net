@@ -14,6 +14,9 @@ A Synapse Plan is a declarative workflow that is based on execution-result branc
 |IsActive|The boolean enabled/disabled state of the Plan.
 |Actions|The list of child Actions.
 |RunAs|The overriding, Plan-level SecurityContext.
+|Result|Holds the post-execution result all child Actiona.  Rolls-up child execution results to the highest StatusType. Includes runtime PId, Status, ExitData.
+|InstanceId|Local runtime identifier for a Plan.
+
 
 ### Example YAML
 
@@ -26,6 +29,12 @@ Actions:
   {Actions}
 RunAs:
   {SecurityContext}
+StartInfo:
+  RequestNumber: 12345
+  RequestUser: John Doe
+Result:
+  {runtime data}
+InstanceId: {runtime data}
 ```
 
 ---
@@ -43,9 +52,11 @@ An Action is a workflow process, which can essentially be anything.  Synapse is 
 |ExecuteCase|A list of StatusType values to match the ExecuteResult of a parent Action.
 |Handler|Declares the library to support executing the Action.
 |Parameters|Delares the ParameterInfo block used when invoking the Action.
-|ExecuteResult|Holds the post-execution result of the Action.  Rolls-up child execution results to the highest StatusType.
+|ActionGroup|A grouping mechanism for a child branch of Actions.
 |Actions|The list of child Actions.
 |RunAs|The Action-level SecurityContext, overrides Plan-level declaration.
+|Result|Holds the post-execution result of the Action.  Rolls-up child execution results to the highest StatusType.  Includes runtime PId, Status, ExitData.
+|InstanceId|Local runtime identifier for an Action.
 
 ### Example YAML
 
@@ -58,6 +69,11 @@ Handler:
   Config: {ParameterInfo}
 Parameters: {ParameterInfo}
 RunAs: {SecurityContext}
+ActionGroup: {Single-node subtree of child Actions}
+Actions: {Multi-node subtree of child Actions}
+Result:
+  {runtime data}
+InstanceId: {runtime data}
 ```
 
 ---

@@ -20,6 +20,9 @@ Action:
     Config: {ParameterInfo}
   Parameters: {ParameterInfo}
   RunAs: {SecurityContext}
+  ActionGroup: {Single-node subtree of child Actions}
+  Actions:  {Multi-node subtree of child Actions}
+  Result: {ExecuteResult}
 ```
 Where, `ParameterInfo` is:
 ```css
@@ -52,8 +55,8 @@ A detailed description of Synapse Plan YAML is [here](/plan/ "Plan YAML").
 | Component | Description
 |--------|--------
 |Synapse.Core|Contains the workflow execution engine and is responsible for initiating calls to sub-processes.
-|Synapse.CommandLine|A CLI wrapper on Synapse.Core for local process execution.
+|Synapse.cli|A [command-line](/cli/ "Command-line") wrapper on Synapse.Core for local process execution.
 |Synapse.Server|A server daemon designed to act as remote Synapse.Core agent.
-|Synapse.Enterprise|An API interface to creating, storing, and executing Synapse Plans under an RBAC.  Manages exection log-capture and keeps detailed audit logs.
+|Synapse.Enterprise|An API interface to creating, storing, and executing Synapse Plans under an RBAC.  Manages execution log-capture and keeps detailed audit logs.
 
 Detailed architectural descriptions and implementations patterns can be found [here](/architecture/ "Architecture").
