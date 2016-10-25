@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    interface IParameterInfo
+    public interface IParameterInfo
     {
         string Name { get; set; }
         bool HasName { get; }
