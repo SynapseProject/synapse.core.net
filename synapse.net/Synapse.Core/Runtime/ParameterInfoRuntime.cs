@@ -93,8 +93,7 @@ namespace Synapse.Core
                 Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicData );
             }
 
-            //todo: XmlSerializer
-            return parms.ToString();
+            return parms.OuterXml();
         }
 
         string ResolveJson()
