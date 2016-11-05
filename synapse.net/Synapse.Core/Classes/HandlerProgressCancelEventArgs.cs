@@ -67,6 +67,5 @@ namespace Synapse.Core
             Deserializer deserializer = new Deserializer( ignoreUnmatched: false );
             return deserializer.Deserialize<HandlerProgressCancelEventArgs>( reader );
         }
-
     }
 }

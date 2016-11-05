@@ -97,6 +97,7 @@ namespace Synapse.Core.Runtime
             {
                 OnProgress( "FooExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );
                 if( !startInfo.IsDryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
+                throw new Exception( "quitting" );
                 OnProgress( "FooExecute", "Finished", st, startInfo.InstanceId, seq++ );
             }
             else

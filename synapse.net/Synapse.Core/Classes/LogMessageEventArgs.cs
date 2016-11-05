@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-
+using System.Xml.Serialization;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -22,6 +22,8 @@ namespace Synapse.Core
         public string Message { get; protected set; }
         public LogLevel Level { get; protected set; }
 
+        [XmlIgnore]
+        [YamlIgnore()]
         public Exception Exception { get; protected set; }
         [YamlIgnore()]
         public bool HasException { get { return Exception != null; } }
@@ -36,6 +38,8 @@ namespace Synapse.Core
                 str = sw.ToString(); //.Replace( "\r\n", "|" );
             }
             return str; //.TrimEnd( '|' );
+
+            //return ToXml();
         }
 
         public static LogMessageEventArgs DeserializeSimple(string s)
@@ -45,6 +49,16 @@ namespace Synapse.Core
             using( StringReader sr = new StringReader( s ) )
                 args = FromYaml( sr );
             return args;
+        }
+
+        public string ToXml(bool indented = false)
+        {
+            return Utilities.XmlHelpers.Serialize<LogMessageEventArgs>( this, indented: indented );
+        }
+
+        public static LogMessageEventArgs FromXml(TextReader reader)
+        {
+            return Utilities.XmlHelpers.Deserialize<LogMessageEventArgs>( reader );
         }
 
         public void ToYaml(TextWriter tw)

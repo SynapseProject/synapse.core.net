@@ -31,7 +31,10 @@ namespace Synapse.Core
         {
             HandlerProgressCancelEventArgs e =
                 new HandlerProgressCancelEventArgs( context, message, status, id, sequence, cancel, ex ) { ActionName = actionName };
-            if( _wantsCancel ) { e.Cancel = true; }
+
+            if( _wantsCancel )
+                e.Cancel = true;
+
             OnProgress( e );
 
             return e.Cancel;
@@ -146,40 +149,35 @@ namespace Synapse.Core
         #region InProc
         ExecuteResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
         {
-            string parms = ResolveConfigAndParameters( a, dynamicData );
-
-            IHandlerRuntime rt = CreateHandlerRuntime( a );
-            rt.Progress += rt_Progress;
-            rt.LogMessage += rt_LogMessage;
-
-            if( !WantsStopOrPause() )
+            try
             {
-                HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
+                string parms = ResolveConfigAndParameters( a, dynamicData );
+
+                IHandlerRuntime rt = CreateHandlerRuntime( a );
+                rt.Progress += rt_Progress;
+                rt.LogMessage += rt_LogMessage;
+
+                if( !WantsStopOrPause() )
                 {
-                    Parameters = parms,
-                    IsDryRun = dryRun,
-                    InstanceId = a.InstanceId
-                };
-                SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
-                sc?.Impersonate();
-                a.Result = rt.Execute( startInfo );
-                sc?.Undo();
+                    HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
+                    {
+                        Parameters = parms,
+                        IsDryRun = dryRun,
+                        InstanceId = a.InstanceId
+                    };
+                    SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
+                    sc?.Impersonate();
+                    a.Result = rt.Execute( startInfo );
+                    sc?.Undo();
+                }
+
+                return a.Result;
             }
-
-            return a.Result;
-        }
-
-        void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
-        {
-            if( _wantsCancel ) { e.Cancel = true; }
-            SynapseDal.UpdateActionInstance( e.Id, e.Status, e.Message, e.Sequence );
-            OnProgress( e );
-            if( e.Cancel ) { _wantsCancel = true; }
-        }
-
-        private void rt_LogMessage(object sender, LogMessageEventArgs e)
-        {
-            OnLogMessage( e );
+            catch( Exception ex )
+            {
+                WriteUnhandledActionException( a, ex );
+                return new ExecuteResult() { Status = StatusType.Failed };
+            }
         }
         #endregion
 
@@ -189,10 +187,18 @@ namespace Synapse.Core
         {
             if( !WantsStopOrPause() )
             {
-                if( !a.HasRunAs )
-                    a.RunAs = parentSecurityContext;
-                a.Result = SpawnExternal( a, dynamicData, dryRun );
-                return a.Result;
+                try
+                {
+                    if( !a.HasRunAs )
+                        a.RunAs = parentSecurityContext;
+                    a.Result = SpawnExternal( a, dynamicData, dryRun );
+                    return a.Result;
+                }
+                catch( Exception ex )
+                {
+                    WriteUnhandledActionException( a, ex );
+                    return new ExecuteResult() { Status = StatusType.Failed };
+                }
             }
             else
             {
@@ -330,18 +336,26 @@ namespace Synapse.Core
 
             if( !WantsStopOrPause() )
             {
-                HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
+                try
                 {
-                    Parameters = parms,
-                    IsDryRun = dryRun,
-                    InstanceId = a.InstanceId
-                };
-                a.RunAs?.Impersonate();
-                ExecuteResult r = rt.Execute( startInfo );
-                a.RunAs?.Undo();
+                    HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
+                    {
+                        Parameters = parms,
+                        IsDryRun = dryRun,
+                        InstanceId = a.InstanceId
+                    };
+                    a.RunAs?.Impersonate();
+                    ExecuteResult r = rt.Execute( startInfo );
+                    a.RunAs?.Undo();
 
-                if( r.Status > returnResult.Status )
-                    returnResult = r;
+                    if( r.Status > returnResult.Status )
+                        returnResult = r;
+                }
+                catch( Exception ex )
+                {
+                    WriteUnhandledActionException( a, ex );
+                    returnResult = new ExecuteResult() { Status = StatusType.Failed };
+                }
             }
 
             return returnResult;
@@ -354,6 +368,46 @@ namespace Synapse.Core
         //    OnProgress( e );
         //    if( e.Cancel ) { _wantsCancel = true; }
         //}
+        #endregion
+
+
+        #region progress/log handlers
+        void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
+        {
+            if( _wantsCancel ) { e.Cancel = true; }
+            SynapseDal.UpdateActionInstance( e.Id, e.Status, e.Message, e.Sequence );
+            OnProgress( e );
+            if( e.Cancel ) { _wantsCancel = true; }
+        }
+
+        private void rt_LogMessage(object sender, LogMessageEventArgs e)
+        {
+            OnLogMessage( e );
+        }
+
+        void WriteUnhandledActionException(ActionItem a, Exception ex, bool writeProgress = true, bool writeLog = true)
+        {
+            string context = "Synapse.Core PlanRuntime";
+            string message = $"An unhandled exeption occurred in {a.Name}, Plan/Action Instance: {a.PlanInstanceId}/{a.InstanceId}. Message: {ex.Message}.";
+
+            if( writeProgress )
+            {
+                HandlerProgressCancelEventArgs e =
+                    new HandlerProgressCancelEventArgs( context: context, message: message, status: StatusType.Failed,
+                    id: a.InstanceId, sequence: Int32.MaxValue - 100, cancel: false, ex: ex )
+                    {
+                        ActionName = a.Name
+                    };
+                rt_Progress( this, e );
+            }
+
+            if( writeLog )
+            {
+                LogMessageEventArgs e =
+                    new LogMessageEventArgs( context: context, message: message, level: LogLevel.Fatal, ex: ex );
+                rt_LogMessage( this, e );
+            }
+        }
         #endregion
 
 

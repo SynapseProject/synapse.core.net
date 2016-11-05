@@ -86,6 +86,7 @@
     <Compile Include="Classes\Enums\SerializationType.cs" />
     <Compile Include="Classes\HandlerInfo.cs" />
     <Compile Include="Classes\Plan.cs" />
+    <Compile Include="Utilities\XmlHelpers.cs" />
     <Compile Include="Dal\ActionInstance.cs" />
     <Compile Include="Dal\PlanInstance.cs" />
     <Compile Include="Dal\SynapseDal.cs" />
