@@ -66,11 +66,17 @@
   <ItemGroup>
     <Compile Include="Classes\Enums\LogLevel.cs" />
     <Compile Include="Classes\ExecuteResult.cs" />
+    <Compile Include="Classes\Interfaces\ICancelEventArgs.cs" />
+    <Compile Include="Classes\Interfaces\IHandlerRuntime.cs" />
+    <Compile Include="Classes\Interfaces\IParameterInfo.cs" />
+    <Compile Include="Classes\Interfaces\IStartInfo.cs" />
     <Compile Include="Classes\LogMessageEventArgs.cs" />
-    <Compile Include="Classes\HandlerEventArgs.cs" />
-    <Compile Include="Classes\IStartInfo.cs" />
-    <Compile Include="Classes\HandlerRuntime.cs" />
-    <Compile Include="Classes\ICloneable.cs" />
+    <Compile Include="Classes\HandlerProgressCancelEventArgs.cs" />
+    <Compile Include="Classes\HandlerStartInfo.cs" />
+    <Compile Include="Classes\PlanStartInfo.cs" />
+    <Compile Include="Classes\BaseClasses\StartInfoBase.cs" />
+    <Compile Include="Classes\BaseClasses\HandlerRuntimeBase.cs" />
+    <Compile Include="Classes\Interfaces\ICloneable.cs" />
     <Compile Include="Classes\SecurityContext.cs" />
     <Compile Include="Classes\DynamicValue.cs" />
     <Compile Include="Classes\Enums\StatusType.cs" />
