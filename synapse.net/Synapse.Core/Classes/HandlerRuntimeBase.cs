@@ -2,17 +2,6 @@
 
 namespace Synapse.Core
 {
-    public interface IHandlerRuntime
-    {
-        string ActionName { get; set; }
-
-        IHandlerRuntime Initialize(string config);
-        ExecuteResult Execute(HandlerStartInfo startInfo);
-
-        event EventHandler<HandlerProgressCancelEventArgs> Progress;
-        event EventHandler<LogMessageEventArgs> LogMessage;
-    }
-
     public abstract class HandlerRuntimeBase : IHandlerRuntime
     {
         public string ActionName { get; set; }

@@ -7,11 +7,6 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public interface ICancelEventArgs
-    {
-        bool Cancel { get; set; }
-    }
-
     public class HandlerProgressCancelEventArgs : EventArgs, ICancelEventArgs
     {
         public HandlerProgressCancelEventArgs() { }

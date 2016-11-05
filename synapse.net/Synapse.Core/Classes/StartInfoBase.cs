@@ -2,12 +2,6 @@
 
 namespace Synapse.Core
 {
-    public interface IStartInfo
-    {
-        string RequestUser { get; set; }
-        string RequestNumber { get; set; }
-    }
-
     public abstract class StartInfoBase : IStartInfo
     {
         public string RequestUser { get; set; }
