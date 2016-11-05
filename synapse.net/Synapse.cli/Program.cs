@@ -56,7 +56,7 @@ namespace Synapse.cli
                     case TaskModel.Single:
                     {
                         _isSingleTaskModel = true;
-                        result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.DryRun );
+                        result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.Data, a.DryRun );
                         break;
                     }
                 }
@@ -130,6 +130,7 @@ namespace Synapse.cli
     internal class Arguments
     {
         const string __plan = "plan";
+        const string __data = "data";
         const string __dryrun = "dryrun";
         const string __taskmodel = "taskmodel";
         const string __render = "render";
@@ -174,6 +175,18 @@ namespace Synapse.cli
                 else
                 {
                     Message = "No plan specified.";
+                }
+                #endregion
+
+                #region Data
+                if( Args.Keys.Contains( __data ) )
+                {
+                    Data = Args[__dryrun];
+                    Args.Remove( __dryrun );
+                }
+                else
+                {
+                    Data = string.Empty;
                 }
                 #endregion
 
@@ -234,6 +247,7 @@ namespace Synapse.cli
 
         public Dictionary<string, string> Args { get; internal set; }
         public string Plan { get; set; }
+        public string Data { get; set; }
         public bool DryRun { get; set; }
         public TaskModel TaskModel { get; set; }
         public RenderAction Render { get; set; }

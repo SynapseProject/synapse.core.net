@@ -21,5 +21,7 @@ namespace Synapse.Core
         public bool IsDryRun { get; internal set; }
 
         public string Parameters { get; internal set; }
+
+        public string ParentExitData { get; internal set; }
     }
 }

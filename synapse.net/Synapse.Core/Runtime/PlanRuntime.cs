@@ -107,7 +107,7 @@ namespace Synapse.Core
 
         ExecuteResult ProcessRecursive(SecurityContext parentSecurityContext, ActionItem actionGroup, List<ActionItem> actions, ExecuteResult result,
             Dictionary<string, string> dynamicData, bool dryRun,
-            Func<SecurityContext, ActionItem, Dictionary<string, string>, bool, ExecuteResult> executeHandlerMethod)
+            Func<SecurityContext, ActionItem, Dictionary<string, string>, string, bool, ExecuteResult> executeHandlerMethod)
         {
             if( WantsStopOrPause() ) { return result; }
 
@@ -116,7 +116,7 @@ namespace Synapse.Core
             StatusType queryStatus = result.Status;
             if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
-                ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, dryRun );
+                ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
                 if( r.Status > returnResult.Status )
                     returnResult = r;
 
@@ -135,7 +135,7 @@ namespace Synapse.Core
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
             Parallel.ForEach( actionList, a =>   //foreach( ActionItem a in actionList )
             {
-                ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, dryRun );
+                ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 if( a.HasActions )
                     r = ProcessRecursive( a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
 
@@ -147,7 +147,8 @@ namespace Synapse.Core
         }
 
         #region InProc
-        ExecuteResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        ExecuteResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a,
+            Dictionary<string, string> dynamicData, string parentExitData, bool dryRun = false)
         {
             try
             {
@@ -163,7 +164,8 @@ namespace Synapse.Core
                     {
                         Parameters = parms,
                         IsDryRun = dryRun,
-                        InstanceId = a.InstanceId
+                        InstanceId = a.InstanceId,
+                        ParentExitData = parentExitData
                     };
                     SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                     sc?.Impersonate();
@@ -183,7 +185,8 @@ namespace Synapse.Core
 
 
         #region External
-        ExecuteResult ExecuteHandlerProcessExternal(SecurityContext parentSecurityContext, ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        ExecuteResult ExecuteHandlerProcessExternal(SecurityContext parentSecurityContext, ActionItem a,
+            Dictionary<string, string> dynamicData, string parentExitData, bool dryRun = false)
         {
             if( !WantsStopOrPause() )
             {
@@ -191,7 +194,7 @@ namespace Synapse.Core
                 {
                     if( !a.HasRunAs )
                         a.RunAs = parentSecurityContext;
-                    a.Result = SpawnExternal( a, dynamicData, dryRun );
+                    a.Result = SpawnExternal( a, dynamicData, parentExitData, dryRun );
                     return a.Result;
                 }
                 catch( Exception ex )
@@ -206,7 +209,7 @@ namespace Synapse.Core
             }
         }
 
-        private ExecuteResult SpawnExternal(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun)
+        private ExecuteResult SpawnExternal(ActionItem a, Dictionary<string, string> dynamicData, object parentExitData, bool dryRun)
         {
             ExecuteResult result = new ExecuteResult();
             List<string> args = new List<string>();
@@ -222,6 +225,7 @@ namespace Synapse.Core
             args.Add( $"/taskModel:single" );
             foreach( string key in dynamicData.Keys )
                 args.Add( $"/{key}:{dynamicData[key]}" );
+            args.Add( $"/data:{parentExitData}" );
             string arguments = string.Join( " ", args );
 
             Process p = new Process();
@@ -324,7 +328,7 @@ namespace Synapse.Core
 
 
         #region SingleAction
-        public ExecuteResult ExecuteHandlerProcess_SingleAction(ActionItem a, Dictionary<string, string> dynamicData, bool dryRun = false)
+        public ExecuteResult ExecuteHandlerProcess_SingleAction(ActionItem a, Dictionary<string, string> dynamicData, string parentExitData, bool dryRun = false)
         {
             ExecuteResult returnResult = ExecuteResult.Emtpy;
 
@@ -342,7 +346,8 @@ namespace Synapse.Core
                     {
                         Parameters = parms,
                         IsDryRun = dryRun,
-                        InstanceId = a.InstanceId
+                        InstanceId = a.InstanceId,
+                        ParentExitData = parentExitData
                     };
                     a.RunAs?.Impersonate();
                     ExecuteResult r = rt.Execute( startInfo );
@@ -387,6 +392,7 @@ namespace Synapse.Core
 
         void WriteUnhandledActionException(ActionItem a, Exception ex, bool writeProgress = true, bool writeLog = true)
         {
+            //todo: serialize exception to composite string
             string context = "Synapse.Core PlanRuntime";
             string message = $"An unhandled exeption occurred in {a.Name}, Plan/Action Instance: {a.PlanInstanceId}/{a.InstanceId}. Message: {ex.Message}.";
 
