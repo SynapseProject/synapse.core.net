@@ -1,8 +1,16 @@
 Name: plan0
 Description: planDesc
 IsActive: true
+RunAs:
+  Domain: x
+  UserName: x0
+  Password: x0
 Actions:
 - Name: ac0
+  RunAs:
+    Domain: x
+    UserName: x1
+    Password: x1
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
@@ -47,6 +55,10 @@ Actions:
       Name: PepeLePew
       Type: Yaml
       Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
+    RunAs:
+      Domain: x
+      UserName: x1
+      Password: x1
     Actions:
     - Name: ac0.g.0
       ExecuteCase: Failed
@@ -74,6 +86,10 @@ Actions:
       Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
     Actions:
     - Name: ac0.1.1
+      RunAs:
+        Domain: x
+        UserName: x2
+        Password: x2
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
         Config:
@@ -90,6 +106,10 @@ Actions:
           Path: /xml[1]/@attr
       Actions: []
     - Name: ac0.1.2
+      RunAs:
+        Domain: x
+        UserName: x0
+        Password: x0
       Handler:
         Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
         Config:

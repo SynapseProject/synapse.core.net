@@ -31,7 +31,7 @@ namespace Synapse.Core.Runtime
     {
         override public ExecuteResult Execute(HandlerStartInfo startInfo)
         {
-            return new ExecuteResult() { Status = StatusType.None };
+            return new ExecuteResult() { Status = StatusType.None, ExitData = "empty" };
         }
 
         protected string getMsg(StatusType status, HandlerStartInfo si)
@@ -90,14 +90,16 @@ namespace Synapse.Core.Runtime
             }
             catch { }
 
+            string x = startInfo.ParentExitData;
+
             System.Threading.Thread.Sleep( 500 );
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
-            OnLogMessage( "FooExecute", "---------- working ----------" );
+            OnLogMessage( "FooExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
             if( !cancel )
             {
                 OnProgress( "FooExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );
                 if( !startInfo.IsDryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
-                throw new Exception( "quitting" );
+                //throw new Exception( "quitting" );
                 OnProgress( "FooExecute", "Finished", st, startInfo.InstanceId, seq++ );
             }
             else
@@ -106,7 +108,7 @@ namespace Synapse.Core.Runtime
                 OnProgress( "FooExecute", "Cancelled", st, startInfo.InstanceId, seq++ );
             }
             WriteFile( "FooHandler", $"parms:{startInfo.Parameters}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
-            return new ExecuteResult() { Status = st };
+            return new ExecuteResult() { Status = st, ExitData = "foo" };
         }
     }
 
@@ -115,9 +117,13 @@ namespace Synapse.Core.Runtime
         override public ExecuteResult Execute(HandlerStartInfo startInfo)
         {
             int seq = 1;
+
+            string x = startInfo.ParentExitData;
+
             System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Complete;
             bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
+            OnLogMessage( "BarExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
             if( !cancel )
             {
                 OnProgress( "BarExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );
@@ -130,7 +136,7 @@ namespace Synapse.Core.Runtime
                 OnProgress( "BarExecute", "Cancelled", st, startInfo.InstanceId, seq++ );
             }
             WriteFile( "BarHandler", $"parms:{startInfo.Parameters}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
-            return new ExecuteResult() { Status = st };
+            return new ExecuteResult() { Status = st, ExitData = "bar" };
         }
     }
 }
