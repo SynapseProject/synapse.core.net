@@ -55,7 +55,7 @@ namespace Synapse.Core
 
         public static Plan FromYaml(TextReader reader)
         {
-            Deserializer deserializer = new Deserializer( ignoreUnmatched: false );
+            Deserializer deserializer = new Deserializer();
             return deserializer.Deserialize<Plan>( reader );
         }
     }

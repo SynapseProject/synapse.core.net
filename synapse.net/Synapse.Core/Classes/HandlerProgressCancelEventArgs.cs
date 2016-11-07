@@ -64,7 +64,7 @@ namespace Synapse.Core
 
         public static HandlerProgressCancelEventArgs FromYaml(TextReader reader)
         {
-            Deserializer deserializer = new Deserializer( ignoreUnmatched: false );
+            Deserializer deserializer = new Deserializer();
             return deserializer.Deserialize<HandlerProgressCancelEventArgs>( reader );
         }
     }

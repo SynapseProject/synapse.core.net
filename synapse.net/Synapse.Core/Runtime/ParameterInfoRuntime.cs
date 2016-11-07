@@ -63,7 +63,7 @@ namespace Synapse.Core
 
                 if( parms != null )
                 {
-                    Utilities.MergeHelpers.MergeXml( ref parms, uriXml );
+                    MergeHelpers.MergeXml( ref parms, uriXml );
                 }
                 else
                 {
@@ -79,7 +79,7 @@ namespace Synapse.Core
 
                 if( parms != null )
                 {
-                    Utilities.MergeHelpers.MergeXml( ref parms, values );
+                    MergeHelpers.MergeXml( ref parms, values );
                 }
                 else
                 {
@@ -90,7 +90,7 @@ namespace Synapse.Core
             //kv_replace
             if( HasDynamic && parms != null )
             {
-                Utilities.MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicData );
+                MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicData );
             }
 
             return parms.OuterXml;
@@ -115,20 +115,18 @@ namespace Synapse.Core
                     object values = null;
                     using( StringReader sr = new StringReader( uriContent ) )
                     {
-                        Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
-                        values = deserializer.Deserialize( sr );
+                        values = YamlHelpers.Deserialize<object>( sr );
                     }
 
                     Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                     Dictionary<object, object> uv = (Dictionary<object, object>)values;
-                    Utilities.MergeHelpers.MergeYaml( ref ip, uv );
+                    MergeHelpers.MergeYaml( ref ip, uv );
                 }
                 else
                 {
                     using( StringReader sr = new StringReader( uriContent ) )
                     {
-                        Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
-                        parms = deserializer.Deserialize( sr );
+                        parms = YamlHelpers.Deserialize<object>( sr );
                     }
                 }
             }
@@ -140,13 +138,13 @@ namespace Synapse.Core
             //merge parms
             if( HasValues && p != null )
             {
-                Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
+                MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
             }
 
             //kv_replace
             if( HasDynamic && p != null )
             {
-                Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
+                MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
             }
 
             string v = null;
@@ -171,8 +169,7 @@ namespace Synapse.Core
 
                 using( StringReader sr = new StringReader( uriContent ) )
                 {
-                    Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
-                    parms = deserializer.Deserialize( sr );
+                    parms = YamlHelpers.Deserialize<object>( sr );
                 }
             }
 
@@ -185,7 +182,7 @@ namespace Synapse.Core
             {
                 if( p == null )
                     p = new Dictionary<object, object>();
-                Utilities.MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
+                MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
             }
 
             //kv_replace
@@ -193,7 +190,7 @@ namespace Synapse.Core
             {
                 if( p == null )
                     p = new Dictionary<object, object>();
-                Utilities.MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
+                MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
             }
 
             string v = null;

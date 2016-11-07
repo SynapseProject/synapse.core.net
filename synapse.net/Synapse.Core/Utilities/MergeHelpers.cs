@@ -145,8 +145,7 @@ namespace Synapse.Core.Utilities
             Dictionary<object, object> result = new Dictionary<object, object>();
             using( StringReader sr = new StringReader( source ) )
             {
-                Deserializer deserializer = new Deserializer( ignoreUnmatched: true );
-                result = deserializer.Deserialize( sr ) as Dictionary<object, object>;
+                result = YamlHelpers.Deserialize<Dictionary<object, object>>( sr );
             }
             return result;
         }

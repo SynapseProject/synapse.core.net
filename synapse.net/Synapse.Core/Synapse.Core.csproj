@@ -102,6 +102,7 @@
     <Compile Include="Utilities\MergeHelpers.cs" />
     <Compile Include="Utilities\ServiceException.cs" />
     <Compile Include="Utilities\WebRequestClient.cs" />
+    <Compile Include="Utilities\YamlHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
