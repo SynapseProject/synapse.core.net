@@ -88,7 +88,7 @@ values
 update {Fields.TableName}
 set
     {Fields.Status} = {(int)status}
-    ,{Fields.StatusMsg} = '{message}'
+    ,{Fields.StatusMsg} = '{message.Replace( "'", "`" )}'
     ,{Fields.StatusSeq} = {sequence}
     ,{Fields.Dttm} = {_dal.GetEpoch()}
     {pidsql}
