@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Synapse.Core.Utilities;
 using YamlDotNet.Serialization;
+using System.Text;
 
 namespace Synapse.Core
 {
@@ -25,14 +26,10 @@ namespace Synapse.Core
                     parms = ResolveXml();
                     break;
                 }
+                case SerializationType.Yaml:
                 case SerializationType.Json:
                 {
-                    parms = ResolveJson();
-                    break;
-                }
-                case SerializationType.Yaml:
-                {
-                    parms = ResolveYaml();
+                    parms = ResolveYamlJson();
                     break;
                 }
                 case SerializationType.Unspecified:
@@ -96,14 +93,12 @@ namespace Synapse.Core
             return parms.OuterXml;
         }
 
-        string ResolveJson()
+        string ResolveYamlJson()
         {
             object parms = null;
 
             if( HasInheritedValues )
-            {
                 parms = InheritedValues;
-            }
 
             //make rest call
             if( HasUri )
@@ -137,91 +132,43 @@ namespace Synapse.Core
 
             //merge parms
             if( HasValues && p != null )
-            {
                 MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
-            }
 
             //kv_replace
             if( HasDynamic && p != null )
-            {
                 MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
-            }
 
-            string v = null;
-            using( StringWriter sw = new StringWriter() )
-            {
-                Serializer serializer = new Serializer();
-                serializer.Serialize( sw, parms );
-                v = sw.ToString();
-            }
-
-            return v;
+            return YamlHelpers.Serialize( parms );
         }
 
-        string ResolveYaml()
+        string ResolveUnspecified()
         {
-            object parms = null;
+            string parms = null;
+
+            if( HasInheritedValues )
+                parms = InheritedValues.ToString();
 
             //make rest call
             if( HasUri )
             {
                 string uriContent = WebRequestClient.GetString( Uri );
+                parms += uriContent;
+            }
 
-                using( StringReader sr = new StringReader( uriContent ) )
+            //merge parms
+            if( HasValues )
+            {
+                parms += Values.ToString();
+            }
+
+            if( HasDynamic )
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach(string key in _dynamicData.Keys)
                 {
-                    parms = YamlHelpers.Deserialize<object>( sr );
+                    sb.Append( $"{key}:{_dynamicData[key]}," );
                 }
-            }
-
-            if( parms == null )
-                parms = new Dictionary<object, object>();
-            Dictionary<object, object> p = (Dictionary<object, object>)parms;
-
-            //merge parms
-            if( HasValues )
-            {
-                if( p == null )
-                    p = new Dictionary<object, object>();
-                MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
-            }
-
-            //kv_replace
-            if( HasDynamic )
-            {
-                if( p == null )
-                    p = new Dictionary<object, object>();
-                MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
-            }
-
-            string v = null;
-            using( StringWriter sw = new StringWriter() )
-            {
-                Serializer serializer = new Serializer();
-                serializer.Serialize( sw, parms );
-                v = sw.ToString();
-            }
-
-            return v;
-        }
-
-        string ResolveUnspecified()
-        {
-            string parms = string.Empty;
-
-            //make rest call
-            if( HasUri )
-            {
-                parms = string.Empty;
-            }
-
-            //merge parms
-            if( HasValues )
-            {
-            }
-
-            if( HasDynamic )
-            {
-                //kv_replace
+                parms += sb.ToString().TrimEnd( ',' );
             }
 
             return parms;

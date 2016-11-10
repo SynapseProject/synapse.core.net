@@ -16,13 +16,13 @@ namespace Synapse.Core.Utilities
             return deserializer.Deserialize<T>( reader );
         }
 
-        public void Serialize(TextWriter tw, object data)
+        public static void Serialize(TextWriter tw, object data)
         {
             Serializer serializer = new Serializer();
             serializer.Serialize( tw, data );
         }
 
-        public string Serialize(object data)
+        public static string Serialize(object data)
         {
             string result = null;
             using( StringWriter writer = new StringWriter() )
