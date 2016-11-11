@@ -48,9 +48,7 @@ namespace Synapse.Core
             XmlDocument parms = null;
 
             if( HasInheritedValues )
-            {
                 parms = (XmlDocument)InheritedValues;
-            }
 
             if( HasUri )
             {
@@ -59,13 +57,9 @@ namespace Synapse.Core
                 uriXml.LoadXml( uriContent );
 
                 if( parms != null )
-                {
-                    MergeHelpers.MergeXml( ref parms, uriXml );
-                }
+                    XmlHelpers.Merge( ref parms, uriXml );
                 else
-                {
                     parms = uriXml;
-                }
             }
 
             //merge parms
@@ -75,20 +69,15 @@ namespace Synapse.Core
                 values.LoadXml( Values.ToString() );
 
                 if( parms != null )
-                {
-                    MergeHelpers.MergeXml( ref parms, values );
-                }
+                    XmlHelpers.Merge( ref parms, values );
                 else
-                {
                     parms = values;
-                }
             }
 
             //kv_replace
             if( HasDynamic && parms != null )
-            {
-                MergeHelpers.MergeXml( ref parms, Dynamic, _dynamicData );
-            }
+                XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
+
 
             return parms.OuterXml;
         }
@@ -115,7 +104,7 @@ namespace Synapse.Core
 
                     Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                     Dictionary<object, object> uv = (Dictionary<object, object>)values;
-                    MergeHelpers.MergeYaml( ref ip, uv );
+                    YamlHelpers.Merge( ref ip, uv );
                 }
                 else
                 {
@@ -132,46 +121,39 @@ namespace Synapse.Core
 
             //merge parms
             if( HasValues && p != null )
-                MergeHelpers.MergeYaml( ref p, (Dictionary<object, object>)Values );
+                YamlHelpers.Merge( ref p, (Dictionary<object, object>)Values );
 
             //kv_replace
             if( HasDynamic && p != null )
-                MergeHelpers.MergeYaml( ref p, Dynamic, _dynamicData );
+                YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
+
 
             return YamlHelpers.Serialize( parms );
         }
 
         string ResolveUnspecified()
         {
-            string parms = null;
+            StringBuilder sb = new StringBuilder();
 
             if( HasInheritedValues )
-                parms = InheritedValues.ToString();
+                sb.Append( InheritedValues.ToString() );
 
             //make rest call
             if( HasUri )
-            {
-                string uriContent = WebRequestClient.GetString( Uri );
-                parms += uriContent;
-            }
+                sb.Append( WebRequestClient.GetString( Uri ) );
 
             //merge parms
             if( HasValues )
-            {
-                parms += Values.ToString();
-            }
+                sb.Append( Values.ToString() );
 
             if( HasDynamic )
-            {
-                StringBuilder sb = new StringBuilder();
-                foreach(string key in _dynamicData.Keys)
+                foreach( string key in _dynamicData.Keys )
                 {
                     sb.Append( $"{key}:{_dynamicData[key]}," );
                 }
-                parms += sb.ToString().TrimEnd( ',' );
-            }
 
-            return parms;
+
+            return sb.ToString().TrimEnd( ',' );
         }
 
         async Task<string> GetUri(string uri)

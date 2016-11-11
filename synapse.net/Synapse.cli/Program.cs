@@ -25,7 +25,7 @@ namespace Synapse.cli
             if( a.Render != RenderAction.None )
             {
                 if( a.Render == RenderAction.Encode )
-                    Console.WriteLine( CrytoHelpers.Encode( a.Plan ) );
+                    Console.WriteLine( CryptoHelpers.Encode( a.Plan ) );
                 else
                     Console.WriteLine( a.Plan );
             }
@@ -74,7 +74,7 @@ namespace Synapse.cli
         {
             string msg = e.SerializeSimple();
             if( _isSingleTaskModel )
-                msg = CrytoHelpers.Encode( msg );
+                msg = CryptoHelpers.Encode( msg );
             Console.WriteLine( msg );
         }
 
@@ -82,7 +82,7 @@ namespace Synapse.cli
         {
             string msg = e.SerializeSimple();
             if( _isSingleTaskModel )
-                msg = CrytoHelpers.Encode( msg );
+                msg = CryptoHelpers.Encode( msg );
             Console.WriteLine( msg );
         }
 
@@ -164,7 +164,7 @@ namespace Synapse.cli
                     else
                     {
                         string plan = null;
-                        if( CrytoHelpers.TryDecode( Args[__plan], out plan ) )
+                        if( CryptoHelpers.TryDecode( Args[__plan], out plan ) )
                             Plan = plan;
                         else
                             Message = "  * Unable to resolve Plan as path or encoded string.\r\n";

@@ -85,7 +85,7 @@ namespace Synapse.Core.Runtime
 
             try
             {
-                Dictionary<object, object> p = Utilities.MergeHelpers.DeserializeYaml( startInfo.Parameters );
+                Dictionary<object, object> p = Utilities.YamlHelpers.Deserialize( startInfo.Parameters );
                 st = (StatusType)Enum.Parse( typeof( StatusType ), p.Values.ElementAt( 0 ).ToString() );
             }
             catch { }

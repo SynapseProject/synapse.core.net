@@ -219,7 +219,7 @@ namespace Synapse.Core
             container.Actions.Add( a.Clone() );
             container.StartInfo = StartInfo;
 
-            string planYaml = CrytoHelpers.Encode( container.ToYaml() );
+            string planYaml = CryptoHelpers.Encode( container.ToYaml() );
             args.Add( $"/plan:{planYaml}" );
             args.Add( $"/dryRun:{dryRun}" );
             args.Add( $"/taskModel:single" );
@@ -279,7 +279,7 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
-                string data = CrytoHelpers.Decode( e.Data );
+                string data = CryptoHelpers.Decode( e.Data );
                 try
                 {
                     HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data );
@@ -304,7 +304,7 @@ namespace Synapse.Core
         {
             if( e.Data != null )
             {
-                string data = CrytoHelpers.Decode( e.Data );
+                string data = CryptoHelpers.Decode( e.Data );
                 try
                 {
                     HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data );

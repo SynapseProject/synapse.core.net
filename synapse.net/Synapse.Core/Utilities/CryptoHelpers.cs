@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Synapse.Core.Utilities
 {
-    public class CrytoHelpers
+    public class CryptoHelpers
     {
         public static string Encode(string value)
         {
