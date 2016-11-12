@@ -25,6 +25,8 @@ namespace Synapse.Core
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
+        [YamlIgnore]
+        internal string ResolvedParameters { get; set; }
 
         public ActionItem ActionGroup { get; set; }
         [YamlIgnore]
@@ -49,7 +51,7 @@ namespace Synapse.Core
             };
         }
 
-        public ActionItem Clone()
+        public ActionItem Clone(bool shallow = true)
         {
             ActionItem a = new ActionItem()
             {
@@ -61,6 +63,12 @@ namespace Synapse.Core
                 RunAs = RunAs,
                 InstanceId = InstanceId
             };
+
+            if( !shallow )
+            {
+                a.ActionGroup = ActionGroup;
+                a.Actions = Actions;
+            }
 
             return a;
         }

@@ -18,15 +18,31 @@ namespace Synapse.Core.DataAccessLayer
 
         static public void CreateDatabase()
         {
+            if( File.Exists( _fileName ) && new FileInfo( _fileName ).Length == 0 )
+            {
+                try { File.Delete( _fileName ); }
+                catch { };
+            }
+
             if( !File.Exists( _fileName ) )
             {
-                SQLiteConnection.CreateFile( _fileName );
+                try
+                {
+                    SQLiteConnection.CreateFile( _fileName );
 
-                SynapseDal dal = new SynapseDal();
-                dal.OpenConnection();
-                dal.ExecuteNonQuery( Plan.Fields.TableDef );
-                dal.ExecuteNonQuery( ActionItem.Fields.TableDef );
-                dal.CloseConnection();
+                    SynapseDal dal = new SynapseDal();
+                    dal.OpenConnection();
+                    dal.ExecuteNonQuery( Plan.Fields.TableDef );
+                    dal.ExecuteNonQuery( ActionItem.Fields.TableDef );
+                    dal.CloseConnection();
+                }
+                catch
+                {
+                    if( File.Exists( _fileName ) )
+                        File.Delete( _fileName );
+
+                    throw;
+                }
             }
         }
 

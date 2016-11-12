@@ -29,17 +29,6 @@ Actions:
       Path: Magical
     - Name: type
       Path: Kitten:Color
-    ForEach:
-    - Path: Lucy
-      Values:
-      - x0
-      - x1
-      - x2
-    - Path: Kitten:Cat
-      Values:
-      - y0
-      - y1
-      - y2
   ActionGroup:
     Name: ac0.g
     ExecuteCase: Failed
@@ -58,6 +47,17 @@ Actions:
       Name: PepeLePew
       Type: Yaml
       Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
+      ForEach:
+      - Path: Lucy
+        Values:
+        - x0
+        - x1
+        - x2
+      - Path: Kitten:Cat
+        Values:
+        - y0
+        - y1
+        - y2
     Actions:
     - Name: ac0.g.0
       ExecuteCase: Failed

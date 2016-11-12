@@ -116,25 +116,49 @@ namespace Synapse.Core
             StatusType queryStatus = result.Status;
             if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
-                ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
-                if( r.Status > returnResult.Status )
-                    returnResult = r;
-
-                if( actionGroup.HasActions )
+                if( (actionGroup.HasParameters && actionGroup.Parameters.HasForEach) ||
+                    (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
-                    r = ProcessRecursive( parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                    List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
+                    ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
+                    ActionItem newActionGroupItem = actionGroup.Clone();
+                    newActionGroupItem.Actions = resolvedParmsActionGroup;
+
+                    ExecuteResult r =
+                        ProcessRecursive( parentSecurityContext, null, newActionGroupItem.Actions,
+                        result, dynamicData, dryRun, executeHandlerMethod );
+
+                    if( r.Status > queryStatus )
+                        queryStatus = r.Status;
+                }
+                else
+                {
+                    ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
                     if( r.Status > returnResult.Status )
                         returnResult = r;
-                }
 
-                if( r.Status > queryStatus )
-                    queryStatus = r.Status;
+                    if( actionGroup.HasActions )
+                    {
+                        r = ProcessRecursive( parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                        if( r.Status > returnResult.Status )
+                            returnResult = r;
+                    }
+
+                    if( r.Status > queryStatus )
+                        queryStatus = r.Status;
+                }
             }
+
 
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
-            //Parallel.ForEach( actionList, a =>   //
-            foreach( ActionItem a in actionList )
+
+            List<ActionItem> resolvedParmsActions = new List<ActionItem>();
+            Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
+                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
+            );
+
+            Parallel.ForEach( resolvedParmsActions, a =>   //foreach( ActionItem a in resolvedParmsActions )
             {
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 if( a.HasActions )
@@ -142,7 +166,7 @@ namespace Synapse.Core
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
-            } //);
+            } );
 
             return returnResult.Clone();
         }
@@ -153,7 +177,8 @@ namespace Synapse.Core
         {
             try
             {
-                string parms = ResolveConfigAndParameters( a, dynamicData );
+                //string parms = ResolveConfigAndParameters( a, dynamicData );
+                string parms = a.ResolvedParameters;
 
                 IHandlerRuntime rt = CreateHandlerRuntime( a );
                 rt.Progress += rt_Progress;
@@ -456,6 +481,56 @@ namespace Synapse.Core
             }
 
             return parms;
+        }
+
+        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions)
+        {
+            bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
+            if( cancel )
+            {
+                _wantsCancel = true;
+                return;
+            }
+
+            List<string> forEachConfigs = new List<string>();
+            if( a.Handler.HasConfig )
+            {
+                ParameterInfo c = a.Handler.Config;
+                if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
+                    c.InheritedValues = _configSets[c.InheritFrom];
+
+                a.Handler.Config.ResolvedValuesSerialized = c.Resolve( out forEachConfigs, dynamicData );
+                if( forEachConfigs.Count == 0 )
+                    forEachConfigs.Add( a.Handler.Config.ResolvedValuesSerialized );
+
+                if( c.HasName )
+                    _configSets[c.Name] = c;
+            }
+
+            List<string> forEachParms = new List<string>();
+            if( a.HasParameters )
+            {
+                ParameterInfo p = a.Parameters;
+                if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
+                    p.InheritedValues = _paramSets[p.InheritFrom];
+
+                a.ResolvedParameters = p.Resolve( out forEachParms, dynamicData );
+                if( forEachParms.Count == 0 )
+                    forEachParms.Add( a.ResolvedParameters );
+
+                if( p.HasName )
+                    _paramSets[p.Name] = p;
+            }
+
+            foreach( string forEachConfig in forEachConfigs )
+                foreach( string forEachParm in forEachParms )
+                {
+                    ActionItem clone = a.Clone( shallow: false );
+                    clone.Handler.Config.ResolvedValuesSerialized = forEachConfig;
+                    clone.ResolvedParameters = forEachParm;
+
+                    resolvedActions.Add( clone );
+                }
         }
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)

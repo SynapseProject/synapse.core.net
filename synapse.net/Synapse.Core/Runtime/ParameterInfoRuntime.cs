@@ -92,7 +92,7 @@ namespace Synapse.Core
             object parms = null;
 
             if( HasInheritedValues )
-                parms = InheritedValues;
+                parms = ((ParameterInfo)InheritedValues).Values;
 
             //make rest call
             if( HasUri )
