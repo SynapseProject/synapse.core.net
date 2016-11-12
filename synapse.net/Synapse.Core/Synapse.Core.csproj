@@ -103,7 +103,6 @@
     <Compile Include="Utilities\ServiceException.cs" />
     <Compile Include="Utilities\WebRequestClient.cs" />
     <Compile Include="Utilities\YamlHelpers.cs" />
-    <Compile Include="Utilities\SecurityPrincipalContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
