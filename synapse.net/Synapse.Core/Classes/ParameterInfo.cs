@@ -14,6 +14,10 @@ namespace Synapse.Core
 
         public SerializationType Type { get; set; }
 
+        public List<ForEach> ForEach { get; set; }
+        [YamlIgnore]
+        public bool HasForEach { get { return ForEach != null && ForEach.Count > 0; } }
+
         public string InheritFrom { get; set; }
         [YamlIgnore]
         public bool HasInheritFrom { get { return !string.IsNullOrWhiteSpace( InheritFrom ); } }

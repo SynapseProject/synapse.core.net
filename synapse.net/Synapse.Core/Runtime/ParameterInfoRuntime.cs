@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+
 using Synapse.Core.Utilities;
-using YamlDotNet.Serialization;
-using System.Text;
 
 namespace Synapse.Core
 {
@@ -14,9 +14,10 @@ namespace Synapse.Core
     {
         private Dictionary<string, string> _dynamicData = null;
 
-        public string Resolve(Dictionary<string, string> dynamicData = null)
+        public string Resolve(out List<string> forEachParms, Dictionary<string, string> dynamicData = null)
         {
             _dynamicData = dynamicData ?? new Dictionary<string, string>();
+            forEachParms = new List<string>();
 
             string parms = string.Empty;
             switch( Type )
@@ -29,7 +30,7 @@ namespace Synapse.Core
                 case SerializationType.Yaml:
                 case SerializationType.Json:
                 {
-                    parms = ResolveYamlJson();
+                    parms = ResolveYamlJson( ref forEachParms );
                     break;
                 }
                 case SerializationType.Unspecified:
@@ -78,11 +79,15 @@ namespace Synapse.Core
             if( HasDynamic && parms != null )
                 XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
 
+            //expand ForEach variables
+            if( HasForEach && parms != null )
+                XmlHelpers.ExpandForEach( ref parms, ForEach );
+
 
             return parms.OuterXml;
         }
 
-        string ResolveYamlJson()
+        string ResolveYamlJson(ref List<string> forEachParms)
         {
             object parms = null;
 
@@ -126,6 +131,10 @@ namespace Synapse.Core
             //kv_replace
             if( HasDynamic && p != null )
                 YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
+
+            //expand ForEach variables
+            if( HasForEach && parms != null )
+                forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
 
 
             return YamlHelpers.Serialize( parms );

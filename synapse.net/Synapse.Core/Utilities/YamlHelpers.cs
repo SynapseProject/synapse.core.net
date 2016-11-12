@@ -61,11 +61,11 @@ namespace Synapse.Core.Utilities
 
         public static void Merge(ref Dictionary<object, object> source, List<DynamicValue> patch, Dictionary<string, string> values)
         {
-            Dictionary<object, object> p = ConvertDynamicValuestoDict( patch, values );
+            Dictionary<object, object> p = ConvertDynamicValuesToDict( patch, values );
             ApplyPatchValues( source, p );
         }
 
-        static Dictionary<object, object> ConvertDynamicValuestoDict(List<DynamicValue> patch, Dictionary<string, string> values)
+        static Dictionary<object, object> ConvertDynamicValuesToDict(List<DynamicValue> patch, Dictionary<string, string> values)
         {
             Dictionary<object, object> dict = new Dictionary<object, object>();
 
@@ -107,5 +107,76 @@ namespace Synapse.Core.Utilities
         }
         #endregion
 
+
+        #region foreach
+        public static List<string> ExpandForEachAndApplyPatchValues(ref Dictionary<object, object> source, List<ForEach> forEach)
+        {
+            ForEach node = forEach[0];
+            for( int i = 1; i < forEach.Count; i++ )
+            {
+                node.Child = forEach[i];
+                node = forEach[i];
+            }
+
+            List<Dictionary<object, object>> matrix = new List<Dictionary<object, object>>();
+            ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
+
+            List<string> patchedParms = new List<string>();
+            foreach( Dictionary<object, object> parms in matrix )
+                patchedParms.Add( Serialize( parms ) );
+
+            return patchedParms;
+        }
+
+        static void ExpandMatrixApplyPatchValues(ForEach fe, Dictionary<object, object> source, List<Dictionary<object, object>> matrix)
+        {
+            foreach( string v in fe.Values )
+            {
+                ConvertForEachValuesToDict( ref fe, v );
+                ApplyPatchValues( source, fe.PathAsPatchValues );
+                if( fe.HasChild )
+                    ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
+                else
+                    matrix.Add( CopyDictionary( source ) );
+            }
+        }
+
+        static void ConvertForEachValuesToDict(ref ForEach fe, string value)
+        {
+            Dictionary<object, object> dict = new Dictionary<object, object>();
+
+            Dictionary<object, object> d = dict;
+
+            string[] keys = fe.Path.ToString().Split( ':' );
+            int lastIndex = keys.Length - 1;
+            for( int i = 0; i < lastIndex; i++ )
+            {
+                string key = keys[i];
+                if( !d.ContainsKey( key ) )
+                {
+                    d[key] = new Dictionary<object, object>();
+                }
+                d = (Dictionary<object, object>)d[key];
+            }
+            d[keys[lastIndex]] = value;
+
+            fe.PathAsPatchValues = dict;
+        }
+
+        static Dictionary<object, object> CopyDictionary(Dictionary<object, object> source)
+        {
+            Dictionary<object, object> copy = new Dictionary<object, object>();
+            foreach( object key in source.Keys )
+            {
+                copy.Add( key, source[key] );
+                if( copy[key] is Dictionary<object, object> )
+                {
+                    copy[key] = CopyDictionary( (Dictionary<object, object>)copy[key] );
+                }
+            }
+
+            return copy;
+        }
+        #endregion
     }
 }

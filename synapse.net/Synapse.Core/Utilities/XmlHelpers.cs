@@ -85,6 +85,11 @@ namespace Synapse.Core.Utilities
             }
         }
 
+        internal static void ExpandForEach(ref XmlDocument parms, List<ForEach> forEach)
+        {
+            throw new NotImplementedException();
+        }
+
         static string FindXPath(XmlNode node)
         {
             StringBuilder builder = new StringBuilder();

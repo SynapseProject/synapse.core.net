@@ -133,7 +133,8 @@ namespace Synapse.Core
 
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
-            Parallel.ForEach( actionList, a =>   //foreach( ActionItem a in actionList )
+            //Parallel.ForEach( actionList, a =>   //
+            foreach( ActionItem a in actionList )
             {
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 if( a.HasActions )
@@ -141,7 +142,7 @@ namespace Synapse.Core
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
-            } );
+            } //);
 
             return returnResult.Clone();
         }
@@ -431,15 +432,13 @@ namespace Synapse.Core
             {
                 ParameterInfo c = a.Handler.Config;
                 if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
-                {
                     c.InheritedValues = _configSets[c.InheritFrom];
-                }
-                c.Resolve( dynamicData );
+
+                List<string> forEachConfig = new List<string>();
+                c.Resolve( out forEachConfig, dynamicData );
 
                 if( c.HasName )
-                {
                     _configSets[c.Name] = c;
-                }
             }
 
             string parms = null;
@@ -447,15 +446,13 @@ namespace Synapse.Core
             {
                 ParameterInfo p = a.Parameters;
                 if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
-                {
                     p.InheritedValues = _paramSets[p.InheritFrom];
-                }
-                parms = p.Resolve( dynamicData );
+
+                List<string> forEachParms = new List<string>();
+                parms = p.Resolve( out forEachParms, dynamicData );
 
                 if( p.HasName )
-                {
                     _paramSets[p.Name] = p;
-                }
             }
 
             return parms;

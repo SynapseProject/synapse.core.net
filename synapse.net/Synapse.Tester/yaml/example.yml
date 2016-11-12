@@ -29,6 +29,17 @@ Actions:
       Path: Magical
     - Name: type
       Path: Kitten:Color
+    ForEach:
+    - Path: Lucy
+      Values:
+      - x0
+      - x1
+      - x2
+    - Path: Kitten:Cat
+      Values:
+      - y0
+      - y1
+      - y2
   ActionGroup:
     Name: ac0.g
     ExecuteCase: Failed
