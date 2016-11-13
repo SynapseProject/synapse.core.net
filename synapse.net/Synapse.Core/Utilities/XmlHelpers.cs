@@ -85,10 +85,6 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static void ExpandForEach(ref XmlDocument parms, List<ForEach> forEach)
-        {
-            throw new NotImplementedException();
-        }
 
         static string FindXPath(XmlNode node)
         {
@@ -169,6 +165,79 @@ namespace Synapse.Core.Utilities
                 }
             }
         }
+        #endregion
+
+        #region ForEach
+        internal static void ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
+        {
+            //ForEach node = forEach[0];
+            //for( int i = 1; i < forEach.Count; i++ )
+            //{
+            //    node.Child = forEach[i];
+            //    node = forEach[i];
+            //}
+
+            //List<Dictionary<object, object>> matrix = new List<Dictionary<object, object>>();
+            //ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
+
+            //List<string> patchedParms = new List<string>();
+            //foreach( Dictionary<object, object> parms in matrix )
+            //    patchedParms.Add( Serialize( parms ) );
+
+            //return patchedParms;
+        }
+
+        /*
+        static void ExpandMatrixApplyPatchValues(ForEach fe, XmlDocument source, List<Dictionary<object, object>> matrix)
+        {
+            foreach( string v in fe.Values )
+            {
+                ConvertForEachValuesToDict( ref fe, v );
+                ApplyPatchValues( source, fe.PathAsPatchValues );
+                if( fe.HasChild )
+                    ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
+                else
+                    matrix.Add( CopyDictionary( source ) );
+            }
+        }
+
+        static void ConvertForEachValuesToDict(ref ForEach fe, string value)
+        {
+            Dictionary<object, object> dict = new Dictionary<object, object>();
+
+            Dictionary<object, object> d = dict;
+
+            string[] keys = fe.Path.ToString().Split( ':' );
+            int lastIndex = keys.Length - 1;
+            for( int i = 0; i < lastIndex; i++ )
+            {
+                string key = keys[i];
+                if( !d.ContainsKey( key ) )
+                {
+                    d[key] = new Dictionary<object, object>();
+                }
+                d = (Dictionary<object, object>)d[key];
+            }
+            d[keys[lastIndex]] = value;
+
+            fe.PathAsPatchValues = dict;
+        }
+
+        static Dictionary<object, object> CopyDictionary(Dictionary<object, object> source)
+        {
+            Dictionary<object, object> copy = new Dictionary<object, object>();
+            foreach( object key in source.Keys )
+            {
+                copy.Add( key, source[key] );
+                if( copy[key] is Dictionary<object, object> )
+                {
+                    copy[key] = CopyDictionary( (Dictionary<object, object>)copy[key] );
+                }
+            }
+
+            return copy;
+        }
+        */
         #endregion
     }
 }

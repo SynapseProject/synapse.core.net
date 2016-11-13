@@ -24,7 +24,7 @@ namespace Synapse.Core
             {
                 case SerializationType.Xml:
                 {
-                    parms = ResolveXml();
+                    parms = ResolveXml( ref forEachParms );
                     break;
                 }
                 case SerializationType.Yaml:
@@ -47,7 +47,7 @@ namespace Synapse.Core
             return parms;
         }
 
-        string ResolveXml()
+        string ResolveXml(ref List<string> forEachParms)
         {
             XmlDocument parms = null;
 
@@ -84,7 +84,7 @@ namespace Synapse.Core
 
             //expand ForEach variables
             if( HasForEach && parms != null )
-                XmlHelpers.ExpandForEach( ref parms, ForEach );
+                XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
 
 
             return parms.OuterXml;
@@ -136,7 +136,7 @@ namespace Synapse.Core
                 YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
 
             //expand ForEach variables
-            if( HasForEach && parms != null )
+            if( HasForEach && p != null )
                 forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
 
 
