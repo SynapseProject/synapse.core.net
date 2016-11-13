@@ -63,7 +63,7 @@ namespace Synapse.cli
                 exitCode = (int)result.Status;
                 //exitCode = (int)plan.Result.Status;
                 if( a.TaskModel != TaskModel.Single )
-                    File.WriteAllText( $"{plan.Name}.result.yml", plan.ToYaml() );
+                    File.WriteAllText( $"{plan.Name}.result.yml", plan.ResultPlan.ToYaml() );
             }
 
             //Console.WriteLine( $"exitCode:{exitCode}" );

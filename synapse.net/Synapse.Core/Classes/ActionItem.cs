@@ -4,12 +4,13 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public partial class ActionItem
+    public partial class ActionItem : IActionContainer
     {
         public ActionItem()
         {
             Name = string.Empty;
             ExecuteCase = StatusType.None;
+            Actions = new List<ActionItem>();
         }
 
         public string Name { get; set; }
@@ -25,8 +26,6 @@ namespace Synapse.Core
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
-        [YamlIgnore]
-        internal string ResolvedParameters { get; set; }
 
         public ActionItem ActionGroup { get; set; }
         [YamlIgnore]

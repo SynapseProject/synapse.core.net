@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public partial class Plan
+    public partial class Plan : IActionContainer
     {
         public Plan()
         {
@@ -18,6 +18,11 @@ namespace Synapse.Core
         public string Description { get; set; }
         public bool IsActive { get; set; }
 
+        ActionItem IActionContainer.ActionGroup
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
         public List<ActionItem> Actions { get; set; }
 
         public SecurityContext RunAs { get; set; }
@@ -33,6 +38,9 @@ namespace Synapse.Core
         public bool HasResult { get { return Result != null; } }
 
         public long InstanceId { get; set; }
+
+        [YamlIgnore]
+        public Plan ResultPlan { get; set; }
 
 
         public string ToYaml()

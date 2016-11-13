@@ -70,6 +70,7 @@
     <Compile Include="Classes\Interfaces\ICancelEventArgs.cs" />
     <Compile Include="Classes\Interfaces\IHandlerRuntime.cs" />
     <Compile Include="Classes\Interfaces\IParameterInfo.cs" />
+    <Compile Include="Classes\Interfaces\IActionContainer.cs" />
     <Compile Include="Classes\Interfaces\IStartInfo.cs" />
     <Compile Include="Classes\LogMessageEventArgs.cs" />
     <Compile Include="Classes\HandlerProgressCancelEventArgs.cs" />

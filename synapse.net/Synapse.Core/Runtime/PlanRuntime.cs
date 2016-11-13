@@ -95,17 +95,20 @@ namespace Synapse.Core
             SynapseDal.CreateDatabase();
             CreateInstance();
 
+            ResultPlan = new Plan();
+
             if( inProc )
-                Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
+                Result = ProcessRecursive( ResultPlan, RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
             else
-                Result = ProcessRecursive( RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
+                Result = ProcessRecursive( ResultPlan, RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
 
             UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
 
             return Result;
         }
 
-        ExecuteResult ProcessRecursive(SecurityContext parentSecurityContext, ActionItem actionGroup, List<ActionItem> actions, ExecuteResult result,
+        ExecuteResult ProcessRecursive(IActionContainer parentContext, SecurityContext parentSecurityContext,
+            ActionItem actionGroup, List<ActionItem> actions, ExecuteResult result,
             Dictionary<string, string> dynamicData, bool dryRun,
             Func<SecurityContext, ActionItem, Dictionary<string, string>, string, bool, ExecuteResult> executeHandlerMethod)
         {
@@ -121,11 +124,13 @@ namespace Synapse.Core
                 {
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
-                    ActionItem newActionGroupItem = actionGroup.Clone();
-                    newActionGroupItem.Actions = resolvedParmsActionGroup;
+                    ActionItem newActionGroup = actionGroup.Clone();
+                    newActionGroup.Actions = resolvedParmsActionGroup;
+
+                    parentContext.ActionGroup = newActionGroup;
 
                     ExecuteResult r =
-                        ProcessRecursive( parentSecurityContext, null, newActionGroupItem.Actions,
+                        ProcessRecursive( parentContext, parentSecurityContext, null, newActionGroup.Actions,
                         result, dynamicData, dryRun, executeHandlerMethod );
 
                     if( r.Status > queryStatus )
@@ -139,7 +144,7 @@ namespace Synapse.Core
 
                     if( actionGroup.HasActions )
                     {
-                        r = ProcessRecursive( parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                        r = ProcessRecursive( actionGroup, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                         if( r.Status > returnResult.Status )
                             returnResult = r;
                     }
@@ -158,11 +163,18 @@ namespace Synapse.Core
                 ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
             );
 
+            //List<ActionItem> list = new List<ActionItem>( actionList );
+            //for( int i = list.Count - 1; i >= 0; i-- )
+            //    parentContext.Actions.Remove( list[i] );
+
             Parallel.ForEach( resolvedParmsActions, a =>   //foreach( ActionItem a in resolvedParmsActions )
             {
+                ActionItem clone = a.Clone();
+                parentContext.Actions.Add( clone );
+
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 if( a.HasActions )
-                    r = ProcessRecursive( a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                    r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
@@ -178,7 +190,7 @@ namespace Synapse.Core
             try
             {
                 //string parms = ResolveConfigAndParameters( a, dynamicData );
-                string parms = a.ResolvedParameters;
+                string parms = a.Parameters.ResolvedValuesSerialized;
 
                 IHandlerRuntime rt = CreateHandlerRuntime( a );
                 rt.Progress += rt_Progress;
@@ -492,6 +504,9 @@ namespace Synapse.Core
                 return;
             }
 
+            if( resolvedActions == null )
+                resolvedActions = new List<ActionItem>();
+
             List<string> forEachConfigs = new List<string>();
             if( a.Handler.HasConfig )
             {
@@ -499,9 +514,7 @@ namespace Synapse.Core
                 if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
                     c.InheritedValues = _configSets[c.InheritFrom];
 
-                a.Handler.Config.ResolvedValuesSerialized = c.Resolve( out forEachConfigs, dynamicData );
-                if( forEachConfigs.Count == 0 )
-                    forEachConfigs.Add( a.Handler.Config.ResolvedValuesSerialized );
+                c.Resolve( out forEachConfigs, dynamicData );
 
                 if( c.HasName )
                     _configSets[c.Name] = c;
@@ -514,9 +527,7 @@ namespace Synapse.Core
                 if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
                     p.InheritedValues = _paramSets[p.InheritFrom];
 
-                a.ResolvedParameters = p.Resolve( out forEachParms, dynamicData );
-                if( forEachParms.Count == 0 )
-                    forEachParms.Add( a.ResolvedParameters );
+                p.Resolve( out forEachParms, dynamicData );
 
                 if( p.HasName )
                     _paramSets[p.Name] = p;
@@ -527,7 +538,7 @@ namespace Synapse.Core
                 {
                     ActionItem clone = a.Clone( shallow: false );
                     clone.Handler.Config.ResolvedValuesSerialized = forEachConfig;
-                    clone.ResolvedParameters = forEachParm;
+                    clone.Parameters.ResolvedValuesSerialized = forEachParm;
 
                     resolvedActions.Add( clone );
                 }
