@@ -29,8 +29,6 @@ namespace Synapse.Core
         List<DynamicValue> Dynamic { get; set; }
         bool HasDynamic { get; }
 
-        //object ResolvedValues { get; set; }
-        //string ResolvedValuesSerialized { get; set; }
         string GetSerializedValues();
 
         string Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null);

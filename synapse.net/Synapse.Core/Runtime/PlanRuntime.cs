@@ -538,9 +538,7 @@ namespace Synapse.Core
                 {
                     ActionItem clone = a.Clone( shallow: false );
                     clone.Handler.Config.Values = forEachConfig;
-                    //clone.Handler.Config.ResolvedValuesSerialized = clone.Handler.Config.GetSerializedValues();
                     clone.Parameters.Values = forEachParm;
-                    //clone.Parameters.ResolvedValuesSerialized = clone.Parameters.GetSerializedValues();
 
                     resolvedActions.Add( clone );
                 }

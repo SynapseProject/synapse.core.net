@@ -38,11 +38,6 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 
-        //[YamlIgnore]
-        //public object ResolvedValues { get; set; }
-        //[YamlIgnore]
-        //public string ResolvedValuesSerialized { get; set; }
-
         public string GetSerializedValues()
         {
             string v = null;

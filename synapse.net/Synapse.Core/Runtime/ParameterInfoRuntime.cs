@@ -43,7 +43,6 @@ namespace Synapse.Core
             if( forEachParms.Count == 0 )
                 forEachParms.Add( parms );
 
-            //ResolvedValuesSerialized = parms;
             return parms;
         }
 

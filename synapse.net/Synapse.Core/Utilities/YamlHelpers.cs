@@ -121,11 +121,7 @@ namespace Synapse.Core.Utilities
             List<Dictionary<object, object>> matrix = new List<Dictionary<object, object>>();
             ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
 
-            List<object> patchedParms = new List<object>();
-            foreach( Dictionary<object, object> parms in matrix )
-                patchedParms.Add( parms );
-
-            return patchedParms;
+            return new List<object>( matrix );
         }
 
         static void ExpandMatrixApplyPatchValues(ForEach fe, Dictionary<object, object> source, List<Dictionary<object, object>> matrix)
