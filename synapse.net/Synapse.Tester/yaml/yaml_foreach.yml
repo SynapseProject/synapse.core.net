@@ -1,0 +1,35 @@
+Name: plan0
+Description: planDesc
+IsActive: true
+Actions:
+- Name: ac0
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+    Config:
+      Type: Yaml
+      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
+  Parameters:
+    Name: PepeLePew
+    Type: Yaml
+    Values:
+      Magical: Mystery1
+      Lucy: In the sky1
+      Kitten:
+        Cat: Tommy1
+        Color: Rat1
+    Dynamic:
+    - Name: app
+      Path: Magical
+    - Name: type
+      Path: Kitten:Color
+    ForEach:
+    - Path: Lucy
+      Values:
+      - x0
+      - x1
+      - x2
+    - Path: Kitten:Cat
+      Values:
+      - y0
+      - y1
+      - y2

@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public partial class ParameterInfo : IParameterInfo
+    public partial class ParameterInfo : IParameterInfo, ICloneable<ParameterInfo>
     {
         public ParameterInfo() { }
 
@@ -42,5 +42,15 @@ namespace Synapse.Core
         public object ResolvedValues { get; set; }
         [YamlIgnore]
         public string ResolvedValuesSerialized { get; set; }
+
+        object ICloneable.Clone()
+        {
+            return Clone( true );
+        }
+
+        public ParameterInfo Clone(bool shallow = true)
+        {
+            return (ParameterInfo)MemberwiseClone();
+        }
     }
 }

@@ -153,9 +153,8 @@ namespace Synapse.Core.Utilities
             {
                 string key = keys[i];
                 if( !d.ContainsKey( key ) )
-                {
                     d[key] = new Dictionary<object, object>();
-                }
+
                 d = (Dictionary<object, object>)d[key];
             }
             d[keys[lastIndex]] = value;
@@ -170,9 +169,7 @@ namespace Synapse.Core.Utilities
             {
                 copy.Add( key, source[key] );
                 if( copy[key] is Dictionary<object, object> )
-                {
                     copy[key] = CopyDictionary( (Dictionary<object, object>)copy[key] );
-                }
             }
 
             return copy;

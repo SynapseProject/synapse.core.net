@@ -84,7 +84,7 @@ namespace Synapse.Core
 
             //expand ForEach variables
             if( HasForEach && parms != null )
-                XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
+                forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
 
 
             return parms.OuterXml;

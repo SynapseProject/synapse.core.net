@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public partial class ActionItem : IActionContainer
+    public partial class ActionItem : IActionContainer, ICloneable<ActionItem>
     {
         public ActionItem()
         {
@@ -50,15 +50,20 @@ namespace Synapse.Core
             };
         }
 
+        object ICloneable.Clone()
+        {
+            return Clone( true );
+        }
+
         public ActionItem Clone(bool shallow = true)
         {
             ActionItem a = new ActionItem()
             {
-                Name = Name,
+                Name = Name + $"_{DateTime.Now.Ticks}",
                 Proxy = Proxy,
                 ExecuteCase = ExecuteCase,
                 Handler = Handler,
-                Parameters = Parameters,
+                Parameters = Parameters.Clone(),
                 RunAs = RunAs,
                 InstanceId = InstanceId
             };

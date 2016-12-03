@@ -62,25 +62,18 @@ namespace Synapse.Core.Utilities
                 {
                     string xpath = FindXPath( node );
                     XmlNode src = source.SelectSingleNode( xpath );
+
                     if( src != null && src.Value != node.Value )
-                    {
                         if( src.NodeType == XmlNodeType.Element )
-                        {
                             src.InnerText = node.InnerText;
-                        }
                         else
-                        {
                             src.Value = node.Value;
-                        }
-                    }
+
                     if( node.Attributes != null )
-                    {
                         lists.Push( node.Attributes );
-                    }
+
                     if( node.ChildNodes.Count > 0 )
-                    {
                         lists.Push( node.ChildNodes );
-                    }
                 }
             }
         }
@@ -168,76 +161,38 @@ namespace Synapse.Core.Utilities
         #endregion
 
         #region ForEach
-        internal static void ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
+        internal static List<string> ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
         {
-            //ForEach node = forEach[0];
-            //for( int i = 1; i < forEach.Count; i++ )
-            //{
-            //    node.Child = forEach[i];
-            //    node = forEach[i];
-            //}
+            ForEach node = forEach[0];
+            for( int i = 1; i < forEach.Count; i++ )
+            {
+                node.Child = forEach[i];
+                node = forEach[i];
+            }
 
-            //List<Dictionary<object, object>> matrix = new List<Dictionary<object, object>>();
-            //ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
+            List<string> matrix = new List<string>();
+            ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
 
-            //List<string> patchedParms = new List<string>();
-            //foreach( Dictionary<object, object> parms in matrix )
-            //    patchedParms.Add( Serialize( parms ) );
-
-            //return patchedParms;
+            return matrix;
         }
 
-        /*
-        static void ExpandMatrixApplyPatchValues(ForEach fe, XmlDocument source, List<Dictionary<object, object>> matrix)
+        static void ExpandMatrixApplyPatchValues(ForEach fe, XmlDocument source, List<string> matrix)
         {
             foreach( string v in fe.Values )
             {
-                ConvertForEachValuesToDict( ref fe, v );
-                ApplyPatchValues( source, fe.PathAsPatchValues );
+                XmlNode src = source.SelectSingleNode( fe.Path );
+                if( src != null )
+                    if( src.NodeType == XmlNodeType.Element )
+                        src.InnerText = v;
+                    else
+                        src.Value = v;
+
                 if( fe.HasChild )
                     ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
                 else
-                    matrix.Add( CopyDictionary( source ) );
+                    matrix.Add( source.OuterXml );
             }
         }
-
-        static void ConvertForEachValuesToDict(ref ForEach fe, string value)
-        {
-            Dictionary<object, object> dict = new Dictionary<object, object>();
-
-            Dictionary<object, object> d = dict;
-
-            string[] keys = fe.Path.ToString().Split( ':' );
-            int lastIndex = keys.Length - 1;
-            for( int i = 0; i < lastIndex; i++ )
-            {
-                string key = keys[i];
-                if( !d.ContainsKey( key ) )
-                {
-                    d[key] = new Dictionary<object, object>();
-                }
-                d = (Dictionary<object, object>)d[key];
-            }
-            d[keys[lastIndex]] = value;
-
-            fe.PathAsPatchValues = dict;
-        }
-
-        static Dictionary<object, object> CopyDictionary(Dictionary<object, object> source)
-        {
-            Dictionary<object, object> copy = new Dictionary<object, object>();
-            foreach( object key in source.Keys )
-            {
-                copy.Add( key, source[key] );
-                if( copy[key] is Dictionary<object, object> )
-                {
-                    copy[key] = CopyDictionary( (Dictionary<object, object>)copy[key] );
-                }
-            }
-
-            return copy;
-        }
-        */
         #endregion
     }
 }

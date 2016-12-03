@@ -1,0 +1,30 @@
+Name: plan0
+Description: planDesc
+IsActive: true
+Actions:
+- Name: ac0
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
+    Config:
+      Type: Yaml
+      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
+  Parameters:
+    Name: PepeLePew
+    Type: Xml
+    Values: <xml attr="value1"><data>foo1</data></xml>
+    Dynamic:
+    - Name: app
+      Path: /xml[1]/data[1]
+    - Name: type
+      Path: /xml[1]/@attr
+    ForEach:
+    - Path: /xml[1]/data[1]
+      Values:
+      - x0
+      - x1
+      - x2
+    - Path: /xml[1]/@attr
+      Values:
+      - y0
+      - y1
+      - y2

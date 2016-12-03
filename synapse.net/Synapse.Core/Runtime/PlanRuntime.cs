@@ -537,8 +537,15 @@ namespace Synapse.Core
                 foreach( string forEachParm in forEachParms )
                 {
                     ActionItem clone = a.Clone( shallow: false );
-                    clone.Handler.Config.ResolvedValuesSerialized = forEachConfig;
-                    clone.Parameters.ResolvedValuesSerialized = forEachParm;
+                    clone.Handler.Config.Values =
+                        clone.Handler.Config.ResolvedValuesSerialized = forEachConfig;
+                    clone.Parameters.Values =
+                        clone.Parameters.ResolvedValuesSerialized = forEachParm;
+
+                    if( clone.Handler.Config.Type == SerializationType.Yaml )
+                        clone.Handler.Config.Values = YamlHelpers.Deserialize( clone.Handler.Config.ResolvedValuesSerialized );
+                    if( clone.Parameters.Type == SerializationType.Yaml )
+                        clone.Parameters.Values = YamlHelpers.Deserialize( clone.Parameters.ResolvedValuesSerialized );
 
                     resolvedActions.Add( clone );
                 }
