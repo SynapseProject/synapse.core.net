@@ -7,7 +7,7 @@ Actions:
     Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
     Config:
       Type: Yaml
-      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
+      Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.Tester/yaml/parms.yml
   Parameters:
     Name: PepeLePew
     Type: Yaml

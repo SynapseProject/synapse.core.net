@@ -190,7 +190,7 @@ namespace Synapse.Core
             try
             {
                 //string parms = ResolveConfigAndParameters( a, dynamicData );
-                string parms = a.Parameters.ResolvedValuesSerialized;
+                string parms = a.Parameters.GetSerializedValues();
 
                 IHandlerRuntime rt = CreateHandlerRuntime( a );
                 rt.Progress += rt_Progress;
@@ -471,7 +471,7 @@ namespace Synapse.Core
                 if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
                     c.InheritedValues = _configSets[c.InheritFrom];
 
-                List<string> forEachConfig = new List<string>();
+                List<object> forEachConfig = new List<object>();
                 c.Resolve( out forEachConfig, dynamicData );
 
                 if( c.HasName )
@@ -485,7 +485,7 @@ namespace Synapse.Core
                 if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
                     p.InheritedValues = _paramSets[p.InheritFrom];
 
-                List<string> forEachParms = new List<string>();
+                List<object> forEachParms = new List<object>();
                 parms = p.Resolve( out forEachParms, dynamicData );
 
                 if( p.HasName )
@@ -507,7 +507,7 @@ namespace Synapse.Core
             if( resolvedActions == null )
                 resolvedActions = new List<ActionItem>();
 
-            List<string> forEachConfigs = new List<string>();
+            List<object> forEachConfigs = new List<object>();
             if( a.Handler.HasConfig )
             {
                 ParameterInfo c = a.Handler.Config;
@@ -520,7 +520,7 @@ namespace Synapse.Core
                     _configSets[c.Name] = c;
             }
 
-            List<string> forEachParms = new List<string>();
+            List<object> forEachParms = new List<object>();
             if( a.HasParameters )
             {
                 ParameterInfo p = a.Parameters;
@@ -533,19 +533,14 @@ namespace Synapse.Core
                     _paramSets[p.Name] = p;
             }
 
-            foreach( string forEachConfig in forEachConfigs )
-                foreach( string forEachParm in forEachParms )
+            foreach( object forEachConfig in forEachConfigs )
+                foreach( object forEachParm in forEachParms )
                 {
                     ActionItem clone = a.Clone( shallow: false );
-                    clone.Handler.Config.Values =
-                        clone.Handler.Config.ResolvedValuesSerialized = forEachConfig;
-                    clone.Parameters.Values =
-                        clone.Parameters.ResolvedValuesSerialized = forEachParm;
-
-                    if( clone.Handler.Config.Type == SerializationType.Yaml )
-                        clone.Handler.Config.Values = YamlHelpers.Deserialize( clone.Handler.Config.ResolvedValuesSerialized );
-                    if( clone.Parameters.Type == SerializationType.Yaml )
-                        clone.Parameters.Values = YamlHelpers.Deserialize( clone.Parameters.ResolvedValuesSerialized );
+                    clone.Handler.Config.Values = forEachConfig;
+                    //clone.Handler.Config.ResolvedValuesSerialized = clone.Handler.Config.GetSerializedValues();
+                    clone.Parameters.Values = forEachParm;
+                    //clone.Parameters.ResolvedValuesSerialized = clone.Parameters.GetSerializedValues();
 
                     resolvedActions.Add( clone );
                 }
@@ -571,7 +566,7 @@ namespace Synapse.Core
             hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
             hr.ActionName = a.Name;
 
-            string config = info.HasConfig ? info.Config.ResolvedValuesSerialized : null;
+            string config = info.HasConfig ? info.Config.GetSerializedValues() : null;
             hr.Initialize( config );
 
             return hr;

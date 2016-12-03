@@ -38,10 +38,36 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 
-        [YamlIgnore]
-        public object ResolvedValues { get; set; }
-        [YamlIgnore]
-        public string ResolvedValuesSerialized { get; set; }
+        //[YamlIgnore]
+        //public object ResolvedValues { get; set; }
+        //[YamlIgnore]
+        //public string ResolvedValuesSerialized { get; set; }
+
+        public string GetSerializedValues()
+        {
+            string v = null;
+            switch( Type )
+            {
+                case SerializationType.Yaml:
+                case SerializationType.Json:
+                {
+                    v = Utilities.YamlHelpers.Serialize( Values );
+                    break;
+                }
+                case SerializationType.Xml:
+                {
+                    v = Utilities.XmlHelpers.Serialize<object>( Values );
+                    break;
+                }
+                case SerializationType.Unspecified:
+                {
+                    v = Values.ToString();
+                    break;
+                }
+            }
+
+            return v;
+        }
 
         object ICloneable.Clone()
         {

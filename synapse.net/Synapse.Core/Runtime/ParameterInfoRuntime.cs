@@ -14,10 +14,10 @@ namespace Synapse.Core
     {
         private Dictionary<string, string> _dynamicData = null;
 
-        public string Resolve(out List<string> forEachParms, Dictionary<string, string> dynamicData = null)
+        public string Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null)
         {
             _dynamicData = dynamicData ?? new Dictionary<string, string>();
-            forEachParms = new List<string>();
+            forEachParms = new List<object>();
 
             string parms = string.Empty;
             switch( Type )
@@ -43,11 +43,11 @@ namespace Synapse.Core
             if( forEachParms.Count == 0 )
                 forEachParms.Add( parms );
 
-            ResolvedValuesSerialized = parms;
+            //ResolvedValuesSerialized = parms;
             return parms;
         }
 
-        string ResolveXml(ref List<string> forEachParms)
+        string ResolveXml(ref List<object> forEachParms)
         {
             XmlDocument parms = null;
 
@@ -90,7 +90,7 @@ namespace Synapse.Core
             return parms.OuterXml;
         }
 
-        string ResolveYamlJson(ref List<string> forEachParms)
+        string ResolveYamlJson(ref List<object> forEachParms)
         {
             object parms = null;
 

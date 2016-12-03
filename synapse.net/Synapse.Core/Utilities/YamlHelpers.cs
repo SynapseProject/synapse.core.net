@@ -109,7 +109,7 @@ namespace Synapse.Core.Utilities
 
 
         #region foreach
-        public static List<string> ExpandForEachAndApplyPatchValues(ref Dictionary<object, object> source, List<ForEach> forEach)
+        public static List<object> ExpandForEachAndApplyPatchValues(ref Dictionary<object, object> source, List<ForEach> forEach)
         {
             ForEach node = forEach[0];
             for( int i = 1; i < forEach.Count; i++ )
@@ -121,9 +121,9 @@ namespace Synapse.Core.Utilities
             List<Dictionary<object, object>> matrix = new List<Dictionary<object, object>>();
             ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
 
-            List<string> patchedParms = new List<string>();
+            List<object> patchedParms = new List<object>();
             foreach( Dictionary<object, object> parms in matrix )
-                patchedParms.Add( Serialize( parms ) );
+                patchedParms.Add( parms );
 
             return patchedParms;
         }

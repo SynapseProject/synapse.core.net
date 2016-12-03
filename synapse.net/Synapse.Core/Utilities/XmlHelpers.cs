@@ -161,7 +161,7 @@ namespace Synapse.Core.Utilities
         #endregion
 
         #region ForEach
-        internal static List<string> ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
+        internal static List<object> ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
         {
             ForEach node = forEach[0];
             for( int i = 1; i < forEach.Count; i++ )
@@ -170,13 +170,13 @@ namespace Synapse.Core.Utilities
                 node = forEach[i];
             }
 
-            List<string> matrix = new List<string>();
+            List<object> matrix = new List<object>();
             ExpandMatrixApplyPatchValues( forEach[0], source, matrix );
 
             return matrix;
         }
 
-        static void ExpandMatrixApplyPatchValues(ForEach fe, XmlDocument source, List<string> matrix)
+        static void ExpandMatrixApplyPatchValues(ForEach fe, XmlDocument source, List<object> matrix)
         {
             foreach( string v in fe.Values )
             {
@@ -190,7 +190,7 @@ namespace Synapse.Core.Utilities
                 if( fe.HasChild )
                     ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
                 else
-                    matrix.Add( source.OuterXml );
+                    matrix.Add( source );
             }
         }
         #endregion

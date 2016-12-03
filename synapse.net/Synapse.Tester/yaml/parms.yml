@@ -3,3 +3,7 @@ Lucy: In the sky
 Kitten:
   Cat: Tommy
   Color: Rat
+  Furry:
+    LongHair: true
+    BigEyes: true
+    EyeColor: Transparent
