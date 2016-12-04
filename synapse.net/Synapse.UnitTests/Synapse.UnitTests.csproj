@@ -68,6 +68,7 @@
     <None Include="Plans\Parms\yaml_out.yaml" />
     <None Include="Plans\Parms\yaml_out_dynamic_foreach.yaml" />
     <None Include="Plans\Parms\yaml_out_dynamic.yaml" />
+    <None Include="Plans\Plans\parameters_yaml_foreach_out.yaml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">

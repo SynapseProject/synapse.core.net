@@ -15,9 +15,10 @@ namespace Synapse.UnitTests
     {
         static string __root = @"C:\Devo\synapse\synapse.core.net\synapse.net\Synapse.UnitTests";
         static string __work = $@"{__root}\bin\Debug";
-        static string __plans = $@"{__root}\Plans";
-        static string __config = $@"{__plans}\Config";
-        static string __parms = $@"{__plans}\Parms";
+        static string __plansRoot = $@"{__root}\Plans";
+        static string __plansOut = $@"{__plansRoot}\Plans";
+        static string __config = $@"{__plansRoot}\Config";
+        static string __parms = $@"{__plansRoot}\Parms";
 
         [OneTimeSetUp]
         public void Init()
@@ -33,7 +34,7 @@ namespace Synapse.UnitTests
         public void MergeParameters_Static(string planFile)
         {
             // Arrange
-            Plan plan = Plan.FromYaml( $"{__plans}\\{planFile}" );
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
 
             // Act
             plan.Start( null, true, true );
@@ -57,7 +58,7 @@ namespace Synapse.UnitTests
         public void MergeParameters_Dynamic(string planFile)
         {
             // Arrange
-            Plan plan = Plan.FromYaml( $"{__plans}\\{planFile}" );
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
 
             Dictionary<string, string> dynamicData = new Dictionary<string, string>();
             dynamicData.Add( "cnode0Dynamic", "CValue0_dynamic" );
@@ -90,7 +91,7 @@ namespace Synapse.UnitTests
         public void MergeParameters_ForEach(string planFile)
         {
             // Arrange
-            Plan plan = Plan.FromYaml( $"{__plans}\\{planFile}" );
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
 
             Dictionary<string, string> dynamicData = new Dictionary<string, string>();
             dynamicData.Add( "cnode0Dynamic", "CValue0_dynamic" );
@@ -111,8 +112,10 @@ namespace Synapse.UnitTests
 
             HashSet<int> configHashes = new HashSet<int>();
             HashSet<int> parmHashes = new HashSet<int>();
+            HashSet<int> actionHashes = new HashSet<int>();
             StringBuilder actualMergedConfig = new StringBuilder();
             StringBuilder actualMergedParms = new StringBuilder();
+            StringBuilder actualMergedActions = new StringBuilder();
             foreach( ActionItem resolvedAction in plan.ResultPlan.Actions )
             {
                 string config = resolvedAction.Handler.Config.GetSerializedValues();
@@ -130,15 +133,25 @@ namespace Synapse.UnitTests
                     parmHashes.Add( hash );
                     actualMergedParms.AppendLine( parms );
                 }
+
+                string actionData = config + parms;
+                hash = actionData.GetHashCode();
+                if( !actionHashes.Contains( hash ) )
+                {
+                    actionHashes.Add( hash );
+                    actualMergedActions.AppendLine( actionData );
+                    actualMergedActions.AppendLine( "--------------------\r\n" );
+                }
             }
 
             string expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out_dynamic_foreach_plan.yaml" );
-
             Assert.AreEqual( expectedMergeConfig, actualMergedConfig.ToString() );
 
             string expectedMergeParms = File.ReadAllText( $"{__parms}\\yaml_out_dynamic_foreach_plan.yaml" );
-
             Assert.AreEqual( expectedMergeParms, actualMergedParms.ToString() );
+
+            string expectedMergeActions = File.ReadAllText( $"{__plansOut}\\parameters_yaml_foreach_out.yaml" );
+            Assert.AreEqual( expectedMergeActions, actualMergedActions.ToString() );
         }
     }
 }
