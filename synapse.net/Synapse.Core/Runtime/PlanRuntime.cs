@@ -459,7 +459,7 @@ namespace Synapse.Core
         void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
         {
             List<ActionItem> resolvedActions = null;
-            ResolveConfigAndParameters( a, dynamicData, ref resolvedActions );
+            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions );
         }
         void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions)
         {
@@ -470,45 +470,7 @@ namespace Synapse.Core
                 return;
             }
 
-            //if( resolvedActions == null )
-            //    resolvedActions = new List<ActionItem>();
-
-            List<object> forEachConfigs = new List<object>();
-            if( a.Handler.HasConfig )
-            {
-                ParameterInfo c = a.Handler.Config;
-                if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
-                    c.InheritedValues = _configSets[c.InheritFrom];
-
-                c.Resolve( out forEachConfigs, dynamicData );
-
-                if( c.HasName )
-                    _configSets[c.Name] = c;
-            }
-
-            List<object> forEachParms = new List<object>();
-            if( a.HasParameters )
-            {
-                ParameterInfo p = a.Parameters;
-                if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
-                    p.InheritedValues = _paramSets[p.InheritFrom];
-
-                p.Resolve( out forEachParms, dynamicData );
-
-                if( p.HasName )
-                    _paramSets[p.Name] = p;
-            }
-
-            if( resolvedActions != null )
-                foreach( object forEachConfig in forEachConfigs )
-                    foreach( object forEachParm in forEachParms )
-                    {
-                        ActionItem clone = a.Clone( shallow: false );
-                        clone.Handler.Config.Values = forEachConfig;
-                        clone.Parameters.Values = forEachParm;
-
-                        resolvedActions.Add( clone );
-                    }
+            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions );
         }
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)

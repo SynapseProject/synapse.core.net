@@ -62,7 +62,7 @@ namespace Synapse.Core
                 Name = Name + $"_{DateTime.Now.Ticks}",
                 Proxy = Proxy,
                 ExecuteCase = ExecuteCase,
-                Handler = Handler,
+                Handler = Handler.Clone(),
                 Parameters = Parameters.Clone(),
                 RunAs = RunAs,
                 InstanceId = InstanceId

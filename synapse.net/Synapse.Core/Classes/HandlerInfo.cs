@@ -6,11 +6,23 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class HandlerInfo
+    public class HandlerInfo : ICloneable<HandlerInfo>
     {
         public string Type { get; set; }
         public ParameterInfo Config { get; set; }
         [YamlIgnore]
         public bool HasConfig { get { return Config != null; } }
+
+        object ICloneable.Clone()
+        {
+            return Clone( true );
+        }
+
+        public HandlerInfo Clone(bool shallow = true)
+        {
+            HandlerInfo handler = (HandlerInfo)MemberwiseClone();
+            handler.Config = Config.Clone( shallow );
+            return handler;
+        }
     }
 }
