@@ -109,10 +109,12 @@ namespace Synapse.UnitTests
             plan.Start( dynamicData, true, true );
 
             // Assert
-
-            HashSet<int> configHashes = new HashSet<int>();
-            HashSet<int> parmHashes = new HashSet<int>();
-            HashSet<int> actionHashes = new HashSet<int>();
+            List<int> configKeys = new List<int>();
+            Dictionary<int, string> configHashes = new Dictionary<int, string>();
+            List<int> parmKeys = new List<int>();
+            Dictionary<int, string> parmHashes = new Dictionary<int, string>();
+            List<int> actionKeys = new List<int>();
+            Dictionary<int, string> actionHashes = new Dictionary<int, string>();
             StringBuilder actualMergedConfig = new StringBuilder();
             StringBuilder actualMergedParms = new StringBuilder();
             StringBuilder actualMergedActions = new StringBuilder();
@@ -120,29 +122,42 @@ namespace Synapse.UnitTests
             {
                 string config = resolvedAction.Handler.Config.GetSerializedValues();
                 int hash = config.GetHashCode();
-                if( !configHashes.Contains( hash ) )
+                if( !configHashes.ContainsKey( hash ) )
                 {
-                    configHashes.Add( hash );
-                    actualMergedConfig.AppendLine( config );
+                    configKeys.Add( hash );
+                    configHashes.Add( hash, config );
                 }
 
                 string parms = resolvedAction.Parameters.GetSerializedValues();
                 hash = parms.GetHashCode();
-                if( !parmHashes.Contains( hash ) )
+                if( !parmHashes.ContainsKey( hash ) )
                 {
-                    parmHashes.Add( hash );
-                    actualMergedParms.AppendLine( parms );
+                    parmKeys.Add( hash );
+                    parmHashes.Add( hash, parms );
                 }
 
                 string actionData = config + parms;
                 hash = actionData.GetHashCode();
-                if( !actionHashes.Contains( hash ) )
+                if( !actionHashes.ContainsKey( hash ) )
                 {
-                    actionHashes.Add( hash );
-                    actualMergedActions.AppendLine( actionData );
-                    actualMergedActions.AppendLine( "--------------------\r\n" );
+                    actionKeys.Add( hash );
+                    actionHashes.Add( hash, actionData );
                 }
             }
+
+            configKeys.Sort();
+            foreach( int key in configKeys )
+                actualMergedConfig.AppendLine( configHashes[key] );
+            parmKeys.Sort();
+            foreach( int key in parmKeys )
+                actualMergedParms.AppendLine( parmHashes[key] );
+            actionKeys.Sort();
+            foreach( int key in actionKeys )
+            {
+                actualMergedActions.AppendLine( actionHashes[key] );
+                actualMergedActions.AppendLine( "--------------------\r\n" );
+            }
+
 
             string expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out_dynamic_foreach_plan.yaml" );
             Assert.AreEqual( expectedMergeConfig, actualMergedConfig.ToString() );
