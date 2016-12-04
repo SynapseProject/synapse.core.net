@@ -1,0 +1,5 @@
+CNode0: CValue0_file
+CNode1: CValue1_file
+CNode2:
+  CNode2_1: CValue2_1_file
+  CNode2_2: CValue2_2_file

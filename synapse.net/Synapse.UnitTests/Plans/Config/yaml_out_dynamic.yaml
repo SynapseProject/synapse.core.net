@@ -1,0 +1,8 @@
+CNode0: CValue0_dynamic
+CNode1: CValue1_inline
+CNode2:
+  CNode2_1: CValue2_1_dynamic
+  CNode2_2: CValue2_2_file
+CNode3:
+  CNode3_1: CValue3_1_dynamic
+  CNode3_2: CValue3_2_inline

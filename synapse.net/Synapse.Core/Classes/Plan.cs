@@ -66,5 +66,13 @@ namespace Synapse.Core
             Deserializer deserializer = new Deserializer();
             return deserializer.Deserialize<Plan>( reader );
         }
+
+        public static Plan FromYaml(string path)
+        {
+            Plan plan = null;
+            using( StreamReader sr = new StreamReader( path ) )
+                plan = Plan.FromYaml( sr );
+            return plan;
+        }
     }
 }

@@ -31,6 +31,6 @@ namespace Synapse.Core
 
         string GetSerializedValues();
 
-        string Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null);
+        object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null);
     }
 }

@@ -1,0 +1,8 @@
+PNode0: PValue0_inline
+PNode1: PValue1_inline
+PNode2:
+  PNode2_1: PValue2_1_file
+  PNode2_2: PValue2_2_file
+PNode3:
+  PNode3_1: PValue3_1_inline
+  PNode3_2: PValue3_2_inline

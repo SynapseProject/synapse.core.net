@@ -370,7 +370,7 @@ namespace Synapse.Core
         {
             ExecuteResult returnResult = ExecuteResult.Emtpy;
 
-            string parms = ResolveConfigAndParameters( a, dynamicData );
+            ResolveConfigAndParameters( a, dynamicData );
 
             IHandlerRuntime rt = CreateHandlerRuntime( a );
             rt.Progress += rt_Progress;
@@ -382,7 +382,7 @@ namespace Synapse.Core
                 {
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
                     {
-                        Parameters = parms,
+                        Parameters = a.Parameters.GetSerializedValues(),
                         IsDryRun = dryRun,
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData
@@ -456,45 +456,11 @@ namespace Synapse.Core
 
 
         #region utility methods
-        string ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
+        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
         {
-            bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
-            if( cancel )
-            {
-                _wantsCancel = true;
-                return null;
-            }
-
-            if( a.Handler.HasConfig )
-            {
-                ParameterInfo c = a.Handler.Config;
-                if( c.HasInheritFrom && _configSets.Keys.Contains( c.InheritFrom ) )
-                    c.InheritedValues = _configSets[c.InheritFrom];
-
-                List<object> forEachConfig = new List<object>();
-                c.Resolve( out forEachConfig, dynamicData );
-
-                if( c.HasName )
-                    _configSets[c.Name] = c;
-            }
-
-            string parms = null;
-            if( a.HasParameters )
-            {
-                ParameterInfo p = a.Parameters;
-                if( p.HasInheritFrom && _paramSets.Keys.Contains( p.InheritFrom ) )
-                    p.InheritedValues = _paramSets[p.InheritFrom];
-
-                List<object> forEachParms = new List<object>();
-                parms = p.Resolve( out forEachParms, dynamicData );
-
-                if( p.HasName )
-                    _paramSets[p.Name] = p;
-            }
-
-            return parms;
+            List<ActionItem> resolvedActions = null;
+            ResolveConfigAndParameters( a, dynamicData, ref resolvedActions );
         }
-
         void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions)
         {
             bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
@@ -504,8 +470,8 @@ namespace Synapse.Core
                 return;
             }
 
-            if( resolvedActions == null )
-                resolvedActions = new List<ActionItem>();
+            //if( resolvedActions == null )
+            //    resolvedActions = new List<ActionItem>();
 
             List<object> forEachConfigs = new List<object>();
             if( a.Handler.HasConfig )
@@ -533,15 +499,16 @@ namespace Synapse.Core
                     _paramSets[p.Name] = p;
             }
 
-            foreach( object forEachConfig in forEachConfigs )
-                foreach( object forEachParm in forEachParms )
-                {
-                    ActionItem clone = a.Clone( shallow: false );
-                    clone.Handler.Config.Values = forEachConfig;
-                    clone.Parameters.Values = forEachParm;
+            if( resolvedActions != null )
+                foreach( object forEachConfig in forEachConfigs )
+                    foreach( object forEachParm in forEachParms )
+                    {
+                        ActionItem clone = a.Clone( shallow: false );
+                        clone.Handler.Config.Values = forEachConfig;
+                        clone.Parameters.Values = forEachParm;
 
-                    resolvedActions.Add( clone );
-                }
+                        resolvedActions.Add( clone );
+                    }
         }
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)

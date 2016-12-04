@@ -61,6 +61,10 @@ namespace Synapse.Core.Utilities
 
         public static void Merge(ref Dictionary<object, object> source, List<DynamicValue> patch, Dictionary<string, string> values)
         {
+            //if there's nothing to do, get out!
+            //if( values == null || (values != null && values.Count == 0) )
+            //    return;
+
             Dictionary<object, object> p = ConvertDynamicValuesToDict( patch, values );
             ApplyPatchValues( source, p );
         }
@@ -78,15 +82,15 @@ namespace Synapse.Core.Utilities
                 {
                     string key = keys[i];
                     if( !d.ContainsKey( key ) )
-                    {
                         d[key] = new Dictionary<object, object>();
-                    }
+
                     d = (Dictionary<object, object>)d[key];
                 }
+
                 if( values.ContainsKey( v.Name ) )
-                {
                     d[keys[lastIndex]] = values[v.Name];
-                }
+
+                d = dict;
             }
 
             return dict;

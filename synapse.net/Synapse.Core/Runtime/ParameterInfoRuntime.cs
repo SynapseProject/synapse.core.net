@@ -14,12 +14,12 @@ namespace Synapse.Core
     {
         private Dictionary<string, string> _dynamicData = null;
 
-        public string Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null)
+        public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null)
         {
             _dynamicData = dynamicData ?? new Dictionary<string, string>();
             forEachParms = new List<object>();
 
-            string parms = string.Empty;
+            object parms = null;
             switch( Type )
             {
                 case SerializationType.Xml:
@@ -43,10 +43,12 @@ namespace Synapse.Core
             if( forEachParms.Count == 0 )
                 forEachParms.Add( parms );
 
+            Values = parms;
+
             return parms;
         }
 
-        string ResolveXml(ref List<object> forEachParms)
+        XmlDocument ResolveXml(ref List<object> forEachParms)
         {
             XmlDocument parms = null;
 
@@ -86,10 +88,10 @@ namespace Synapse.Core
                 forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
 
 
-            return parms.OuterXml;
+            return parms;
         }
 
-        string ResolveYamlJson(ref List<object> forEachParms)
+        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms)
         {
             object parms = null;
 
@@ -105,9 +107,7 @@ namespace Synapse.Core
                 {
                     object values = null;
                     using( StringReader sr = new StringReader( uriContent ) )
-                    {
                         values = YamlHelpers.Deserialize<object>( sr );
-                    }
 
                     Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                     Dictionary<object, object> uv = (Dictionary<object, object>)values;
@@ -116,9 +116,7 @@ namespace Synapse.Core
                 else
                 {
                     using( StringReader sr = new StringReader( uriContent ) )
-                    {
                         parms = YamlHelpers.Deserialize<object>( sr );
-                    }
                 }
             }
 
@@ -139,7 +137,7 @@ namespace Synapse.Core
                 forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
 
 
-            return YamlHelpers.Serialize( parms );
+            return p;
         }
 
         string ResolveUnspecified()

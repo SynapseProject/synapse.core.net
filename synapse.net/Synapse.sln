@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.cli", "Synapse.cli\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Wpf", "Synapse.Wpf\Synapse.Wpf.csproj", "{C3F810C9-7388-49F8-9548-392F37228975}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.UnitTests", "Synapse.UnitTests\Synapse.UnitTests.csproj", "{49107C8F-8BD7-47EC-8267-B478071160B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{C3F810C9-7388-49F8-9548-392F37228975}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3F810C9-7388-49F8-9548-392F37228975}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3F810C9-7388-49F8-9548-392F37228975}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49107C8F-8BD7-47EC-8267-B478071160B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49107C8F-8BD7-47EC-8267-B478071160B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49107C8F-8BD7-47EC-8267-B478071160B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49107C8F-8BD7-47EC-8267-B478071160B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
