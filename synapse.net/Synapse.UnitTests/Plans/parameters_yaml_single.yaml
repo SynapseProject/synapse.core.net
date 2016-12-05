@@ -39,3 +39,23 @@ Actions:
       Path: PNode2:PNode2_1
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
+  Actions:
+  - Name: action1
+    Handler:
+      Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+      Config:
+        Name: ConfigSet01
+        InheritFrom: ConfigSet00
+        Type: Yaml
+        Values:
+          CNode0: CValue0_inline_1
+          CNode3:
+            CNode3_1: CValue3_1_inline_1
+    Parameters:
+      Name: ParamSet01
+      InheritFrom: ParamSet00
+      Type: Yaml
+      Values:
+        PNode1: PValue1_inline_1
+        PNode3:
+          PNode3_2: PValue3_2_inline_1

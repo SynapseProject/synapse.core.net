@@ -60,11 +60,13 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Plans\Config\yaml_in.yaml" />
+    <None Include="Plans\Config\yaml_out_inherit.yaml" />
     <None Include="Plans\Config\yaml_out.yaml" />
     <None Include="Plans\Config\yaml_out_dynamic_foreach.yaml" />
     <None Include="Plans\Config\yaml_out_dynamic.yaml" />
     <None Include="Plans\parameters_yaml_foreach.yaml" />
     <None Include="Plans\Parms\yaml_in.yaml" />
+    <None Include="Plans\Parms\yaml_out_inherit.yaml" />
     <None Include="Plans\Parms\yaml_out.yaml" />
     <None Include="Plans\Parms\yaml_out_dynamic_foreach.yaml" />
     <None Include="Plans\Parms\yaml_out_dynamic.yaml" />

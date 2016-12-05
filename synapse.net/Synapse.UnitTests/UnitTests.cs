@@ -168,5 +168,29 @@ namespace Synapse.UnitTests
             string expectedMergeActions = File.ReadAllText( $"{__plansOut}\\parameters_yaml_foreach_out.yaml" );
             Assert.AreEqual( expectedMergeActions, actualMergedActions.ToString() );
         }
+
+        [Test]
+        [Category( "Parameters" )]
+        [Category( "Parameters_Inherit" )]
+        [TestCase( "parameters_yaml_single.yaml" )]
+        public void MergeParameters_Inherit(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            // Act
+            plan.Start( null, true, true );
+
+            // Assert
+            string expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out_inherit.yaml" );
+            string actualMergedConfig = plan.Actions[0].Actions[0].Handler.Config.GetSerializedValues();
+
+            Assert.AreEqual( expectedMergeConfig, actualMergedConfig );
+
+            string expectedMergeParms = File.ReadAllText( $"{__parms}\\yaml_out_inherit.yaml" );
+            string actualMergedParms = plan.Actions[0].Actions[0].Parameters.GetSerializedValues();
+
+            Assert.AreEqual( expectedMergeParms, actualMergedParms );
+        }
     }
 }
