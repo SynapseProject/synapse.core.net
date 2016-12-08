@@ -96,7 +96,10 @@ namespace Synapse.Core
             object parms = null;
 
             if( HasInheritedValues )
-                parms = ((ParameterInfo)InheritedValues).Values;
+            {
+                string tmp = YamlHelpers.Serialize( ((ParameterInfo)InheritedValues).Values );
+                parms = YamlHelpers.Deserialize( tmp );
+            }
 
             //make rest call
             if( HasUri )
