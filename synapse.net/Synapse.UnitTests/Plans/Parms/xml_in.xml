@@ -1,0 +1,8 @@
+<PXmlDoc>
+    <PNode0 PAttr0="PAValue0_file">PValue0_file</PNode0>
+    <PNode1>PValue1_file</PNode1>
+    <PNode2>
+        <PNode2_1>PValue2_1_file</PNode2_1>
+        <PNode2_2>PValue2_2_file</PNode2_2>
+    </PNode2>
+</PXmlDoc>

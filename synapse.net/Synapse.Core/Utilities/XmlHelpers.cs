@@ -2,43 +2,60 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.XmlDiffPatch;
 
 namespace Synapse.Core.Utilities
 {
     public class XmlHelpers
     {
         public static string Serialize<T>(object data, bool omitXmlDeclaration = true, bool omitXmlNamespace = true,
-            bool indented = false, Encoding encoding = null)
+            bool indented = true, Encoding encoding = null)
         {
             if( encoding == null )
                 encoding = UnicodeEncoding.Unicode;
 
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.OmitXmlDeclaration = omitXmlDeclaration;
-            settings.ConformanceLevel = ConformanceLevel.Auto;
-            settings.CloseOutput = false;
-            settings.Encoding = encoding;
-            settings.Indent = indented;
+            XmlWriterSettings settings = new XmlWriterSettings()
+            {
+                OmitXmlDeclaration = omitXmlDeclaration,
+                ConformanceLevel = ConformanceLevel.Auto,
+                CloseOutput = false,
+                Encoding = encoding,
+                Indent = indented
+            };
 
             MemoryStream ms = new MemoryStream();
             XmlSerializer s = new XmlSerializer( typeof( T ) );
             XmlWriter w = XmlWriter.Create( ms, settings );
-            if( omitXmlNamespace )
+            if( data is XmlDocument )
             {
-                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-                ns.Add( "", "" );
-                s.Serialize( w, data, ns );
+                ((XmlDocument)data).Save( w );
             }
             else
             {
-                s.Serialize( w, data );
+                if( omitXmlNamespace )
+                {
+                    XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                    ns.Add( "", "" );
+                    s.Serialize( w, data, ns );
+                }
+                else
+                {
+                    s.Serialize( w, data );
+                }
             }
             string result = encoding.GetString( ms.GetBuffer(), 0, (int)ms.Length );
             w.Close();
             return result;
+        }
+
+        public static T Deserialize<T>(string s)
+        {
+            StringReader sr = new StringReader( s );
+            return Deserialize<T>( sr );
         }
 
         public static T Deserialize<T>(TextReader reader)
@@ -52,6 +69,17 @@ namespace Synapse.Core.Utilities
         //todo: rewrite to calc all xpaths upfront, then select/update from source
         public static void Merge(ref XmlDocument source, XmlDocument patch)
         {
+            foreach( XmlNode node in patch.DocumentElement.ChildNodes )
+            {
+                string xpath = FindXPath( node );
+                XmlNode src = source.SelectSingleNode( xpath );
+                if( src == null )
+                {
+                    XmlNode imported = source.ImportNode( node, true );
+                    source.DocumentElement.AppendChild( imported );
+                }
+            }
+
             Stack<IEnumerable> lists = new Stack<IEnumerable>();
             lists.Push( patch.ChildNodes );
 
@@ -196,3 +224,37 @@ namespace Synapse.Core.Utilities
         #endregion
     }
 }
+
+/*
+ * Just for documentation, because I'll otherwise forget and try this again in the future:
+ * 
+ * The behavior of XmlDiffPatch is remove anything in 'source' that's not represented
+ * in 'patch', which is not the desired behavior for Synapse.Merge functions. The
+ * code below otherwise works.
+ * 
+ * The first foreach loop is to add any top level nodes from source not represented
+ * in patch, then the following code executes a standard Diff/Patch.
+ * 
+ 
+            foreach( XmlNode node in source.DocumentElement.ChildNodes )
+            {
+                string xpath = FindXPath( node );
+                XmlNode p = patch.SelectSingleNode( xpath );
+                if( p == null )
+                {
+                    XmlNode imported = patch.ImportNode( node, true );
+                    patch.DocumentElement.AppendChild( imported );
+                }
+            }
+
+            XmlReader sr = XmlReader.Create( new StringReader( source.OuterXml ) );
+            XmlReader pr = XmlReader.Create( new StringReader( patch.OuterXml ) );
+            StringBuilder dgw = new StringBuilder();
+            XmlWriter dw = XmlWriter.Create( dgw );
+            XmlDiff xmlDiff = new XmlDiff( XmlDiffOptions.IgnoreChildOrder );
+            bool ok = xmlDiff.Compare( sr, pr, dw );
+            XmlPatch xmlPatch = new XmlPatch();
+            StringReader reader = new StringReader( dgw.ToString() );
+            xmlPatch.Patch( source, XmlReader.Create( reader ) );
+
+ */

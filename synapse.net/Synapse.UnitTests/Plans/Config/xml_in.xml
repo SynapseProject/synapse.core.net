@@ -1,0 +1,8 @@
+<CXmlDoc>
+    <CNode0 CAttr0="CAValue0_file">CValue0_file</CNode0>
+    <CNode1>CValue1_file</CNode1>
+    <CNode2>
+        <CNode2_1>CValue2_1_file</CNode2_1>
+        <CNode2_2>CValue2_2_file</CNode2_2>
+    </CNode2>
+</CXmlDoc>

@@ -32,6 +32,7 @@ namespace Synapse.UnitTests
         [Category( "Parameters_Static" )]
         [TestCase( "parameters_yaml_single.yaml" )]
         [TestCase( "parameters_json_single.yaml" )]
+        [TestCase( "parameters_xml_single.yaml" )]
         public void MergeParameters_Static(string planFile)
         {
             // Arrange
@@ -41,13 +42,23 @@ namespace Synapse.UnitTests
             plan.Start( null, true, true );
 
             // Assert
-            string expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out.yaml" );
+            string expectedMergeConfig = null;
             string actualMergedConfig = plan.Actions[0].Handler.Config.GetSerializedValues();
+            if( plan.Actions[0].Parameters.Type == SerializationType.Yaml ||
+                plan.Actions[0].Parameters.Type == SerializationType.Json )
+                expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out.yaml" );
+            else
+                expectedMergeConfig = File.ReadAllText( $"{__config}\\xml_out.xml" );
 
             Assert.AreEqual( expectedMergeConfig, actualMergedConfig );
 
-            string expectedMergeParms = File.ReadAllText( $"{__parms}\\yaml_out.yaml" );
+            string expectedMergeParms = null;
             string actualMergedParms = plan.Actions[0].Parameters.GetSerializedValues();
+            if( plan.Actions[0].Parameters.Type == SerializationType.Yaml ||
+                plan.Actions[0].Parameters.Type == SerializationType.Json )
+                expectedMergeParms = File.ReadAllText( $"{__parms}\\yaml_out.yaml" );
+            else
+                expectedMergeParms = File.ReadAllText( $"{__parms}\\xml_out.xml" );
 
             Assert.AreEqual( expectedMergeParms, actualMergedParms );
         }
@@ -57,6 +68,7 @@ namespace Synapse.UnitTests
         [Category( "Parameters_Dynamic" )]
         [TestCase( "parameters_yaml_single.yaml" )]
         [TestCase( "parameters_json_single.yaml" )]
+        [TestCase( "parameters_xml_single.yaml" )]
         public void MergeParameters_Dynamic(string planFile)
         {
             // Arrange
@@ -74,13 +86,23 @@ namespace Synapse.UnitTests
             plan.Start( dynamicData, true, true );
 
             // Assert
-            string expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out_dynamic.yaml" );
+            string expectedMergeConfig = null;
             string actualMergedConfig = plan.Actions[0].Handler.Config.GetSerializedValues();
+            if( plan.Actions[0].Parameters.Type == SerializationType.Yaml ||
+                plan.Actions[0].Parameters.Type == SerializationType.Json )
+                expectedMergeConfig = File.ReadAllText( $"{__config}\\yaml_out_dynamic.yaml" );
+            else
+                expectedMergeConfig = File.ReadAllText( $"{__config}\\xml_out_dynamic.xml" );
 
             Assert.AreEqual( expectedMergeConfig, actualMergedConfig );
 
-            string expectedMergeParms = File.ReadAllText( $"{__parms}\\yaml_out_dynamic.yaml" );
+            string expectedMergeParms = null;
             string actualMergedParms = plan.Actions[0].Parameters.GetSerializedValues();
+            if( plan.Actions[0].Parameters.Type == SerializationType.Yaml ||
+                plan.Actions[0].Parameters.Type == SerializationType.Json )
+                expectedMergeParms = File.ReadAllText( $"{__parms}\\yaml_out_dynamic.yaml" );
+            else
+                expectedMergeParms = File.ReadAllText( $"{__parms}\\xml_out_dynamic.xml" );
 
             Assert.AreEqual( expectedMergeParms, actualMergedParms );
         }

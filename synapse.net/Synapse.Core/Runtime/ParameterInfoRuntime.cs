@@ -53,7 +53,7 @@ namespace Synapse.Core
             XmlDocument parms = null;
 
             if( HasInheritedValues )
-                parms = (XmlDocument)InheritedValues;
+                parms = (XmlDocument)((XmlDocument)((ParameterInfo)InheritedValues).Values).Clone();
 
             if( HasUri )
             {
