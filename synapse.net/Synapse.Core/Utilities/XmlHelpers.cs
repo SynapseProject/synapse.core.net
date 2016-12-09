@@ -218,7 +218,7 @@ namespace Synapse.Core.Utilities
                 if( fe.HasChild )
                     ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
                 else
-                    matrix.Add( source );
+                    matrix.Add( (XmlDocument)source.Clone() );
             }
         }
         #endregion

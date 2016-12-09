@@ -10,25 +10,27 @@ Actions:
       Type: Xml
       Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Config/xml_in.xml
       Values:
-        <CNode0>CValue0_inline</CNode0>
-        <CNode1>CValue1_inline</CNode1>
-        <CNode3>
-          <CNode3_1>CValue3_1_inline</CNode3_1>
-          <CNode3_2>CValue3_2_inline</CNode3_2>
-        </CNode3>
+        <CXmlDoc>
+            <CNode0>CValue0_inline</CNode0>
+            <CNode1>CValue1_inline</CNode1>
+            <CNode3>
+                <CNode3_1 CAttr3_1="CAValue3_1_inline">CValue3_1_inline</CNode3_1>
+                <CNode3_2>CValue3_2_inline</CNode3_2>
+            </CNode3>
+        </CXmlDoc>
       Dynamic:
       - Name: cnode0Dynamic
-        Path: CNode0
+        Path: /CXmlDoc[1]/CNode0[1]
       - Name: cnode2_1Dynamic
-        Path: CNode2:CNode2_1
+        Path: /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
       - Name: cnode3_1Dynamic
-        Path: CNode3:CNode3_1
+        Path: /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
       ForEach:
-      - Path: CNode1
+      - Path: /CXmlDoc[1]/CNode1[1]
         Values:
         - CValue1_forach_0
         - CValue1_forach_1
-      - Path: CNode2:CNode2_1
+      - Path: /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
         Values:
         - CValue2_2_forach_0
         - CValue2_2_forach_1
@@ -37,25 +39,27 @@ Actions:
     Type: Xml
     Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Parms/xml_in.xml
     Values:
-      <PNode0>PValue0_inline</PNode0>
-      <PNode1>PValue1_inline</PNode1>
-      <PNode3>
-        <PNode3_1>PValue3_1_inline</PNode3_1>
-        <PNode3_2>PValue3_2_inline</PNode3_2>
-      </PNode3>
+        <PXmlDoc>
+            <PNode0 PAttr0="PAValue0_inline">PValue0_inline</PNode0>
+            <PNode1>PValue1_inline</PNode1>
+            <PNode3>
+                <PNode3_1 PAttr0="PAValue0_inline">PValue3_1_inline</PNode3_1>
+                <PNode3_2>PValue3_2_inline</PNode3_2>
+            </PNode3>
+        </PXmlDoc>
     Dynamic:
     - Name: pnode0Dynamic
-      Path: PNode0
+      Path: /PXmlDoc[1]/PNode0[1]
     - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
+      Path: /PXmlDoc[1]/PNode2[1]/PNode2_1[1]
     - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
+      Path: /PXmlDoc[1]/PNode3[1]/PNode3_1[1]/@PAttr0
     ForEach:
-    - Path: PNode1
+    - Path: /PXmlDoc[1]/PNode1[1]
       Values:
       - PValue1_forach_0
       - PValue1_forach_1
-    - Path: PNode2:PNode2_1
+    - Path: /PXmlDoc[1]/PNode2[1]/PNode2_1[1]
       Values:
       - PValue2_2_forach_0
       - PValue2_2_forach_1
