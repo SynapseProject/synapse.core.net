@@ -11,12 +11,15 @@ namespace Synapse.Core.Utilities
         public static string Serialize(object data)
         {
             string result = null;
-            using( StringWriter writer = new StringWriter() )
-            {
-                Serializer serializer = new Serializer();
-                serializer.Serialize( writer, data );
-                result = writer.ToString();
-            }
+
+            if( !string.IsNullOrWhiteSpace( data?.ToString() ) )
+                using( StringWriter writer = new StringWriter() )
+                {
+                    Serializer serializer = new Serializer();
+                    serializer.Serialize( writer, data );
+                    result = writer.ToString();
+                }
+
             return result;
         }
 

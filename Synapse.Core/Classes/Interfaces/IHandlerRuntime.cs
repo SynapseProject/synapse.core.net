@@ -6,6 +6,8 @@ namespace Synapse.Core
     {
         string ActionName { get; set; }
 
+        string RuntimeType { get; set; }
+
         IHandlerRuntime Initialize(string config);
         ExecuteResult Execute(HandlerStartInfo startInfo);
 

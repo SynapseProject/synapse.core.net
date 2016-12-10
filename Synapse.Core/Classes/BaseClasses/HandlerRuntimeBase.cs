@@ -6,6 +6,8 @@ namespace Synapse.Core
     {
         public string ActionName { get; set; }
 
+        public string RuntimeType { get; set; }
+
         //public abstract string Parameters { get; set; }
         public abstract ExecuteResult Execute(HandlerStartInfo startInfo);
 

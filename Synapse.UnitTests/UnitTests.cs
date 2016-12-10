@@ -236,5 +236,24 @@ namespace Synapse.UnitTests
             string expectedMergeActions = File.ReadAllText( $"{__plansOut}\\parameters_{lang}_foreach_out.{lang}" );
             Assert.AreEqual( expectedMergeActions, actualMergedActions.ToString() );
         }
+
+        [Test]
+        [Category( "Handlers" )]
+        [TestCase( "handlerLoad.yaml" )]
+        public void LoadHandlers(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            // Act
+            plan.Start( null, true, true );
+
+            // Assert
+            string expectedType = typeof( Synapse.Core.Runtime.EmptyHandler ).AssemblyQualifiedName;
+            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Handler.Type );
+            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Handler.Type );
+            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Handler.Type );
+            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
+        }
     }
 }

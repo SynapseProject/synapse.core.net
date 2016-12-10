@@ -2,11 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using Microsoft.XmlDiffPatch;
 
 namespace Synapse.Core.Utilities
 {
@@ -15,6 +13,9 @@ namespace Synapse.Core.Utilities
         public static string Serialize<T>(object data, bool omitXmlDeclaration = true, bool omitXmlNamespace = true,
             bool indented = true, Encoding encoding = null)
         {
+            if( string.IsNullOrWhiteSpace( data?.ToString() ) )
+                return null;
+
             if( encoding == null )
                 encoding = UnicodeEncoding.UTF8;
 
@@ -235,6 +236,8 @@ namespace Synapse.Core.Utilities
  * The first foreach loop is to add any top level nodes from source not represented
  * in patch, then the following code executes a standard Diff/Patch.
  * 
+
+    using Microsoft.XmlDiffPatch;
  
             foreach( XmlNode node in source.DocumentElement.ChildNodes )
             {

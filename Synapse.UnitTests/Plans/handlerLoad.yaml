@@ -1,0 +1,19 @@
+﻿Name: plan0
+Description: Load handlers with full or partial names.  Hierarchy below to enable synchronous execution.
+IsActive: true
+Actions:
+- Name: action0
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+  Actions:
+  - Name: action1
+    Handler:
+      Type: Synapse.Core.Runtime.EmptyHandler
+    Actions:
+    - Name: action2
+      Handler:
+        Type: EmptyHandler
+      Actions:
+      - Name: action3
+        Handler:
+          Type: Empty

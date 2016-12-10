@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using System.Security;
-using System.Text;
 using System.Threading.Tasks;
+
 using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Utilities;
 
@@ -173,6 +171,8 @@ namespace Synapse.Core
                 parentContext.Actions.Add( clone );
 
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
+                clone.Handler.Type = a.Handler.Type;
+
                 if( a.HasActions )
                     r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
 
@@ -475,26 +475,30 @@ namespace Synapse.Core
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)
         {
-            HandlerInfo info = a.Handler;
+            HandlerInfo handler = a.Handler;
 
-            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + info.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
+            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + handler.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
                 _wantsCancel = true;
                 return new Runtime.EmptyHandler();
             }
 
-            IHandlerRuntime hr = new Runtime.EmptyHandler();
+            AssemblyLoader loader = new AssemblyLoader();
+            IHandlerRuntime hr = loader.Load( handler.Type );
 
-            string[] typeInfo = info.Type.Split( ':' );
-            AssemblyName an = new AssemblyName( typeInfo[0] );
-            Assembly hrAsm = Assembly.Load( an );
-            Type handlerRuntime = hrAsm.GetType( typeInfo[1], true );
-            hr = Activator.CreateInstance( handlerRuntime ) as IHandlerRuntime;
-            hr.ActionName = a.Name;
+            if( hr != null )
+            {
+                handler.Type = hr.RuntimeType;
+                hr.ActionName = a.Name;
 
-            string config = info.HasConfig ? info.Config.GetSerializedValues() : null;
-            hr.Initialize( config );
+                string config = handler.HasConfig ? handler.Config.GetSerializedValues() : null;
+                hr.Initialize( config );
+            }
+            else
+            {
+                throw new Exception( $"Could not load {handler.Type}." );
+            }
 
             return hr;
         }

@@ -16,6 +16,9 @@ namespace Synapse.Core
         public void ResolveConfigAndParameters(Dictionary<string, string> dynamicData,
             Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets, ref List<ActionItem> resolvedActions)
         {
+            if( Handler == null )
+                Handler = new HandlerInfo();
+
             List<object> forEachConfigs = new List<object>();
             if( Handler.HasConfig )
             {
@@ -27,6 +30,11 @@ namespace Synapse.Core
 
                 if( globalConfigSets != null && c.HasName )
                     globalConfigSets[c.Name] = c;
+            }
+            else
+            {
+                Handler.Config = new ParameterInfo() { };
+                forEachConfigs.Add( string.Empty );
             }
 
             List<object> forEachParms = new List<object>();
@@ -40,6 +48,11 @@ namespace Synapse.Core
 
                 if( globalParamSets != null && p.HasName )
                     globalParamSets[p.Name] = p;
+            }
+            else
+            {
+                Parameters = new ParameterInfo() { };
+                forEachParms.Add( string.Empty );
             }
 
             if( resolvedActions != null )

@@ -50,14 +50,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XmlDiffPatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="XmlDiffPatch.View, Version=1.0.1493.40755, Culture=neutral">
-      <HintPath>..\packages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.View.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="YamlDotNet, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\YamlDotNet.4.0.0\lib\net35\YamlDotNet.dll</HintPath>
       <Private>True</Private>
@@ -89,6 +81,7 @@
     <Compile Include="Classes\HandlerInfo.cs" />
     <Compile Include="Classes\Plan.cs" />
     <Compile Include="Runtime\ActionItem.cs" />
+    <Compile Include="Utilities\AssemblyLoader.cs" />
     <Compile Include="Utilities\XmlHelpers.cs" />
     <Compile Include="Dal\ActionInstance.cs" />
     <Compile Include="Dal\PlanInstance.cs" />
