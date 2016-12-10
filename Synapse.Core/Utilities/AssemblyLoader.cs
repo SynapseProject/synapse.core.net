@@ -10,19 +10,24 @@ namespace Synapse.Core.Utilities
 {
     public class AssemblyLoader
     {
-        public IHandlerRuntime Load(string handlerType)
-        {
-            HashSet<string> knownFiles = new HashSet<string>();
-            knownFiles.Add( "log4net" );
-            knownFiles.Add( "microsoft.visualstudio.qualitytools.unittestframework" );
-            knownFiles.Add( "nunit.framework" );
-            knownFiles.Add( "sqlite.interop" );
-            knownFiles.Add( "synapse.service.common" );
-            knownFiles.Add( "synapse.unittests" );
-            knownFiles.Add( "system.data.sqlite" );
-            knownFiles.Add( "yamldotnet" );
+        static HashSet<string> _knownFiles = null;
 
+        public static IHandlerRuntime Load(string handlerType)
+        {
             IHandlerRuntime hr = null;
+
+            if( _knownFiles == null )
+            {
+                _knownFiles = new HashSet<string>();
+                _knownFiles.Add( "log4net" );
+                _knownFiles.Add( "microsoft.visualstudio.qualitytools.unittestframework" );
+                _knownFiles.Add( "nunit.framework" );
+                _knownFiles.Add( "sqlite.interop" );
+                _knownFiles.Add( "synapse.service.common" );
+                _knownFiles.Add( "synapse.unittests" );
+                _knownFiles.Add( "system.data.sqlite" );
+                _knownFiles.Add( "yamldotnet" );
+            }
 
             if( handlerType == null )
                 handlerType = "Synapse.Handler.CommandLine:CommandLineHandler";
@@ -50,7 +55,7 @@ namespace Synapse.Core.Utilities
                 while( fileList.MoveNext() && hr == null )
                 {
                     string current = fileList.Current.Name.ToLower().Replace( fileList.Current.Extension.ToLower(), string.Empty );
-                    if( !knownFiles.Contains( current ) )
+                    if( !_knownFiles.Contains( current ) )
                     {
                         //assume that the name is complete, including namespace (if there is one)
                         try
