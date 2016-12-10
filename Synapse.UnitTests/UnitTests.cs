@@ -13,7 +13,7 @@ namespace Synapse.UnitTests
     [TestFixture]
     public partial class UnitTests
     {
-        static string __root = @"C:\Devo\synapse\synapse.core.net\synapse.net\Synapse.UnitTests";
+        static string __root = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests";
         static string __work = $@"{__root}\bin\Debug";
         static string __plansRoot = $@"{__root}\Plans";
         static string __plansOut = $@"{__plansRoot}\Plans";
@@ -204,7 +204,7 @@ namespace Synapse.UnitTests
                     parmHashes.Add( hash, parms );
                 }
 
-                string actionData = config + parms;
+                string actionData = config + "\r\n" + parms;
                 hash = actionData.GetHashCode();
                 if( !actionHashes.ContainsKey( hash ) )
                 {

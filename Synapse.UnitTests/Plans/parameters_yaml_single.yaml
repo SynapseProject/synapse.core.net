@@ -8,7 +8,7 @@ Actions:
     Config:
       Name: ConfigSet00
       Type: Yaml
-      Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Config/yaml_in.yaml
+      Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Config/yaml_in.yaml
       Values:
         CNode0: CValue0_inline
         CNode1: CValue1_inline
@@ -25,7 +25,7 @@ Actions:
   Parameters:
     Name: ParamSet00
     Type: Yaml
-    Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Parms/yaml_in.yaml
+    Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Parms/yaml_in.yaml
     Values:
       PNode0: PValue0_inline
       PNode1: PValue1_inline

@@ -8,7 +8,7 @@ Actions:
     Config:
       Name: ConfigSet00
       Type: Json
-      Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Config/json_in.json
+      Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Config/json_in.json
       Values:
         {
           "CNode0": "CValue0_inline",
@@ -37,7 +37,7 @@ Actions:
   Parameters:
     Name: ParamSet00
     Type: Json
-    Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Parms/json_in.json
+    Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Parms/json_in.json
     Values:
       {
         "PNode0": "PValue0_inline",

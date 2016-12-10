@@ -8,7 +8,7 @@ Actions:
     Config:
       Name: ConfigSet00
       Type: Xml
-      Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Config/xml_in.xml
+      Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Config/xml_in.xml
       Values:
         <CXmlDoc>
             <CNode0>CValue0_inline</CNode0>
@@ -28,7 +28,7 @@ Actions:
   Parameters:
     Name: ParamSet00
     Type: Xml
-    Uri: file://C:/Devo/synapse/synapse.core.net/synapse.net/Synapse.UnitTests/Plans/Parms/xml_in.xml
+    Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Parms/xml_in.xml
     Values:
         <PXmlDoc>
             <PNode0 PAttr0="PAValue0_inline">PValue0_inline</PNode0>
