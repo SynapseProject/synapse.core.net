@@ -18,6 +18,10 @@ namespace Synapse.Core
         public string Description { get; set; }
         public bool IsActive { get; set; }
 
+        public string DefaultHandlerType { get; set; }
+        [YamlIgnore]
+        public bool HasDefaultHandlerType { get { return !string.IsNullOrWhiteSpace( DefaultHandlerType ); } }
+
         ActionItem IActionContainer.ActionGroup
         {
             get { throw new NotImplementedException(); }

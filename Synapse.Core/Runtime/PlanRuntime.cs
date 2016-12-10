@@ -484,7 +484,7 @@ namespace Synapse.Core
                 return new Runtime.EmptyHandler();
             }
 
-            IHandlerRuntime hr = AssemblyLoader.Load( handler.Type );
+            IHandlerRuntime hr = AssemblyLoader.Load( handler.Type, DefaultHandlerType );
 
             if( hr != null )
             {

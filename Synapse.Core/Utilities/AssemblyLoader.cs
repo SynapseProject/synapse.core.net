@@ -12,7 +12,7 @@ namespace Synapse.Core.Utilities
     {
         static HashSet<string> _knownFiles = null;
 
-        public static IHandlerRuntime Load(string handlerType)
+        public static IHandlerRuntime Load(string handlerType, string defaultHandler)
         {
             IHandlerRuntime hr = null;
 
@@ -29,8 +29,10 @@ namespace Synapse.Core.Utilities
                 _knownFiles.Add( "yamldotnet" );
             }
 
-            if( handlerType == null )
-                handlerType = "Synapse.Handler.CommandLine:CommandLineHandler";
+            if( string.IsNullOrWhiteSpace( defaultHandler ) )
+                defaultHandler = "Synapse.Handler.CommandLine:CommandLineHandler";
+            if( string.IsNullOrWhiteSpace( handlerType ) )
+                handlerType = defaultHandler;
             else if( !handlerType.ToLower().EndsWith( "handler" ) )
                 handlerType = $"{handlerType}Handler";
 

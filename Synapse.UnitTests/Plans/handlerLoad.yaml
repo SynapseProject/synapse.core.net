@@ -1,19 +1,21 @@
 ﻿Name: plan0
 Description: Load handlers with full or partial names.  Hierarchy below to enable synchronous execution.
-IsActive: true
+DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
 Actions:
-- Name: action0
+- Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
   Actions:
-  - Name: action1
+  - Name: FullyQualifiedClassName
     Handler:
       Type: Synapse.Core.Runtime.EmptyHandler
     Actions:
-    - Name: action2
+    - Name: SimpleClassName
       Handler:
         Type: EmptyHandler
       Actions:
-      - Name: action3
+      - Name: AbbreviatedClassName
         Handler:
           Type: Empty
+        Actions:
+        - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
