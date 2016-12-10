@@ -16,20 +16,20 @@ namespace Synapse.Core.Utilities
             bool indented = true, Encoding encoding = null)
         {
             if( encoding == null )
-                encoding = UnicodeEncoding.Unicode;
+                encoding = UnicodeEncoding.UTF8;
 
             XmlWriterSettings settings = new XmlWriterSettings()
             {
                 OmitXmlDeclaration = omitXmlDeclaration,
                 ConformanceLevel = ConformanceLevel.Auto,
-                CloseOutput = false,
                 Encoding = encoding,
+                CloseOutput = false,
                 Indent = indented
             };
 
-            MemoryStream ms = new MemoryStream();
             XmlSerializer s = new XmlSerializer( typeof( T ) );
-            XmlWriter w = XmlWriter.Create( ms, settings );
+            StringBuilder buf = new StringBuilder();
+            XmlWriter w = XmlWriter.Create( buf, settings );
             if( data is XmlDocument )
             {
                 ((XmlDocument)data).Save( w );
@@ -47,9 +47,9 @@ namespace Synapse.Core.Utilities
                     s.Serialize( w, data );
                 }
             }
-            string result = encoding.GetString( ms.GetBuffer(), 0, (int)ms.Length );
             w.Close();
-            return result;
+
+            return buf.ToString();
         }
 
         public static T Deserialize<T>(string s)
