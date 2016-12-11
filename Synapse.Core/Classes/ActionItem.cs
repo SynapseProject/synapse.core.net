@@ -59,7 +59,7 @@ namespace Synapse.Core
         {
             ActionItem a = new ActionItem()
             {
-                Name = Name + $"_{DateTime.Now.Ticks}",
+                Name = Name,    // + $"_{DateTime.Now.Ticks}",
                 Proxy = Proxy,
                 ExecuteCase = ExecuteCase,
                 Handler = Handler.Clone(),

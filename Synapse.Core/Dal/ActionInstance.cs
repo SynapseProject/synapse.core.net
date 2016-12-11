@@ -44,6 +44,19 @@ CREATE TABLE `Action_Instance` (
             return null;
         }
 
+        /// <summary>
+        /// Creates an instance of this action in the sqlite db for tracking status.
+        /// </summary>
+        /// <param name="parentContext">The parent of the action; if the parent is the Plan, ParentId = null.</param>
+        internal void CreateInstance(IActionContainer parentContext, long planInstanceId)
+        {
+            PlanInstanceId = planInstanceId;
+            long? parentId = null;
+            if( parentContext is ActionItem )
+                parentId = ((ActionItem)parentContext).InstanceId;
+            CreateInstance( parentId );
+        }
+
         internal void CreateInstance(long? parentId)
         {
             if( !HasResult )

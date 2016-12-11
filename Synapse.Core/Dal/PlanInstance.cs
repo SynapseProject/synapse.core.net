@@ -45,9 +45,9 @@ CREATE TABLE `Plan_Instance` (
         {
             _dal.OpenConnection();
             CreateInstanceInternal();
-            RecurseActions( Actions, null, InstanceId );
             _dal.CloseConnection();
         }
+        [Obsolete( "remove", true )]
         void RecurseActions(List<ActionItem> actions, long? parentId, long planId)
         {
             foreach( ActionItem action in actions )

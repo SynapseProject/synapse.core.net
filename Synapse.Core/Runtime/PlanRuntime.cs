@@ -94,6 +94,7 @@ namespace Synapse.Core
             CreateInstance();
 
             ResultPlan = new Plan();
+            ResultPlan.InstanceId = InstanceId;
 
             if( inProc )
                 Result = ProcessRecursive( ResultPlan, RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
@@ -136,6 +137,7 @@ namespace Synapse.Core
                 }
                 else
                 {
+                    actionGroup.CreateInstance( parentContext, InstanceId );
                     ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
                     if( r.Status > returnResult.Status )
                         returnResult = r;
@@ -167,6 +169,7 @@ namespace Synapse.Core
 
             Parallel.ForEach( resolvedParmsActions, a =>   //foreach( ActionItem a in resolvedParmsActions )
             {
+                a.CreateInstance( parentContext, InstanceId );
                 ActionItem clone = a.Clone();
                 parentContext.Actions.Add( clone );
 
