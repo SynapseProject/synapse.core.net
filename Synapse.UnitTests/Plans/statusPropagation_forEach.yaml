@@ -12,6 +12,11 @@ Actions:
     Parameters:
       Values:
         ReturnStatus: Running
+      ForEach:
+      - Path: ReturnStatus
+        Values:
+        - Initializing
+        - Complete
     Actions:
     - Name: ac0.g.0
       ExecuteCase: Any

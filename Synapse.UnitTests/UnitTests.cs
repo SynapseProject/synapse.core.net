@@ -261,7 +261,7 @@ namespace Synapse.UnitTests
         [Test]
         [Category( "Status" )]
         [TestCase( "statusPropagation_single.yaml" )]
-        public void StatusPropagation(string planFile)
+        public void StatusPropagation_Single(string planFile)
         {
             // Arrange
             Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
@@ -307,6 +307,20 @@ namespace Synapse.UnitTests
             Assert.AreEqual( expectedStatus.Count, actualStatus.Count );
             foreach( string key in expectedStatus.Keys )
                 Assert.AreEqual( expectedStatus[key], actualStatus[key] );
+        }
+
+        [Test]
+        [Category( "Status" )]
+        [TestCase( "statusPropagation_forEach.yaml" )]
+        public void StatusPropagation_ForEach(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            // Act
+            plan.Start( null, true, true );
+
+            string planResult = plan.ResultPlan.ToYaml();
         }
     }
 }
