@@ -260,7 +260,7 @@ namespace Synapse.UnitTests
 
         [Test]
         [Category( "Status" )]
-        [TestCase( "statusPropagation.yaml" )]
+        [TestCase( "statusPropagation_single.yaml" )]
         public void StatusPropagation(string planFile)
         {
             // Arrange
@@ -280,7 +280,10 @@ namespace Synapse.UnitTests
                 List<ActionItem> actions = actionLists.Pop();
                 foreach( ActionItem a in actions )
                 {
-                    //expectedStatus.Add( a.Name, a.Parameters.Values );
+                    expectedStatus.Add( a.Name, StatusType.None );
+                    if( a.HasParameters && a.Parameters.HasValues )
+                        expectedStatus[a.Name] = (StatusType)Enum.Parse( typeof( StatusType ),
+                            ((Dictionary<object, object>)a.Parameters.Values)["ReturnStatus"].ToString() );
                     if( a.HasActionGroup )
                         actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
                     if( a.HasActions )

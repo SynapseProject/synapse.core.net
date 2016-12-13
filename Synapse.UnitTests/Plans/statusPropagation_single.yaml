@@ -1,0 +1,53 @@
+Name: plan0
+Description: Tests ExecuteResult.Status propagation
+DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+Actions:
+- Name: ac0
+  Parameters:
+    Values:
+      ReturnStatus: New
+  ActionGroup:
+    Name: ac0.g
+    ExecuteCase: Any
+    Parameters:
+      Values:
+        ReturnStatus: Running
+    Actions:
+    - Name: ac0.g.0
+      ExecuteCase: Any
+      Parameters:
+        Values:
+          ReturnStatus: Failed
+    - Name: ac0.g.1
+      ExecuteCase: Any
+      Parameters:
+        Values:
+          ReturnStatus: Waiting
+  Actions:
+  - Name: ac0.1
+    ExecuteCase: Any
+    Actions:
+    - Name: ac0.1.1
+      Parameters:
+        Values:
+          ReturnStatus: Cancelled
+    - Name: ac0.1.2
+      ExecuteCase: Any
+      Parameters:
+        Values:
+          ReturnStatus: Initializing
+    - Name: ac0.1.3
+      ExecuteCase: Any
+      Parameters:
+        Type: Yaml
+        Values:
+          ReturnStatus: Complete
+- Name: ac1
+  ExecuteCase: Any
+  Parameters:
+    Values:
+      ReturnStatus: Cancelling
+- Name: ac2
+  Parameters:
+    Values:
+      ReturnStatus: CompletedWithErrors
