@@ -103,6 +103,7 @@ namespace Synapse.Core
 
             UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
 
+            ResultPlan.Result = Result;
             return Result;
         }
 
@@ -118,18 +119,21 @@ namespace Synapse.Core
             StatusType queryStatus = result.Status;
             if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
+                if( actionGroup.Handler == null )
+                    actionGroup.Handler = new HandlerInfo();
+
                 if( (actionGroup.HasParameters && actionGroup.Parameters.HasForEach) ||
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
-                    ActionItem newActionGroup = actionGroup.Clone();
-                    newActionGroup.Actions = resolvedParmsActionGroup;
+                    ActionItem clone = actionGroup.Clone();
+                    clone.Actions = resolvedParmsActionGroup;
 
-                    parentContext.ActionGroup = newActionGroup;
+                    parentContext.ActionGroup = clone;
 
                     ExecuteResult r =
-                        ProcessRecursive( parentContext, parentSecurityContext, null, newActionGroup.Actions,
+                        ProcessRecursive( parentContext, parentSecurityContext, null, clone.Actions,
                         result, dynamicData, dryRun, executeHandlerMethod );
 
                     if( r.Status > queryStatus )
@@ -138,13 +142,20 @@ namespace Synapse.Core
                 else
                 {
                     actionGroup.CreateInstance( parentContext, InstanceId );
+
+                    ActionItem clone = actionGroup.Clone();
+                    parentContext.ActionGroup = clone;
+
                     ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
+                    clone.Handler.Type = actionGroup.Handler.Type;
+                    clone.Result = r;
+
                     if( r.Status > returnResult.Status )
                         returnResult = r;
 
                     if( actionGroup.HasActions )
                     {
-                        r = ProcessRecursive( actionGroup, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                        r = ProcessRecursive( clone, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                         if( r.Status > returnResult.Status )
                             returnResult = r;
                     }
@@ -167,7 +178,8 @@ namespace Synapse.Core
             //for( int i = list.Count - 1; i >= 0; i-- )
             //    parentContext.Actions.Remove( list[i] );
 
-            Parallel.ForEach( resolvedParmsActions, a =>   //foreach( ActionItem a in resolvedParmsActions )
+            //Parallel.ForEach( resolvedParmsActions, a =>   //
+            foreach( ActionItem a in resolvedParmsActions )
             {
                 a.CreateInstance( parentContext, InstanceId );
                 ActionItem clone = a.Clone();
@@ -175,13 +187,14 @@ namespace Synapse.Core
 
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 clone.Handler.Type = a.Handler.Type;
+                clone.Result = r;
 
                 if( a.HasActions )
                     r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
-            } );
+            } //);
 
             return returnResult.Clone();
         }

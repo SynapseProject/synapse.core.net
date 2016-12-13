@@ -21,7 +21,8 @@ namespace Synapse.Core
         public HandlerInfo Clone(bool shallow = true)
         {
             HandlerInfo handler = (HandlerInfo)MemberwiseClone();
-            handler.Config = Config.Clone( shallow );
+            if( HasConfig )
+                handler.Config = Config.Clone( shallow );
             return handler;
         }
     }

@@ -31,7 +31,14 @@ namespace Synapse.Core.Runtime
     {
         override public ExecuteResult Execute(HandlerStartInfo startInfo)
         {
-            return new ExecuteResult() { Status = StatusType.None, ExitData = "empty" };
+            EmptyHandlerResult result = new EmptyHandlerResult();
+            try
+            {
+                result = Utilities.YamlHelpers.Deserialize<EmptyHandlerResult>( startInfo.Parameters );
+            }
+            catch { }
+
+            return new ExecuteResult() { Status = result.ReturnStatus, ExitData = result.ExitData };
         }
 
         protected string getMsg(StatusType status, HandlerStartInfo si)
@@ -44,6 +51,49 @@ namespace Synapse.Core.Runtime
             //string user = System.Security.Principal.WindowsIdentity.GetCurrent().Name.Split( '\\' )[1];
             //string fn = $"{ActionName}_{user}_{handler}_{DateTime.Now.Ticks}_{Guid.NewGuid()}";
             //System.IO.File.AppendAllText( fn, message ); ;
+        }
+    }
+
+    public class EmptyHandlerResult
+    {
+        public EmptyHandlerResult()
+        {
+            ReturnStatus = StatusType.None;
+            ExitData = "empty";
+        }
+
+        public StatusType ReturnStatus { get; set; }
+        public string ExitData { get; set; }
+    }
+
+    public class EchoHandler : HandlerRuntimeBase
+    {
+        string _config = null;
+
+        public override IHandlerRuntime Initialize(string config)
+        {
+            _config = config;
+            return base.Initialize( config );
+        }
+
+        public override ExecuteResult Execute(HandlerStartInfo startInfo)
+        {
+            StringBuilder exitData = new StringBuilder();
+            exitData.AppendFormat( "InstanceId: {0}\r\n", startInfo.InstanceId );
+            exitData.AppendFormat( "IsDryRun: {0}\r\n", startInfo.IsDryRun );
+            exitData.AppendFormat( "RequestUser: {0}\r\n", startInfo.RequestUser );
+            exitData.AppendFormat( "RequestNumber: {0}\r\n", startInfo.RequestNumber );
+            exitData.AppendFormat( "ParentExitData: {0}\r\n", startInfo.ParentExitData );
+            exitData.AppendLine( "Config:" );
+            exitData.AppendLine( _config );
+            exitData.AppendLine( "Parameters:" );
+            exitData.AppendLine( startInfo.Parameters );
+
+            return new ExecuteResult()
+            {
+                Status = StatusType.None,
+                ExitData = exitData.ToString()
+            };
         }
     }
 

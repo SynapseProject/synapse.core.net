@@ -257,10 +257,53 @@ namespace Synapse.UnitTests
             Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
         }
 
-        //tests:
-        //  ForEach wirh ActionGroup
-        //  ActionGroup Result accumulation (upward)
-        //  SecurityContext
-        //  Negative Test: missing declations for...
+
+        [Test]
+        [Category( "Status" )]
+        [TestCase( "statusPropagation.yaml" )]
+        public void StatusPropagation(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            // Act
+            plan.Start( null, true, true );
+
+            // Assert
+            Dictionary<string, StatusType> expectedStatus = new Dictionary<string, StatusType>();
+            Dictionary<string, StatusType> actualStatus = new Dictionary<string, StatusType>();
+
+            Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
+            actionLists.Push( plan.Actions );
+            while( actionLists.Count > 0 )
+            {
+                List<ActionItem> actions = actionLists.Pop();
+                foreach( ActionItem a in actions )
+                {
+                    //expectedStatus.Add( a.Name, a.Parameters.Values );
+                    if( a.HasActionGroup )
+                        actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
+                    if( a.HasActions )
+                        actionLists.Push( a.Actions );
+                }
+            }
+            actionLists.Push( plan.ResultPlan.Actions );
+            while( actionLists.Count > 0 )
+            {
+                List<ActionItem> actions = actionLists.Pop();
+                foreach( ActionItem a in actions )
+                {
+                    actualStatus.Add( a.Name, a.Result.Status );
+                    if( a.HasActionGroup )
+                        actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
+                    if( a.HasActions )
+                        actionLists.Push( a.Actions );
+                }
+            }
+
+            Assert.AreEqual( expectedStatus.Count, actualStatus.Count );
+            foreach( string key in expectedStatus.Keys )
+                Assert.AreEqual( expectedStatus[key], actualStatus[key] );
+        }
     }
 }
