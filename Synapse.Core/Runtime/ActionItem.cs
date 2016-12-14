@@ -34,7 +34,7 @@ namespace Synapse.Core
             else
             {
                 Handler.Config = new ParameterInfo() { };
-                forEachConfigs.Add( string.Empty );
+                forEachConfigs.Add( null );
             }
 
             List<object> forEachParms = new List<object>();
@@ -52,7 +52,7 @@ namespace Synapse.Core
             else
             {
                 Parameters = new ParameterInfo() { };
-                forEachParms.Add( string.Empty );
+                forEachParms.Add( null );
             }
 
             if( resolvedActions != null )

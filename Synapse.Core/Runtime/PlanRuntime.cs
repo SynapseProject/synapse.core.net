@@ -127,17 +127,40 @@ namespace Synapse.Core
                 {
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
-                    ActionItem clone = actionGroup.Clone();
-                    clone.Actions = resolvedParmsActionGroup;
+                    ActionItem agclone = actionGroup.Clone();
+                    //clone.Actions = resolvedParmsActionGroup;
+                    foreach( ActionItem ai in resolvedParmsActionGroup )
+                        ai.Parameters.ForEach = null;
 
-                    parentContext.ActionGroup = clone;
+                    parentContext.ActionGroup = agclone;
 
-                    ExecuteResult r =
-                        ProcessRecursive( parentContext, parentSecurityContext, null, clone.Actions,
-                        result, dynamicData, dryRun, executeHandlerMethod );
+                    //Parallel.ForEach( resolvedParmsActions, a =>   //
+                    foreach( ActionItem a in resolvedParmsActionGroup )
+                    {
+                        a.CreateInstance( parentContext, InstanceId );
+                        ActionItem clone = a.Clone();
+                        agclone.Actions.Add( clone );
 
-                    if( r.Status > queryStatus )
-                        queryStatus = r.Status;
+                        ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
+                        clone.Handler.Type = actionGroup.Handler.Type;
+                        clone.Result = r;
+
+                        if( a.HasActions )
+                            r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+
+                        if( r.Status > queryStatus )
+                            queryStatus = r.Status;
+                    } //);
+
+                    agclone.Result = new ExecuteResult() { Status = queryStatus };
+
+
+                    //ExecuteResult r =
+                    //    ProcessRecursive( parentContext, parentSecurityContext, null, clone.Actions,
+                    //    result, dynamicData, dryRun, executeHandlerMethod );
+
+                    //if( r.Status > queryStatus )
+                    //    queryStatus = r.Status;
                 }
                 else
                 {
