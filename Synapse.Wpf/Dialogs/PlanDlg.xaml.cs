@@ -24,7 +24,7 @@ namespace Synapse.Wpf.Dialogs
         {
             InitializeComponent();
 
-            txtName.Text = @"C:\Devo\git\Synapse\synapse.net\Synapse.cli\bin\Debug\plan0.result.yml";
+            txtName.Text = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\Plans\.yaml";
         }
 
         public void LoadPlan(Plan plan)

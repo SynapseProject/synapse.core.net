@@ -7,6 +7,7 @@ namespace Synapse.Core
         public ExecuteResult()
         {
             Status = StatusType.None;
+            BranchStatus = StatusType.None;
         }
 
         public static readonly ExecuteResult Emtpy = new ExecuteResult();
@@ -15,6 +16,7 @@ namespace Synapse.Core
         public int PId { get; set; }
         public StatusType Status { get; set; }
         public string ExitData { get; set; }
+        public StatusType BranchStatus { get; set; }
 
         object ICloneable.Clone()
         {

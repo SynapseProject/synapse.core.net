@@ -261,6 +261,7 @@ namespace Synapse.UnitTests
         [Test]
         [Category( "Status" )]
         [TestCase( "statusPropagation_single.yaml" )]
+        [TestCase( "statusPropagation_single_actionGroup.yaml" )]
         public void StatusPropagation_Single(string planFile)
         {
             // Arrange
@@ -272,6 +273,8 @@ namespace Synapse.UnitTests
             // Assert
             Dictionary<string, StatusType> expectedStatus = new Dictionary<string, StatusType>();
             Dictionary<string, StatusType> actualStatus = new Dictionary<string, StatusType>();
+
+            StatusType maxStatus = StatusType.None;
 
             Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
             actionLists.Push( plan.Actions );
@@ -288,6 +291,9 @@ namespace Synapse.UnitTests
                         actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
                     if( a.HasActions )
                         actionLists.Push( a.Actions );
+
+                    if( (int)expectedStatus[a.Name] > (int)maxStatus )
+                        maxStatus = expectedStatus[a.Name];
                 }
             }
             actionLists.Push( plan.ResultPlan.Actions );
@@ -304,6 +310,11 @@ namespace Synapse.UnitTests
                 }
             }
 
+            string planResult = plan.ResultPlan.ToYaml();
+            File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
+
+            Assert.AreEqual( maxStatus, plan.Result.Status );
+            Assert.AreEqual( plan.ResultPlan.Result.Status, plan.Result.Status );
             Assert.AreEqual( expectedStatus.Count, actualStatus.Count );
             foreach( string key in expectedStatus.Keys )
                 Assert.AreEqual( expectedStatus[key], actualStatus[key] );
@@ -312,6 +323,7 @@ namespace Synapse.UnitTests
         [Test]
         [Category( "Status" )]
         [TestCase( "statusPropagation_forEach.yaml" )]
+        [TestCase( "statusPropagation_forEach_actionGroup.yaml" )]
         public void StatusPropagation_ForEach(string planFile)
         {
             // Arrange
@@ -321,6 +333,7 @@ namespace Synapse.UnitTests
             plan.Start( null, true, true );
 
             string planResult = plan.ResultPlan.ToYaml();
+            File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
         }
     }
 }

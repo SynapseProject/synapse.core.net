@@ -117,11 +117,14 @@ namespace Synapse.Core
             ExecuteResult returnResult = ExecuteResult.Emtpy;
 
             StatusType queryStatus = result.Status;
+
+            #region actionGroup
             if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
                 if( actionGroup.Handler == null )
                     actionGroup.Handler = new HandlerInfo();
 
+                #region actionGroup-forEach
                 if( (actionGroup.HasParameters && actionGroup.Parameters.HasForEach) ||
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
@@ -136,6 +139,7 @@ namespace Synapse.Core
                     Parallel.ForEach( resolvedParmsActionGroup, a =>   // foreach( ActionItem a in resolvedParmsActionGroup )
                     {
                         a.CreateInstance( parentContext, InstanceId );
+
                         ActionItem clone = a.Clone();
                         agclone.Actions.Add( clone );
 
@@ -143,15 +147,24 @@ namespace Synapse.Core
                         clone.Handler.Type = actionGroup.Handler.Type;
                         clone.Result = r;
 
-                        if( a.HasActions )
-                            r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
-
                         if( r.Status > queryStatus )
                             queryStatus = r.Status;
+
+                        if( a.HasActions )
+                        {
+                            r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                            if( r.Status > queryStatus )
+                                queryStatus = r.Status;
+                        }
                     } );
 
-                    agclone.Result = new ExecuteResult() { Status = queryStatus };
+                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = queryStatus };
+
+                    if( queryStatus > returnResult.Status )
+                        returnResult.Status = queryStatus;
                 }
+                #endregion
+                #region actionGroup-single
                 else
                 {
                     actionGroup.CreateInstance( parentContext, InstanceId );
@@ -176,9 +189,12 @@ namespace Synapse.Core
                     if( r.Status > queryStatus )
                         queryStatus = r.Status;
                 }
+                #endregion
             }
+            #endregion
 
 
+            #region actions
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
 
@@ -190,6 +206,7 @@ namespace Synapse.Core
             Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
             {
                 a.CreateInstance( parentContext, InstanceId );
+
                 ActionItem clone = a.Clone();
                 parentContext.Actions.Add( clone );
 
@@ -197,12 +214,17 @@ namespace Synapse.Core
                 clone.Handler.Type = a.Handler.Type;
                 clone.Result = r;
 
-                if( a.HasActions )
-                    r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
-
                 if( r.Status > returnResult.Status )
                     returnResult = r;
+
+                if( a.HasActions )
+                {
+                    r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                    if( r.Status > returnResult.Status )
+                        returnResult = r;
+                }
             } );
+            #endregion
 
             return returnResult.Clone();
         }

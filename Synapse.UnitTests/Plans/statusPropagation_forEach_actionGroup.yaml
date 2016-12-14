@@ -1,5 +1,5 @@
-Name: statusPropagation_single
-Description: Tests ExecuteResult.Status propagation
+Name: statusPropagation_forEach_actionGroup
+Description: Tests ExecuteResult.Status propagation from an ActionGroup, within a ForEach
 DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
 Actions:
 - Name: ac0
@@ -12,6 +12,11 @@ Actions:
     Parameters:
       Values:
         ReturnStatus: Running
+      ForEach:
+      - Path: ReturnStatus
+        Values:
+        - Initializing
+        - Cancelled
     Actions:
     - Name: ac0.g.0
       ExecuteCase: Any
@@ -30,7 +35,7 @@ Actions:
     - Name: ac0.1.1
       Parameters:
         Values:
-          ReturnStatus: Cancelled
+          ReturnStatus: Complete
     - Name: ac0.1.2
       ExecuteCase: Any
       Parameters:
