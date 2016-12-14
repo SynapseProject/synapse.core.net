@@ -127,15 +127,13 @@ namespace Synapse.Core
                 {
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
-                    ActionItem agclone = actionGroup.Clone();
-                    //clone.Actions = resolvedParmsActionGroup;
                     foreach( ActionItem ai in resolvedParmsActionGroup )
                         ai.Parameters.ForEach = null;
 
+                    ActionItem agclone = actionGroup.Clone();
                     parentContext.ActionGroup = agclone;
 
-                    //Parallel.ForEach( resolvedParmsActions, a =>   //
-                    foreach( ActionItem a in resolvedParmsActionGroup )
+                    Parallel.ForEach( resolvedParmsActionGroup, a =>   // foreach( ActionItem a in resolvedParmsActionGroup )
                     {
                         a.CreateInstance( parentContext, InstanceId );
                         ActionItem clone = a.Clone();
@@ -150,17 +148,9 @@ namespace Synapse.Core
 
                         if( r.Status > queryStatus )
                             queryStatus = r.Status;
-                    } //);
+                    } );
 
                     agclone.Result = new ExecuteResult() { Status = queryStatus };
-
-
-                    //ExecuteResult r =
-                    //    ProcessRecursive( parentContext, parentSecurityContext, null, clone.Actions,
-                    //    result, dynamicData, dryRun, executeHandlerMethod );
-
-                    //if( r.Status > queryStatus )
-                    //    queryStatus = r.Status;
                 }
                 else
                 {
@@ -197,12 +187,7 @@ namespace Synapse.Core
                 ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
             );
 
-            //List<ActionItem> list = new List<ActionItem>( actionList );
-            //for( int i = list.Count - 1; i >= 0; i-- )
-            //    parentContext.Actions.Remove( list[i] );
-
-            //Parallel.ForEach( resolvedParmsActions, a =>   //
-            foreach( ActionItem a in resolvedParmsActions )
+            Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
             {
                 a.CreateInstance( parentContext, InstanceId );
                 ActionItem clone = a.Clone();
@@ -217,7 +202,7 @@ namespace Synapse.Core
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
-            } //);
+            } );
 
             return returnResult.Clone();
         }
