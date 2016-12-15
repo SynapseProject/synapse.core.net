@@ -158,7 +158,7 @@ namespace Synapse.Core
                         }
                     } );
 
-                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = queryStatus };
+                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = queryStatus, PId = 7 };
 
                     if( queryStatus > returnResult.Status )
                         returnResult.Status = queryStatus;
@@ -188,6 +188,8 @@ namespace Synapse.Core
 
                     if( r.Status > queryStatus )
                         queryStatus = r.Status;
+
+                    clone.Result.BranchStatus = returnResult.Status;
                 }
                 #endregion
             }
@@ -226,6 +228,12 @@ namespace Synapse.Core
             } );
             #endregion
 
+            if( parentContext.Result == null )
+                parentContext.Result = new ExecuteResult() { PId = 8 };
+
+            if( returnResult.Status >= parentContext.Result.BranchStatus )
+                parentContext.Result.BranchStatus = returnResult.Status;
+
             return returnResult.Clone();
         }
 
@@ -254,6 +262,7 @@ namespace Synapse.Core
                     SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                     sc?.Impersonate();
                     a.Result = rt.Execute( startInfo );
+                    a.Result.BranchStatus = a.Result.Status;
                     sc?.Undo();
                 }
 
