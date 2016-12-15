@@ -117,7 +117,6 @@ namespace Synapse.Core
             ExecuteResult returnResult = ExecuteResult.Emtpy;
 
             StatusType queryStatus = result.Status;
-
             #region actionGroup
             if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
@@ -128,6 +127,8 @@ namespace Synapse.Core
                 if( (actionGroup.HasParameters && actionGroup.Parameters.HasForEach) ||
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
+                    StatusType localStatus = StatusType.None;
+
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
                     foreach( ActionItem ai in resolvedParmsActionGroup )
@@ -136,7 +137,8 @@ namespace Synapse.Core
                     ActionItem agclone = actionGroup.Clone();
                     parentContext.ActionGroup = agclone;
 
-                    Parallel.ForEach( resolvedParmsActionGroup, a =>   // foreach( ActionItem a in resolvedParmsActionGroup )
+                    //Parallel.ForEach( resolvedParmsActionGroup, a =>   //
+                    foreach( ActionItem a in resolvedParmsActionGroup )
                     {
                         a.CreateInstance( parentContext, InstanceId );
 
@@ -146,6 +148,8 @@ namespace Synapse.Core
                         ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                         clone.Handler.Type = actionGroup.Handler.Type;
                         clone.Result = r;
+                        if( r.Status > localStatus )
+                            localStatus = r.Status;
 
                         if( r.Status > queryStatus )
                             queryStatus = r.Status;
@@ -155,10 +159,12 @@ namespace Synapse.Core
                             r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                             if( r.Status > queryStatus )
                                 queryStatus = r.Status;
+                            if( r.Status > localStatus )
+                                localStatus = r.Status;
                         }
-                    } );
+                    } //);
 
-                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = queryStatus, PId = 7 };
+                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = localStatus };
 
                     if( queryStatus > returnResult.Status )
                         returnResult.Status = queryStatus;
@@ -167,6 +173,8 @@ namespace Synapse.Core
                 #region actionGroup-single
                 else
                 {
+                    StatusType localStatus = StatusType.None;
+
                     actionGroup.CreateInstance( parentContext, InstanceId );
 
                     ActionItem clone = actionGroup.Clone();
@@ -175,6 +183,8 @@ namespace Synapse.Core
                     ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
                     clone.Handler.Type = actionGroup.Handler.Type;
                     clone.Result = r;
+                    if( r.Status > localStatus )
+                        localStatus = r.Status;
 
                     if( r.Status > returnResult.Status )
                         returnResult = r;
@@ -184,12 +194,14 @@ namespace Synapse.Core
                         r = ProcessRecursive( clone, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                         if( r.Status > returnResult.Status )
                             returnResult = r;
+                        if( r.Status > localStatus )
+                            localStatus = r.Status;
                     }
 
                     if( r.Status > queryStatus )
                         queryStatus = r.Status;
 
-                    clone.Result.BranchStatus = returnResult.Status;
+                    clone.Result.BranchStatus = localStatus;
                 }
                 #endregion
             }
@@ -205,7 +217,10 @@ namespace Synapse.Core
                 ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
             );
 
-            Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
+            StatusType lclStatus = StatusType.None;
+
+            //Parallel.ForEach( resolvedParmsActions, a =>   //
+            foreach( ActionItem a in resolvedParmsActions )
             {
                 a.CreateInstance( parentContext, InstanceId );
 
@@ -215,6 +230,8 @@ namespace Synapse.Core
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 clone.Handler.Type = a.Handler.Type;
                 clone.Result = r;
+                if( r.Status > lclStatus )
+                    lclStatus = r.Status;
 
                 if( r.Status > returnResult.Status )
                     returnResult = r;
@@ -224,16 +241,19 @@ namespace Synapse.Core
                     r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                     if( r.Status > returnResult.Status )
                         returnResult = r;
+                    if( r.Status > lclStatus )
+                        lclStatus = r.Status;
                 }
-            } );
+            } //);
             #endregion
 
             if( parentContext.Result == null )
-                parentContext.Result = new ExecuteResult() { PId = 8 };
+                parentContext.Result = new ExecuteResult();
 
-            if( returnResult.Status >= parentContext.Result.BranchStatus )
-                parentContext.Result.BranchStatus = returnResult.Status;
+            if( lclStatus > parentContext.Result.BranchStatus )
+                parentContext.Result.BranchStatus = lclStatus;
 
+            returnResult.BranchStatus = returnResult.Status;
             return returnResult.Clone();
         }
 
