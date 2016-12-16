@@ -18,6 +18,12 @@ namespace Synapse.Core
         public string ExitData { get; set; }
         public StatusType BranchStatus { get; set; }
 
+        public void SetStatusChecked(StatusType status)
+        {
+            if( status > Status )
+                Status = status;
+        }
+
         object ICloneable.Clone()
         {
             return Clone( true );

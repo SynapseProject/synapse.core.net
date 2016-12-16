@@ -116,7 +116,10 @@ namespace Synapse.Core
 
             ExecuteResult returnResult = ExecuteResult.Emtpy;
 
+            //queryStatus provides the inbound value to ExecuteCase evaluation; it's the ExecuteCase comparison value.
+            //queryStatus is carried downward through successive subtree executions.
             StatusType queryStatus = result.Status;
+
             #region actionGroup
             if( actionGroup != null && (actionGroup.ExecuteCase == result.Status || actionGroup.ExecuteCase == StatusType.Any) )
             {
@@ -127,7 +130,8 @@ namespace Synapse.Core
                 if( (actionGroup.HasParameters && actionGroup.Parameters.HasForEach) ||
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
-                    StatusType localStatus = StatusType.None;
+                    //tracks the local status of this ActionGroup ForEach branch
+                    StatusType agForEachBranchStatus = StatusType.None;
 
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
@@ -148,32 +152,29 @@ namespace Synapse.Core
                         ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                         clone.Handler.Type = actionGroup.Handler.Type;
                         clone.Result = r;
-                        if( r.Status > localStatus )
-                            localStatus = r.Status;
 
-                        if( r.Status > queryStatus )
-                            queryStatus = r.Status;
+                        if( r.Status > queryStatus ) queryStatus = r.Status;
+                        if( r.Status > agForEachBranchStatus ) agForEachBranchStatus = r.Status;
 
                         if( a.HasActions )
                         {
                             r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
-                            if( r.Status > queryStatus )
-                                queryStatus = r.Status;
-                            if( r.Status > localStatus )
-                                localStatus = r.Status;
+
+                            if( r.Status > queryStatus ) queryStatus = r.Status;
+                            if( r.Status > agForEachBranchStatus ) agForEachBranchStatus = r.Status;
                         }
                     } //);
 
-                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = localStatus };
+                    agclone.Result = new ExecuteResult() { Status = StatusType.None, BranchStatus = agForEachBranchStatus };
 
-                    if( queryStatus > returnResult.Status )
-                        returnResult.Status = queryStatus;
+                    if( queryStatus > returnResult.Status ) returnResult.Status = queryStatus;
                 }
                 #endregion
                 #region actionGroup-single
                 else
                 {
-                    StatusType localStatus = StatusType.None;
+                    //tracks the local status of this ActionGroup branch
+                    StatusType agSingleBranchStatus = StatusType.None;
 
                     actionGroup.CreateInstance( parentContext, InstanceId );
 
@@ -183,25 +184,21 @@ namespace Synapse.Core
                     ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, result.ExitData, dryRun );
                     clone.Handler.Type = actionGroup.Handler.Type;
                     clone.Result = r;
-                    if( r.Status > localStatus )
-                        localStatus = r.Status;
 
-                    if( r.Status > returnResult.Status )
-                        returnResult = r;
+                    if( r.Status > returnResult.Status ) returnResult = r;
+                    if( r.Status > agSingleBranchStatus ) agSingleBranchStatus = r.Status;
 
                     if( actionGroup.HasActions )
                     {
                         r = ProcessRecursive( clone, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
-                        if( r.Status > returnResult.Status )
-                            returnResult = r;
-                        if( r.Status > localStatus )
-                            localStatus = r.Status;
+
+                        if( r.Status > returnResult.Status ) returnResult = r;
+                        if( r.Status > agSingleBranchStatus ) agSingleBranchStatus = r.Status;
                     }
 
-                    if( r.Status > queryStatus )
-                        queryStatus = r.Status;
+                    if( r.Status > queryStatus ) queryStatus = r.Status;
 
-                    clone.Result.BranchStatus = localStatus;
+                    clone.Result.BranchStatus = agSingleBranchStatus;
                 }
                 #endregion
             }
@@ -217,7 +214,8 @@ namespace Synapse.Core
                 ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
             );
 
-            StatusType lclStatus = StatusType.None;
+            //tracks the local status of this subtree branch
+            StatusType actionSubtreeBranchStatus = StatusType.None;
 
             //Parallel.ForEach( resolvedParmsActions, a =>   //
             foreach( ActionItem a in resolvedParmsActions )
@@ -230,19 +228,16 @@ namespace Synapse.Core
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, result.ExitData, dryRun );
                 clone.Handler.Type = a.Handler.Type;
                 clone.Result = r;
-                if( r.Status > lclStatus )
-                    lclStatus = r.Status;
 
-                if( r.Status > returnResult.Status )
-                    returnResult = r;
+                if( r.Status > returnResult.Status ) returnResult = r;
+                if( r.Status > actionSubtreeBranchStatus ) actionSubtreeBranchStatus = r.Status;
 
                 if( a.HasActions )
                 {
                     r = ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
-                    if( r.Status > returnResult.Status )
-                        returnResult = r;
-                    if( r.Status > lclStatus )
-                        lclStatus = r.Status;
+
+                    if( r.Status > returnResult.Status ) returnResult = r;
+                    if( r.Status > actionSubtreeBranchStatus ) actionSubtreeBranchStatus = r.Status;
                 }
             } //);
             #endregion
@@ -250,12 +245,13 @@ namespace Synapse.Core
             if( parentContext.Result == null )
                 parentContext.Result = new ExecuteResult();
 
-            if( lclStatus > parentContext.Result.BranchStatus )
-                parentContext.Result.BranchStatus = lclStatus;
+            if( actionSubtreeBranchStatus > parentContext.Result.BranchStatus )
+                parentContext.Result.BranchStatus = actionSubtreeBranchStatus;
 
             returnResult.BranchStatus = returnResult.Status;
             return returnResult.Clone();
         }
+
 
         #region InProc
         ExecuteResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a,

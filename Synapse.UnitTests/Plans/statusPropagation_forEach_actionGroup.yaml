@@ -36,6 +36,18 @@ Actions:
       Parameters:
         Values:
           ReturnStatus: Complete
+      Actions:
+      - Name: ac0.1.1.0
+        ExecuteCase: Any
+        Parameters:
+          Values:
+            ReturnStatus: CompletedWithErrors
+        Actions:
+        - Name: ac0.1.1.0.1
+          ExecuteCase: Any
+          Parameters:
+            Values:
+              ReturnStatus: Waiting
     - Name: ac0.1.2
       ExecuteCase: Any
       Parameters:

@@ -6,6 +6,7 @@ Actions:
   Result:
     Status: New
     ExitData: empty
+    BranchStatus: Failed
   Parameters:
     Values:
       ReturnStatus: New
@@ -17,6 +18,7 @@ Actions:
     Result:
       Status: Running
       ExitData: empty
+      BranchStatus: Cancelled
     Parameters:
       Values:
         ReturnStatus: Running
@@ -29,11 +31,12 @@ Actions:
       Result:
         Status: Cancelled
         ExitData: empty
+        BranchStatus: Cancelled
       Parameters:
         Values:
           ReturnStatus: Cancelled
       Actions: []
-      InstanceId: 642
+      InstanceId: 1241
     - Name: ac0.g.1
       ExecuteCase: Any
       Handler:
@@ -42,12 +45,13 @@ Actions:
       Result:
         Status: Waiting
         ExitData: empty
+        BranchStatus: Waiting
       Parameters:
         Values:
           ReturnStatus: Waiting
       Actions: []
-      InstanceId: 643
-    InstanceId: 641
+      InstanceId: 1242
+    InstanceId: 1240
   Actions:
   - Name: ac0.1
     ExecuteCase: Any
@@ -56,33 +60,9 @@ Actions:
       Config: {}
     Result:
       ExitData: empty
+      BranchStatus: Failed
     Parameters: {}
     Actions:
-    - Name: ac0.1.1
-      Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-        Config: {}
-      Result:
-        Status: Failed
-        ExitData: empty
-      Parameters:
-        Values:
-          ReturnStatus: Failed
-      Actions: []
-      InstanceId: 645
-    - Name: ac0.1.2
-      ExecuteCase: Any
-      Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-        Config: {}
-      Result:
-        Status: Initializing
-        ExitData: empty
-      Parameters:
-        Values:
-          ReturnStatus: Initializing
-      Actions: []
-      InstanceId: 647
     - Name: ac0.1.3
       ExecuteCase: Any
       Handler:
@@ -91,13 +71,41 @@ Actions:
       Result:
         Status: Complete
         ExitData: empty
+        BranchStatus: Complete
       Parameters:
         Values:
           ReturnStatus: Complete
       Actions: []
-      InstanceId: 648
-    InstanceId: 644
-  InstanceId: 640
+      InstanceId: 1244
+    - Name: ac0.1.2
+      ExecuteCase: Any
+      Handler:
+        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Config: {}
+      Result:
+        Status: Initializing
+        ExitData: empty
+        BranchStatus: Initializing
+      Parameters:
+        Values:
+          ReturnStatus: Initializing
+      Actions: []
+      InstanceId: 1245
+    - Name: ac0.1.1
+      Handler:
+        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Config: {}
+      Result:
+        Status: Failed
+        ExitData: empty
+        BranchStatus: Failed
+      Parameters:
+        Values:
+          ReturnStatus: Failed
+      Actions: []
+      InstanceId: 1246
+    InstanceId: 1243
+  InstanceId: 1239
 - Name: ac1
   ExecuteCase: Any
   Handler:
@@ -106,11 +114,12 @@ Actions:
   Result:
     Status: Cancelling
     ExitData: empty
+    BranchStatus: Cancelling
   Parameters:
     Values:
       ReturnStatus: Cancelling
   Actions: []
-  InstanceId: 646
+  InstanceId: 1247
 - Name: ac2
   Handler:
     Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -118,13 +127,15 @@ Actions:
   Result:
     Status: CompletedWithErrors
     ExitData: empty
+    BranchStatus: CompletedWithErrors
   Parameters:
     Values:
       ReturnStatus: CompletedWithErrors
   Actions: []
-  InstanceId: 649
+  InstanceId: 1248
 StartInfo: {}
 Result:
   Status: Cancelled
   ExitData: empty
-InstanceId: 71
+  BranchStatus: Cancelled
+InstanceId: 133
