@@ -206,6 +206,9 @@ namespace Synapse.Core
 
 
             #region actions
+            if( parentContext.Result == null )
+                parentContext.Result = new ExecuteResult() { PId = 7 };
+
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (a.ExecuteCase == queryStatus || a.ExecuteCase == StatusType.Any) );
 
@@ -231,6 +234,7 @@ namespace Synapse.Core
 
                 if( r.Status > returnResult.Status ) returnResult = r;
                 if( r.Status > actionSubtreeBranchStatus ) actionSubtreeBranchStatus = r.Status;
+                parentContext.Result.SetBranchStatusChecked( actionSubtreeBranchStatus );
 
                 if( a.HasActions )
                 {
@@ -238,17 +242,13 @@ namespace Synapse.Core
 
                     if( r.Status > returnResult.Status ) returnResult = r;
                     if( r.Status > actionSubtreeBranchStatus ) actionSubtreeBranchStatus = r.Status;
+                    parentContext.Result.SetBranchStatusChecked( actionSubtreeBranchStatus );
                 }
             } //);
             #endregion
 
-            if( parentContext.Result == null )
-                parentContext.Result = new ExecuteResult();
+            returnResult.SetBranchStatusChecked( returnResult.Status );
 
-            if( actionSubtreeBranchStatus > parentContext.Result.BranchStatus )
-                parentContext.Result.BranchStatus = actionSubtreeBranchStatus;
-
-            returnResult.BranchStatus = returnResult.Status;
             return returnResult.Clone();
         }
 
@@ -278,7 +278,7 @@ namespace Synapse.Core
                     SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                     sc?.Impersonate();
                     a.Result = rt.Execute( startInfo );
-                    a.Result.BranchStatus = a.Result.Status;
+                    //a.Result.BranchStatus = a.Result.Status;
                     sc?.Undo();
                 }
 

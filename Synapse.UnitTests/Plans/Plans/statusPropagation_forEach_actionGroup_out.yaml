@@ -1,4 +1,17 @@
 Actions:
+- Name: ac1
+  ExecuteCase: Any
+  Handler:
+    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    Status: Cancelling
+    ExitData: empty
+  Parameters:
+    Values:
+      ReturnStatus: Cancelling
+  Actions: []
+  InstanceId: 1441
 - Name: ac0
   Handler:
     Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -46,12 +59,11 @@ Actions:
         Result:
           Status: Waiting
           ExitData: empty
-          BranchStatus: Waiting
         Parameters:
           Values:
             ReturnStatus: Waiting
         Actions: []
-        InstanceId: 1340
+        InstanceId: 1444
       - Name: ac0.g.0
         ExecuteCase: Any
         Handler:
@@ -65,8 +77,8 @@ Actions:
           Values:
             ReturnStatus: Failed
         Actions: []
-        InstanceId: 1341
-      InstanceId: 1339
+        InstanceId: 1445
+      InstanceId: 1443
     - Name: ac0.g
       ExecuteCase: Any
       Handler:
@@ -74,7 +86,7 @@ Actions:
       Result:
         Status: Cancelled
         ExitData: empty
-        BranchStatus: Cancelled
+        BranchStatus: Failed
       Parameters:
         Values:
           ReturnStatus: Cancelled
@@ -93,7 +105,7 @@ Actions:
           Values:
             ReturnStatus: Failed
         Actions: []
-        InstanceId: 1343
+        InstanceId: 1447
       - Name: ac0.g.1
         ExecuteCase: Any
         Handler:
@@ -103,13 +115,12 @@ Actions:
         Result:
           Status: Waiting
           ExitData: empty
-          BranchStatus: Waiting
         Parameters:
           Values:
             ReturnStatus: Waiting
         Actions: []
-        InstanceId: 1344
-      InstanceId: 1342
+        InstanceId: 1448
+      InstanceId: 1446
   Actions:
   - Name: ac0.1
     ExecuteCase: Any
@@ -129,26 +140,11 @@ Actions:
       Result:
         Status: Initializing
         ExitData: empty
-        BranchStatus: Initializing
       Parameters:
         Values:
           ReturnStatus: Initializing
       Actions: []
-      InstanceId: 1346
-    - Name: ac0.1.3
-      ExecuteCase: Any
-      Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-        Config: {}
-      Result:
-        Status: Complete
-        ExitData: empty
-        BranchStatus: Complete
-      Parameters:
-        Values:
-          ReturnStatus: Complete
-      Actions: []
-      InstanceId: 1347
+      InstanceId: 1450
     - Name: ac0.1.1
       Handler:
         Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -182,16 +178,28 @@ Actions:
           Result:
             Status: Waiting
             ExitData: empty
-            BranchStatus: Waiting
           Parameters:
             Values:
               ReturnStatus: Waiting
           Actions: []
-          InstanceId: 1350
-        InstanceId: 1349
-      InstanceId: 1348
-    InstanceId: 1345
-  InstanceId: 1338
+          InstanceId: 1453
+        InstanceId: 1452
+      InstanceId: 1451
+    - Name: ac0.1.3
+      ExecuteCase: Any
+      Handler:
+        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Config: {}
+      Result:
+        Status: Complete
+        ExitData: empty
+      Parameters:
+        Values:
+          ReturnStatus: Complete
+      Actions: []
+      InstanceId: 1454
+    InstanceId: 1449
+  InstanceId: 1442
 - Name: ac2
   Handler:
     Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -199,28 +207,13 @@ Actions:
   Result:
     Status: CompletedWithErrors
     ExitData: empty
-    BranchStatus: CompletedWithErrors
   Parameters:
     Values:
       ReturnStatus: CompletedWithErrors
   Actions: []
-  InstanceId: 1351
-- Name: ac1
-  ExecuteCase: Any
-  Handler:
-    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-    Config: {}
-  Result:
-    Status: Cancelling
-    ExitData: empty
-    BranchStatus: Cancelling
-  Parameters:
-    Values:
-      ReturnStatus: Cancelling
-  Actions: []
-  InstanceId: 1352
+  InstanceId: 1455
 StartInfo: {}
 Result:
   Status: Cancelled
   BranchStatus: Cancelled
-InstanceId: 141
+InstanceId: 148

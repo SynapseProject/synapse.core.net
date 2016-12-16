@@ -24,6 +24,12 @@ namespace Synapse.Core
                 Status = status;
         }
 
+        public void SetBranchStatusChecked(StatusType status)
+        {
+            if( status > BranchStatus )
+                BranchStatus = status;
+        }
+
         object ICloneable.Clone()
         {
             return Clone( true );
