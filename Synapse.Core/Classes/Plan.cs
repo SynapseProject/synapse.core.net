@@ -13,6 +13,12 @@ namespace Synapse.Core
             StartInfo = new PlanStartInfo();
         }
 
+        public void EnsureInitialized()
+        {
+            if( Result == null )
+                Result = ExecuteResult.Emtpy;
+        }
+
         public string Name { get; set; }
         public string UniqueName { get; set; }
         public string Description { get; set; }

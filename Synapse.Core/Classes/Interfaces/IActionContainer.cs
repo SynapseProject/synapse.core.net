@@ -10,5 +10,7 @@ namespace Synapse.Core
         //bool IsAction { get; }
 
         ExecuteResult Result { get; set; }
+
+        void EnsureInitialized();
     }
 }

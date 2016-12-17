@@ -314,7 +314,6 @@ namespace Synapse.UnitTests
             File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
 
             Assert.AreEqual( maxStatus, plan.Result.Status );
-            Assert.AreEqual( plan.ResultPlan.Result.Status, plan.Result.Status );
             Assert.AreEqual( expectedStatus.Count, actualStatus.Count );
             foreach( string key in expectedStatus.Keys )
                 Assert.AreEqual( expectedStatus[key], actualStatus[key] );

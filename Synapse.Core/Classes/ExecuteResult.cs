@@ -1,4 +1,5 @@
 ﻿using System;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -11,6 +12,7 @@ namespace Synapse.Core
         }
 
         public static readonly ExecuteResult Emtpy = new ExecuteResult();
+        [YamlIgnore]
         public bool IsEmpty { get { return this == ExecuteResult.Emtpy; } }
 
         public int PId { get; set; }
@@ -18,17 +20,35 @@ namespace Synapse.Core
         public string ExitData { get; set; }
         public StatusType BranchStatus { get; set; }
 
-        public void SetStatusChecked(StatusType status)
+        //public void SetStatusChecked(StatusType status)
+        //{
+        //    if( status > Status )
+        //        Status = status;
+        //}
+
+        //public void SetBranchStatusChecked(StatusType localStatus, StatusType descendentStatus)
+        //{
+        //    if( localStatus > BranchStatus )
+        //        BranchStatus = localStatus;
+        //    if( descendentStatus > BranchStatus )
+        //        BranchStatus = descendentStatus;
+        //    if( Status > BranchStatus )
+        //        BranchStatus = Status;
+        //}
+
+        public void SetBranchStatusChecked(ExecuteResult compareResult)
         {
-            if( status > Status )
-                Status = status;
+            //get the highest Status value
+            StatusType compareStatus =
+                compareResult.Status > compareResult.BranchStatus ? compareResult.Status : compareResult.BranchStatus;
+            if( Status > compareStatus )
+                compareStatus = Status;
+
+            //compare highest value to current BranchStatus
+            if( compareStatus > BranchStatus )
+                BranchStatus = compareStatus;
         }
 
-        public void SetBranchStatusChecked(StatusType status)
-        {
-            if( status > BranchStatus )
-                BranchStatus = status;
-        }
 
         object ICloneable.Clone()
         {

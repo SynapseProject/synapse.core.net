@@ -13,6 +13,15 @@ namespace Synapse.Core
             Actions = new List<ActionItem>();
         }
 
+        public void EnsureInitialized()
+        {
+            if( Handler == null )
+                Handler = new HandlerInfo();
+
+            if( Result == null )
+                Result = ExecuteResult.Emtpy;
+        }
+
         public string Name { get; set; }
         public string Proxy { get; set; }
         public StatusType ExecuteCase { get; set; }
@@ -39,17 +48,6 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
 
-        public static ActionItem CreateDummy(string name = "xxx")
-        {
-            return new ActionItem()
-            {
-                Name = name,
-                Handler = new HandlerInfo() { Type = "foo" },
-                Parameters = new ParameterInfo() { Values = "foo" },
-                Actions = new List<ActionItem>()
-            };
-        }
-
         object ICloneable.Clone()
         {
             return Clone( true );
@@ -57,13 +55,15 @@ namespace Synapse.Core
 
         public ActionItem Clone(bool shallow = true)
         {
+            EnsureInitialized();
+
             ActionItem a = new ActionItem()
             {
                 Name = Name,    // + $"_{DateTime.Now.Ticks}",
                 Proxy = Proxy,
                 ExecuteCase = ExecuteCase,
                 Handler = Handler.Clone(),
-                Parameters = Parameters.Clone(),
+                Parameters = HasParameters ? Parameters.Clone() : null,
                 RunAs = RunAs,
                 InstanceId = InstanceId
             };
@@ -73,6 +73,8 @@ namespace Synapse.Core
                 a.ActionGroup = ActionGroup;
                 a.Actions = Actions;
             }
+
+            a.EnsureInitialized();
 
             return a;
         }
@@ -84,6 +86,18 @@ namespace Synapse.Core
         public override string ToString()
         {
             return string.Format( "{0}-->{1}", Name, Handler.Type );
+        }
+
+
+        public static ActionItem CreateDummy(string name = "xxx")
+        {
+            return new ActionItem()
+            {
+                Name = name,
+                Handler = new HandlerInfo() { Type = "foo" },
+                Parameters = new ParameterInfo() { Values = "foo" },
+                Actions = new List<ActionItem>()
+            };
         }
     }
 }
