@@ -331,8 +331,78 @@ namespace Synapse.UnitTests
             // Act
             plan.Start( null, true, true );
 
+            // Assert
+            Dictionary<string, StatusType> expectedStatus = new Dictionary<string, StatusType>();
+            Dictionary<string, StatusType> actualStatus = new Dictionary<string, StatusType>();
+
+            StatusType maxStatus = StatusType.None;
+
+            Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
+            Plan expectedResultsPlan = Plan.FromYaml( $"{__plansOut}\\{plan.Name}_expected.yaml" );
+            actionLists.Push( expectedResultsPlan.Actions );
+            while( actionLists.Count > 0 )
+            {
+                List<ActionItem> actions = actionLists.Pop();
+                foreach( ActionItem a in actions )
+                {
+                    expectedStatus.Add( a.Name, StatusType.None );
+                    if( a.HasParameters && a.Parameters.HasValues )
+                        expectedStatus[a.Name] = (StatusType)Enum.Parse( typeof( StatusType ),
+                            ((Dictionary<object, object>)a.Parameters.Values)["ReturnStatus"].ToString() );
+                    if( a.HasActionGroup )
+                    {
+                        if( expectedStatus.ContainsKey( a.ActionGroup.Name ) )
+                        {
+                            if( expectedStatus[a.ActionGroup.Name] < a.ActionGroup.Result.BranchStatus )
+                                expectedStatus[a.ActionGroup.Name] = a.ActionGroup.Result.BranchStatus;
+                        }
+                        else
+                            expectedStatus.Add( a.ActionGroup.Name, a.ActionGroup.Result.BranchStatus );
+                        //actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
+
+                        if( (int)expectedStatus[a.ActionGroup.Name] > (int)maxStatus )
+                            maxStatus = expectedStatus[a.ActionGroup.Name];
+                    }
+                    if( a.HasActions )
+                        actionLists.Push( a.Actions );
+
+                    if( (int)expectedStatus[a.Name] > (int)maxStatus )
+                        maxStatus = expectedStatus[a.Name];
+                }
+            }
+            actionLists.Push( plan.ResultPlan.Actions );
+            while( actionLists.Count > 0 )
+            {
+                List<ActionItem> actions = actionLists.Pop();
+                foreach( ActionItem a in actions )
+                {
+                    actualStatus.Add( a.Name, a.Result.Status );
+                    if( a.HasActionGroup )
+                    {
+                        if( actualStatus.ContainsKey( a.ActionGroup.Name ) )
+                        {
+                            if( actualStatus[a.ActionGroup.Name] < a.ActionGroup.Result.BranchStatus )
+                                actualStatus[a.ActionGroup.Name] = a.ActionGroup.Result.BranchStatus;
+                        }
+                        else
+                            actualStatus.Add( a.ActionGroup.Name, a.ActionGroup.Result.BranchStatus );
+                        //actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
+
+                        if( (int)expectedStatus[a.ActionGroup.Name] > (int)maxStatus )
+                            maxStatus = expectedStatus[a.ActionGroup.Name];
+                    }
+                    if( a.HasActions )
+                        actionLists.Push( a.Actions );
+                }
+            }
+
             string planResult = plan.ResultPlan.ToYaml();
             File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
+
+            Assert.AreEqual( maxStatus, plan.Result.Status );
+            Assert.AreEqual( expectedStatus.Count, actualStatus.Count );
+            foreach( string key in expectedStatus.Keys )
+                Assert.AreEqual( expectedStatus[key], actualStatus[key] );
         }
     }
 }

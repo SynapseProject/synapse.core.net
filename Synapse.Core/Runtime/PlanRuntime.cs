@@ -140,10 +140,10 @@ namespace Synapse.Core
                         ai.Parameters.ForEach = null;
 
                     ActionItem agclone = actionGroup.Clone();
+                    agclone.Result = new ExecuteResult();
                     parentContext.ActionGroup = agclone;
 
-                    //Parallel.ForEach( resolvedParmsActionGroup, a =>   //
-                    foreach( ActionItem a in resolvedParmsActionGroup )
+                    Parallel.ForEach( resolvedParmsActionGroup, a =>   // foreach( ActionItem a in resolvedParmsActionGroup )
                     {
                         a.CreateInstance( parentContext, InstanceId );
 
@@ -151,6 +151,7 @@ namespace Synapse.Core
                         agclone.Actions.Add( clone );
 
                         ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, parentResult.ExitData, dryRun );
+                        parentContext.ActionGroup.Result.SetBranchStatusChecked( r );
                         parentContext.Result.SetBranchStatusChecked( r );
                         clone.Handler.Type = actionGroup.Handler.Type;
                         clone.Result = r;
@@ -160,11 +161,12 @@ namespace Synapse.Core
                         if( a.HasActions )
                         {
                             ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                            parentContext.ActionGroup.Result.SetBranchStatusChecked( clone.Result );
                             parentContext.Result.SetBranchStatusChecked( clone.Result );
 
                             if( clone.Result.Status > queryStatus ) queryStatus = clone.Result.Status;
                         }
-                    } //);
+                    } );
                 }
                 #endregion
                 #region actionGroup-single
@@ -204,8 +206,7 @@ namespace Synapse.Core
                 ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
             );
 
-            //Parallel.ForEach( resolvedParmsActions, a =>   //
-            foreach( ActionItem a in resolvedParmsActions )
+            Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
             {
                 a.CreateInstance( parentContext, InstanceId );
 
@@ -222,7 +223,7 @@ namespace Synapse.Core
                     ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                     parentContext.Result.SetBranchStatusChecked( clone.Result );
                 }
-            } //);
+            } );
             #endregion
         }
 
