@@ -11,30 +11,10 @@ namespace Synapse.Core
             BranchStatus = StatusType.None;
         }
 
-        public static readonly ExecuteResult Emtpy = new ExecuteResult();
-        [YamlIgnore]
-        public bool IsEmpty { get { return this == ExecuteResult.Emtpy; } }
-
         public int PId { get; set; }
         public StatusType Status { get; set; }
         public string ExitData { get; set; }
         public StatusType BranchStatus { get; set; }
-
-        //public void SetStatusChecked(StatusType status)
-        //{
-        //    if( status > Status )
-        //        Status = status;
-        //}
-
-        //public void SetBranchStatusChecked(StatusType localStatus, StatusType descendentStatus)
-        //{
-        //    if( localStatus > BranchStatus )
-        //        BranchStatus = localStatus;
-        //    if( descendentStatus > BranchStatus )
-        //        BranchStatus = descendentStatus;
-        //    if( Status > BranchStatus )
-        //        BranchStatus = Status;
-        //}
 
         public void SetBranchStatusChecked(ExecuteResult compareResult)
         {
@@ -62,7 +42,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return Status.ToString();
+            return $"{Status}/{BranchStatus}";
         }
     }
 }

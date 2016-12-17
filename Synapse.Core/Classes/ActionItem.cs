@@ -19,7 +19,7 @@ namespace Synapse.Core
                 Handler = new HandlerInfo();
 
             if( Result == null )
-                Result = ExecuteResult.Emtpy;
+                Result = new ExecuteResult();
         }
 
         public string Name { get; set; }

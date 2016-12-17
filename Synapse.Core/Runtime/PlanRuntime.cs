@@ -95,11 +95,12 @@ namespace Synapse.Core
 
             ResultPlan = new Plan();
             ResultPlan.InstanceId = InstanceId;
+            ResultPlan.Result = new ExecuteResult();
 
             if( inProc )
-                ProcessRecursive( ResultPlan, RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessInProc );
+                ProcessRecursive( ResultPlan, RunAs, null, Actions, ResultPlan.Result, dynamicData, dryRun, ExecuteHandlerProcessInProc );
             else
-                ProcessRecursive( ResultPlan, RunAs, null, Actions, ExecuteResult.Emtpy, dynamicData, dryRun, ExecuteHandlerProcessExternal );
+                ProcessRecursive( ResultPlan, RunAs, null, Actions, ResultPlan.Result, dynamicData, dryRun, ExecuteHandlerProcessExternal );
 
             ResultPlan.Result.Status = ResultPlan.Result.BranchStatus;
             Result = ResultPlan.Result;
@@ -161,7 +162,7 @@ namespace Synapse.Core
                             ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                             parentContext.Result.SetBranchStatusChecked( clone.Result );
 
-                            if( r.Status > queryStatus ) queryStatus = r.Status;
+                            if( clone.Result.Status > queryStatus ) queryStatus = clone.Result.Status;
                         }
                     } //);
                 }
@@ -186,7 +187,7 @@ namespace Synapse.Core
                         ProcessRecursive( clone, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                         parentContext.Result.SetBranchStatusChecked( clone.Result );
 
-                        if( r.Status > queryStatus ) queryStatus = r.Status;
+                        if( clone.Result.Status > queryStatus ) queryStatus = clone.Result.Status;
                     }
                 }
                 #endregion
@@ -287,7 +288,7 @@ namespace Synapse.Core
             }
             else
             {
-                return ExecuteResult.Emtpy;
+                return new ExecuteResult();
             }
         }
 
@@ -412,7 +413,7 @@ namespace Synapse.Core
         #region SingleAction
         public ExecuteResult ExecuteHandlerProcess_SingleAction(ActionItem a, Dictionary<string, string> dynamicData, string parentExitData, bool dryRun = false)
         {
-            ExecuteResult returnResult = ExecuteResult.Emtpy;
+            ExecuteResult returnResult = new ExecuteResult();
 
             ResolveConfigAndParameters( a, dynamicData );
 

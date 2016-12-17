@@ -16,7 +16,7 @@ namespace Synapse.Core
         public void EnsureInitialized()
         {
             if( Result == null )
-                Result = ExecuteResult.Emtpy;
+                Result = new ExecuteResult();
         }
 
         public string Name { get; set; }

@@ -16,6 +16,52 @@ namespace Synapse.Tester
         static Plan plan = null;
         static void Main(string[] args)
         {
+            string __root = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests";
+            string __plansRoot = $@"{__root}\Plans";
+            string __plansOut = $@"{__plansRoot}\Plans";
+            string plan0Name = "statusPropagation_single.yaml";
+            string plan1Name = "statusPropagation_single_actionGroup.yaml";
+            string plan2Name = "statusPropagation_forEach.yaml";
+            string plan3Name = "statusPropagation_forEach_actionGroup.yaml";
+
+            Plan plan0 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
+            Plan plan1 = Plan.FromYaml( $"{__plansRoot}\\{plan1Name}" );
+            Plan plan2 = Plan.FromYaml( $"{__plansRoot}\\{plan2Name}" );
+            Plan plan3 = Plan.FromYaml( $"{__plansRoot}\\{plan3Name}" );
+
+            PlanScheduler scheduler = new PlanScheduler( 10 );
+            scheduler.StartPlan( "0", false, plan0 );
+            scheduler.StartPlan( "1", false, plan1 );
+            scheduler.StartPlan( "2", false, plan2 );
+            scheduler.StartPlan( "3", false, plan3 );
+            scheduler.Drainstop();
+
+            File.WriteAllText( $"{__plansOut}\\{plan0.Name}_out.yaml", plan0.ResultPlan.ToYaml() );
+            File.WriteAllText( $"{__plansOut}\\{plan1.Name}_out.yaml", plan1.ResultPlan.ToYaml() );
+            File.WriteAllText( $"{__plansOut}\\{plan2.Name}_out.yaml", plan2.ResultPlan.ToYaml() );
+            File.WriteAllText( $"{__plansOut}\\{plan3.Name}_out.yaml", plan3.ResultPlan.ToYaml() );
+
+            Plan plan00 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
+            Plan plan01 = Plan.FromYaml( $"{__plansRoot}\\{plan1Name}" );
+            Plan plan02 = Plan.FromYaml( $"{__plansRoot}\\{plan2Name}" );
+            Plan plan03 = Plan.FromYaml( $"{__plansRoot}\\{plan3Name}" );
+
+            //plan0 = plan1 = plan2 = plan3 = null;
+
+            scheduler.StartPlan( "0", false, plan00 );
+            scheduler.StartPlan( "1", false, plan01 );
+            scheduler.StartPlan( "2", false, plan02 );
+            scheduler.StartPlan( "3", false, plan03 );
+            scheduler.Drainstop();
+
+            File.WriteAllText( $"{__plansOut}\\{plan00.Name}_out.yaml", plan00.ResultPlan.ToYaml() );
+            File.WriteAllText( $"{__plansOut}\\{plan01.Name}_out.yaml", plan01.ResultPlan.ToYaml() );
+            File.WriteAllText( $"{__plansOut}\\{plan02.Name}_out.yaml", plan02.ResultPlan.ToYaml() );
+            File.WriteAllText( $"{__plansOut}\\{plan03.Name}_out.yaml", plan03.ResultPlan.ToYaml() );
+
+            Environment.Exit( 0 );
+
+
             string path = @"..\..\yaml\example.yml";
             string outpath = @"..\..\yaml\example.out.yml";
             if( args.Length > 0 )
