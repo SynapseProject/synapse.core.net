@@ -1,0 +1,49 @@
+Actions:
+- Name: FullName-Assembly:FullyQualifiedClassName
+  Handler:
+    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    ExitData: empty
+  Parameters: {}
+  Actions:
+  - Name: FullyQualifiedClassName
+    Handler:
+      Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      Config: {}
+    Result:
+      ExitData: empty
+    Parameters: {}
+    Actions:
+    - Name: SimpleClassName
+      Handler:
+        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Config: {}
+      Result:
+        ExitData: empty
+      Parameters: {}
+      Actions:
+      - Name: AbbreviatedClassName
+        Handler:
+          Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+          Config: {}
+        Result:
+          ExitData: empty
+        Parameters: {}
+        Actions:
+        - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
+          Handler:
+            Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            Config: {}
+          Result:
+            ExitData: empty
+          Parameters: {}
+          Actions: []
+          InstanceId: 195
+        InstanceId: 194
+      InstanceId: 193
+    InstanceId: 192
+  InstanceId: 191
+StartInfo: {}
+Result: {}
+InstanceId: 30

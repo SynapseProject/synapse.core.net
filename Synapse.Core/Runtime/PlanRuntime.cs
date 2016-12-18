@@ -262,7 +262,7 @@ namespace Synapse.Core
             catch( Exception ex )
             {
                 WriteUnhandledActionException( a, ex );
-                return new ExecuteResult() { Status = StatusType.Failed };
+                return new ExecuteResult() { Status = StatusType.Failed, ExitData = ex.Message };
             }
         }
         #endregion

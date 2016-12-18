@@ -1,0 +1,25 @@
+Name: handlerLoadFail
+Description: Tests failure to successfully resolve/load a handler
+DefaultHandlerType: Synapse.CoreFoo:Synapse.Core.Runtime.EmptyHandlerFoo
+Actions:
+- Name: FullName-Assembly:FullyQualifiedClassName
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandlerFoo
+  Actions:
+  - Name: FullyQualifiedClassName
+    ExecuteCase: Failed
+    Handler:
+      Type: Synapse.Core.Runtime.EmptyHandlerFoo
+    Actions:
+    - Name: SimpleClassName
+      ExecuteCase: Failed
+      Handler:
+        Type: EmptyHandlerFoo
+      Actions:
+      - Name: AbbreviatedClassName
+        ExecuteCase: Failed
+        Handler:
+          Type: EmptyFoo
+        Actions:
+        - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
+          ExecuteCase: Failed

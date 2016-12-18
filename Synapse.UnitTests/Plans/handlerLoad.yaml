@@ -1,4 +1,4 @@
-﻿Name: plan0
+﻿Name: handlerLoad
 Description: Load handlers with full or partial names.  Hierarchy below to enable synchronous execution.
 DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
 Actions:

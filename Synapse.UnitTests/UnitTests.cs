@@ -240,6 +240,7 @@ namespace Synapse.UnitTests
         [Test]
         [Category( "Handlers" )]
         [TestCase( "handlerLoad.yaml" )]
+        [TestCase( "handlerLoadFail.yaml" )]
         public void LoadHandlers(string planFile)
         {
             // Arrange
@@ -249,12 +250,27 @@ namespace Synapse.UnitTests
             plan.Start( null, true, true );
 
             // Assert
-            string expectedType = typeof( Synapse.Core.Runtime.EmptyHandler ).AssemblyQualifiedName;
-            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Handler.Type );
-            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Handler.Type );
-            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Handler.Type );
-            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
-            Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
+            File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
+
+            if( plan.ResultPlan.Result.Status == StatusType.Failed )
+            {
+                //by testing the plan & resultPlan Types are equal, that indicates the Plan didn't crash and the Types are unresolved
+                Assert.AreEqual( plan.Actions[0].Handler.Type, plan.ResultPlan.Actions[0].Handler.Type );
+                Assert.AreEqual( plan.Actions[0].Actions[0].Handler.Type, plan.ResultPlan.Actions[0].Actions[0].Handler.Type );
+                Assert.AreEqual( plan.Actions[0].Actions[0].Actions[0].Handler.Type, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Handler.Type );
+                Assert.AreEqual( plan.Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
+                Assert.AreEqual( plan.Actions[0].Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
+            }
+            else
+            {
+                //otherwise, they should all be the fully qualified assm name for EmptyHandler
+                string expectedType = typeof( Synapse.Core.Runtime.EmptyHandler ).AssemblyQualifiedName;
+                Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Handler.Type );
+                Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Handler.Type );
+                Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Handler.Type );
+                Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
+                Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Actions[0].Actions[0].Handler.Type );
+            }
         }
 
 
@@ -323,8 +339,20 @@ namespace Synapse.UnitTests
         [Category( "Status" )]
         [TestCase( "statusPropagation_forEach.yaml" )]
         [TestCase( "statusPropagation_forEach_actionGroup.yaml" )]
-        [TestCase( "executeCase.yaml" )]
         public void StatusPropagation_ForEach(string planFile)
+        {
+            RunPlanCompareExpected( planFile );
+        }
+
+        [Test]
+        [Category( "ExecuteCase" )]
+        [TestCase( "executeCase.yaml" )]
+        public void ExecuteCase(string planFile)
+        {
+            RunPlanCompareExpected( planFile );
+        }
+
+        void RunPlanCompareExpected(string planFile)
         {
             // Arrange
             Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
