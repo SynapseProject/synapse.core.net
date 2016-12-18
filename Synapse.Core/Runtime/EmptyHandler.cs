@@ -38,6 +38,8 @@ namespace Synapse.Core.Runtime
             }
             catch { }
 
+            OnProgress( "Execute", result.ReturnStatus.ToString(), result.ReturnStatus, startInfo.InstanceId, Int32.MaxValue );
+
             return new ExecuteResult() { Status = result.ReturnStatus, ExitData = result.ExitData };
         }
 

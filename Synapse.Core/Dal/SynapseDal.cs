@@ -38,7 +38,7 @@ namespace Synapse.Core.DataAccessLayer
                 }
                 catch
                 {
-                    if( File.Exists( _fileName ) )
+                    if( File.Exists( _fileName ) && new FileInfo( _fileName ).Length == 0 )
                         File.Delete( _fileName );
 
                     throw;

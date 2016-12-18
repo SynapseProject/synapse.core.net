@@ -18,6 +18,8 @@ namespace Synapse.cli
         {
             int exitCode = 11;
 
+            EnsureDatabaseExists();
+
             Arguments a = new Arguments( args );
             if( !a.IsParsed )
                 WriteHelpAndExit( a.Message );
@@ -85,6 +87,33 @@ namespace Synapse.cli
                 msg = CryptoHelpers.Encode( msg );
             Console.WriteLine( msg );
         }
+
+
+        #region ensure database exists
+        static void EnsureDatabaseExists()
+        {
+            try
+            {
+                Synapse.Core.DataAccessLayer.SynapseDal.CreateDatabase();
+            }
+            catch( Exception ex )
+            {
+                ConsoleColor defaultColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                if( ex.HResult == -2146233052 )
+                {
+                    Console.WriteLine( ex.Message );
+                    Console.WriteLine( "Ensure the x86/x64 Sqlite folders are included with the distribution." );
+                }
+                else
+                {
+                    Console.WriteLine( ex.Message );
+                }
+                Console.ForegroundColor = defaultColor;
+                Environment.Exit( 99 );
+            }
+        }
+        #endregion
 
 
         #region Help

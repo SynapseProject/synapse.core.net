@@ -323,6 +323,7 @@ namespace Synapse.UnitTests
         [Category( "Status" )]
         [TestCase( "statusPropagation_forEach.yaml" )]
         [TestCase( "statusPropagation_forEach_actionGroup.yaml" )]
+        [TestCase( "executeCase.yaml" )]
         public void StatusPropagation_ForEach(string planFile)
         {
             // Arrange
@@ -403,6 +404,28 @@ namespace Synapse.UnitTests
             Assert.AreEqual( expectedStatus.Count, actualStatus.Count );
             foreach( string key in expectedStatus.Keys )
                 Assert.AreEqual( expectedStatus[key], actualStatus[key] );
+        }
+
+        [Test]
+        [Category( "SynapseDal" )]
+        public void EnsureDatabaseExists()
+        {
+            // Arrange
+            string msg = null;
+
+            try
+            {
+                Synapse.Core.DataAccessLayer.SynapseDal.CreateDatabase();
+            }
+            catch( Exception ex )
+            {
+                msg = ex.Message;
+                if( ex.HResult == -2146233052 )
+                    msg += "  Ensure the x86/x64 Sqlite folders are included with the distribution.";
+            }
+
+            // Assert
+            Assert.IsNull( msg );
         }
     }
 }

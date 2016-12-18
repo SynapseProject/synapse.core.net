@@ -16,6 +16,9 @@ namespace Synapse.Tester
         static Plan plan = null;
         static void Main(string[] args)
         {
+            EnsureDatabaseExists();
+
+
             string __root = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests";
             string __plansRoot = $@"{__root}\Plans";
             string __plansOut = $@"{__plansRoot}\Plans";
@@ -129,5 +132,32 @@ namespace Synapse.Tester
             //Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}, StatusType:{3}", e.ActionName, e.Context, e.Message, e.Status );
             Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}, StatusType:{3}, {4}", e.ActionName, e.Context, e.Message, e.Status, ++_count );
         }
+
+        
+        #region ensure database exists
+        static void EnsureDatabaseExists()
+        {
+            try
+            {
+                Synapse.Core.DataAccessLayer.SynapseDal.CreateDatabase();
+            }
+            catch( Exception ex )
+            {
+                ConsoleColor defaultColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                if( ex.HResult == -2146233052 )
+                {
+                    Console.WriteLine( ex.Message );
+                    Console.WriteLine( "Ensure the x86/x64 Sqlite folders are included with the distribution." );
+                }
+                else
+                {
+                    Console.WriteLine( ex.Message );
+                }
+                Console.ForegroundColor = defaultColor;
+                Environment.Exit( 99 );
+            }
+        }
+        #endregion
     }
 }

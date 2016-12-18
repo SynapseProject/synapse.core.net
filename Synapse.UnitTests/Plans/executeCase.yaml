@@ -1,0 +1,70 @@
+Name: executeCase
+Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
+DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+Actions:
+- Name: ac0
+  Parameters:
+    Values:
+      ReturnStatus: New
+  ActionGroup:
+    Name: ac0.g
+    ExecuteCase: Any
+    Parameters:
+      Values:
+        ReturnStatus: Running
+      ForEach:
+      - Path: ReturnStatus
+        Values:
+        - Initializing
+        - Complete
+    Actions:
+    - Name: ac0.g.0
+      ExecuteCase: Complete
+      Parameters:
+        Values:
+          ReturnStatus: Failed
+    - Name: ac0.g.1
+      ExecuteCase: Complete
+      Parameters:
+        Values:
+          ReturnStatus: Waiting
+  Actions:
+  - Name: ac0.1
+    ExecuteCase: Complete
+    Actions:
+    - Name: ac0.1.1
+      Parameters:
+        Values:
+          ReturnStatus: Complete
+      Actions:
+      - Name: ac0.1.1.0
+        ExecuteCase: Complete
+        Parameters:
+          Values:
+            ReturnStatus: CompletedWithErrors
+        Actions:
+        - Name: ac0.1.1.0.1
+          ExecuteCase: Complete
+          Parameters:
+            Values:
+              ReturnStatus: Waiting
+    - Name: ac0.1.2
+      ExecuteCase: Complete
+      Parameters:
+        Values:
+          ReturnStatus: Initializing
+    - Name: ac0.1.3
+      ExecuteCase: Complete
+      Parameters:
+        Type: Yaml
+        Values:
+          ReturnStatus: Complete
+- Name: ac1
+  ExecuteCase: Complete
+  Parameters:
+    Values:
+      ReturnStatus: Cancelling
+- Name: ac2
+  Parameters:
+    Values:
+      ReturnStatus: CompletedWithErrors

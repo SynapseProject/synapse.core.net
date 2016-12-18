@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.ServiceModel;
 using System.ServiceProcess;
 
@@ -42,10 +43,10 @@ namespace Synapse.Service.Windows
         {
             _log.Write( ServiceStatus.Starting );
 
+            EnsureDatabaseExists();
+
             if( _serviceHost != null )
-            {
                 _serviceHost.Close();
-            }
 
             _serviceHost = new ServiceHost( typeof( SynapseServer ) );
             _serviceHost.Open();
@@ -56,8 +57,47 @@ namespace Synapse.Service.Windows
         protected override void OnStop()
         {
             _log.Write( ServiceStatus.Stopping );
-            _serviceHost.Close();
+            if( _serviceHost != null )
+                _serviceHost.Close();
             _log.Write( ServiceStatus.Stopped );
+        }
+
+
+        #region ensure database exists
+        void EnsureDatabaseExists()
+        {
+            try
+            {
+                Synapse.Core.DataAccessLayer.SynapseDal.CreateDatabase();
+            }
+            catch( Exception ex )
+            {
+                string msg = ex.Message;
+                if( ex.HResult == -2146233052 )
+                    msg += "  Ensure the x86/x64 Sqlite folders are included with the distribution.";
+
+                _log.Write( LogLevel.Fatal, msg );
+                WriteEventLog( msg );
+
+                this.Stop();
+                Environment.Exit( 99 );
+            }
+        }
+        #endregion
+
+        void WriteEventLog(string msg, EventLogEntryType entryType = EventLogEntryType.Error)
+        {
+            string source = "Synapse";
+            string log = "Application";
+
+            try
+            {
+                if( !EventLog.SourceExists( source ) )
+                    EventLog.CreateEventSource( source, log );
+
+                EventLog.WriteEntry( source, msg, entryType );
+            }
+            catch { }
         }
     }
 }
