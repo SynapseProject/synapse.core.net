@@ -1,0 +1,100 @@
+﻿Name: planDeclarationFail
+Description: Test missing/partial Plan/Action declaration.
+DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+Actions:
+- Name: ac0
+  Description: Fully formed, correctly structured Action; here for reference
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Config:
+      Type: Yaml
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+  Parameters:
+    Name: myYamlParms
+    Type: Yaml
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+- Name: ac1
+  Description: No Parameters declaration
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Config:
+      Type: Yaml
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+- Name: ac2
+  Description: No Handler declaration
+  Parameters:
+    Name: myYamlParms
+    Type: Yaml
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+- Name: ac3
+  Description: Has Handler, but no Handler.Config.  No Parameters
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+- Name: ac4
+  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+  Parameters:
+    Name: myYamlParms
+    Type: Yaml
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+- Name: ac5
+  Description: No Handler declaration, partially formed Parameters
+  Parameters:
+    Name: myYamlParms
+    Type: Yaml
+    Values:
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+- Description: No Name, no declaration at all

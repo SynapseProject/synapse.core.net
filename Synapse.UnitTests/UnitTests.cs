@@ -352,6 +352,24 @@ namespace Synapse.UnitTests
             RunPlanCompareExpected( planFile );
         }
 
+        [Test]
+        [Category( "PlanDeclaration" )]
+        [TestCase( "planDeclarationFail.yaml" )]
+        public void PlanDeclaration(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            // Act
+            plan.Start( null, true, true );
+
+            // Assert
+            //essentially, if this test doesn't crash it's a success, but:
+            //todo: these are pretty lame test conditions, need to improve.
+            Assert.IsNotNull( plan.ResultPlan );
+            Assert.AreEqual( 7, plan.ResultPlan.Actions.Count );
+        }
+
         void RunPlanCompareExpected(string planFile)
         {
             // Arrange

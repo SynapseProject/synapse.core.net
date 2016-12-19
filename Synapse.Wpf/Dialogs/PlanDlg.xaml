@@ -29,11 +29,14 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Name}"
-                               Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
-                    <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}'}"/>
-                    <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Status: \{0\}'}"/>
-                    <TextBlock Text="{local:FormattedBinding Result.BranchStatus, FormatString='/\{0\}'}"/>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                    <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}, '}"/>
+                    <TextBlock Text="Status: " FontWeight="Bold" />
+                    <TextBlock Text="{local:FormattedBinding Result.Status, FormatString='\{0\}'}"
+                               Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result.Status}"/>
+                    <TextBlock Text=" / " />
+                    <TextBlock Text="{local:FormattedBinding Result.BranchStatus, FormatString='\{0\}'}"
+                               Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result.BranchStatus}"/>
                 </StackPanel>
 
                 <Grid Grid.Row="1" Margin="7,0,0,0"
@@ -45,11 +48,14 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}"
-                                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
-                            <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}'}"/>
-                            <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Status: \{0\}'}"/>
-                            <TextBlock Text="{local:FormattedBinding Result.BranchStatus, FormatString='/\{0\}'}"/>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}, '}"/>
+                            <TextBlock Text="Status: " FontWeight="Bold" />
+                            <TextBlock Text="{local:FormattedBinding Result.Status, FormatString='\{0\}'}"
+                                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result.Status}"/>
+                            <TextBlock Text=" / " />
+                            <TextBlock Text="{local:FormattedBinding Result.BranchStatus, FormatString='\{0\}'}"
+                                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result.BranchStatus}"/>
                         </StackPanel>
                         <TreeView Grid.Row="1" ItemsSource="{Binding Path=Actions}" ItemTemplate="{DynamicResource actionItem}"/>
                     </Grid>
@@ -69,17 +75,20 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Name="txtName" />
+            <ComboBox Name="txtName" IsEditable="True" />
             <Button Grid.Column="1" Name="cmdLoadPlan" Content="Load"
                     Click="cmdLoadPlan_Click" />
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock Text="{Binding Name}"
-                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result}"/>
-            <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}'}"/>
-            <TextBlock Text="{local:FormattedBinding Result.Status, FormatString=', Status: \{0\}'}"/>
-            <TextBlock Text="{local:FormattedBinding Result.BranchStatus, FormatString='/\{0\}'}"/>
+            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+            <TextBlock Text="{local:FormattedBinding Result.PId, FormatString=' --> PId: \{0\}, '}"/>
+            <TextBlock Text="Status: " FontWeight="Bold" />
+            <TextBlock Text="{local:FormattedBinding Result.Status, FormatString='\{0\}'}"
+                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result.Status}"/>
+            <TextBlock Text=" / " />
+            <TextBlock Text="{local:FormattedBinding Result.BranchStatus, FormatString='\{0\}'}"
+                       Background="{Binding Converter={StaticResource resultStatusColorConverter}, Path=Result.BranchStatus}"/>
         </StackPanel>
 
         <TreeView Grid.Row="2" ItemsSource="{Binding Path=Actions}" ItemTemplate="{StaticResource actionItem}" />

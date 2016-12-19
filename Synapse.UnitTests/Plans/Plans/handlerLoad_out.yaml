@@ -1,3 +1,5 @@
+Name: handlerLoad
+Description: Load handlers with full or partial names.  Hierarchy below to enable synchronous execution.
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
@@ -39,11 +41,11 @@ Actions:
             ExitData: empty
           Parameters: {}
           Actions: []
-          InstanceId: 195
-        InstanceId: 194
-      InstanceId: 193
-    InstanceId: 192
-  InstanceId: 191
+          InstanceId: 374
+        InstanceId: 373
+      InstanceId: 372
+    InstanceId: 371
+  InstanceId: 370
 StartInfo: {}
 Result: {}
-InstanceId: 30
+InstanceId: 58

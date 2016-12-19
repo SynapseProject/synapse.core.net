@@ -1,0 +1,144 @@
+Name: planDeclarationFail
+Description: Test missing/partial Plan/Action declaration.
+Actions:
+- Name: ac0
+  Description: Fully formed, correctly structured Action; here for reference
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config:
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+  Result:
+    ExitData: "InstanceId: 340\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\nCNode0: CValue0_inline\r\nCNode1: CValue1_inline\r\nCNode3:\r\n  CNode3_1: CValue3_1_inline\r\n  CNode3_2: CValue3_2_inline\r\n\r\nParameters:\r\nPNode0: PValue0_inline\r\nPNode1: PValue1_inline\r\nPNode3:\r\n  PNode3_1: PValue3_1_inline\r\n  PNode3_2: PValue3_2_inline\r\nPNode2: {}\r\n\r\n"
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+      PNode2: {}
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions: []
+  InstanceId: 340
+- Name: ac1
+  Description: No Parameters declaration
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config:
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+  Result:
+    ExitData: "InstanceId: 341\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\nCNode0: CValue0_inline\r\nCNode1: CValue1_inline\r\nCNode3:\r\n  CNode3_1: CValue3_1_inline\r\n  CNode3_2: CValue3_2_inline\r\n\r\nParameters:\r\n\r\n"
+  Parameters: {}
+  Actions: []
+  InstanceId: 341
+- Name: ac3
+  Description: Has Handler, but no Handler.Config.  No Parameters
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    ExitData: "InstanceId: 342\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\n\r\nParameters:\r\n\r\n"
+  Parameters: {}
+  Actions: []
+  InstanceId: 342
+- Name: ac2
+  Description: No Handler declaration
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    ExitData: "InstanceId: 343\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\n\r\nParameters:\r\nPNode0: PValue0_inline\r\nPNode1: PValue1_inline\r\nPNode3:\r\n  PNode3_1: PValue3_1_inline\r\n  PNode3_2: PValue3_2_inline\r\nPNode2: {}\r\n\r\n"
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+      PNode2: {}
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions: []
+  InstanceId: 343
+- Name: ac4
+  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    ExitData: "InstanceId: 344\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\n\r\nParameters:\r\nPNode0: PValue0_inline\r\nPNode1: PValue1_inline\r\nPNode3:\r\n  PNode3_1: PValue3_1_inline\r\n  PNode3_2: PValue3_2_inline\r\nPNode2: {}\r\n\r\n"
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+      PNode2: {}
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions: []
+  InstanceId: 344
+- Name: ac5
+  Description: No Handler declaration, partially formed Parameters
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    ExitData: "InstanceId: 345\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\n\r\nParameters:\r\nPNode2: {}\r\nPNode3: {}\r\n\r\n"
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode2: {}
+      PNode3: {}
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions: []
+  InstanceId: 345
+- Name: ''
+  Description: No Name, no declaration at all
+  Handler:
+    Type: Synapse.Core.Runtime.EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    ExitData: "InstanceId: 346\r\nIsDryRun: True\r\nRequestUser: \r\nRequestNumber: \r\nParentExitData: \r\nConfig:\r\n\r\nParameters:\r\n\r\n"
+  Parameters: {}
+  Actions: []
+  InstanceId: 346
+StartInfo: {}
+Result: {}
+InstanceId: 54

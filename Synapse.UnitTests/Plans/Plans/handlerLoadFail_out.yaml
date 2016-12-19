@@ -1,3 +1,5 @@
+Name: handlerLoadFail
+Description: Tests failure to successfully resolve/load a handler
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
@@ -51,13 +53,13 @@ Actions:
             ExitData: Could not load file or assembly 'Synapse.CoreFoo' or one of its dependencies. The system cannot find the file specified.
           Parameters: {}
           Actions: []
-          InstanceId: 200
-        InstanceId: 199
-      InstanceId: 198
-    InstanceId: 197
-  InstanceId: 196
+          InstanceId: 379
+        InstanceId: 378
+      InstanceId: 377
+    InstanceId: 376
+  InstanceId: 375
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-InstanceId: 31
+InstanceId: 59

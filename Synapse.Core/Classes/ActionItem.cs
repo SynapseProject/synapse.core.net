@@ -23,6 +23,8 @@ namespace Synapse.Core
         }
 
         public string Name { get; set; }
+        public string Description { get; set; }
+
         public string Proxy { get; set; }
         public StatusType ExecuteCase { get; set; }
 
@@ -60,6 +62,7 @@ namespace Synapse.Core
             ActionItem a = new ActionItem()
             {
                 Name = Name,    // + $"_{DateTime.Now.Ticks}",
+                Description = Description,
                 Proxy = Proxy,
                 ExecuteCase = ExecuteCase,
                 Handler = Handler.Clone(),

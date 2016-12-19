@@ -1,3 +1,5 @@
+Name: executeCase
+Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
 Actions:
 - Name: ac0
   Handler:
@@ -38,7 +40,7 @@ Actions:
         Values:
           ReturnStatus: Initializing
       Actions: []
-      InstanceId: 183
+      InstanceId: 363
     - Name: ac0.g
       ExecuteCase: Any
       Handler:
@@ -64,7 +66,7 @@ Actions:
           Values:
             ReturnStatus: Failed
         Actions: []
-        InstanceId: 185
+        InstanceId: 365
       - Name: ac0.g.1
         ExecuteCase: Complete
         Handler:
@@ -78,8 +80,8 @@ Actions:
           Values:
             ReturnStatus: Waiting
         Actions: []
-        InstanceId: 186
-      InstanceId: 184
+        InstanceId: 366
+      InstanceId: 364
   Actions:
   - Name: ac0.1
     ExecuteCase: Complete
@@ -116,10 +118,10 @@ Actions:
           Values:
             ReturnStatus: CompletedWithErrors
         Actions: []
-        InstanceId: 189
-      InstanceId: 188
-    InstanceId: 187
-  InstanceId: 182
+        InstanceId: 369
+      InstanceId: 368
+    InstanceId: 367
+  InstanceId: 361
 - Name: ac2
   Handler:
     Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -132,9 +134,9 @@ Actions:
     Values:
       ReturnStatus: CompletedWithErrors
   Actions: []
-  InstanceId: 190
+  InstanceId: 362
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-InstanceId: 29
+InstanceId: 57

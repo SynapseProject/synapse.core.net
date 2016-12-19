@@ -94,6 +94,8 @@ namespace Synapse.Core
             CreateInstance();
 
             ResultPlan = new Plan();
+            ResultPlan.Name = Name;
+            ResultPlan.Description = Description;
             ResultPlan.InstanceId = InstanceId;
             ResultPlan.Result = new ExecuteResult();
 

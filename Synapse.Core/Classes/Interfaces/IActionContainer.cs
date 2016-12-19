@@ -5,6 +5,9 @@ namespace Synapse.Core
 {
     public interface IActionContainer
     {
+        string Name { get; set; }
+        string Description { get; set; }
+
         ActionItem ActionGroup { get; set; }
         List<ActionItem> Actions { get; set; }
         //bool IsAction { get; }
