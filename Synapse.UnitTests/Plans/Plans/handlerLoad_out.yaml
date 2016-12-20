@@ -3,49 +3,49 @@ Description: Load handlers with full or partial names.  Hierarchy below to enabl
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
-    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Config: {}
   Result:
-    ExitData: empty
+    ExitData: EmptyHandler ExitData default value.
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
       Config: {}
     Result:
-      ExitData: empty
+      ExitData: EmptyHandler ExitData default value.
     Parameters: {}
     Actions:
     - Name: SimpleClassName
       Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config: {}
       Result:
-        ExitData: empty
+        ExitData: EmptyHandler ExitData default value.
       Parameters: {}
       Actions:
       - Name: AbbreviatedClassName
         Handler:
-          Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
           Config: {}
         Result:
-          ExitData: empty
+          ExitData: EmptyHandler ExitData default value.
         Parameters: {}
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
           Handler:
-            Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+            Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
             Config: {}
           Result:
-            ExitData: empty
+            ExitData: EmptyHandler ExitData default value.
           Parameters: {}
           Actions: []
-          InstanceId: 374
-        InstanceId: 373
-      InstanceId: 372
-    InstanceId: 371
-  InstanceId: 370
+          InstanceId: 984
+        InstanceId: 983
+      InstanceId: 982
+    InstanceId: 981
+  InstanceId: 980
 StartInfo: {}
 Result: {}
-InstanceId: 58
+InstanceId: 148

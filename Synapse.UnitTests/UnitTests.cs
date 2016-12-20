@@ -264,7 +264,7 @@ namespace Synapse.UnitTests
             else
             {
                 //otherwise, they should all be the fully qualified assm name for EmptyHandler
-                string expectedType = typeof( Synapse.Core.Runtime.EmptyHandler ).AssemblyQualifiedName;
+                string expectedType = typeof( Synapse.Handlers.EmptyHandler ).AssemblyQualifiedName;
                 Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Handler.Type );
                 Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Handler.Type );
                 Assert.AreEqual( expectedType, plan.ResultPlan.Actions[0].Actions[0].Actions[0].Handler.Type );

@@ -1,7 +1,7 @@
 Actions:
 - Name: ac0
   Handler:
-    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Config: {}
   Result:
     Status: New
@@ -14,7 +14,7 @@ Actions:
     Name: ac0.g
     ExecuteCase: Any
     Handler:
-      Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Result:
       Status: Running
       ExitData: empty
@@ -26,7 +26,7 @@ Actions:
     - Name: ac0.g.1
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config: {}
       Result:
         Status: Waiting
@@ -40,7 +40,7 @@ Actions:
     - Name: ac0.g.0
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config: {}
       Result:
         Status: Failed
@@ -56,7 +56,7 @@ Actions:
   - Name: ac0.1
     ExecuteCase: Any
     Handler:
-      Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
       Config: {}
     Result:
       ExitData: empty
@@ -65,7 +65,7 @@ Actions:
     Actions:
     - Name: ac0.1.1
       Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config: {}
       Result:
         Status: Cancelled
@@ -79,7 +79,7 @@ Actions:
     - Name: ac0.1.3
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config: {}
       Result:
         Status: Complete
@@ -93,7 +93,7 @@ Actions:
     - Name: ac0.1.2
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config: {}
       Result:
         Status: Initializing
@@ -108,7 +108,7 @@ Actions:
   InstanceId: 178
 - Name: ac2
   Handler:
-    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Config: {}
   Result:
     Status: CompletedWithErrors
@@ -122,7 +122,7 @@ Actions:
 - Name: ac1
   ExecuteCase: Any
   Handler:
-    Type: Synapse.Core.Runtime.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Config: {}
   Result:
     Status: Cancelling

@@ -80,6 +80,9 @@
     <Compile Include="Classes\Enums\SerializationType.cs" />
     <Compile Include="Classes\HandlerInfo.cs" />
     <Compile Include="Classes\Plan.cs" />
+    <Compile Include="Handlers\UriHandler.cs" />
+    <Compile Include="Handlers\FooBarHandler.cs" />
+    <Compile Include="Handlers\EchoHandler.cs" />
     <Compile Include="Runtime\ActionItem.cs" />
     <Compile Include="Utilities\AssemblyLoader.cs" />
     <Compile Include="Utilities\XmlHelpers.cs" />
@@ -87,7 +90,7 @@
     <Compile Include="Dal\PlanInstance.cs" />
     <Compile Include="Dal\SynapseDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Runtime\EmptyHandler.cs" />
+    <Compile Include="Handlers\EmptyHandler.cs" />
     <Compile Include="Runtime\ParameterInfoRuntime.cs" />
     <Compile Include="Runtime\PlanRuntime.cs" />
     <Compile Include="Runtime\PlanTaskScheduler.cs" />

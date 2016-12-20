@@ -1,6 +1,6 @@
 Name: statusPropagation_forEach_actionGroup
 Description: Tests ExecuteResult.Status propagation from an ActionGroup, within a ForEach
-DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+DefaultHandlerType: Synapse.Core:Synapse.Handlers.EmptyHandler
 Actions:
 - Name: ac0
   Parameters:

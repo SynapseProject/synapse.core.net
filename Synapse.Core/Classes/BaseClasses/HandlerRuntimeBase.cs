@@ -1,4 +1,5 @@
 ﻿using System;
+using Synapse.Core.Utilities;
 
 namespace Synapse.Core
 {
@@ -14,6 +15,35 @@ namespace Synapse.Core
         public virtual IHandlerRuntime Initialize(string config)
         {
             return this;
+        }
+
+        /// <summary>
+        /// Tries to desrialize parameters first as YAML/JSON, then tries XML.
+        /// </summary>
+        /// <typeparam name="T">The class type for deserialization.</typeparam>
+        /// <param name="parameters">The string to deserialize.</param>
+        /// <returns>Deserialized class or default( T ).</returns>
+        public virtual T DeserializeOrNew<T>(string parameters) where T : class, new()
+        {
+            T parms = null;
+
+            try
+            {
+                parms = YamlHelpers.Deserialize<T>( parameters );
+            }
+            catch
+            {
+                try
+                {
+                    parms = XmlHelpers.Deserialize<T>( parameters );
+                }
+                catch
+                {
+                    parms = new T();
+                }
+            }
+
+            return parms;
         }
 
         public event EventHandler<HandlerProgressCancelEventArgs> Progress;

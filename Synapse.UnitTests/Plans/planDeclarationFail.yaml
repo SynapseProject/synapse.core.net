@@ -1,11 +1,11 @@
 ﻿Name: planDeclarationFail
 Description: Test missing/partial Plan/Action declaration.
-DefaultHandlerType: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+DefaultHandlerType: Synapse.Core:Synapse.Handlers.EchoHandler
 Actions:
 - Name: ac0
   Description: Fully formed, correctly structured Action; here for reference
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Type: Synapse.Core:Synapse.Handlers.EchoHandler
     Config:
       Type: Yaml
       Values:
@@ -33,7 +33,7 @@ Actions:
 - Name: ac1
   Description: No Parameters declaration
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Type: Synapse.Core:Synapse.Handlers.EchoHandler
     Config:
       Type: Yaml
       Values:
@@ -63,11 +63,11 @@ Actions:
 - Name: ac3
   Description: Has Handler, but no Handler.Config.  No Parameters
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Type: Synapse.Core:Synapse.Handlers.EchoHandler
 - Name: ac4
   Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Type: Synapse.Core:Synapse.Handlers.EchoHandler
   Parameters:
     Name: myYamlParms
     Type: Yaml

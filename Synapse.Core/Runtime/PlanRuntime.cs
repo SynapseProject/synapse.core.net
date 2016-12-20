@@ -529,7 +529,7 @@ namespace Synapse.Core
             if( cancel )
             {
                 _wantsCancel = true;
-                return new Runtime.EmptyHandler();
+                return new Handlers.EmptyHandler();
             }
 
             IHandlerRuntime hr = AssemblyLoader.Load( handler.Type, DefaultHandlerType );
