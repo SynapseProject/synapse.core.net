@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Synapse.Core.Utilities;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -34,38 +35,33 @@ namespace Synapse.Core
         [YamlIgnore()]
         public bool HasException { get { return Exception != null; } }
 
-        public string SerializeSimple()
+
+        public string SerializeSimple(bool asYaml = false)
         {
-            //return $"ActionName: {ActionName}|Context: {Context}|Message: {Message}|Status: {Status}|Id: {Id}|Sequence: {Sequence}|Cancel: {Cancel}";
-            string str = null;
-            using( StringWriter sw = new StringWriter() )
-            {
-                ToYaml( sw );
-                str = sw.ToString(); //.Replace( "\r\n", "|" );
-            }
-            return str; //.TrimEnd( '|' );
+            return asYaml ? ToYaml() : ToSingleLine();
         }
 
-        public static HandlerProgressCancelEventArgs DeserializeSimple(string s)
+        public static HandlerProgressCancelEventArgs DeserializeSimple(string s, bool asYaml = false)
         {
-            HandlerProgressCancelEventArgs hpcev = null;
-            //s = s.Replace( "|", "\r\n" );
-            using( StringReader sr = new StringReader( s ) )
-                hpcev = FromYaml( sr );
+            HandlerProgressCancelEventArgs hpcev = FromYaml( s );
             return hpcev;
         }
 
 
-        public void ToYaml(TextWriter tw)
+        public string ToSingleLine()
         {
-            Serializer serializer = new Serializer();
-            serializer.Serialize( tw, this );
+            string exception = HasException ? $"|Exception: {Exception.Message}" : null;
+            return $"ActionName: {ActionName}|Context: {Context}|Message: {Message}|Status: {Status}|Id: {Id}|Sequence: {Sequence}|Cancel: {Cancel}{exception}";
         }
 
-        public static HandlerProgressCancelEventArgs FromYaml(TextReader reader)
+        public string ToYaml()
         {
-            Deserializer deserializer = new Deserializer();
-            return deserializer.Deserialize<HandlerProgressCancelEventArgs>( reader );
+            return YamlHelpers.Serialize( this );
+        }
+
+        public static HandlerProgressCancelEventArgs FromYaml(string s)
+        {
+            return YamlHelpers.Deserialize<HandlerProgressCancelEventArgs>( s );
         }
     }
 }

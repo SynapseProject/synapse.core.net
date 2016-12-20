@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Synapse.Core.Utilities;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -26,39 +27,32 @@ namespace Synapse.Core
         [YamlIgnore()]
         public bool HasException { get { return Exception != null; } }
 
-        public string SerializeSimple()
-        {
-            //return $"ActionName: {ActionName}|Context: {Context}|Message: {Message}|Status: {Status}|Id: {Id}|Sequence: {Sequence}|Cancel: {Cancel}";
-            string str = null;
-            using( StringWriter sw = new StringWriter() )
-            {
-                ToYaml( sw );
-                str = sw.ToString(); //.Replace( "\r\n", "|" );
-            }
-            return str; //.TrimEnd( '|' );
 
-            //return ToXml();
+        public string SerializeSimple(bool asYaml = false)
+        {
+            return asYaml ? ToYaml() : ToSingleLine();
         }
 
-        public static LogMessageEventArgs DeserializeSimple(string s)
+        public static LogMessageEventArgs DeserializeSimple(string s, bool asYaml = false)
         {
-            LogMessageEventArgs args = null;
-            //s = s.Replace( "|", "\r\n" );
-            using( StringReader sr = new StringReader( s ) )
-                args = FromYaml( sr );
+            LogMessageEventArgs args = FromYaml( s );
             return args;
         }
 
-        public void ToYaml(TextWriter tw)
+        public string ToSingleLine()
         {
-            Serializer serializer = new Serializer();
-            serializer.Serialize( tw, this );
+            string exception = HasException ? $"|Exception: {Exception.Message}" : null;
+            return $"ActionName: {ActionName}|Context: {Context}|Message: {Message}|LogLevel: {Level}{exception}";
         }
 
-        public static LogMessageEventArgs FromYaml(TextReader reader)
+        public string ToYaml()
         {
-            Deserializer deserializer = new Deserializer();
-            return deserializer.Deserialize<LogMessageEventArgs>( reader );
+            return YamlHelpers.Serialize( this );
+        }
+
+        public static LogMessageEventArgs FromYaml(string s)
+        {
+            return YamlHelpers.Deserialize<LogMessageEventArgs>( s );
         }
     }
 }

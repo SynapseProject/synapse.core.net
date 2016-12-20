@@ -357,7 +357,7 @@ namespace Synapse.Core
 
             p.WaitForExit();
 
-            result.Status = (StatusType)p.ExitCode;
+            result.BranchStatus = result.Status = (StatusType)p.ExitCode;
             return result;
         }
 
@@ -368,14 +368,14 @@ namespace Synapse.Core
                 string data = CryptoHelpers.Decode( e.Data );
                 try
                 {
-                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data );
+                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data, true );
                     OnProgress( args );
                 }
                 catch
                 {
                     try
                     {
-                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( data );
+                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( data, true );
                         OnLogMessage( args );
                     }
                     catch
@@ -393,14 +393,14 @@ namespace Synapse.Core
                 string data = CryptoHelpers.Decode( e.Data );
                 try
                 {
-                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data );
+                    HandlerProgressCancelEventArgs args = HandlerProgressCancelEventArgs.DeserializeSimple( data, true );
                     OnProgress( args );
                 }
                 catch
                 {
                     try
                     {
-                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( data );
+                        LogMessageEventArgs args = LogMessageEventArgs.DeserializeSimple( data, true );
                         OnLogMessage( args );
                     }
                     catch

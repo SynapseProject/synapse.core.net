@@ -74,7 +74,7 @@ namespace Synapse.cli
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
-            string msg = e.SerializeSimple();
+            string msg = e.SerializeSimple( _isSingleTaskModel );
             if( _isSingleTaskModel )
                 msg = CryptoHelpers.Encode( msg );
             Console.WriteLine( msg );
@@ -82,7 +82,7 @@ namespace Synapse.cli
 
         private static void plan_LogMessage(object sender, LogMessageEventArgs e)
         {
-            string msg = e.SerializeSimple();
+            string msg = e.SerializeSimple( _isSingleTaskModel );
             if( _isSingleTaskModel )
                 msg = CryptoHelpers.Encode( msg );
             Console.WriteLine( msg );
@@ -100,15 +100,9 @@ namespace Synapse.cli
             {
                 ConsoleColor defaultColor = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine( ex.Message );
                 if( ex.HResult == -2146233052 )
-                {
-                    Console.WriteLine( ex.Message );
                     Console.WriteLine( "Ensure the x86/x64 Sqlite folders are included with the distribution." );
-                }
-                else
-                {
-                    Console.WriteLine( ex.Message );
-                }
                 Console.ForegroundColor = defaultColor;
                 Environment.Exit( 99 );
             }
