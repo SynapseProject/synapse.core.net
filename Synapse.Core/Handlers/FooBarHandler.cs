@@ -20,7 +20,7 @@ namespace Synapse.Handlers
             }
             catch { }
 
-            string x = startInfo.ParentExitData;
+            string x = startInfo.ParentExitData.ToString();
 
             System.Threading.Thread.Sleep( 500 );
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
@@ -60,7 +60,7 @@ namespace Synapse.Handlers
         {
             int seq = 1;
 
-            string x = startInfo.ParentExitData;
+            string x = startInfo.ParentExitData.ToString();
 
             System.Threading.Thread.Sleep( 500 );
             StatusType st = StatusType.Complete;

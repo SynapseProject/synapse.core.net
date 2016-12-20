@@ -22,10 +22,10 @@ namespace Synapse.Handlers
             ExecuteResult result = new ExecuteResult()
             {
                 Status = StatusType.Complete,
-                ExitData = r.ToString()
+                ExitData = r
             };
 
-            OnProgress( "Execute", result.ExitData, result.Status, startInfo.InstanceId, Int32.MaxValue );
+            OnProgress( "Execute", result.ExitData.ToString(), result.Status, startInfo.InstanceId, Int32.MaxValue );
 
             return result;
         }

@@ -22,6 +22,6 @@ namespace Synapse.Core
 
         public string Parameters { get; internal set; }
 
-        public string ParentExitData { get; internal set; }
+        public object ParentExitData { get; internal set; }
     }
 }

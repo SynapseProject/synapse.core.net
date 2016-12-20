@@ -24,7 +24,7 @@ namespace Synapse.Handlers
             catch( Exception ex )
             {
                 result.Status = StatusType.Failed;
-                msg = result.ExitData = ex.Message;
+                result.ExitData = msg = ex.Message;
                 exception = ex;
             }
 

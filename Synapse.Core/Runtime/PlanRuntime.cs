@@ -115,7 +115,7 @@ namespace Synapse.Core
         void ProcessRecursive(IActionContainer parentContext, SecurityContext parentSecurityContext,
             ActionItem actionGroup, List<ActionItem> actions, ExecuteResult parentResult,
             Dictionary<string, string> dynamicData, bool dryRun,
-            Func<SecurityContext, ActionItem, Dictionary<string, string>, string, bool, ExecuteResult> executeHandlerMethod)
+            Func<SecurityContext, ActionItem, Dictionary<string, string>, object, bool, ExecuteResult> executeHandlerMethod)
         {
             if( WantsStopOrPause() )
                 return;
@@ -232,7 +232,7 @@ namespace Synapse.Core
 
         #region InProc
         ExecuteResult ExecuteHandlerProcessInProc(SecurityContext parentSecurityContext, ActionItem a,
-            Dictionary<string, string> dynamicData, string parentExitData, bool dryRun = false)
+            Dictionary<string, string> dynamicData, object parentExitData, bool dryRun = false)
         {
             try
             {
@@ -272,7 +272,7 @@ namespace Synapse.Core
 
         #region External
         ExecuteResult ExecuteHandlerProcessExternal(SecurityContext parentSecurityContext, ActionItem a,
-            Dictionary<string, string> dynamicData, string parentExitData, bool dryRun = false)
+            Dictionary<string, string> dynamicData, object parentExitData, bool dryRun = false)
         {
             if( !WantsStopOrPause() )
             {

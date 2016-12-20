@@ -13,7 +13,7 @@ namespace Synapse.Core
 
         public int PId { get; set; }
         public StatusType Status { get; set; }
-        public string ExitData { get; set; }
+        public object ExitData { get; set; }
         public StatusType BranchStatus { get; set; }
 
         public void SetBranchStatusChecked(ExecuteResult compareResult)

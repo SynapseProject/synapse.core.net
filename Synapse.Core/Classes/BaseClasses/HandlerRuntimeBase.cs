@@ -18,11 +18,11 @@ namespace Synapse.Core
         }
 
         /// <summary>
-        /// Tries to desrialize parameters first as YAML/JSON, then tries XML.
+        /// Tries to desrialize parameters first as YAML/JSON, then tries XML.  Returns deserialized class or new T().
         /// </summary>
         /// <typeparam name="T">The class type for deserialization.</typeparam>
         /// <param name="parameters">The string to deserialize.</param>
-        /// <returns>Deserialized class or default( T ).</returns>
+        /// <returns>Deserialized class or new T().</returns>
         public virtual T DeserializeOrNew<T>(string parameters) where T : class, new()
         {
             T parms = null;
@@ -40,6 +40,35 @@ namespace Synapse.Core
                 catch
                 {
                     parms = new T();
+                }
+            }
+
+            return parms;
+        }
+
+        /// <summary>
+        /// Tries to desrialize parameters first as YAML/JSON, then tries XML.  Returns deserialized class or default( T ).
+        /// </summary>
+        /// <typeparam name="T">The class type for deserialization.</typeparam>
+        /// <param name="parameters">The string to deserialize.</param>
+        /// <returns>Deserialized class or default( T ).</returns>
+        public virtual T DeserializeOrDefault<T>(string parameters) where T : class
+        {
+            T parms = null;
+
+            try
+            {
+                parms = YamlHelpers.Deserialize<T>( parameters );
+            }
+            catch
+            {
+                try
+                {
+                    parms = XmlHelpers.Deserialize<T>( parameters );
+                }
+                catch
+                {
+                    parms = default( T );
                 }
             }
 

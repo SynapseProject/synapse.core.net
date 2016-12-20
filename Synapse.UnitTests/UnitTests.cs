@@ -366,6 +366,7 @@ namespace Synapse.UnitTests
             // Assert
             //essentially, if this test doesn't crash it's a success, but:
             //todo: these are pretty lame test conditions, need to improve.
+            File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
             Assert.IsNotNull( plan.ResultPlan );
             Assert.AreEqual( 7, plan.ResultPlan.Actions.Count );
         }
