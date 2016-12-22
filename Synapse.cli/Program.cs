@@ -35,9 +35,7 @@ namespace Synapse.cli
             {
                 ExecuteResult result = null;
 
-                Plan plan = null;
-                using( StringReader reader = new StringReader( a.Plan ) )
-                    plan = Plan.FromYaml( reader );
+                Plan plan = YamlHelpers.Deserialize<Plan>( a.Plan );
                 plan.Progress += plan_Progress;
                 plan.LogMessage += plan_LogMessage;
 
@@ -57,6 +55,7 @@ namespace Synapse.cli
                     }
                     case TaskModel.Single:
                     {
+                        Console.WriteLine(a.Plan);
                         _isSingleTaskModel = true;
                         result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.Data, a.DryRun );
                         break;
