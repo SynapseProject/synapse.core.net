@@ -8,7 +8,7 @@ namespace Synapse.Core.Utilities
 {
     public class YamlHelpers
     {
-        public static string Serialize(object data)
+        public static string Serialize(object data, bool serializeAsJson = false)
         {
             string result = null;
 
@@ -16,16 +16,29 @@ namespace Synapse.Core.Utilities
                 using( StringWriter writer = new StringWriter() )
                 {
                     Serializer serializer = new Serializer();
+                    if( serializeAsJson )
+                    {
+                        SerializerBuilder builder = new SerializerBuilder();
+                        builder.JsonCompatible();
+                        serializer = builder.Build();
+                    }
+
                     serializer.Serialize( writer, data );
-                    result = writer.ToString();
+                    result = serializeAsJson ? JsonHelpers.FormatJson( writer.ToString() ) : writer.ToString();
                 }
 
             return result;
         }
 
-        public static void Serialize(TextWriter tw, object data)
+        public static void Serialize(TextWriter tw, object data, bool serializeAsJson = false)
         {
             Serializer serializer = new Serializer();
+            if( serializeAsJson )
+            {
+                SerializerBuilder builder = new SerializerBuilder();
+                builder.JsonCompatible();
+                serializer = builder.Build();
+            }
             serializer.Serialize( tw, data );
         }
 

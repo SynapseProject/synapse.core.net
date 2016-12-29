@@ -85,6 +85,7 @@
     <Compile Include="Handlers\EchoHandler.cs" />
     <Compile Include="Runtime\ActionItem.cs" />
     <Compile Include="Utilities\AssemblyLoader.cs" />
+    <Compile Include="Utilities\JsonHelpers.cs" />
     <Compile Include="Utilities\XmlHelpers.cs" />
     <Compile Include="Dal\ActionInstance.cs" />
     <Compile Include="Dal\PlanInstance.cs" />

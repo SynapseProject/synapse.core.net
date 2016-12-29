@@ -44,9 +44,13 @@ namespace Synapse.Core
             switch( Type )
             {
                 case SerializationType.Yaml:
-                case SerializationType.Json:
                 {
                     v = Utilities.YamlHelpers.Serialize( Values );
+                    break;
+                }
+                case SerializationType.Json:
+                {
+                    v = Utilities.YamlHelpers.Serialize( Values, serializeAsJson: true );
                     break;
                 }
                 case SerializationType.Xml:

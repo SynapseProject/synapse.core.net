@@ -1,6 +1,19 @@
 Name: executeCase
 Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
 Actions:
+- Name: ac2
+  Handler:
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+  Result:
+    Status: CompletedWithErrors
+    ExitData: EmptyHandler ExitData default value.
+    BranchStatus: CompletedWithErrors
+  Parameters:
+    Values:
+      ReturnStatus: CompletedWithErrors
+  Actions: []
+  InstanceId: 1651
 - Name: ac0
   Handler:
     Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -40,20 +53,6 @@ Actions:
         Values:
           ReturnStatus: Complete
       Actions:
-      - Name: ac0.g.0
-        ExecuteCase: Complete
-        Handler:
-          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-          Config: {}
-        Result:
-          Status: Failed
-          ExitData: EmptyHandler ExitData default value.
-          BranchStatus: Failed
-        Parameters:
-          Values:
-            ReturnStatus: Failed
-        Actions: []
-        InstanceId: 1155
       - Name: ac0.g.1
         ExecuteCase: Complete
         Handler:
@@ -67,8 +66,22 @@ Actions:
           Values:
             ReturnStatus: Waiting
         Actions: []
-        InstanceId: 1157
-      InstanceId: 1154
+        InstanceId: 1654
+      - Name: ac0.g.0
+        ExecuteCase: Complete
+        Handler:
+          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+          Config: {}
+        Result:
+          Status: Failed
+          ExitData: EmptyHandler ExitData default value.
+          BranchStatus: Failed
+        Parameters:
+          Values:
+            ReturnStatus: Failed
+        Actions: []
+        InstanceId: 1655
+      InstanceId: 1653
     - Name: ac0.g
       ExecuteCase: Any
       Handler:
@@ -81,7 +94,7 @@ Actions:
         Values:
           ReturnStatus: Initializing
       Actions: []
-      InstanceId: 1156
+      InstanceId: 1656
   Actions:
   - Name: ac0.1
     ExecuteCase: Complete
@@ -118,25 +131,12 @@ Actions:
           Values:
             ReturnStatus: CompletedWithErrors
         Actions: []
-        InstanceId: 1161
-      InstanceId: 1160
-    InstanceId: 1159
-  InstanceId: 1153
-- Name: ac2
-  Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-    Config: {}
-  Result:
-    Status: CompletedWithErrors
-    ExitData: EmptyHandler ExitData default value.
-    BranchStatus: CompletedWithErrors
-  Parameters:
-    Values:
-      ReturnStatus: CompletedWithErrors
-  Actions: []
-  InstanceId: 1158
+        InstanceId: 1659
+      InstanceId: 1658
+    InstanceId: 1657
+  InstanceId: 1652
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-InstanceId: 174
+InstanceId: 260
