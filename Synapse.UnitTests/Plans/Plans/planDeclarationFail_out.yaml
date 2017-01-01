@@ -1,24 +1,10 @@
 Name: planDeclarationFail
 Description: Test missing/partial Plan/Action declaration.
 Actions:
-- Name: ac3
-  Description: Has Handler, but no Handler.Config.  No Parameters
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-  Result:
-    Status: Complete
-    ExitData:
-      InstanceId: 2012
-      IsDryRun: true
-    BranchStatus: Complete
-  Parameters: {}
-  Actions: []
-  InstanceId: 2012
 - Name: ac0
   Description: Fully formed, correctly structured Action; here for reference
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config:
       Values:
         CNode0: CValue0_inline
@@ -40,7 +26,7 @@ Actions:
 
           CNode3_2: CValue3_2_inline
 
-      InstanceId: 2013
+      InstanceId: 2150
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -73,16 +59,100 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
   Actions: []
-  InstanceId: 2013
-- Name: ac5
-  Description: No Handler declaration, partially formed Parameters
+  InstanceId: 2150
+- Name: ac4
+  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
     Status: Complete
     ExitData:
-      InstanceId: 2014
+      InstanceId: 2151
+      IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+        PNode2: {}
+
+    BranchStatus: Complete
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+      PNode2: {}
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions: []
+  InstanceId: 2151
+- Name: ac2
+  Description: No Handler declaration
+  Handler:
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+  Result:
+    Status: Complete
+    ExitData:
+      InstanceId: 2152
+      IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+        PNode2: {}
+
+    BranchStatus: Complete
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+      PNode2: {}
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions: []
+  InstanceId: 2152
+- Name: ac5
+  Description: No Handler declaration, partially formed Parameters
+  Handler:
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+  Result:
+    Status: Complete
+    ExitData:
+      InstanceId: 2153
       IsDryRun: true
       Parameters: >+
         PNode2: {}
@@ -103,109 +173,11 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
   Actions: []
-  InstanceId: 2014
-- Name: ''
-  Description: No Name, no declaration at all
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-  Result:
-    Status: Complete
-    ExitData:
-      InstanceId: 2015
-      IsDryRun: true
-    BranchStatus: Complete
-  Parameters: {}
-  Actions: []
-  InstanceId: 2015
-- Name: ac2
-  Description: No Handler declaration
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-  Result:
-    Status: Complete
-    ExitData:
-      InstanceId: 2016
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-        PNode2: {}
-
-    BranchStatus: Complete
-  Parameters:
-    Name: myYamlParms
-    Values:
-      PNode0: PValue0_inline
-      PNode1: PValue1_inline
-      PNode3:
-        PNode3_1: PValue3_1_inline
-        PNode3_2: PValue3_2_inline
-      PNode2: {}
-    Dynamic:
-    - Name: pnode0Dynamic
-      Path: PNode0
-    - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
-  Actions: []
-  InstanceId: 2016
-- Name: ac4
-  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-  Result:
-    Status: Complete
-    ExitData:
-      InstanceId: 2017
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-        PNode2: {}
-
-    BranchStatus: Complete
-  Parameters:
-    Name: myYamlParms
-    Values:
-      PNode0: PValue0_inline
-      PNode1: PValue1_inline
-      PNode3:
-        PNode3_1: PValue3_1_inline
-        PNode3_2: PValue3_2_inline
-      PNode2: {}
-    Dynamic:
-    - Name: pnode0Dynamic
-      Path: PNode0
-    - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
-  Actions: []
-  InstanceId: 2017
+  InstanceId: 2153
 - Name: ac1
   Description: No Parameters declaration
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config:
       Values:
         CNode0: CValue0_inline
@@ -227,14 +199,42 @@ Actions:
 
           CNode3_2: CValue3_2_inline
 
-      InstanceId: 2018
+      InstanceId: 2154
       IsDryRun: true
     BranchStatus: Complete
   Parameters: {}
   Actions: []
-  InstanceId: 2018
+  InstanceId: 2154
+- Name: ac3
+  Description: Has Handler, but no Handler.Config.  No Parameters
+  Handler:
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+  Result:
+    Status: Complete
+    ExitData:
+      InstanceId: 2155
+      IsDryRun: true
+    BranchStatus: Complete
+  Parameters: {}
+  Actions: []
+  InstanceId: 2155
+- Name: ''
+  Description: No Name, no declaration at all
+  Handler:
+    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+  Result:
+    Status: Complete
+    ExitData:
+      InstanceId: 2156
+      IsDryRun: true
+    BranchStatus: Complete
+  Parameters: {}
+  Actions: []
+  InstanceId: 2156
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-InstanceId: 315
+InstanceId: 335

@@ -3,7 +3,7 @@ Description: Load handlers with full or partial names.  Hierarchy below to enabl
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
     ExitData: EmptyHandler ExitData default value.
@@ -12,7 +12,7 @@ Actions:
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
     Result:
       ExitData: EmptyHandler ExitData default value.
@@ -28,11 +28,11 @@ Actions:
         ExitData: Could not load EmptyHandler.
       Parameters: {}
       Actions: []
-      InstanceId: 1940
-    InstanceId: 1939
-  InstanceId: 1938
+      InstanceId: 2078
+    InstanceId: 2077
+  InstanceId: 2076
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-InstanceId: 301
+InstanceId: 321
