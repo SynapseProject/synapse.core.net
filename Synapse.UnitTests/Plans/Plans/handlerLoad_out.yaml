@@ -3,49 +3,36 @@ Description: Load handlers with full or partial names.  Hierarchy below to enabl
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
     ExitData: EmptyHandler ExitData default value.
+    BranchStatus: Failed
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.2, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
     Result:
       ExitData: EmptyHandler ExitData default value.
+      BranchStatus: Failed
     Parameters: {}
     Actions:
     - Name: SimpleClassName
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+        Type: EmptyHandler
         Config: {}
       Result:
-        ExitData: EmptyHandler ExitData default value.
+        Status: Failed
+        ExitData: Could not load EmptyHandler.
       Parameters: {}
-      Actions:
-      - Name: AbbreviatedClassName
-        Handler:
-          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-          Config: {}
-        Result:
-          ExitData: EmptyHandler ExitData default value.
-        Parameters: {}
-        Actions:
-        - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
-          Handler:
-            Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-            Config: {}
-          Result:
-            ExitData: EmptyHandler ExitData default value.
-          Parameters: {}
-          Actions: []
-          InstanceId: 1664
-        InstanceId: 1663
-      InstanceId: 1662
-    InstanceId: 1661
-  InstanceId: 1660
+      Actions: []
+      InstanceId: 1940
+    InstanceId: 1939
+  InstanceId: 1938
 StartInfo: {}
-Result: {}
-InstanceId: 261
+Result:
+  Status: Failed
+  BranchStatus: Failed
+InstanceId: 301
