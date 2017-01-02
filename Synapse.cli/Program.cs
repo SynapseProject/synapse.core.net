@@ -55,7 +55,7 @@ namespace Synapse.cli
                     }
                     case TaskModel.Single:
                     {
-                        Console.WriteLine(a.Plan);
+                        Console.WriteLine( a.Plan );
                         _isSingleTaskModel = true;
                         result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.Data, a.DryRun );
                         break;
@@ -63,8 +63,21 @@ namespace Synapse.cli
                 }
                 exitCode = (int)result.Status;
                 //exitCode = (int)plan.Result.Status;
-                if( a.TaskModel != TaskModel.Single )
-                    File.WriteAllText( $"{plan.Name}.result.yml", plan.ResultPlan.ToYaml() );
+                if( a.TaskModel != TaskModel.Single && !string.IsNullOrWhiteSpace( a.ResultPlan ) )
+                {
+                    bool isTrue = false;
+                    isTrue = Boolean.TryParse( a.ResultPlan, out isTrue );
+                    if( isTrue )
+                    {
+                        string extension = new FileInfo( a.PlanFilePath ).Extension;
+                        string resultFile = a.PlanFilePath.Replace( extension, $".result{extension}" );
+                        File.WriteAllText( resultFile, plan.ResultPlan.ToYaml() );
+                    }
+                    else
+                    {
+                        File.WriteAllText( a.ResultPlan, plan.ResultPlan.ToYaml() );
+                    }
+                }
             }
 
             //Console.WriteLine( $"exitCode:{exitCode}" );
@@ -118,10 +131,13 @@ namespace Synapse.cli
 
             Console_WriteLine( $"synapse.cli.exe, Version: {typeof( Program ).Assembly.GetName().Version}\r\n", ConsoleColor.Green );
             Console.WriteLine( "Syntax:" );
-            Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1} [/dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
+            Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1}", ConsoleColor.Cyan, "{", "}" );
+            Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [/dryRun:true|false]", "{", "}" );
             Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
             Console_WriteLine( "  /plan{0,-8}- filePath: Valid path to plan file.", ConsoleColor.Green, "" );
-            Console.WriteLine( "{0,-15}- encodedPlanString: Inline base64 encoded plan string.", "" );
+            Console.WriteLine( "{0,-15}- [or] encodedPlanString: Inline base64 encoded plan string.", "" );
+            Console.WriteLine( "  /resultPlan{0,-2}- filePath: Valid path to write ResultPlan output file.", "" );
+            Console.WriteLine( "{0,-15}- [or]: 'true' will write to same path as /plan as *.result.*", "" );
             Console.WriteLine( "  /dryRun{0,-6}Specifies whether to execute the plan as a DryRun only.", "" );
             Console.WriteLine( "{0,-15}  Default is false.", "" );
             Console.WriteLine( "  /taskModel{0,-3}Specifies whether to execute the plan on an internal", "" );
@@ -156,6 +172,7 @@ namespace Synapse.cli
         const string __dryrun = "dryrun";
         const string __taskmodel = "taskmodel";
         const string __render = "render";
+        const string __resultplan = "resultplan";
 
         public Arguments(string[] args)
         {
@@ -182,6 +199,7 @@ namespace Synapse.cli
                     if( File.Exists( Args[__plan] ) )
                     {
                         Plan = File.ReadAllText( Args[__plan] );
+                        PlanFilePath = Args[__plan];
                     }
                     else
                     {
@@ -262,6 +280,18 @@ namespace Synapse.cli
                     Render = RenderAction.None;
                 }
                 #endregion
+
+                #region ResultPlan
+                if( Args.Keys.Contains( __resultplan ) )
+                {
+                    ResultPlan = Args[__resultplan];
+                    Args.Remove( __resultplan );
+                }
+                else
+                {
+                    ResultPlan = string.Empty;
+                }
+                #endregion
             }
 
             IsParsed &= string.IsNullOrWhiteSpace( Message );
@@ -269,10 +299,12 @@ namespace Synapse.cli
 
         public Dictionary<string, string> Args { get; internal set; }
         public string Plan { get; set; }
+        public string PlanFilePath { get; set; }
         public string Data { get; set; }
         public bool DryRun { get; set; }
         public TaskModel TaskModel { get; set; }
         public RenderAction Render { get; set; }
+        public string ResultPlan { get; set; }
         public string Message { get; internal set; }
         public bool IsParsed { get; internal set; }
 
