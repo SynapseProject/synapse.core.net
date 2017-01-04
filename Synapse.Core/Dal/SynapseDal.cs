@@ -46,6 +46,31 @@ namespace Synapse.Core.DataAccessLayer
             }
         }
 
+        static public bool TestConnection(out Exception exception, out string message)
+        {
+            bool ok = true;
+            exception = null;
+
+            SynapseDal dal = new SynapseDal();
+            try
+            {
+                dal.OpenConnection();
+                message = $"Using: {dal._connection.FileName}";
+            }
+            catch( Exception ex )
+            {
+                exception = ex;
+                message = ex.Message;
+                ok = false;
+            }
+            finally
+            {
+                dal.CloseConnection();
+            }
+
+            return ok;
+        }
+
         internal void OpenConnection()
         {
             if( _connection == null )
