@@ -7,7 +7,7 @@ namespace Synapse.Core.DataAccessLayer
 {
     public partial class SynapseDal
     {
-        const string _fileName = "synapse.sqlite3";
+        static readonly string _fileName = $"{Path.GetDirectoryName( typeof( SynapseDal ).Assembly.Location )}\\synapse.sqlite3";
         SQLiteConnection _connection = null;
 
         public SynapseDal()

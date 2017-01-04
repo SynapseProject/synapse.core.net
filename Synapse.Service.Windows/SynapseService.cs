@@ -5,6 +5,7 @@ using System.ServiceProcess;
 using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Runtime;
 using Synapse.Service.Common;
+using System.Windows.Forms;
 
 namespace Synapse.Service.Windows
 {
@@ -19,39 +20,41 @@ namespace Synapse.Service.Windows
             InitializeComponent();
         }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
-            if( Environment.UserInteractive && args.Length > 0 )
-            {
-                string arg0 = args[0].ToLower();
-                if( arg0 == "/install" || arg0 == "/i" )
-                    InstallUtility.InstallService( install: true );
-                else if( arg0 == "/uninstall" || arg0 == "/u" )
-                    InstallUtility.InstallService( install: false );
+            if( Environment.UserInteractive )
+                if( args.Length > 0 )
+                {
+                    bool ok = false;
+                    string message = string.Empty;
 
-                Environment.Exit( 0 );
-            }
+                    string arg0 = args[0].ToLower();
+                    if( arg0 == "/install" || arg0 == "/i" )
+                        ok = InstallUtility.InstallService( install: true, message: out message );
+                    else if( arg0 == "/uninstall" || arg0 == "/u" )
+                        ok = InstallUtility.InstallService( install: false, message: out message );
+
+                    if( !ok )
+                        WriteHelpAndExit( message );
+                    else
+                        Environment.Exit( 0 );
+                }
+                else
+                {
+                    WriteHelpAndExit();
+                }
 
 
 #if DEBUG
             SynapseService s = new SynapseService();
-            s.OnDebugMode_Start();
+            s.OnStart( null );
             System.Threading.Thread.Sleep( System.Threading.Timeout.Infinite );
-            s.OnDebugMode_Stop();
+            s.OnStop();
 #else
 			ServiceBase.Run( new SynapseService() );
 #endif
-        }
-
-        public void OnDebugMode_Start()
-        {
-            OnStart( null );
-        }
-        public void OnDebugMode_Stop()
-        {
-            OnStop();
         }
 
         protected override void OnStart(string[] args)
@@ -70,7 +73,7 @@ namespace Synapse.Service.Windows
 
                 _log.Write( ServiceStatus.Running );
             }
-            catch(Exception ex)
+            catch( Exception ex )
             {
                 string msg = ex.Message;
                 if( ex.HResult == -2146233052 )
@@ -147,6 +150,26 @@ namespace Synapse.Service.Windows
                 EventLog.WriteEntry( source, msg, entryType );
             }
             catch { }
+        }
+        #endregion
+
+        #region Help
+        static void WriteHelpAndExit(string errorMessage = null)
+        {
+            bool haveError = !string.IsNullOrWhiteSpace( errorMessage );
+
+            MessageBoxIcon icon = MessageBoxIcon.Information;
+            string msg = $"synapse.service.exe, Version: {typeof( SynapseService ).Assembly.GetName().Version}\r\nSyntax:\r\n  synapse.service.exe /install | /uninstall";
+
+            if( haveError )
+            {
+                msg += $"\r\n\r\n* Last error:\r\n{errorMessage}\r\nSee logs for details.";
+                icon = MessageBoxIcon.Error;
+            }
+
+            MessageBox.Show( msg, "Synapse Server Service", MessageBoxButtons.OK, icon );
+
+            Environment.Exit( haveError ? 1 : 0 );
         }
         #endregion
     }

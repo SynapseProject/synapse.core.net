@@ -40,6 +40,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ServiceProcess" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -54,7 +55,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTests.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="Core.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +82,10 @@
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">
       <Project>{4464700a-50ba-4b62-bd7e-16628fda8b94}</Project>
       <Name>Synapse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Synapse.Service.Windows\Synapse.Service.Windows.csproj">
+      <Project>{4001a6c5-e5c7-4cfa-8543-263b33bf17c0}</Project>
+      <Name>Synapse.Service.Windows</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
