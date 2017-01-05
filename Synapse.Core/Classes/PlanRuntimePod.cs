@@ -10,16 +10,18 @@ namespace Synapse.Core
     public class PlanRuntimePod : Plan
     {
         LogManager _log = new LogManager();
+        log4net.ILog _logger = null;
 
         public void InitializeLogger()
         {
             //todo: GetDynamicFileAppender
-            //_log.GetDynamicFileAppender( "x", "y", "z", "123", "foo" );
+            log4net.Appender.Dynamic.DynamicFileAppender dfa = _log.GetDynamicFileAppender( "x", "y", "z", "123", "foo" );
+            _logger = dfa.Log;
         }
 
         protected override void OnLogMessage(LogMessageEventArgs e)
         {
-            //todo: _log.Write( e.SerializeSimple() );
+            _log.Write( e.SerializeSimple(), _logger );
             base.OnLogMessage( e );
         }
 
