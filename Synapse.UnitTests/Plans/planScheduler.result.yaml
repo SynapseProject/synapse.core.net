@@ -1,0 +1,18 @@
+Name: planScheduler
+Description: Runs two instances of Foo, each of which takes 5 seconds.  Total execution time 10s.
+Actions:
+- Name: one
+  Handler:
+    Type: Synapse.Handlers.FooHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+  Result:
+    Status: Failed
+    ExitData: Object reference not set to an instance of an object.
+  Parameters: {}
+  Actions: []
+  InstanceId: 65
+StartInfo: {}
+Result:
+  Status: Failed
+  BranchStatus: Failed
+InstanceId: 10

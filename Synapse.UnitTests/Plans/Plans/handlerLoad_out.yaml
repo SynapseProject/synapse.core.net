@@ -7,7 +7,6 @@ Actions:
     Config: {}
   Result:
     ExitData: EmptyHandler ExitData default value.
-    BranchStatus: Failed
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
@@ -16,23 +15,37 @@ Actions:
       Config: {}
     Result:
       ExitData: EmptyHandler ExitData default value.
-      BranchStatus: Failed
     Parameters: {}
     Actions:
     - Name: SimpleClassName
       Handler:
-        Type: EmptyHandler
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
-        Status: Failed
-        ExitData: Could not load EmptyHandler.
+        ExitData: EmptyHandler ExitData default value.
       Parameters: {}
-      Actions: []
-      InstanceId: 2219
-    InstanceId: 2218
-  InstanceId: 2217
+      Actions:
+      - Name: AbbreviatedClassName
+        Handler:
+          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config: {}
+        Result:
+          ExitData: EmptyHandler ExitData default value.
+        Parameters: {}
+        Actions:
+        - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
+          Handler:
+            Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+            Config: {}
+          Result:
+            ExitData: EmptyHandler ExitData default value.
+          Parameters: {}
+          Actions: []
+          InstanceId: 5
+        InstanceId: 4
+      InstanceId: 3
+    InstanceId: 2
+  InstanceId: 1
 StartInfo: {}
-Result:
-  Status: Failed
-  BranchStatus: Failed
-InstanceId: 344
+Result: {}
+InstanceId: 1

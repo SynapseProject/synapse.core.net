@@ -20,9 +20,9 @@ namespace Synapse.Handlers
             }
             catch { }
 
-            string x = startInfo.ParentExitData.ToString();
+            string x = $"{startInfo.ParentExitData}";
 
-            System.Threading.Thread.Sleep( 500 );
+            System.Threading.Thread.Sleep( 5000 );
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             OnLogMessage( "FooExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
             if( !cancel )
@@ -60,9 +60,9 @@ namespace Synapse.Handlers
         {
             int seq = 1;
 
-            string x = startInfo.ParentExitData.ToString();
+            string x = $"{startInfo.ParentExitData}";
 
-            System.Threading.Thread.Sleep( 500 );
+            System.Threading.Thread.Sleep( 5000 );
             StatusType st = StatusType.Complete;
             bool cancel = OnProgress( "BarExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             OnLogMessage( "BarExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );

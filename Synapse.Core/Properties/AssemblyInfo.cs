@@ -15,7 +15,7 @@ using System.Security;
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
-[assembly: AllowPartiallyTrustedCallers( PartialTrustVisibilityLevel = PartialTrustVisibilityLevel.VisibleToAllHosts )]
+//[assembly: AllowPartiallyTrustedCallers( PartialTrustVisibilityLevel = PartialTrustVisibilityLevel.VisibleToAllHosts )]
 [assembly: AssemblyKeyFile( "Synapse.Core.snk" )]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
