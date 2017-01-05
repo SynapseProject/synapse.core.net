@@ -47,21 +47,11 @@ namespace Synapse.Core.Runtime
         /// <param name="plan"></param>
         public void StartPlan(string planInstanceId, bool dryRun, Plan plan)
         {
-            plan.Progress += plan_Progress;
-            plan.LogMessage += plan_LogMessage;
+            if( plan is PlanRuntimePod )
+                ((PlanRuntimePod)plan).InitializeLogger();
 
             Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cancellationTokenSvc.Token );
             _tasks.Add( t );
-        }
-
-        private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
-        {
-            string msg = e.SerializeSimple( asYaml: true );
-        }
-
-        private static void plan_LogMessage(object sender, LogMessageEventArgs e)
-        {
-            string msg = e.SerializeSimple( asYaml: true );
         }
 
 

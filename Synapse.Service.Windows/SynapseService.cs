@@ -2,10 +2,13 @@
 using System.Diagnostics;
 using System.ServiceModel;
 using System.ServiceProcess;
+using System.Windows.Forms;
+using System.Threading;
+
+using Synapse.Common;
 using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Runtime;
 using Synapse.Service.Common;
-using System.Windows.Forms;
 
 namespace Synapse.Service.Windows
 {
@@ -24,6 +27,25 @@ namespace Synapse.Service.Windows
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
+            InstallService( args );
+
+#if DEBUG
+            SynapseService s = new SynapseService();
+            s.OnStart( null );
+            Thread.Sleep( Timeout.Infinite );
+            s.OnStop();
+#else
+			ServiceBase.Run( new SynapseService() );
+#endif
+        }
+
+        /// <summary>
+        /// Install/Uninstall the service.  Only works for Release build, as Debug will timeout on service start anyway (Thread.Sleep( Timeout.Infinite );).
+        /// </summary>
+        /// <param name="args"></param>
+        [Conditional( "RELEASE" )]
+        static void InstallService(string[] args)
+        {
             if( Environment.UserInteractive )
                 if( args.Length > 0 )
                 {
@@ -45,16 +67,6 @@ namespace Synapse.Service.Windows
                 {
                     WriteHelpAndExit();
                 }
-
-
-#if DEBUG
-            SynapseService s = new SynapseService();
-            s.OnStart( null );
-            System.Threading.Thread.Sleep( System.Threading.Timeout.Infinite );
-            s.OnStop();
-#else
-			ServiceBase.Run( new SynapseService() );
-#endif
         }
 
         protected override void OnStart(string[] args)

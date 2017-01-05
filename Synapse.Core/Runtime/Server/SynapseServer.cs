@@ -28,7 +28,7 @@ namespace Synapse.Core.Runtime
             return plan.Start( null, dryRun );
         }
 
-        public void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan)
+        public void StartPlanAsync(string planInstanceId, bool dryRun, PlanRuntimePod plan)
         {
             _scheduler.StartPlan( null, dryRun, plan );
         }
