@@ -1,6 +1,7 @@
 ﻿using Synapse.Core;
+using Synapse.Core.Runtime;
 
-namespace Synapse.Core.Runtime
+namespace Synapse.Service.Windows
 {
     public class SynapseServer : ISynapseServer
     {
@@ -28,9 +29,13 @@ namespace Synapse.Core.Runtime
             return plan.Start( null, dryRun );
         }
 
-        public void StartPlanAsync(string planInstanceId, bool dryRun, PlanRuntimePod plan)
+        public void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan)
         {
-            _scheduler.StartPlan( null, dryRun, plan );
+            PlanRuntimePod p = new PlanRuntimePod( plan, dryRun, null );
+            p.InitializeLogger();
+            _scheduler.StartPlan( p );
+
+            //_scheduler.StartPlan( null, dryRun, plan );
         }
 
         #endregion

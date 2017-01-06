@@ -41,10 +41,6 @@
     <AssemblyOriginatorKeyFile>Synapse.Core.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.104.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
@@ -73,11 +69,11 @@
     <Compile Include="Classes\Interfaces\IHandlerRuntime.cs" />
     <Compile Include="Classes\Interfaces\IParameterInfo.cs" />
     <Compile Include="Classes\Interfaces\IActionContainer.cs" />
+    <Compile Include="Classes\Interfaces\IPlanRuntimeContainer.cs" />
     <Compile Include="Classes\Interfaces\IStartInfo.cs" />
     <Compile Include="Classes\LogMessageEventArgs.cs" />
     <Compile Include="Classes\HandlerProgressCancelEventArgs.cs" />
     <Compile Include="Classes\HandlerStartInfo.cs" />
-    <Compile Include="Classes\PlanRuntimePod.cs" />
     <Compile Include="Classes\PlanStartInfo.cs" />
     <Compile Include="Classes\BaseClasses\StartInfoBase.cs" />
     <Compile Include="Classes\BaseClasses\HandlerRuntimeBase.cs" />
@@ -107,8 +103,7 @@
     <Compile Include="Runtime\PlanRuntime.cs" />
     <Compile Include="Runtime\PlanTaskScheduler.cs" />
     <Compile Include="Runtime\SecurityContextRuntime.cs" />
-    <Compile Include="Runtime\Server\ISynapseServer.cs" />
-    <Compile Include="Runtime\Server\SynapseServer.cs" />
+    <Compile Include="Classes\Interfaces\ISynapseServer.cs" />
     <Compile Include="Utilities\CryptoHelpers.cs" />
     <Compile Include="Utilities\ServiceException.cs" />
     <Compile Include="Utilities\WebRequestClient.cs" />
@@ -118,12 +113,6 @@
     <None Include="packages.config" />
     <None Include="Synapse.Core.pfx" />
     <None Include="Synapse.Core.snk" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Synapse.Service.Common\Synapse.Common.csproj">
-      <Project>{683170DE-F380-4F2E-8B91-91C7C9180B2B}</Project>
-      <Name>Synapse.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.104.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.104.0\build\net451\System.Data.SQLite.Core.targets')" />

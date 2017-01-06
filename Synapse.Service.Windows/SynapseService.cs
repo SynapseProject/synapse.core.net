@@ -40,7 +40,8 @@ namespace Synapse.Service.Windows
         }
 
         /// <summary>
-        /// Install/Uninstall the service.  Only works for Release build, as Debug will timeout on service start anyway (Thread.Sleep( Timeout.Infinite );).
+        /// Install/Uninstall the service.
+        /// Only works for Release build, as Debug will timeout on service start anyway (Thread.Sleep( Timeout.Infinite );).
         /// </summary>
         /// <param name="args"></param>
         [Conditional( "RELEASE" )]

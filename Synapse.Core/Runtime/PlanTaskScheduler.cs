@@ -47,10 +47,13 @@ namespace Synapse.Core.Runtime
         /// <param name="plan"></param>
         public void StartPlan(string planInstanceId, bool dryRun, Plan plan)
         {
-            if( plan is PlanRuntimePod )
-                ((PlanRuntimePod)plan).InitializeLogger();
-
             Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cancellationTokenSvc.Token );
+            _tasks.Add( t );
+        }
+
+        public void StartPlan(IPlanRuntimeContainer planContainer)
+        {
+            Task t = _tf.StartNew( () => { planContainer.Start(); }, _cancellationTokenSvc.Token );
             _tasks.Add( t );
         }
 

@@ -52,7 +52,7 @@ namespace Synapse.Common
 
         public void Write(object message, ILog logger = null)
         {
-            Write( LogLevel.Info, message );
+            Write( LogLevel.Info, message, null, logger );
         }
 
         public void Write(LogLevel level, object message, Exception ex = null, ILog logger = null)
