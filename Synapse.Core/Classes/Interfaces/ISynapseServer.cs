@@ -33,6 +33,14 @@ namespace Synapse.Core.Runtime
         [OperationContract]
         [WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/async/{planInstanceId}/?action=start&dryRun={dryRun}" )]
         void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan);
+
+        [OperationContract]
+        [WebGet( UriTemplate = "/drainstop/" ), Description( "Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
+        void Drainstop();
+
+        [OperationContract]
+        [WebGet( UriTemplate = "/drainstop/?unstop" ), Description( "Returns the TaskScheduler to a normal state." )]
+        void Undrainstop();
         #endregion
     }
 }

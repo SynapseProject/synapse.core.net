@@ -94,42 +94,53 @@ namespace Synapse.UnitTests
             File.WriteAllText( $"{__plansOut}\\plan6_out.yaml", plan6.ResultPlan.ToYaml() );
             File.WriteAllText( $"{__plansOut}\\plan7_out.yaml", plan7.ResultPlan.ToYaml() );
 
-            Plan plan00 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
-            Plan plan01 = Plan.FromYaml( $"{__plansRoot}\\{plan1Name}" );
-            Plan plan02 = Plan.FromYaml( $"{__plansRoot}\\{plan2Name}" );
-            Plan plan03 = Plan.FromYaml( $"{__plansRoot}\\{plan3Name}" );
-            Plan plan04 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
-            Plan plan05 = Plan.FromYaml( $"{__plansRoot}\\{plan1Name}" );
-            Plan plan06 = Plan.FromYaml( $"{__plansRoot}\\{plan2Name}" );
-            Plan plan07 = Plan.FromYaml( $"{__plansRoot}\\{plan3Name}" );
+            if( scheduler.IsDrainstopped )
+            {
+                scheduler.Undrainstop();
 
-            PlanRuntimePod p00 = new PlanRuntimePod( plan00 );
-            PlanRuntimePod p01 = new PlanRuntimePod( plan01 );
-            PlanRuntimePod p02 = new PlanRuntimePod( plan02 );
-            PlanRuntimePod p03 = new PlanRuntimePod( plan03 );
-            PlanRuntimePod p04 = new PlanRuntimePod( plan04 );
-            PlanRuntimePod p05 = new PlanRuntimePod( plan05 );
-            PlanRuntimePod p06 = new PlanRuntimePod( plan06 );
-            PlanRuntimePod p07 = new PlanRuntimePod( plan07 );
+                Plan plan00 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
+                Plan plan01 = Plan.FromYaml( $"{__plansRoot}\\{plan1Name}" );
+                Plan plan02 = Plan.FromYaml( $"{__plansRoot}\\{plan2Name}" );
+                Plan plan03 = Plan.FromYaml( $"{__plansRoot}\\{plan3Name}" );
+                Plan plan04 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
+                Plan plan05 = Plan.FromYaml( $"{__plansRoot}\\{plan1Name}" );
+                Plan plan06 = Plan.FromYaml( $"{__plansRoot}\\{plan2Name}" );
+                Plan plan07 = Plan.FromYaml( $"{__plansRoot}\\{plan3Name}" );
 
-            scheduler.StartPlan( p00 );
-            scheduler.StartPlan( p01 );
-            scheduler.StartPlan( p02 );
-            scheduler.StartPlan( p03 );
-            scheduler.StartPlan( p04 );
-            scheduler.StartPlan( p05 );
-            scheduler.StartPlan( p06 );
-            scheduler.StartPlan( p07 );
-            scheduler.Drainstop();
+                PlanRuntimePod p00 = new PlanRuntimePod( plan00 );
+                PlanRuntimePod p01 = new PlanRuntimePod( plan01 );
+                PlanRuntimePod p02 = new PlanRuntimePod( plan02 );
+                PlanRuntimePod p03 = new PlanRuntimePod( plan03 );
+                PlanRuntimePod p04 = new PlanRuntimePod( plan04 );
+                PlanRuntimePod p05 = new PlanRuntimePod( plan05 );
+                PlanRuntimePod p06 = new PlanRuntimePod( plan06 );
+                PlanRuntimePod p07 = new PlanRuntimePod( plan07 );
 
-            File.WriteAllText( $"{__plansOut}\\plan00_out.yaml", plan00.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan01_out.yaml", plan01.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan02_out.yaml", plan02.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan03_out.yaml", plan03.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan04_out.yaml", plan04.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan05_out.yaml", plan05.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan06_out.yaml", plan06.ResultPlan.ToYaml() );
-            File.WriteAllText( $"{__plansOut}\\plan07_out.yaml", plan07.ResultPlan.ToYaml() );
+                scheduler.StartPlan( p00 );
+                scheduler.StartPlan( p01 );
+                scheduler.StartPlan( p02 );
+                scheduler.StartPlan( p03 );
+                scheduler.StartPlan( p04 );
+                scheduler.StartPlan( p05 );
+                scheduler.StartPlan( p06 );
+                scheduler.StartPlan( p07 );
+                scheduler.Drainstop();
+
+                File.WriteAllText( $"{__plansOut}\\plan00_out.yaml", plan00.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan01_out.yaml", plan01.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan02_out.yaml", plan02.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan03_out.yaml", plan03.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan04_out.yaml", plan04.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan05_out.yaml", plan05.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan06_out.yaml", plan06.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{__plansOut}\\plan07_out.yaml", plan07.ResultPlan.ToYaml() );
+            }
+            else
+            {
+                Assert.IsTrue( scheduler.IsDrainstopped );
+            }
+
+            Assert.IsTrue( scheduler.IsDrainstopped );
         }
     }
 }

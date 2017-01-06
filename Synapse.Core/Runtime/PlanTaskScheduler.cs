@@ -14,9 +14,11 @@ namespace Synapse.Core.Runtime
         List<Task> _tasks = new List<Task>();
 
         // handles max threading
-        LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = new LimitedConcurrencyLevelTaskScheduler( 20 );
+        LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = null;
 
         CancellationTokenSource _cancellationTokenSvc = new CancellationTokenSource();
+
+        bool _isDrainstopped = false;
 
         // default ctor
         public PlanScheduler()
@@ -35,6 +37,7 @@ namespace Synapse.Core.Runtime
             }
             else
             {
+                _limitedConcurTaskSched = new LimitedConcurrencyLevelTaskScheduler( maxThreads );
                 _tf = new TaskFactory( _limitedConcurTaskSched );
             }
         }
@@ -45,23 +48,40 @@ namespace Synapse.Core.Runtime
         /// <param name="planInstanceId"></param>
         /// <param name="dryRun"></param>
         /// <param name="plan"></param>
-        public void StartPlan(string planInstanceId, bool dryRun, Plan plan)
+        public bool StartPlan(string planInstanceId, bool dryRun, Plan plan)
         {
-            Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cancellationTokenSvc.Token );
-            _tasks.Add( t );
+            if( !_isDrainstopped )
+            {
+                Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cancellationTokenSvc.Token );
+                _tasks.Add( t );
+            }
+
+            return !_isDrainstopped;
         }
 
-        public void StartPlan(IPlanRuntimeContainer planContainer)
+        public bool StartPlan(IPlanRuntimeContainer planContainer)
         {
-            Task t = _tf.StartNew( () => { planContainer.Start(); }, _cancellationTokenSvc.Token );
-            _tasks.Add( t );
+            if( !_isDrainstopped )
+            {
+                Task t = _tf.StartNew( () => { planContainer.Start(); }, _cancellationTokenSvc.Token );
+                _tasks.Add( t );
+            }
+
+            return !_isDrainstopped;
         }
 
 
         public void Drainstop()
         {
+            _isDrainstopped = true;
             Task.WaitAll( _tasks.ToArray() );
         }
+        public void Undrainstop()
+        {
+            _isDrainstopped = false;
+        }
+
+        public bool IsDrainstopped { get { return _isDrainstopped; } }
 
         #region IDisposable Members
 

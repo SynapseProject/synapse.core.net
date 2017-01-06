@@ -22,9 +22,16 @@ namespace Synapse.Handlers
 
             string x = $"{startInfo.ParentExitData}";
 
-            System.Threading.Thread.Sleep( 30000 );
-            bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             OnLogMessage( "FooExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
+
+            //System.Threading.Thread.Sleep( 30000 );
+            Int64 j = 0;
+            for( Int64 i = 0; i < 2000000000; i++ )
+                j = i - 1;
+
+            bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
+            OnLogMessage( "FooExecute", $"   ----------   loop complete   ---------- working ----------" );
+
             if( !cancel )
             {
                 OnProgress( "FooExecute", getMsg( StatusType.Running, startInfo ), StatusType.Running, startInfo.InstanceId, seq++ );

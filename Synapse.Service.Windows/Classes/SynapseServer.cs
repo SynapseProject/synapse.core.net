@@ -38,6 +38,15 @@ namespace Synapse.Service.Windows
             //_scheduler.StartPlan( null, dryRun, plan );
         }
 
+        public void Drainstop()
+        {
+            _scheduler.Drainstop();
+        }
+
+        public void Undrainstop()
+        {
+            _scheduler.Undrainstop();
+        }
         #endregion
     }
 }
