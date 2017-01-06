@@ -14,7 +14,7 @@ namespace Synapse.Service.Windows
 {
     public partial class SynapseService : ServiceBase
     {
-        LogManager _log = new LogManager();
+        LogManager _log = new LogManager( true );
         ServiceHost _serviceHost = null;
 
         public SynapseService()
@@ -141,7 +141,7 @@ namespace Synapse.Service.Windows
 
             try
             {
-                LogManager _log = new LogManager();
+                LogManager _log = new LogManager( true );
                 _log.Write( LogLevel.Fatal, msg );
             }
             catch

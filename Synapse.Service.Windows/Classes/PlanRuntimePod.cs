@@ -11,11 +11,13 @@ namespace Synapse.Service.Windows
     {
         LogManager _log = new LogManager();
 
-        public PlanRuntimePod(Plan plan, bool isDryRun, Dictionary<string, string> dynamicData)
+        public PlanRuntimePod(Plan plan, bool isDryRun = false, Dictionary<string, string> dynamicData = null)
         {
             Plan = plan;
             IsDryRun = isDryRun;
             DynamicData = dynamicData;
+
+            InitializeLogger();
 
             Plan.Progress += Plan_Progress;
             Plan.LogMessage += Plan_LogMessage;

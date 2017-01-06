@@ -22,7 +22,7 @@ namespace Synapse.Handlers
 
             string x = $"{startInfo.ParentExitData}";
 
-            System.Threading.Thread.Sleep( 5000 );
+            System.Threading.Thread.Sleep( 30000 );
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             OnLogMessage( "FooExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
             if( !cancel )

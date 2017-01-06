@@ -176,6 +176,7 @@ namespace Synapse.Core.Runtime
 
         // Gets the maximum concurrency level supported by this scheduler. 
         public sealed override int MaximumConcurrencyLevel { get { return _maxDegreeOfParallelism; } }
+        public int DelegatesQueuedOrRunning { get { return _delegatesQueuedOrRunning; } }
 
         // Gets an enumerable of the tasks currently scheduled on this scheduler. 
         protected sealed override IEnumerable<Task> GetScheduledTasks()
