@@ -20,6 +20,8 @@ namespace Synapse.Common
 
         public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseServer" );
 
+        ILog _logger = null;
+
         public LogManager()
         {
         }
@@ -28,10 +30,10 @@ namespace Synapse.Common
             Dispose();
         }
 
-        public DynamicFileAppender GetDynamicFileAppender(string loggerName, string appenderName,
-            string logfileName, string conversionPattern, string levelName)
+        public void InitDynamicFileAppender(string loggerName, string appenderName,
+            string logfileName, string conversionPattern, string levelName = "ALL")
         {
-            return new DynamicFileAppender( loggerName, appenderName, logfileName, conversionPattern, levelName );
+            _logger = new DynamicFileAppender( loggerName, appenderName, logfileName, conversionPattern, levelName ).Log;
         }
 
         #region Write/WriteFormat
@@ -50,37 +52,40 @@ namespace Synapse.Common
             Write( LogLevel.Info, message );
         }
 
-        public void Write(object message, ILog logger = null)
-        {
-            Write( LogLevel.Info, message, null, logger );
-        }
+        //public void Write(object message, ILog logger = null)
+        //{
+        //    Write( LogLevel.Info, message, null, logger );
+        //}
 
         public void Write(LogLevel level, object message, Exception ex = null, ILog logger = null)
         {
             if( logger == null )
-            {
-                logger = Default;
-            }
+                if( _logger != null )
+                    logger = _logger;
+                else
+                    logger = Default;
 
             if( ex != null && (level == LogLevel.Debug || level == LogLevel.Info) )
-            {
                 level = LogLevel.Error;
-            }
 
             switch( level )
             {
                 case LogLevel.Debug:
                 logger.Debug( message );
                 break;
+
                 case LogLevel.Error:
                 logger.Error( message, ex );
                 break;
+
                 case LogLevel.Fatal:
                 logger.Fatal( message, ex );
                 break;
+
                 case LogLevel.Info:
                 logger.Info( message );
                 break;
+
                 case LogLevel.Warn:
                 logger.Warn( message );
                 break;
