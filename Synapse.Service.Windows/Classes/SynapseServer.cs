@@ -47,6 +47,8 @@ namespace Synapse.Service.Windows
         {
             _scheduler.Undrainstop();
         }
+
+        public bool GetIsDrainstopComplete() { return _scheduler.IsDrainstopComplete; }
         #endregion
     }
 }

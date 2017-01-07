@@ -19,6 +19,7 @@ namespace Synapse.Core.Runtime
         CancellationTokenSource _cancellationTokenSvc = new CancellationTokenSource();
 
         bool _isDrainstopped = false;
+        bool _isDrainstopComplete = false;
 
         // default ctor
         public PlanScheduler()
@@ -73,15 +74,24 @@ namespace Synapse.Core.Runtime
 
         public void Drainstop()
         {
-            _isDrainstopped = true;
-            Task.WaitAll( _tasks.ToArray() );
+            if( !_isDrainstopped )
+            {
+                _isDrainstopped = true;
+                _isDrainstopComplete = false;
+                Task.WaitAll( _tasks.ToArray() );
+                _isDrainstopComplete = true;
+            }
         }
         public void Undrainstop()
         {
             _isDrainstopped = false;
+            _isDrainstopComplete = false;
         }
 
+        public int TasksQueuedOrRunning { get { return _limitedConcurTaskSched != null ? _limitedConcurTaskSched.DelegatesQueuedOrRunning : -1; } }
+
         public bool IsDrainstopped { get { return _isDrainstopped; } }
+        public bool IsDrainstopComplete { get { return _isDrainstopComplete; } }
 
         #region IDisposable Members
 

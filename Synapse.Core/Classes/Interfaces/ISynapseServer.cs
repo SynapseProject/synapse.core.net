@@ -35,12 +35,16 @@ namespace Synapse.Core.Runtime
         void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan);
 
         [OperationContract]
-        [WebGet( UriTemplate = "/drainstop/" ), Description( "Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
+        [WebGet( UriTemplate = "/drainstop/?stop" ), Description( "Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
         void Drainstop();
 
         [OperationContract]
         [WebGet( UriTemplate = "/drainstop/?unstop" ), Description( "Returns the TaskScheduler to a normal state." )]
         void Undrainstop();
+
+        [OperationContract]
+        [WebGet( UriTemplate = "/drainstop/?status" ), Description( "Returns the TaskScheduler Drainstop 'Complete' status." )]
+        bool GetIsDrainstopComplete();
         #endregion
     }
 }
