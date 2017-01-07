@@ -46,8 +46,9 @@ namespace Synapse.UnitTests
 
         [Test]
         [Category( "Service" )]
+        [Category( "PlanScheduler" )]
         [TestCase( 4 )]
-        public void PlanScheduler(int maxThreads)
+        public void PlanScheduler_MaxThreads(int maxThreads)
         {
             Synapse.Core.DataAccessLayer.SynapseDal.CreateDatabase();
 
@@ -141,6 +142,32 @@ namespace Synapse.UnitTests
             }
 
             Assert.IsTrue( scheduler.IsDrainstopped );
+        }
+
+        [Test]
+        [Category( "Service" )]
+        [Category( "PlanScheduler" )]
+        public void PlanScheduler_Cancel()
+        {
+            Synapse.Core.DataAccessLayer.SynapseDal.CreateDatabase();
+
+            string plan0Name = "planScheduler.yaml";
+
+            Plan plan0 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
+            Plan plan1 = Plan.FromYaml( $"{__plansRoot}\\{plan0Name}" );
+
+            PlanRuntimePod p0 = new PlanRuntimePod( plan0, planInstanceId: 0 );
+            PlanRuntimePod p1 = new PlanRuntimePod( plan1, planInstanceId: 1 );
+
+            PlanScheduler scheduler = new PlanScheduler( 10 );
+            scheduler.StartPlan( p0 );
+            scheduler.StartPlan( p1 );
+            System.Threading.Thread.Sleep( 5000 );
+            scheduler.CancelPlan( planInstanceId: 0 );
+            scheduler.Drainstop();
+
+            Assert.IsTrue( plan0.Result.Status == StatusType.Cancelled );
+            Assert.IsTrue( plan1.Result.Status == StatusType.Failed );
         }
     }
 }
