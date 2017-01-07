@@ -12,6 +12,7 @@ namespace Synapse.Service.Windows
     public class PlanRuntimePod : IPlanRuntimeContainer
     {
         LogManager _log = new LogManager();
+        DirectoryInfo _logRootPath = null;
         bool _wantsCancel = false;
 
         public PlanRuntimePod(Plan plan, bool isDryRun = false, Dictionary<string, string> dynamicData = null, int planInstanceId = 0)
@@ -30,8 +31,8 @@ namespace Synapse.Service.Windows
         public void InitializeLogger()
         {
             string logFileName = $"{Plan.Name}_{DateTime.Now.Ticks}";
-            DirectoryInfo logRootPath = Directory.CreateDirectory( SynapseService.Config.LogRootPath );
-            string logFilePath = $"{logRootPath.FullName}\\{logFileName}.log";
+            _logRootPath = Directory.CreateDirectory( SynapseService.Config.LogRootPath );
+            string logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
             _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
         }
 
@@ -56,6 +57,10 @@ namespace Synapse.Service.Windows
         {
             if( _wantsCancel )
                 e.Cancel = true;
+
+            //todo: this is stub code
+            if( SynapseService.Config.SerializeResultPlan )
+                File.WriteAllText( $"{_logRootPath}\\{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
 
             //todo: send a message home
         }
