@@ -25,25 +25,29 @@ namespace Synapse.Core.Runtime
         //WhoAmIRecord WhoAmI();
         #endregion
 
-        #region
+        #region SynapseServer
         [OperationContract]
         [WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/sync/{planInstanceId}/?action=start&dryRun={dryRun}" )]
         ExecuteResult StartPlan(string planInstanceId, bool dryRun, Plan plan);
 
         [OperationContract]
-        [WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/async/{planInstanceId}/?action=start&dryRun={dryRun}" )]
+        [WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/{planInstanceId}/?action=start&dryRun={dryRun}" )]
         void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan);
 
         [OperationContract]
-        [WebGet( UriTemplate = "/drainstop/?stop" ), Description( "Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
+        [WebGet( UriTemplate = "/execute/{planInstanceId}/?action=cancel" ), Description( "[?action=cancel] Cancels Plan execution at first opportunity." )]
+        void CancelPlan(string planInstanceId);
+
+        [OperationContract]
+        [WebGet( UriTemplate = "/drainstop/?action=stop" ), Description( "[?action=stop] Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
         void Drainstop();
 
         [OperationContract]
-        [WebGet( UriTemplate = "/drainstop/?unstop" ), Description( "Returns the TaskScheduler to a normal state." )]
+        [WebGet( UriTemplate = "/drainstop/?action=unstop" ), Description( "[?action=unstop] Returns the TaskScheduler to a normal state." )]
         void Undrainstop();
 
         [OperationContract]
-        [WebGet( UriTemplate = "/drainstop/?status" ), Description( "Returns the TaskScheduler Drainstop 'Complete' status." )]
+        [WebGet( UriTemplate = "/drainstop/?action=status" ), Description( "[?action=status] Returns the TaskScheduler Drainstop 'Complete' status." )]
         bool GetIsDrainstopComplete();
         #endregion
     }

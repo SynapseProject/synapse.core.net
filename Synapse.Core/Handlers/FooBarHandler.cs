@@ -24,10 +24,10 @@ namespace Synapse.Handlers
 
             OnLogMessage( "FooExecute", $"   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
 
-            //System.Threading.Thread.Sleep( 30000 );
-            Int64 j = 0;
-            for( Int64 i = 0; i < 2000000000; i++ )
-                j = i - 1;
+            System.Threading.Thread.Sleep( 30000 );
+            //Int64 j = 0;
+            //for( Int64 i = 0; i < 2000000000; i++ )
+            //    j = i - 1;
 
             bool cancel = OnProgress( "FooExecute", getMsg( StatusType.Initializing, startInfo ), StatusType.Initializing, startInfo.InstanceId, seq++ );
             OnLogMessage( "FooExecute", $"   ----------   loop complete   ---------- working ----------" );
@@ -38,12 +38,15 @@ namespace Synapse.Handlers
                 if( !startInfo.IsDryRun ) { OnProgress( "FooExecute", "...Progress...", StatusType.Running, startInfo.InstanceId, seq++ ); }
                 //throw new Exception( "quitting" );
                 OnProgress( "FooExecute", "Finished", st, startInfo.InstanceId, seq++ );
+                OnLogMessage( "FooExecute", $"Finished" );
             }
             else
             {
                 st = StatusType.Cancelled;
                 OnProgress( "FooExecute", "Cancelled", st, startInfo.InstanceId, seq++ );
+                OnLogMessage( "FooExecute", $"Cancelled" );
             }
+
             WriteFile( "FooHandler", $"parms:{startInfo.Parameters}\r\nstatus:{st}\r\n-->CurrentPrincipal:{System.Security.Principal.WindowsIdentity.GetCurrent().Name}" );
             return new ExecuteResult() { Status = st, ExitData = "foo" };
         }

@@ -12,11 +12,10 @@ namespace Synapse.Core.Runtime
 
         // list of current tasks
         List<Task> _tasks = new List<Task>();
+        Dictionary<int, CancellationTokenSource> _plans = new Dictionary<int, CancellationTokenSource>();
 
         // handles max threading
         LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = null;
-
-        CancellationTokenSource _cancellationTokenSvc = new CancellationTokenSource();
 
         bool _isDrainstopped = false;
         bool _isDrainstopComplete = false;
@@ -46,29 +45,24 @@ namespace Synapse.Core.Runtime
         /// <summary>
         /// Queues a new Task onto the TaskFactory
         /// </summary>
-        /// <param name="planInstanceId"></param>
-        /// <param name="dryRun"></param>
-        /// <param name="plan"></param>
-        public bool StartPlan(string planInstanceId, bool dryRun, Plan plan)
+        /// <param name="planContainer"></param>
+        /// <returns>Success/Fail for whether the Task is queued.</returns>
+        public bool StartPlan(IPlanRuntimeContainer planContainer)
         {
             if( !_isDrainstopped )
             {
-                Task t = _tf.StartNew( () => { plan.Start( null, dryRun ); }, _cancellationTokenSvc.Token );
-                _tasks.Add( t );
+                CancellationTokenSource cts = new CancellationTokenSource();
+                _plans.Add( planContainer.PlanInstanceId, cts );
+                _tasks.Add( _tf.StartNew( () => { planContainer.Start( cts.Token ); }, cts.Token ));
             }
 
             return !_isDrainstopped;
         }
 
-        public bool StartPlan(IPlanRuntimeContainer planContainer)
+        public void CancelPlan(int planInstanceId)
         {
-            if( !_isDrainstopped )
-            {
-                Task t = _tf.StartNew( () => { planContainer.Start(); }, _cancellationTokenSvc.Token );
-                _tasks.Add( t );
-            }
-
-            return !_isDrainstopped;
+            if( _plans.ContainsKey( planInstanceId ) )
+                _plans[planInstanceId].Cancel();
         }
 
 
@@ -97,7 +91,7 @@ namespace Synapse.Core.Runtime
 
         public void Dispose()
         {
-            _cancellationTokenSvc.Dispose();
+            //_cancellationTokenSrc.Dispose();
             GC.SuppressFinalize( this );
         }
 
@@ -225,3 +219,21 @@ namespace Synapse.Core.Runtime
         }
     }
 }
+
+
+///// <summary>
+///// Queues a new Task onto the TaskFactory
+///// </summary>
+///// <param name="planInstanceId"></param>
+///// <param name="dryRun"></param>
+///// <param name="plan"></param>
+//public bool StartPlan(string planInstanceId, bool dryRun, Plan plan)
+//{
+//    if( !_isDrainstopped )
+//    {
+//        CancellationTokenSource cts = new CancellationTokenSource();
+//        _tasks.Add( _tf.StartNew( () => { plan.Start( null, dryRun ); }, cts.Token ) );
+//    }
+
+//    return !_isDrainstopped;
+//}

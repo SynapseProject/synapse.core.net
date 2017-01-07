@@ -1,15 +1,17 @@
-﻿using Synapse.Core;
+﻿using System;
+using Synapse.Core;
 using Synapse.Core.Runtime;
 
 namespace Synapse.Service.Windows
 {
     public class SynapseServer : ISynapseServer
     {
-        PlanScheduler _scheduler = null;
+        static PlanScheduler _scheduler = null;
 
         public SynapseServer()
         {
-            _scheduler = new PlanScheduler( 10 );
+            if( _scheduler == null )
+                _scheduler = new PlanScheduler( 10 );
         }
 
         #region ISynapseServer Members
@@ -31,11 +33,18 @@ namespace Synapse.Service.Windows
 
         public void StartPlanAsync(string planInstanceId, bool dryRun, Plan plan)
         {
-            PlanRuntimePod p = new PlanRuntimePod( plan, dryRun, null );
-            p.InitializeLogger();
+            int planInstId = int.Parse( planInstanceId );
+
+            PlanRuntimePod p = new PlanRuntimePod( plan, dryRun, null, planInstId );
             _scheduler.StartPlan( p );
 
             //_scheduler.StartPlan( null, dryRun, plan );
+        }
+
+        public void CancelPlan(string planInstanceId)
+        {
+            int planInstId = int.Parse( planInstanceId );
+            _scheduler.CancelPlan( planInstId );
         }
 
         public void Drainstop()
