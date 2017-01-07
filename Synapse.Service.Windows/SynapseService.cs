@@ -17,6 +17,8 @@ namespace Synapse.Service.Windows
         LogManager _log = new LogManager( true );
         ServiceHost _serviceHost = null;
 
+        public static SynapseServiceConfig Config = null;
+
         public SynapseService()
         {
             this.ServiceName = "Synapse.Service";
@@ -28,6 +30,8 @@ namespace Synapse.Service.Windows
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
             InstallService( args );
+
+            Config = SynapseServiceConfig.Deserialze();
 
 #if DEBUG
             SynapseService s = new SynapseService();

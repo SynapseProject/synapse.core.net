@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 using Synapse.Common;
@@ -29,8 +30,9 @@ namespace Synapse.Service.Windows
         public void InitializeLogger()
         {
             string logFileName = $"{Plan.Name}_{DateTime.Now.Ticks}";
-            string logFilePath = $"{System.IO.Path.GetDirectoryName( typeof( PlanRuntimePod ).Assembly.Location )}\\{logFileName}.log";
-            _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, "%d{ISO8601}|%-5p|(%t)|%m%n", "all" );
+            DirectoryInfo logRootPath = Directory.CreateDirectory( SynapseService.Config.LogRootPath );
+            string logFilePath = $"{logRootPath.FullName}\\{logFileName}.log";
+            _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
         }
 
         public void Start(CancellationToken token)

@@ -8,38 +8,48 @@ namespace Synapse.Core.Utilities
 {
     public class YamlHelpers
     {
-        public static string Serialize(object data, bool serializeAsJson = false)
+        public static void Serialize(TextWriter tw, object data, bool serializeAsJson = false, bool emitDefaultValues = false)
+        {
+            Serializer serializer = null;
+            SerializerBuilder builder = new SerializerBuilder();
+
+            if( serializeAsJson )
+                builder.JsonCompatible();
+
+            if( emitDefaultValues )
+                builder.EmitDefaults();
+
+            serializer = builder.Build();
+
+            serializer.Serialize( tw, data );
+        }
+
+        public static string Serialize(object data, bool serializeAsJson = false, bool emitDefaultValues = false)
         {
             string result = null;
 
             if( !string.IsNullOrWhiteSpace( data?.ToString() ) )
                 using( StringWriter writer = new StringWriter() )
                 {
-                    Serializer serializer = new Serializer();
-                    if( serializeAsJson )
-                    {
-                        SerializerBuilder builder = new SerializerBuilder();
-                        builder.JsonCompatible();
-                        serializer = builder.Build();
-                    }
-
-                    serializer.Serialize( writer, data );
+                    Serialize( writer, data, serializeAsJson, emitDefaultValues );
                     result = serializeAsJson ? JsonHelpers.FormatJson( writer.ToString() ) : writer.ToString();
                 }
 
             return result;
         }
 
-        public static void Serialize(TextWriter tw, object data, bool serializeAsJson = false)
+        public static void SerializeFile(string path, object data, bool serializeAsJson = false, bool emitDefaultValues = false)
         {
-            Serializer serializer = new Serializer();
-            if( serializeAsJson )
+            if( !serializeAsJson )
             {
-                SerializerBuilder builder = new SerializerBuilder();
-                builder.JsonCompatible();
-                serializer = builder.Build();
+                using( StreamWriter writer = new StreamWriter( path ) )
+                    Serialize( writer, data, serializeAsJson, emitDefaultValues );
             }
-            serializer.Serialize( tw, data );
+            else //gets formatted json
+            {
+                string result = Serialize( data, serializeAsJson, emitDefaultValues );
+                File.WriteAllText( path, result );
+            }
         }
 
         public static T Deserialize<T>(string yaml, bool ignoreUnmatchedProperties = true)
@@ -62,6 +72,21 @@ namespace Synapse.Core.Utilities
             Deserializer deserializer = builder.Build();
             return deserializer.Deserialize<T>( reader );
         }
+
+        public static T DeserializeFile<T>(string path, bool ignoreUnmatchedProperties = true) where T : class
+        {
+            T ssc = null;
+            using( StreamReader reader = new StreamReader( path ) )
+            {
+                DeserializerBuilder builder = new DeserializerBuilder();
+                if( ignoreUnmatchedProperties )
+                    builder.IgnoreUnmatchedProperties();
+                Deserializer deserializer = builder.Build();
+                ssc = deserializer.Deserialize<T>( reader );
+            }
+            return ssc;
+        }
+
 
 
         #region merge for yaml/json

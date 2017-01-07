@@ -11,7 +11,7 @@ namespace Synapse.Service.Windows
         public SynapseServer()
         {
             if( _scheduler == null )
-                _scheduler = new PlanScheduler( 10 );
+                _scheduler = new PlanScheduler( SynapseService.Config.MaxServerThreads );
         }
 
         #region ISynapseServer Members
