@@ -59,10 +59,12 @@ namespace Synapse.Core.Runtime
             return !_isDrainstopped;
         }
 
-        public void CancelPlan(int planInstanceId)
+        public bool CancelPlan(int planInstanceId)
         {
-            if( _plans.ContainsKey( planInstanceId ) )
+            bool found = _plans.ContainsKey( planInstanceId );
+            if( found )
                 _plans[planInstanceId].Cancel();
+            return found;
         }
 
         public void PlanComplete(IPlanRuntimeContainer planContainer)
@@ -91,6 +93,8 @@ namespace Synapse.Core.Runtime
 
         public bool IsDrainstopped { get { return _isDrainstopped; } }
         public bool IsDrainstopComplete { get { return _isDrainstopComplete; } }
+
+        public int CurrentQueueDepth { get { return _plans != null ? _plans.Keys.Count : -1; } }
 
         #region IDisposable Members
 
