@@ -53,7 +53,7 @@ namespace Synapse.Core.Runtime
             {
                 CancellationTokenSource cts = new CancellationTokenSource();
                 _plans.Add( planContainer.PlanInstanceId, cts );
-                _tasks.Add( _tf.StartNew( () => { planContainer.Start( cts.Token ); }, cts.Token ));
+                _tasks.Add( _tf.StartNew( () => { planContainer.Start( cts.Token, PlanComplete ); }, cts.Token ));
             }
 
             return !_isDrainstopped;
@@ -63,6 +63,11 @@ namespace Synapse.Core.Runtime
         {
             if( _plans.ContainsKey( planInstanceId ) )
                 _plans[planInstanceId].Cancel();
+        }
+
+        public void PlanComplete(IPlanRuntimeContainer planContainer)
+        {
+            _plans.Remove( planContainer.PlanInstanceId );
         }
 
 

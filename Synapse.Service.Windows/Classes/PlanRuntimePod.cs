@@ -11,9 +11,10 @@ namespace Synapse.Service.Windows
 {
     public class PlanRuntimePod : IPlanRuntimeContainer
     {
-        LogManager _log = new LogManager();
+        SynapseLogManager _log = new SynapseLogManager();
         DirectoryInfo _logRootPath = null;
         bool _wantsCancel = false;
+        long _ticks = DateTime.Now.Ticks;
 
         public PlanRuntimePod(Plan plan, bool isDryRun = false, Dictionary<string, string> dynamicData = null, int planInstanceId = 0)
         {
@@ -30,16 +31,21 @@ namespace Synapse.Service.Windows
 
         public void InitializeLogger()
         {
-            string logFileName = $"{Plan.Name}_{DateTime.Now.Ticks}";
-            _logRootPath = Directory.CreateDirectory( SynapseService.Config.LogRootPath );
+            string logFileName = $"{_ticks}_{Plan.Name}";
+            _logRootPath = Directory.CreateDirectory( SynapseService.Config.AuditLogRootPath );
             string logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
             _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
         }
 
-        public void Start(CancellationToken token)
+        public void Start(CancellationToken token, Action<IPlanRuntimeContainer> callback)
         {
             token.Register( () => CancelPlanExecution() );
             Plan.Start( DynamicData, IsDryRun );
+
+            if( SynapseService.Config.SerializeResultPlan )
+                File.WriteAllText( $"{_logRootPath}\\{_ticks}_{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
+
+            callback?.Invoke( this );
         }
 
         private void CancelPlanExecution()
@@ -57,10 +63,6 @@ namespace Synapse.Service.Windows
         {
             if( _wantsCancel )
                 e.Cancel = true;
-
-            //todo: this is stub code
-            if( SynapseService.Config.SerializeResultPlan )
-                File.WriteAllText( $"{_logRootPath}\\{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
 
             //todo: send a message home
         }

@@ -15,15 +15,17 @@ namespace Synapse.Service.Windows
         {
             Log4NetConversionPattern = "%d{ISO8601}|%-5p|(%t)|%m%n";
             SerializeResultPlan = true;
+            ValidatePlanSignature = true;
         }
 
         public static readonly string CurrentPath = $"{Path.GetDirectoryName( typeof( SynapseServiceConfig ).Assembly.Location )}";
         public static readonly string FileName = $"{Path.GetDirectoryName( typeof( SynapseServiceConfig ).Assembly.Location )}\\Synapse.Service.config.yaml";
 
         public int MaxServerThreads { get; set; }
-        public string LogRootPath { get; set; }
+        public string AuditLogRootPath { get; set; }
         public string Log4NetConversionPattern { get; set; }
         public bool SerializeResultPlan { get; set; }
+        public bool ValidatePlanSignature { get; set; }
 
 
         public void Serialize()

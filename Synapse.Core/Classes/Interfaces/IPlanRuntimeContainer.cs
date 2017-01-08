@@ -11,6 +11,6 @@ namespace Synapse.Core.Runtime
         Dictionary<string, string> DynamicData { get; }
         int PlanInstanceId { get; }
 
-        void Start(CancellationToken token);
+        void Start(CancellationToken token, Action<IPlanRuntimeContainer> callback);
     }
 }

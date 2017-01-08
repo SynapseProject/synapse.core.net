@@ -14,7 +14,7 @@ namespace Synapse.Common
         Fatal
     }
 
-    public class LogManager : IDisposable
+    public class SynapseLogManager : IDisposable
     {
         bool _disposed = false;
 
@@ -22,12 +22,12 @@ namespace Synapse.Common
 
         ILog _logger = null;
 
-        public LogManager(bool initDefaultLogger=false)
+        public SynapseLogManager(bool initDefaultLogger=false)
         {
             if( initDefaultLogger )
                 _logger = log4net.LogManager.GetLogger( "SynapseServer" );
         }
-        ~LogManager()
+        ~SynapseLogManager()
         {
             Dispose();
         }

@@ -5,19 +5,19 @@ using System.ServiceProcess;
 using System.Windows.Forms;
 using System.Threading;
 
-using Synapse.Common;
 using Synapse.Core.DataAccessLayer;
-using Synapse.Core.Runtime;
 using Synapse.Service.Common;
+using log4net;
 
 namespace Synapse.Service.Windows
 {
     public partial class SynapseService : ServiceBase
     {
-        LogManager _log = new LogManager( true );
+        public static ILog Logger = LogManager.GetLogger( "SynapseServer" );
+        public static SynapseServiceConfig Config = null;
+
         ServiceHost _serviceHost = null;
 
-        public static SynapseServiceConfig Config = null;
 
         public SynapseService()
         {
@@ -78,7 +78,7 @@ namespace Synapse.Service.Windows
         {
             try
             {
-                _log.Write( ServiceStatus.Starting );
+                Logger.Info( ServiceStatus.Starting );
 
                 EnsureDatabase();
 
@@ -88,7 +88,7 @@ namespace Synapse.Service.Windows
                 _serviceHost = new ServiceHost( typeof( SynapseServer ) );
                 _serviceHost.Open();
 
-                _log.Write( ServiceStatus.Running );
+                Logger.Info( ServiceStatus.Running );
             }
             catch( Exception ex )
             {
@@ -96,7 +96,8 @@ namespace Synapse.Service.Windows
                 if( ex.HResult == -2146233052 )
                     msg += "  Ensure the x86/x64 Sqlite folders are included with the distribution.";
 
-                _log.Write( LogLevel.Fatal, msg );
+                //_log.Write( Synapse.Common.LogLevel.Fatal, msg );
+                Logger.Fatal( msg );
                 WriteEventLog( msg );
 
                 this.Stop();
@@ -106,23 +107,23 @@ namespace Synapse.Service.Windows
 
         protected override void OnStop()
         {
-            _log.Write( ServiceStatus.Stopping );
+            Logger.Info( ServiceStatus.Stopping );
             if( _serviceHost != null )
                 _serviceHost.Close();
-            _log.Write( ServiceStatus.Stopped );
+            Logger.Info( ServiceStatus.Stopped );
         }
 
 
         #region ensure database exists
         void EnsureDatabase()
         {
-            _log.Write( "EnsureDatabase: Checking file exists and connection is valid." );
+            Logger.Info( "EnsureDatabase: Checking file exists and connection is valid." );
             SynapseDal.CreateDatabase();
             Exception testResult = null;
             string message = string.Empty;
             if( !SynapseDal.TestConnection( out testResult, out message ) )
                 throw testResult;
-            _log.Write( $"EnsureDatabase: Success. {message}" );
+            Logger.Info( $"EnsureDatabase: Success. {message}" );
         }
         #endregion
 
@@ -145,8 +146,8 @@ namespace Synapse.Service.Windows
 
             try
             {
-                LogManager _log = new LogManager( true );
-                _log.Write( LogLevel.Fatal, msg );
+                Synapse.Common.SynapseLogManager _log = new Synapse.Common.SynapseLogManager( true );
+                _log.Write( Synapse.Common.LogLevel.Fatal, msg );
             }
             catch
             {

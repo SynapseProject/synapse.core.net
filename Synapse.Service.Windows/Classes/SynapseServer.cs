@@ -35,6 +35,8 @@ namespace Synapse.Service.Windows
         {
             int planInstId = int.Parse( planInstanceId );
 
+            SynapseService.Logger.Debug( $"StartPlanAsync {planInstId}, {plan.Name}" );
+
             PlanRuntimePod p = new PlanRuntimePod( plan, dryRun, null, planInstId );
             _scheduler.StartPlan( p );
 
