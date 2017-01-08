@@ -14,27 +14,27 @@ namespace Synapse.Common
         Fatal
     }
 
-    public class SynapseLogManager : IDisposable
+    public class LogUtility : IDisposable
     {
         bool _disposed = false;
 
         //public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseServer" );
 
-        ILog _logger = null;
+        public ILog _logger = null;
 
-        public SynapseLogManager(bool initDefaultLogger=false)
+        public LogUtility()
         {
-            if( initDefaultLogger )
-                _logger = log4net.LogManager.GetLogger( "SynapseServer" );
         }
-        ~SynapseLogManager()
+        ~LogUtility()
         {
             Dispose();
         }
 
-        public void InitDefaultLogger()
+        public void InitDefaultLogger(string loggerName, string appenderName,
+            string logfileName, string conversionPattern, string levelName = "ALL")
         {
-            _logger = log4net.LogManager.GetLogger( "SynapseServer" );
+            //_logger = log4net.LogManager.GetLogger( "SynapseServer" );
+            _logger = new RollingFileAppenderHelper( loggerName, appenderName, logfileName, conversionPattern, levelName ).Log;
         }
 
         public void InitDynamicFileAppender(string loggerName, string appenderName,
@@ -97,7 +97,7 @@ namespace Synapse.Common
         {
             if( !_disposed )
             {
-                log4net.LogManager.Shutdown();
+                LogManager.Shutdown();
             }
             _disposed = true;
 

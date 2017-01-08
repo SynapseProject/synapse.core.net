@@ -47,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Logging\FileAppender.cs" />
-    <Compile Include="Classes\Logging\LogManager.cs" />
+    <Compile Include="Classes\Logging\LogUtility.cs" />
     <Compile Include="Classes\ServiceStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

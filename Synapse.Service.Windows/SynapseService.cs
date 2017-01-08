@@ -5,14 +5,17 @@ using System.ServiceProcess;
 using System.Windows.Forms;
 using System.Threading;
 
+using Synapse.Common;
 using Synapse.Core.DataAccessLayer;
 using Synapse.Service.Common;
+
 using log4net;
 
 namespace Synapse.Service.Windows
 {
     public partial class SynapseService : ServiceBase
     {
+        //LogUtility _logUtil = new LogUtility();
         public static ILog Logger = LogManager.GetLogger( "SynapseServer" );
         public static SynapseServiceConfig Config = null;
 
@@ -21,17 +24,25 @@ namespace Synapse.Service.Windows
 
         public SynapseService()
         {
-            this.ServiceName = "Synapse.Service";
+            Config = SynapseServiceConfig.Deserialze();
+
             InitializeComponent();
+            this.ServiceName = "Synapse.Service";
         }
+
+        //public void InitializeLogger()
+        //{
+        //    string logRootPath = System.IO.Directory.CreateDirectory( Config.ServiceLogRootPath ).FullName;
+        //    string logFilePath = $"{logRootPath}\\Synapse.Service.log";
+        //    _logUtil.InitDefaultLogger( "SynapseServer", "SynapseServer", logFilePath, Config.Log4NetConversionPattern, "DEBUG" );
+        //    Logger = _logUtil._logger;
+        //}
 
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
 
             InstallService( args );
-
-            Config = SynapseServiceConfig.Deserialze();
 
 #if DEBUG
             SynapseService s = new SynapseService();
@@ -127,6 +138,7 @@ namespace Synapse.Service.Windows
         }
         #endregion
 
+
         #region exception handling
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
@@ -146,13 +158,13 @@ namespace Synapse.Service.Windows
 
             try
             {
-                Synapse.Common.SynapseLogManager _log = new Synapse.Common.SynapseLogManager( true );
-                _log.Write( Synapse.Common.LogLevel.Fatal, msg );
+                string logRootPath = System.IO.Directory.CreateDirectory( Config.ServiceLogRootPath ).FullName;
+                string logFilePath = $"{logRootPath}\\UnhandledException_{DateTime.Now.Ticks}.log";
+                Exception ex = (Exception)e.ExceptionObject;
+                string innerMsg = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
+                System.IO.File.AppendAllText( logFilePath, $"{ex.Message}\r\n\r\n{innerMsg}" );
             }
-            catch
-            {
-                System.IO.File.AppendAllText( @"C:\Temp\error.txt", ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).InnerException.Message );
-            }
+            catch { }
         }
 
         void WriteEventLog(string msg, EventLogEntryType entryType = EventLogEntryType.Error)

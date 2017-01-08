@@ -11,7 +11,7 @@ namespace Synapse.Service.Windows
 {
     public class PlanRuntimePod : IPlanRuntimeContainer
     {
-        SynapseLogManager _log = new SynapseLogManager();
+        LogUtility _log = new LogUtility();
         DirectoryInfo _logRootPath = null;
         bool _wantsCancel = false;
         long _ticks = DateTime.Now.Ticks;

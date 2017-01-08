@@ -23,6 +23,7 @@ namespace Synapse.Service.Windows
 
         public int MaxServerThreads { get; set; }
         public string AuditLogRootPath { get; set; }
+        public string ServiceLogRootPath { get; set; }
         public string Log4NetConversionPattern { get; set; }
         public bool SerializeResultPlan { get; set; }
         public bool ValidatePlanSignature { get; set; }
