@@ -47,30 +47,6 @@ namespace Synapse.Service.cli
             plans.Add( plan05 );
             plans.Add( plan06 );
             plans.Add( plan07 );
-            plans.Add( plan00 );
-            plans.Add( plan01 );
-            plans.Add( plan02 );
-            plans.Add( plan03 );
-            plans.Add( plan04 );
-            plans.Add( plan05 );
-            plans.Add( plan06 );
-            plans.Add( plan07 );
-            plans.Add( plan00 );
-            plans.Add( plan01 );
-            plans.Add( plan02 );
-            plans.Add( plan03 );
-            plans.Add( plan04 );
-            plans.Add( plan05 );
-            plans.Add( plan06 );
-            plans.Add( plan07 );
-            plans.Add( plan00 );
-            plans.Add( plan01 );
-            plans.Add( plan02 );
-            plans.Add( plan03 );
-            plans.Add( plan04 );
-            plans.Add( plan05 );
-            plans.Add( plan06 );
-            plans.Add( plan07 );
 
 
             int instanceId = 0;
