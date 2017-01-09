@@ -11,7 +11,11 @@ namespace Synapse.Service.cli
     {
         static void Main(string[] args)
         {
-            HttpApiClient winClient = new HttpApiClient( "http://localhost:8000/syn/server/" );
+            string url = "http://localhost:8000/syn/server/";
+            if( args.Length > 0 )
+                url = args[0];
+
+            HttpApiClient winClient = new HttpApiClient( url );
 
             string __root = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests";
             string __plansRoot = $@"{__root}\Plans";
@@ -39,10 +43,12 @@ namespace Synapse.Service.cli
             plans.Add( plan06 );
             plans.Add( plan07 );
 
+            int count = 100;
+            if( args.Length > 1 )
+                count = int.Parse( args[1] );
 
             int instanceId = 0;
-
-            Parallel.For( 0, 100, ctr =>
+            Parallel.For( 0, count, ctr =>
             {
                 winClient.StartPlan( instanceId++, false, plan00 );
             } );

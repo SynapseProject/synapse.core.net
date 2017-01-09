@@ -37,7 +37,8 @@ namespace Synapse.Service.Windows
             try
             {
                 string logFileName = $"{_ticks}_{Plan.Name}";
-                _logRootPath = Directory.CreateDirectory( SynapseService.Config.AuditLogRootPath );
+                _logRootPath = Directory.CreateDirectory(
+                    $"{SynapseServiceConfig.CurrentPath}\\{SynapseService.Config.AuditLogRootPath}" );
                 logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
                 _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
             }

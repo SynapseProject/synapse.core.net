@@ -160,7 +160,8 @@ namespace Synapse.Service.Windows
 
             try
             {
-                string logRootPath = System.IO.Directory.CreateDirectory( Config.ServiceLogRootPath ).FullName;
+                string logRootPath = System.IO.Directory.CreateDirectory(
+                    $"{SynapseServiceConfig.CurrentPath}\\{Config.ServiceLogRootPath}" ).FullName;
                 string logFilePath = $"{logRootPath}\\UnhandledException_{DateTime.Now.Ticks}.log";
                 Exception ex = (Exception)e.ExceptionObject;
                 string innerMsg = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
