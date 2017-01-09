@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+
+using System.Data.SQLite;
+
 using Synapse.Core.DataAccessLayer;
 
 namespace Synapse.Core
@@ -43,9 +43,7 @@ CREATE TABLE `Plan_Instance` (
 
         internal void CreateInstance()
         {
-            _dal.OpenConnection();
             CreateInstanceInternal();
-            _dal.CloseConnection();
         }
         [Obsolete( "remove", true )]
         void RecurseActions(List<ActionItem> actions, long? parentId, long planId)
@@ -97,8 +95,13 @@ values
 )
 ";
 
-            _dal.ExecuteNonQuery( sql );
-            InstanceId = _dal.GetLastRowId().Value;
+            using( SQLiteConnection c = new SQLiteConnection( SynapseDal.ConnectionString ) )
+            {
+                c.Open();
+
+                _dal.ExecuteNonQuery( sql, c );
+                InstanceId = _dal.GetLastRowId( c ).Value;
+            }
         }
 
         internal void UpdateInstanceStatus(StatusType status, string message)
@@ -113,7 +116,7 @@ where
     {Fields.Id} = {InstanceId}
 ";
 
-            _dal.ExecuteNonQuery( sql, CommandBehavior.CloseConnection );
+            _dal.ExecuteNonQuery( sql );
         }
 
         internal void DeleteInstance(int instanceId)

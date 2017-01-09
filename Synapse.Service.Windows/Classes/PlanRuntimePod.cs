@@ -14,7 +14,7 @@ namespace Synapse.Service.Windows
         LogUtility _log = new LogUtility();
         DirectoryInfo _logRootPath = null;
         bool _wantsCancel = false;
-        long _ticks = DateTime.Now.Ticks;
+        string _ticks = null;
 
         public PlanRuntimePod(Plan plan, bool isDryRun = false, Dictionary<string, string> dynamicData = null, int planInstanceId = 0)
         {
@@ -22,6 +22,8 @@ namespace Synapse.Service.Windows
             IsDryRun = isDryRun;
             DynamicData = dynamicData;
             PlanInstanceId = planInstanceId;
+
+            _ticks = $"{planInstanceId}_{DateTime.Now.Ticks}";
 
             InitializeLogger();
 
@@ -31,10 +33,18 @@ namespace Synapse.Service.Windows
 
         public void InitializeLogger()
         {
-            string logFileName = $"{_ticks}_{Plan.Name}";
-            _logRootPath = Directory.CreateDirectory( SynapseService.Config.AuditLogRootPath );
-            string logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
-            _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
+            string logFilePath = null;
+            try
+            {
+                string logFileName = $"{_ticks}_{Plan.Name}";
+                _logRootPath = Directory.CreateDirectory( SynapseService.Config.AuditLogRootPath );
+                logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
+                _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
+            }
+            catch( Exception ex )
+            {
+                throw new FileNotFoundException( $"Could not find/acceess log file: {logFilePath}, AuditLogRootPath: {SynapseService.Config.AuditLogRootPath}", ex );
+            }
         }
 
         public void Start(CancellationToken token, Action<IPlanRuntimeContainer> callback)

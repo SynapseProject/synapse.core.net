@@ -96,6 +96,8 @@ namespace Synapse.Service.Windows
                 if( _serviceHost != null )
                     _serviceHost.Close();
 
+                SynapseServer.InitPlanScheduler();
+
                 _serviceHost = new ServiceHost( typeof( SynapseServer ) );
                 _serviceHost.Open();
 

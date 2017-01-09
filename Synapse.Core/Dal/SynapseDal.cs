@@ -7,39 +7,42 @@ namespace Synapse.Core.DataAccessLayer
 {
     public partial class SynapseDal
     {
-        static readonly string _fileName = $"{Path.GetDirectoryName( typeof( SynapseDal ).Assembly.Location )}\\synapse.sqlite3";
-        SQLiteConnection _connection = null;
+        public static readonly string FileName = $"{Path.GetDirectoryName( typeof( SynapseDal ).Assembly.Location )}\\synapse.sqlite3";
+        public static readonly string ConnectionString = $"Data Source={FileName};Version=3;";
 
-        public SynapseDal()
-        {
-            if( File.Exists( _fileName ) )
-                _connection = new SQLiteConnection( $"Data Source={_fileName};Version=3;" );
-        }
+        public SynapseDal() { }
 
         static public void CreateDatabase()
         {
-            if( File.Exists( _fileName ) && new FileInfo( _fileName ).Length == 0 )
+            if( File.Exists( FileName ) && new FileInfo( FileName ).Length == 0 )
             {
-                try { File.Delete( _fileName ); }
+                try { File.Delete( FileName ); }
                 catch { };
             }
 
-            if( !File.Exists( _fileName ) )
+            if( !File.Exists( FileName ) )
             {
                 try
                 {
-                    SQLiteConnection.CreateFile( _fileName );
+                    SQLiteConnection.CreateFile( FileName );
 
-                    SynapseDal dal = new SynapseDal();
-                    dal.OpenConnection();
-                    dal.ExecuteNonQuery( Plan.Fields.TableDef );
-                    dal.ExecuteNonQuery( ActionItem.Fields.TableDef );
-                    dal.CloseConnection();
+                    using( SQLiteConnection c = new SQLiteConnection( ConnectionString ) )
+                    {
+                        c.Open();
+                        using( SQLiteCommand cmd = new SQLiteCommand( Plan.Fields.TableDef, c ) )
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                        using( SQLiteCommand cmd = new SQLiteCommand( ActionItem.Fields.TableDef, c ) )
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
                 }
                 catch
                 {
-                    if( File.Exists( _fileName ) && new FileInfo( _fileName ).Length == 0 )
-                        File.Delete( _fileName );
+                    if( File.Exists( FileName ) && new FileInfo( FileName ).Length == 0 )
+                        File.Delete( FileName );
 
                     throw;
                 }
@@ -54,8 +57,11 @@ namespace Synapse.Core.DataAccessLayer
             SynapseDal dal = new SynapseDal();
             try
             {
-                dal.OpenConnection();
-                message = $"Using: {dal._connection.FileName}";
+                using( SQLiteConnection c = new SQLiteConnection( ConnectionString ) )
+                {
+                    c.Open();
+                    message = $"Using: {c.FileName}";
+                }
             }
             catch( Exception ex )
             {
@@ -63,39 +69,41 @@ namespace Synapse.Core.DataAccessLayer
                 message = ex.Message;
                 ok = false;
             }
-            finally
-            {
-                dal.CloseConnection();
-            }
 
             return ok;
         }
 
-        internal void OpenConnection()
+        internal void ExecuteNonQuery(string sql, SQLiteConnection connection = null)
         {
-            if( _connection == null )
-                _connection = new SQLiteConnection( $"Data Source={_fileName};Version=3;" );
-
-            if( _connection.State != ConnectionState.Open )
-                _connection.Open();
+            if( connection == null )
+            {
+                using( SQLiteConnection c = new SQLiteConnection( ConnectionString ) )
+                {
+                    c.Open();
+                    using( SQLiteCommand cmd = new SQLiteCommand( sql, c ) )
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            else
+            {
+                using( SQLiteCommand cmd = new SQLiteCommand( sql, connection ) )
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
-        internal void CloseConnection()
+        internal long? GetLastRowId(SQLiteConnection c)
         {
-            if( _connection.State != ConnectionState.Closed )
-                _connection.Close();
-        }
+            long? id = 0;
+            using( SQLiteCommand cmd = new SQLiteCommand( "select last_insert_rowid()", c ) )
+            {
+                id = (long?)cmd.ExecuteScalar();
+            }
 
-        internal void ExecuteNonQuery(string sql, CommandBehavior commandBehavior = CommandBehavior.Default)
-        {
-            OpenConnection();
-            new SQLiteCommand( sql, _connection ).ExecuteNonQuery( commandBehavior );
-        }
-
-        internal long? GetLastRowId()
-        {
-            OpenConnection();
-            return (long?)(new SQLiteCommand( "select last_insert_rowid()", _connection ).ExecuteScalar());
+            return id;
         }
 
         internal int GetEpoch()

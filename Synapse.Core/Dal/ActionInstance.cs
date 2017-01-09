@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using Synapse.Core.DataAccessLayer;
@@ -90,8 +91,13 @@ values
 )
 ";
 
-            _dal.ExecuteNonQuery( sql );
-            InstanceId = _dal.GetLastRowId().Value;
+            using( SQLiteConnection c = new SQLiteConnection( SynapseDal.ConnectionString ) )
+            {
+                c.Open();
+
+                _dal.ExecuteNonQuery( sql, c );
+                InstanceId = _dal.GetLastRowId( c ).Value;
+            }
         }
 
         internal void UpdateInstanceStatus(StatusType status, string message, int sequence, int? pid = null)
@@ -109,7 +115,7 @@ where
     {Fields.Id} = {InstanceId} and {Fields.StatusSeq} < {sequence}
 ";
 
-            _dal.ExecuteNonQuery( sql, CommandBehavior.CloseConnection );
+            _dal.ExecuteNonQuery( sql );
         }
 
         private void UpdateInstance(ActionItem action)
@@ -129,7 +135,7 @@ where
     {Fields.Id} = {InstanceId}
 ";
 
-            _dal.ExecuteNonQuery( sql, CommandBehavior.CloseConnection );
+            _dal.ExecuteNonQuery( sql );
         }
 
         public void DeleteInstance()

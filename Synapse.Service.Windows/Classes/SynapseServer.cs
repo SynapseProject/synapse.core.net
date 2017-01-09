@@ -10,6 +10,11 @@ namespace Synapse.Service.Windows
 
         public SynapseServer()
         {
+            InitPlanScheduler();
+        }
+
+        public static void InitPlanScheduler()
+        {
             if( _scheduler == null )
             {
                 _scheduler = new PlanScheduler( SynapseService.Config.MaxServerThreads );
