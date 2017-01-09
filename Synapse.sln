@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.UnitTests", "Synaps
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Common", "Synapse.Common\Synapse.Common.csproj", "{683170DE-F380-4F2E-8B91-91C7C9180B2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Service.HttpClient", "Synapse.Service.HttpClient\Synapse.Service.HttpClient.csproj", "{67051FA7-2226-4411-B150-7C61B7C88233}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Service.cli", "Synapse.Service.cli\Synapse.Service.cli.csproj", "{871FF00E-C7CA-48D7-92B2-B769333703A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{683170DE-F380-4F2E-8B91-91C7C9180B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{683170DE-F380-4F2E-8B91-91C7C9180B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{683170DE-F380-4F2E-8B91-91C7C9180B2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67051FA7-2226-4411-B150-7C61B7C88233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67051FA7-2226-4411-B150-7C61B7C88233}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67051FA7-2226-4411-B150-7C61B7C88233}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67051FA7-2226-4411-B150-7C61B7C88233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{871FF00E-C7CA-48D7-92B2-B769333703A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{871FF00E-C7CA-48D7-92B2-B769333703A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{871FF00E-C7CA-48D7-92B2-B769333703A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{871FF00E-C7CA-48D7-92B2-B769333703A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
