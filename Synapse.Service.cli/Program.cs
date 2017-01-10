@@ -48,10 +48,17 @@ namespace Synapse.Service.cli
                 count = int.Parse( args[1] );
 
             int instanceId = 0;
-            Parallel.For( 0, count, ctr =>
+            try
             {
-                winClient.StartPlan( instanceId++, false, plan00 );
-            } );
+                Parallel.For( 0, count, ctr =>
+                {
+                    winClient.StartPlan( instanceId++, false, plan00 );
+                } );
+            }
+            catch( Exception ex )
+            {
+                Console.WriteLine( Synapse.Common.WebApi.Utilities.UnwindException( ex ) );
+            }
 
             //Parallel.ForEach( plans, plan =>
             //{

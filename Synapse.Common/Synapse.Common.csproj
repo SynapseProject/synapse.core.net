@@ -62,6 +62,7 @@
     <Compile Include="WebClient\IAuthentication.cs" />
     <Compile Include="WebClient\NoAuthenticaton.cs" />
     <Compile Include="WebClient\HttpApiClientBase.cs" />
+    <Compile Include="WebClient\Utilities.cs" />
     <Compile Include="WebClient\WebApiClientException.cs" />
     <Compile Include="WebClient\WebApiClientExceptionDetails.cs" />
     <Compile Include="WebClient\WebApiClientOptions.cs" />
