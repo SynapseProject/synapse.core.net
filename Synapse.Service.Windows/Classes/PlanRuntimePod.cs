@@ -37,8 +37,7 @@ namespace Synapse.Service.Windows
             try
             {
                 string logFileName = $"{_ticks}_{Plan.Name}";
-                _logRootPath = Directory.CreateDirectory(
-                    $"{SynapseServiceConfig.CurrentPath}\\{SynapseService.Config.AuditLogRootPath}" );
+                _logRootPath = Directory.CreateDirectory( SynapseService.Config.GetResolvedAuditLogRootPath() );
                 logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
                 _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
             }
@@ -53,8 +52,9 @@ namespace Synapse.Service.Windows
             token.Register( () => CancelPlanExecution() );
             Plan.Start( DynamicData, IsDryRun );
 
+            SynapseService.Logger.Info( $"SerializeResultPlan: {SynapseService.Config.SerializeResultPlan}, {_logRootPath.FullName}\\{_ticks}_{Plan.Name}.result.yaml" );
             if( SynapseService.Config.SerializeResultPlan )
-                File.WriteAllText( $"{_logRootPath}\\{_ticks}_{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
+                File.WriteAllText( $"{_logRootPath.FullName}\\{_ticks}_{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
 
             callback?.Invoke( this );
         }

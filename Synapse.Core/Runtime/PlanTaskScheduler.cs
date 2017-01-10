@@ -52,7 +52,7 @@ namespace Synapse.Core.Runtime
             if( !_isDrainstopped )
             {
                 CancellationTokenSource cts = new CancellationTokenSource();
-                _plans.Add( planContainer.PlanInstanceId, cts );
+                _plans[planContainer.PlanInstanceId] = cts;
                 _tasks.Add( _tf.StartNew( () => { planContainer.Start( cts.Token, PlanComplete ); }, cts.Token ));
             }
 
