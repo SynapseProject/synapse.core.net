@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "Synapse.Service.cli" )]
+[assembly: AssemblyTitle( "Synapse.Node.cli" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
-[assembly: AssemblyProduct( "Synapse.Service.cli" )]
+[assembly: AssemblyProduct( "Synapse.Node.cli" )]
 [assembly: AssemblyCopyright( "Copyright ©  Steve Shortt, 2016 - 2017" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

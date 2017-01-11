@@ -5,36 +5,35 @@ using System.ServiceProcess;
 using System.Windows.Forms;
 using System.Threading;
 
-using Synapse.Common;
 using Synapse.Core.DataAccessLayer;
-using Synapse.Service.Common;
+using Synapse.Services.Common;
 
 using log4net;
 
-namespace Synapse.Service.Windows
+namespace Synapse.Services
 {
-    public partial class SynapseService : ServiceBase
+    public partial class SynapseNodeService : ServiceBase
     {
         //LogUtility _logUtil = new LogUtility();
-        public static ILog Logger = LogManager.GetLogger( "SynapseServer" );
-        public static SynapseServiceConfig Config = null;
+        public static ILog Logger = LogManager.GetLogger( "SynapseNodeServer" );
+        public static SynapseNodeConfig Config = null;
 
         ServiceHost _serviceHost = null;
 
 
-        public SynapseService()
+        public SynapseNodeService()
         {
-            Config = SynapseServiceConfig.Deserialze();
+            Config = SynapseNodeConfig.Deserialze();
 
             InitializeComponent();
-            this.ServiceName = "Synapse.Service";
+            this.ServiceName = "Synapse.Node";
         }
 
         //public void InitializeLogger()
         //{
         //    string logRootPath = System.IO.Directory.CreateDirectory( Config.ServiceLogRootPath ).FullName;
-        //    string logFilePath = $"{logRootPath}\\Synapse.Service.log";
-        //    _logUtil.InitDefaultLogger( "SynapseServer", "SynapseServer", logFilePath, Config.Log4NetConversionPattern, "DEBUG" );
+        //    string logFilePath = $"{logRootPath}\\Synapse.Node.log";
+        //    _logUtil.InitDefaultLogger( "SynapseNodeServer", "SynapseNodeServer", logFilePath, Config.Log4NetConversionPattern, "DEBUG" );
         //    Logger = _logUtil._logger;
         //}
 
@@ -45,12 +44,12 @@ namespace Synapse.Service.Windows
             InstallService( args );
 
 #if DEBUG
-            SynapseService s = new SynapseService();
+            SynapseNodeService s = new SynapseNodeService();
             s.OnStart( null );
             Thread.Sleep( Timeout.Infinite );
             s.OnStop();
 #else
-			ServiceBase.Run( new SynapseService() );
+			ServiceBase.Run( new SynapseNodeService() );
 #endif
         }
 
@@ -96,9 +95,9 @@ namespace Synapse.Service.Windows
                 if( _serviceHost != null )
                     _serviceHost.Close();
 
-                SynapseServer.InitPlanScheduler();
+                SynapseNodeServer.InitPlanScheduler();
 
-                _serviceHost = new ServiceHost( typeof( SynapseServer ) );
+                _serviceHost = new ServiceHost( typeof( SynapseNodeServer ) );
                 _serviceHost.Open();
 
                 Logger.Info( ServiceStatus.Running );
@@ -161,7 +160,7 @@ namespace Synapse.Service.Windows
             try
             {
                 string logRootPath = System.IO.Directory.CreateDirectory(
-                    SynapseService.Config.GetResolvedServiceLogRootPath() ).FullName;
+                    SynapseNodeService.Config.GetResolvedServiceLogRootPath() ).FullName;
                 string logFilePath = $"{logRootPath}\\UnhandledException_{DateTime.Now.Ticks}.log";
                 Exception ex = (Exception)e.ExceptionObject;
                 string innerMsg = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
@@ -192,7 +191,7 @@ namespace Synapse.Service.Windows
             bool haveError = !string.IsNullOrWhiteSpace( errorMessage );
 
             MessageBoxIcon icon = MessageBoxIcon.Information;
-            string msg = $"synapse.service.exe, Version: {typeof( SynapseService ).Assembly.GetName().Version}\r\nSyntax:\r\n  synapse.service.exe /install | /uninstall";
+            string msg = $"synapse.service.exe, Version: {typeof( SynapseNodeService ).Assembly.GetName().Version}\r\nSyntax:\r\n  synapse.service.exe /install | /uninstall";
 
             if( haveError )
             {

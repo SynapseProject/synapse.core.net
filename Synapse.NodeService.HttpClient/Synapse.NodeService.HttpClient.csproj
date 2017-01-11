@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{871FF00E-C7CA-48D7-92B2-B769333703A4}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{67051FA7-2226-4411-B150-7C61B7C88233}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Synapse.Service.cli</RootNamespace>
-    <AssemblyName>Synapse.Service.cli</AssemblyName>
+    <RootNamespace>Synapse.Services</RootNamespace>
+    <AssemblyName>Synapse.NodeService.HttpClient</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,11 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="NodeServiceHttpApiClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Synapse.Common\Synapse.Common.csproj">
@@ -55,12 +49,8 @@
       <Name>Synapse.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">
-      <Project>{4464700A-50BA-4B62-BD7E-16628FDA8B94}</Project>
+      <Project>{4464700a-50ba-4b62-bd7e-16628fda8b94}</Project>
       <Name>Synapse.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Synapse.Service.HttpClient\Synapse.Service.HttpClient.csproj">
-      <Project>{67051fa7-2226-4411-b150-7c61b7c88233}</Project>
-      <Name>Synapse.Service.HttpClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

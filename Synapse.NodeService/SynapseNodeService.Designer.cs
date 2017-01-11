@@ -1,6 +1,6 @@
-﻿namespace Synapse.Service.Windows
+﻿namespace Synapse.Services
 {
-	partial class SynapseService
+	partial class SynapseNodeService
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -31,7 +31,7 @@
             // 
             // SynapseService
             // 
-            this.ServiceName = "Synapse.Service";
+            this.ServiceName = "Synapse.Node";
 
 		}
 

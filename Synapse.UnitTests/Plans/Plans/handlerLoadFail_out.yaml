@@ -7,7 +7,7 @@ Actions:
     Config: {}
   Result:
     Status: Failed
-    ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
+    ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
     BranchStatus: Failed
   Parameters: {}
   Actions:
@@ -53,13 +53,13 @@ Actions:
             ExitData: Could not load file or assembly 'Synapse.CoreFoo' or one of its dependencies. The system cannot find the file specified.
           Parameters: {}
           Actions: []
-          InstanceId: 10
-        InstanceId: 9
-      InstanceId: 8
-    InstanceId: 7
-  InstanceId: 6
+          InstanceId: 501
+        InstanceId: 500
+      InstanceId: 499
+    InstanceId: 498
+  InstanceId: 497
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-InstanceId: 2
+InstanceId: 134

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using NUnit.Framework;
 
 using Synapse.Core;
 using Synapse.Core.Runtime;
-using Synapse.Service.Windows;
+using Synapse.Services;
 
 namespace Synapse.UnitTests
 {

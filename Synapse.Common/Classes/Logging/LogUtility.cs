@@ -18,7 +18,7 @@ namespace Synapse.Common
     {
         bool _disposed = false;
 
-        //public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseServer" );
+        //public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseNodeServer" );
 
         public ILog _logger = null;
 
@@ -33,7 +33,7 @@ namespace Synapse.Common
         public void InitDefaultLogger(string loggerName, string appenderName,
             string logfileName, string conversionPattern, string levelName = "ALL")
         {
-            //_logger = log4net.LogManager.GetLogger( "SynapseServer" );
+            //_logger = log4net.LogManager.GetLogger( "SynapseNodeServer" );
             _logger = new RollingFileAppenderHelper( loggerName, appenderName, logfileName, conversionPattern, levelName ).Log;
         }
 

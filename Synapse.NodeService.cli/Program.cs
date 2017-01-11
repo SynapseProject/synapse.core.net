@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Synapse.Core;
-using Synapse.Service.Windows;
+using Synapse.Services;
 
-namespace Synapse.Service.cli
+namespace Synapse.Services.NodeService.cli
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string url = "http://localhost:8000/syn/server/";
+            string url = "http://localhost:8000/synapse/node";
             if( args.Length > 0 )
                 url = args[0];
 
-            HttpApiClient winClient = new HttpApiClient( url );
+            NodeServiceHttpApiClient winClient = new NodeServiceHttpApiClient( url );
 
             string __root = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests";
             string __plansRoot = $@"{__root}\Plans";

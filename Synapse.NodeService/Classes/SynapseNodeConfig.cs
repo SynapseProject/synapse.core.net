@@ -4,22 +4,22 @@ using System.IO;
 using Synapse.Core.Utilities;
 
 
-namespace Synapse.Service.Windows
+namespace Synapse.Services
 {
     /// <summary>
-    /// Hold the startup config for Synapse.Service; written as an independent class (not using .NET config) for cross-platform compatibility.
+    /// Hold the startup config for Synapse.Node; written as an independent class (not using .NET config) for cross-platform compatibility.
     /// </summary>
-    public class SynapseServiceConfig
+    public class SynapseNodeConfig
     {
-        public SynapseServiceConfig()
+        public SynapseNodeConfig()
         {
             Log4NetConversionPattern = "%d{ISO8601}|%-5p|(%t)|%m%n";
             SerializeResultPlan = true;
             ValidatePlanSignature = true;
         }
 
-        public static readonly string CurrentPath = $"{Path.GetDirectoryName( typeof( SynapseServiceConfig ).Assembly.Location )}";
-        public static readonly string FileName = $"{Path.GetDirectoryName( typeof( SynapseServiceConfig ).Assembly.Location )}\\Synapse.Service.config.yaml";
+        public static readonly string CurrentPath = $"{Path.GetDirectoryName( typeof( SynapseNodeConfig ).Assembly.Location )}";
+        public static readonly string FileName = $"{Path.GetDirectoryName( typeof( SynapseNodeConfig ).Assembly.Location )}\\Synapse.Node.config.yaml";
 
         public int MaxServerThreads { get; set; }
         public string AuditLogRootPath { get; set; }
@@ -80,9 +80,9 @@ namespace Synapse.Service.Windows
             YamlHelpers.SerializeFile( FileName, this, serializeAsJson: false, emitDefaultValues: true );
         }
 
-        public static SynapseServiceConfig Deserialze()
+        public static SynapseNodeConfig Deserialze()
         {
-            return YamlHelpers.DeserializeFile<SynapseServiceConfig>( FileName );
+            return YamlHelpers.DeserializeFile<SynapseNodeConfig>( FileName );
         }
     }
 }

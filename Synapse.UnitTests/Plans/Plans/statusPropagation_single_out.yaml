@@ -1,22 +1,23 @@
 Name: statusPropagation_single
 Description: Tests ExecuteResult.Status propagation
 Actions:
-- Name: ac2
+- Name: ac1
+  ExecuteCase: Any
   Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
-    Status: CompletedWithErrors
+    Status: Cancelling
     ExitData: EmptyHandler ExitData default value.
-    BranchStatus: CompletedWithErrors
+    BranchStatus: Cancelling
   Parameters:
     Values:
-      ReturnStatus: CompletedWithErrors
+      ReturnStatus: Cancelling
   Actions: []
-  InstanceId: 238
+  InstanceId: 603
 - Name: ac0
   Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
     Status: New
@@ -29,7 +30,7 @@ Actions:
     Name: ac0.g
     ExecuteCase: Any
     Handler:
-      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Result:
       Status: Running
       ExitData: EmptyHandler ExitData default value.
@@ -41,7 +42,7 @@ Actions:
     - Name: ac0.g.1
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
         Status: Waiting
@@ -51,11 +52,11 @@ Actions:
         Values:
           ReturnStatus: Waiting
       Actions: []
-      InstanceId: 269
+      InstanceId: 606
     - Name: ac0.g.0
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
         Status: Failed
@@ -65,13 +66,13 @@ Actions:
         Values:
           ReturnStatus: Failed
       Actions: []
-      InstanceId: 270
-    InstanceId: 261
+      InstanceId: 607
+    InstanceId: 605
   Actions:
   - Name: ac0.1
     ExecuteCase: Any
     Handler:
-      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
     Result:
       ExitData: EmptyHandler ExitData default value.
@@ -80,7 +81,7 @@ Actions:
     Actions:
     - Name: ac0.1.1
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
         Status: Cancelled
@@ -90,11 +91,11 @@ Actions:
         Values:
           ReturnStatus: Cancelled
       Actions: []
-      InstanceId: 272
+      InstanceId: 609
     - Name: ac0.1.3
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
         Status: Complete
@@ -104,11 +105,11 @@ Actions:
         Values:
           ReturnStatus: Complete
       Actions: []
-      InstanceId: 273
+      InstanceId: 610
     - Name: ac0.1.2
       ExecuteCase: Any
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
         Status: Initializing
@@ -118,25 +119,24 @@ Actions:
         Values:
           ReturnStatus: Initializing
       Actions: []
-      InstanceId: 274
-    InstanceId: 271
-  InstanceId: 241
-- Name: ac1
-  ExecuteCase: Any
+      InstanceId: 611
+    InstanceId: 608
+  InstanceId: 604
+- Name: ac2
   Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.4, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
-    Status: Cancelling
+    Status: CompletedWithErrors
     ExitData: EmptyHandler ExitData default value.
-    BranchStatus: Cancelling
+    BranchStatus: CompletedWithErrors
   Parameters:
     Values:
-      ReturnStatus: Cancelling
+      ReturnStatus: CompletedWithErrors
   Actions: []
-  InstanceId: 249
+  InstanceId: 612
 StartInfo: {}
 Result:
   Status: Cancelled
   BranchStatus: Cancelled
-InstanceId: 21
+InstanceId: 150

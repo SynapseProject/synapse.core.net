@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 
-using Synapse.Core;
 using Synapse.Core.Utilities;
-using System.Collections.Generic;
 
 namespace Synapse.Core.Runtime
 {
-    [ServiceContract( Namespace = "http://Synapse.Server" )]
-    public interface ISynapseServer
+    [ServiceContract( Namespace = "http://Synapse.Services.Node" )]
+    public interface ISynapseNodeServer
     {
         #region smoke tests
         [OperationContract]
@@ -26,7 +25,7 @@ namespace Synapse.Core.Runtime
         //WhoAmIRecord WhoAmI();
         #endregion
 
-        #region SynapseServer
+        #region SynapseNodeServer
         [OperationContract]
         [WebInvoke( Method = HttpMethod.Post, UriTemplate = "/execute/sync/{planInstanceId}/?action=start&dryRun={dryRun}" )]
         ExecuteResult StartPlan(string planInstanceId, bool dryRun, Plan plan);

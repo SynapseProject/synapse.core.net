@@ -7,8 +7,8 @@
     <ProjectGuid>{4001A6C5-E5C7-4CFA-8543-263B33BF17C0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Synapse.Service.Windows</RootNamespace>
-    <AssemblyName>Synapse.Service</AssemblyName>
+    <RootNamespace>Synapse.Services</RootNamespace>
+    <AssemblyName>Synapse.Node</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -53,14 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\PlanRuntimePod.cs" />
-    <Compile Include="Classes\SynapseServiceConfig.cs" />
+    <Compile Include="Classes\SynapseNodeConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\SynapseServer.cs" />
-    <Compile Include="SynapseService.cs">
+    <Compile Include="Classes\SynapseNodeServer.cs" />
+    <Compile Include="SynapseNodeService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="SynapseService.Designer.cs">
-      <DependentUpon>SynapseService.cs</DependentUpon>
+    <Compile Include="SynapseNodeService.Designer.cs">
+      <DependentUpon>SynapseNodeService.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Utilities.cs" />
   </ItemGroup>
@@ -79,8 +79,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SynapseService.resx">
-      <DependentUpon>SynapseService.cs</DependentUpon>
+    <EmbeddedResource Include="SynapseNodeService.resx">
+      <DependentUpon>SynapseNodeService.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

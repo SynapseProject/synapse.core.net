@@ -5,15 +5,15 @@ using System.Configuration.Install;
 using System.IO;
 using System.ServiceProcess;
 
-namespace Synapse.Service.Windows
+namespace Synapse.Services
 {
     public class InstallUtility
     {
         public static bool InstallService(bool install, out string message)
         {
-            Type type = typeof( SynapseServiceInstaller );
+            Type type = typeof( SynapseNodeServiceInstaller );
 
-            string logFile = $"Synapse.Service.InstallLog.txt";
+            string logFile = $"Synapse.Node.InstallLog.txt";
 
             List<string> args = new List<string>();
 
@@ -42,9 +42,9 @@ namespace Synapse.Service.Windows
     }
 
     [RunInstaller( true )]
-    public class SynapseServiceInstaller : Installer
+    public class SynapseNodeServiceInstaller : Installer
     {
-        public SynapseServiceInstaller()
+        public SynapseNodeServiceInstaller()
         {
             ServiceProcessInstaller processInstaller = new ServiceProcessInstaller();
             ServiceInstaller serviceInstaller = new ServiceInstaller();
@@ -52,12 +52,12 @@ namespace Synapse.Service.Windows
             //set the privileges
             processInstaller.Account = ServiceAccount.LocalSystem;
 
-            serviceInstaller.DisplayName = "Synapse Server";
-            serviceInstaller.Description = "Synapse Server service.  Runs Plans, proxies to other Synapse Servers.  Use 'Synapse.Service /uninstall' to remove.  Information at http://synapse.readthedocs.io/en/latest/.";
+            serviceInstaller.DisplayName = "Synapse Node Service";
+            serviceInstaller.Description = "Runs Plans, proxies to other Synapse Nodes.  Use 'Synapse.Node /uninstall' to remove.  Information at http://synapse.readthedocs.io/en/latest/.";
             serviceInstaller.StartType = ServiceStartMode.Automatic;
 
             //must be the same as what was set in Program's constructor
-            serviceInstaller.ServiceName = "Synapse.Service";
+            serviceInstaller.ServiceName = "Synapse.Node";
             this.Installers.Add( processInstaller );
             this.Installers.Add( serviceInstaller );
         }

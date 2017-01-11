@@ -3,13 +3,13 @@ using Synapse.Core;
 using Synapse.Core.Runtime;
 using System.Collections.Generic;
 
-namespace Synapse.Service.Windows
+namespace Synapse.Services
 {
-    public class SynapseServer : ISynapseServer
+    public class SynapseNodeServer : ISynapseNodeServer
     {
         static PlanScheduler _scheduler = null;
 
-        public SynapseServer()
+        public SynapseNodeServer()
         {
             InitPlanScheduler();
         }
@@ -18,9 +18,9 @@ namespace Synapse.Service.Windows
         {
             if( _scheduler == null )
             {
-                _scheduler = new PlanScheduler( SynapseService.Config.MaxServerThreads );
+                _scheduler = new PlanScheduler( SynapseNodeService.Config.MaxServerThreads );
                 _scheduler.PlanCompleted += Scheduler_PlanCompleted;
-                SynapseService.Logger.Info( $"Initialized PlanScheduler, MaxThreads: {SynapseService.Config.MaxServerThreads}" );
+                SynapseNodeService.Logger.Info( $"Initialized PlanScheduler, MaxThreads: {SynapseNodeService.Config.MaxServerThreads}" );
             }
         }
 
@@ -28,12 +28,12 @@ namespace Synapse.Service.Windows
 
         public string Hello()
         {
-            return "Hello from SynapseServer, World!";
+            return "Hello from SynapseNodeServer, World!";
         }
 
         public string WhosHere()
         {
-            return "WhosHere from SynapseServer, World!";
+            return "WhosHere from SynapseNodeServer, World!";
         }
 
         public ExecuteResult StartPlan(string planInstanceId, bool dryRun, Plan plan)
@@ -45,7 +45,7 @@ namespace Synapse.Service.Windows
         {
             int planInstId = int.Parse( planInstanceId );
 
-            SynapseService.Logger.Info( $"StartPlanAsync: InstanceId: {planInstId}, Name: {plan.Name}" );
+            SynapseNodeService.Logger.Info( $"StartPlanAsync: InstanceId: {planInstId}, Name: {plan.Name}" );
 
             PlanRuntimePod p = new PlanRuntimePod( plan, dryRun, null, planInstId );
             _scheduler.StartPlan( p );  //_scheduler.StartPlan( null, dryRun, plan );
@@ -58,26 +58,26 @@ namespace Synapse.Service.Windows
             string foundMsg = found ?
                 "Found executing Plan and signaled Cancel request." :
                 "Could not find executing Plan; Plan may have already completed execution.";
-            SynapseService.Logger.Info( $"CancelPlan {planInstId}: {foundMsg}" );
+            SynapseNodeService.Logger.Info( $"CancelPlan {planInstId}: {foundMsg}" );
         }
 
         private static void Scheduler_PlanCompleted(object sender, PlanCompletedEventArgs e)
         {
-            SynapseService.Logger.Info( $"Plan Completed: InstanceId: {e.PlanContainer.PlanInstanceId}, Name: {e.PlanContainer.Plan.Name}" );  //, At: {e.TimeCompleted}
+            SynapseNodeService.Logger.Info( $"Plan Completed: InstanceId: {e.PlanContainer.PlanInstanceId}, Name: {e.PlanContainer.Plan.Name}" );  //, At: {e.TimeCompleted}
         }
 
         public void Drainstop()
         {
-            SynapseService.Logger.Info( $"Drainstop starting, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
+            SynapseNodeService.Logger.Info( $"Drainstop starting, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
             _scheduler.Drainstop();
-            SynapseService.Logger.Info( $"Drainstop complete, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
+            SynapseNodeService.Logger.Info( $"Drainstop complete, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
         }
 
         public void Undrainstop()
         {
-            SynapseService.Logger.Info( $"Undrainstop starting, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
+            SynapseNodeService.Logger.Info( $"Undrainstop starting, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
             _scheduler.Undrainstop();
-            SynapseService.Logger.Info( $"Undrainstop complete, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
+            SynapseNodeService.Logger.Info( $"Undrainstop complete, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
         }
 
         public bool GetIsDrainstopComplete() { return _scheduler.IsDrainstopComplete; }

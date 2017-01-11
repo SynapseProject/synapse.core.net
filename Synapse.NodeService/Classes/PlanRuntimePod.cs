@@ -7,7 +7,7 @@ using Synapse.Common;
 using Synapse.Core;
 using Synapse.Core.Runtime;
 
-namespace Synapse.Service.Windows
+namespace Synapse.Services
 {
     public class PlanRuntimePod : IPlanRuntimeContainer
     {
@@ -37,13 +37,13 @@ namespace Synapse.Service.Windows
             try
             {
                 string logFileName = $"{_ticks}_{Plan.Name}";
-                _logRootPath = Directory.CreateDirectory( SynapseService.Config.GetResolvedAuditLogRootPath() );
+                _logRootPath = Directory.CreateDirectory( SynapseNodeService.Config.GetResolvedAuditLogRootPath() );
                 logFilePath = $"{_logRootPath.FullName}\\{logFileName}.log";
-                _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseService.Config.Log4NetConversionPattern, "all" );
+                _log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, SynapseNodeService.Config.Log4NetConversionPattern, "all" );
             }
             catch( Exception ex )
             {
-                throw new FileNotFoundException( $"Could not find/acceess log file: {logFilePath}, AuditLogRootPath: {SynapseService.Config.AuditLogRootPath}", ex );
+                throw new FileNotFoundException( $"Could not find/acceess log file: {logFilePath}, AuditLogRootPath: {SynapseNodeService.Config.AuditLogRootPath}", ex );
             }
         }
 
@@ -52,8 +52,8 @@ namespace Synapse.Service.Windows
             token.Register( () => CancelPlanExecution() );
             Plan.Start( DynamicData, IsDryRun );
 
-            SynapseService.Logger.Info( $"SerializeResultPlan: {SynapseService.Config.SerializeResultPlan}, {_logRootPath.FullName}\\{_ticks}_{Plan.Name}.result.yaml" );
-            if( SynapseService.Config.SerializeResultPlan )
+            SynapseNodeService.Logger.Info( $"SerializeResultPlan: {SynapseNodeService.Config.SerializeResultPlan}, {_logRootPath.FullName}\\{_ticks}_{Plan.Name}.result.yaml" );
+            if( SynapseNodeService.Config.SerializeResultPlan )
                 File.WriteAllText( $"{_logRootPath.FullName}\\{_ticks}_{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
 
             callback?.Invoke( this );

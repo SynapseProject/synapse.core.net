@@ -83,9 +83,9 @@
       <Project>{4464700a-50ba-4b62-bd7e-16628fda8b94}</Project>
       <Name>Synapse.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Synapse.Service.Windows\Synapse.Service.Windows.csproj">
+    <ProjectReference Include="..\Synapse.NodeService\Synapse.NodeService.csproj">
       <Project>{4001a6c5-e5c7-4cfa-8543-263b33bf17c0}</Project>
-      <Name>Synapse.Service.Windows</Name>
+      <Name>Synapse.NodeService</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Synapse.Service.Common
+namespace Synapse.Services.Common
 {
     public enum ServiceStatus
     {

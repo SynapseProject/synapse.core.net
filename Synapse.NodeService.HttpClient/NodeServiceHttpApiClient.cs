@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Synapse.Core;
 using Synapse.Common.WebApi;
 
-namespace Synapse.Service.Windows
+namespace Synapse.Services
 {
-    public class HttpApiClient : HttpApiClientBase
+    public class NodeServiceHttpApiClient : HttpApiClientBase
     {
-        public HttpApiClient(string baseUrl, string messageFormatType = "application/json") : base( baseUrl, messageFormatType )
+        string _rootPath = "/synapse/node";
+
+        public NodeServiceHttpApiClient(string baseUrl, string messageFormatType = "application/json") : base( baseUrl, messageFormatType )
         {
         }
 
@@ -23,7 +25,7 @@ namespace Synapse.Service.Windows
 
         public async Task<ExecuteResult> StartPlanAsync(int planInstanceId, bool dryRun, Plan plan)
         {
-            string requestUri = $"/syn/server/execute/{planInstanceId}/?action=start&dryRun={dryRun}";
+            string requestUri = $"{_rootPath}/execute/{planInstanceId}/?action=start&dryRun={dryRun}";
             return await PostAsync<Plan, ExecuteResult>( plan, requestUri );
         }
 
@@ -34,7 +36,7 @@ namespace Synapse.Service.Windows
 
         public async Task CancelPlanAsync(int planInstanceId)
         {
-            string requestUri = $"/execute/{planInstanceId}/?action=cancel";
+            string requestUri = $"{_rootPath}/execute/{planInstanceId}/?action=cancel";
             await GetAsync( requestUri );
         }
 
@@ -46,7 +48,7 @@ namespace Synapse.Service.Windows
 
         public async Task DrainstopAsync()
         {
-            string requestUri = $"/drainstop/?action=stop";
+            string requestUri = $"{_rootPath}/drainstop/?action=stop";
             await GetAsync( requestUri );
         }
 
@@ -57,7 +59,7 @@ namespace Synapse.Service.Windows
 
         public async Task UndrainstopAsync()
         {
-            string requestUri = $"/drainstop/?action=unstop";
+            string requestUri = $"{_rootPath}/drainstop/?action=unstop";
             await GetAsync( requestUri );
         }
     }
