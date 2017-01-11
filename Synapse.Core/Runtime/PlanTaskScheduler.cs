@@ -7,12 +7,18 @@ namespace Synapse.Core.Runtime
 {
     public class PlanScheduler : IDisposable
     {
+        public event EventHandler<PlanCompletedEventArgs> PlanCompleted;
+        protected void OnPlanCompleted(IPlanRuntimeContainer planContainer)
+        {
+            PlanCompleted?.Invoke( this, new PlanCompletedEventArgs( planContainer ) );
+        }
+
         // default TaskFactory for starting new Tasks
         TaskFactory _tf = null;
 
         // list of current tasks
         List<Task> _tasks = new List<Task>();
-        Dictionary<int, CancellationTokenSource> _plans = new Dictionary<int, CancellationTokenSource>();
+        Dictionary<int, InProcPlanInfo> _plans = new Dictionary<int, InProcPlanInfo>();
 
         // handles max threading
         LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = null;
@@ -47,33 +53,40 @@ namespace Synapse.Core.Runtime
         /// </summary>
         /// <param name="planContainer"></param>
         /// <returns>Success/Fail for whether the Task is queued.</returns>
-        public bool StartPlan(IPlanRuntimeContainer planContainer)
+        public virtual bool StartPlan(IPlanRuntimeContainer planContainer)
         {
             if( !_isDrainstopped )
             {
                 CancellationTokenSource cts = new CancellationTokenSource();
-                _plans[planContainer.PlanInstanceId] = cts;
-                _tasks.Add( _tf.StartNew( () => { planContainer.Start( cts.Token, PlanComplete ); }, cts.Token ));
+                InProcPlanInfo info = new InProcPlanInfo()
+                {
+                    PlanPod = planContainer,
+                    CancellationToken = cts
+                };
+                _plans[planContainer.PlanInstanceId] = info;
+
+                _tasks.Add( _tf.StartNew( () => { planContainer.Start( cts.Token, PlanComplete ); }, cts.Token ) );
             }
 
             return !_isDrainstopped;
         }
 
-        public bool CancelPlan(int planInstanceId)
+        public virtual bool CancelPlan(int planInstanceId)
         {
             bool found = _plans.ContainsKey( planInstanceId );
             if( found )
-                _plans[planInstanceId].Cancel();
+                _plans[planInstanceId].CancellationToken.Cancel();
             return found;
         }
 
-        public void PlanComplete(IPlanRuntimeContainer planContainer)
+        protected virtual void PlanComplete(IPlanRuntimeContainer planContainer)
         {
             _plans.Remove( planContainer.PlanInstanceId );
+            OnPlanCompleted( planContainer );
         }
 
 
-        public void Drainstop()
+        public virtual void Drainstop()
         {
             if( !_isDrainstopped )
             {
@@ -83,18 +96,30 @@ namespace Synapse.Core.Runtime
                 _isDrainstopComplete = true;
             }
         }
-        public void Undrainstop()
+        public virtual void Undrainstop()
         {
             _isDrainstopped = false;
             _isDrainstopComplete = false;
         }
 
-        public int TasksQueuedOrRunning { get { return _limitedConcurTaskSched != null ? _limitedConcurTaskSched.DelegatesQueuedOrRunning : -1; } }
+        public virtual int TasksQueuedOrRunning { get { return _limitedConcurTaskSched != null ? _limitedConcurTaskSched.DelegatesQueuedOrRunning : -1; } }
 
-        public bool IsDrainstopped { get { return _isDrainstopped; } }
-        public bool IsDrainstopComplete { get { return _isDrainstopComplete; } }
+        public virtual bool IsDrainstopped { get { return _isDrainstopped; } }
+        public virtual bool IsDrainstopComplete { get { return _isDrainstopComplete; } }
 
-        public int CurrentQueueDepth { get { return _plans != null ? _plans.Keys.Count : -1; } }
+        public virtual int CurrentQueueDepth { get { return _plans != null ? _plans.Keys.Count : -1; } }
+
+        public virtual List<string> CurrentQueue
+        {
+            get
+            {
+                List<string> list = new List<string>();
+                foreach( InProcPlanInfo info in _plans.Values )
+                    list.Add( info.PlanPod.Plan.Name );
+
+                return list;
+            }
+        }
 
         #region IDisposable Members
 
@@ -226,6 +251,25 @@ namespace Synapse.Core.Runtime
                 if( lockTaken ) Monitor.Exit( _tasks );
             }
         }
+    }
+
+    public class InProcPlanInfo
+    {
+        public IPlanRuntimeContainer PlanPod { get; set; }
+        public CancellationTokenSource CancellationToken { get; set; }
+    }
+
+    public class PlanCompletedEventArgs : EventArgs
+    {
+        PlanCompletedEventArgs() { }
+        public PlanCompletedEventArgs(IPlanRuntimeContainer planContainer)
+        {
+            PlanContainer = planContainer;
+            TimeCompleted = DateTime.Now;
+        }
+
+        public IPlanRuntimeContainer PlanContainer { get; private set; }
+        public DateTime TimeCompleted { get; private set; }
     }
 }
 

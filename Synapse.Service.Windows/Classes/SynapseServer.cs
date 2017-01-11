@@ -1,6 +1,7 @@
 ﻿using System;
 using Synapse.Core;
 using Synapse.Core.Runtime;
+using System.Collections.Generic;
 
 namespace Synapse.Service.Windows
 {
@@ -18,6 +19,7 @@ namespace Synapse.Service.Windows
             if( _scheduler == null )
             {
                 _scheduler = new PlanScheduler( SynapseService.Config.MaxServerThreads );
+                _scheduler.PlanCompleted += Scheduler_PlanCompleted;
                 SynapseService.Logger.Info( $"Initialized PlanScheduler, MaxThreads: {SynapseService.Config.MaxServerThreads}" );
             }
         }
@@ -59,6 +61,11 @@ namespace Synapse.Service.Windows
             SynapseService.Logger.Info( $"CancelPlan {planInstId}: {foundMsg}" );
         }
 
+        private static void Scheduler_PlanCompleted(object sender, PlanCompletedEventArgs e)
+        {
+            SynapseService.Logger.Info( $"Plan Completed: InstanceId: {e.PlanContainer.PlanInstanceId}, Name: {e.PlanContainer.Plan.Name}" );  //, At: {e.TimeCompleted}
+        }
+
         public void Drainstop()
         {
             SynapseService.Logger.Info( $"Drainstop starting, CurrentQueueDepth: {_scheduler.CurrentQueueDepth}" );
@@ -74,6 +81,10 @@ namespace Synapse.Service.Windows
         }
 
         public bool GetIsDrainstopComplete() { return _scheduler.IsDrainstopComplete; }
+
+        public int GetCurrentQueueDepth() { return _scheduler.CurrentQueueDepth; }
+
+        public List<string> GetCurrentQueueItems() { return _scheduler.CurrentQueue; }
         #endregion
     }
 }

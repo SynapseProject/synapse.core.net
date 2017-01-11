@@ -107,6 +107,7 @@ namespace Synapse.Common
             if( !_disposed )
             {
                 LogManager.Shutdown();
+                _annoyed?.Close();
                 _annoyed?.Dispose();
             }
             _disposed = true;

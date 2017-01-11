@@ -5,6 +5,7 @@ using System.ServiceModel.Web;
 
 using Synapse.Core;
 using Synapse.Core.Utilities;
+using System.Collections.Generic;
 
 namespace Synapse.Core.Runtime
 {
@@ -38,6 +39,7 @@ namespace Synapse.Core.Runtime
         [WebGet( UriTemplate = "/execute/{planInstanceId}/?action=cancel" ), Description( "[?action=cancel] Cancels Plan execution at first opportunity." )]
         void CancelPlan(string planInstanceId);
 
+
         [OperationContract]
         [WebGet( UriTemplate = "/drainstop/?action=stop" ), Description( "[?action=stop] Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
         void Drainstop();
@@ -49,6 +51,15 @@ namespace Synapse.Core.Runtime
         [OperationContract]
         [WebGet( UriTemplate = "/drainstop/?action=status" ), Description( "[?action=status] Returns the TaskScheduler Drainstop 'Complete' status." )]
         bool GetIsDrainstopComplete();
+
+
+        [OperationContract]
+        [WebGet( UriTemplate = "/queue/?action=depth" ), Description( "[?action=depth] Returns the number of executing plans." )]
+        int GetCurrentQueueDepth();
+
+        [OperationContract]
+        [WebGet( UriTemplate = "/queue/?action=list" ), Description( "[?action=list] Returns the list of executing plans." )]
+        List<string> GetCurrentQueueItems();
         #endregion
     }
 }
