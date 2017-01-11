@@ -24,7 +24,7 @@ namespace Synapse.Handlers
 
             OnLogMessage( "FooExecute", $"   - [[id]:[{startInfo.InstanceId}]] -   ----------   {startInfo.ParentExitData}   ---------- working ----------" );
 
-            System.Threading.Thread.Sleep( 10000 );
+            System.Threading.Thread.Sleep( 3000 );
             //Int64 j = 0;
             //for( Int64 i = 0; i < 2000000000; i++ )
             //    j = i - 1;

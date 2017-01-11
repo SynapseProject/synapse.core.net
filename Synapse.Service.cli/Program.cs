@@ -43,7 +43,7 @@ namespace Synapse.Service.cli
             plans.Add( plan06 );
             plans.Add( plan07 );
 
-            int count = 100;
+            int count = 3;
             if( args.Length > 1 )
                 count = int.Parse( args[1] );
 
