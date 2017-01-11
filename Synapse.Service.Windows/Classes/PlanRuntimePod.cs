@@ -56,8 +56,6 @@ namespace Synapse.Service.Windows
             if( SynapseService.Config.SerializeResultPlan )
                 File.WriteAllText( $"{_logRootPath.FullName}\\{_ticks}_{Plan.Name}.result.yaml", Plan.ResultPlan.ToYaml() );
 
-            //_log.Dispose();
-
             callback?.Invoke( this );
         }
 

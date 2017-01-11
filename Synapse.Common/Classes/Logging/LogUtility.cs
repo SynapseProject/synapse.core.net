@@ -17,7 +17,6 @@ namespace Synapse.Common
     public class LogUtility : IDisposable
     {
         bool _disposed = false;
-        StreamWriter _annoyed = null;
 
         //public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseServer" );
 
@@ -42,8 +41,6 @@ namespace Synapse.Common
             string logfileName, string conversionPattern, string levelName = "ALL")
         {
             _logger = new DynamicFileAppender( loggerName, appenderName, logfileName, conversionPattern, levelName ).Log;
-            //_annoyed = new StreamWriter( logfileName );
-            //_annoyed.AutoFlush = true;
         }
 
         #region Write/WriteFormat
@@ -66,12 +63,6 @@ namespace Synapse.Common
         {
             if( logger == null )
             {
-                if( _annoyed != null )
-                {
-                    _annoyed.WriteLine( $"{DateTime.Now}|{message}" );
-                    return;
-                }
-
                 if( _logger != null )
                     logger = _logger;
                 //else
@@ -107,8 +98,6 @@ namespace Synapse.Common
             if( !_disposed )
             {
                 LogManager.Shutdown();
-                _annoyed?.Close();
-                _annoyed?.Dispose();
             }
             _disposed = true;
 
