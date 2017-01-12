@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.NodeService.cli", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.NodeService.HttpClient", "Synapse.NodeService.HttpClient\Synapse.NodeService.HttpClient.csproj", "{67051FA7-2226-4411-B150-7C61B7C88233}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.ControllerService", "Synapse.ControllerService\Synapse.ControllerService.csproj", "{6335FE8D-72F6-40E6-98B8-F921EAF9377D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{67051FA7-2226-4411-B150-7C61B7C88233}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67051FA7-2226-4411-B150-7C61B7C88233}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67051FA7-2226-4411-B150-7C61B7C88233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6335FE8D-72F6-40E6-98B8-F921EAF9377D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6335FE8D-72F6-40E6-98B8-F921EAF9377D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6335FE8D-72F6-40E6-98B8-F921EAF9377D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6335FE8D-72F6-40E6-98B8-F921EAF9377D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

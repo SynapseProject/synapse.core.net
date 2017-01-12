@@ -1,41 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.ServiceModel;
 using System.ServiceProcess;
-using System.Windows.Forms;
+using System.Text;
 using System.Threading;
-
-using Synapse.Core.DataAccessLayer;
-using Synapse.Services.Common;
-
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using log4net;
+using Microsoft.Owin.Hosting;
+using Synapse.Services.Common;
 
 namespace Synapse.Services
 {
-    public partial class SynapseNodeService : ServiceBase
+    public partial class SynapseControllerService : ServiceBase
     {
-        //LogUtility _logUtil = new LogUtility();
-        public static ILog Logger = LogManager.GetLogger( "SynapseNodeServer" );
-        public static SynapseNodeConfig Config = null;
+        public static ILog Logger = LogManager.GetLogger( "SynapseControllerServer" );
+        public static SynapseControllerConfig Config = null;
 
         ServiceHost _serviceHost = null;
+        private IDisposable _webapp;
 
 
-        public SynapseNodeService()
+        public SynapseControllerService()
         {
-            Config = SynapseNodeConfig.Deserialze();
+            Config = SynapseControllerConfig.Deserialze();
 
             InitializeComponent();
-            this.ServiceName = "Synapse.Node";
         }
-
-        //public void InitializeLogger()
-        //{
-        //    string logRootPath = System.IO.Directory.CreateDirectory( Config.ServiceLogRootPath ).FullName;
-        //    string logFilePath = $"{logRootPath}\\Synapse.Node.log";
-        //    _logUtil.InitDefaultLogger( "SynapseNodeServer", "SynapseNodeServer", logFilePath, Config.Log4NetConversionPattern, "DEBUG" );
-        //    Logger = _logUtil._logger;
-        //}
 
         public static void Main(string[] args)
         {
@@ -44,12 +39,12 @@ namespace Synapse.Services
             InstallService( args );
 
 #if DEBUG
-            SynapseNodeService s = new SynapseNodeService();
+            SynapseControllerService s = new SynapseControllerService();
             s.OnStart( null );
             Thread.Sleep( Timeout.Infinite );
             s.OnStop();
 #else
-			ServiceBase.Run( new SynapseNodeService() );
+			ServiceBase.Run( new SynapseControllerService() );
 #endif
         }
 
@@ -90,14 +85,16 @@ namespace Synapse.Services
             {
                 Logger.Info( ServiceStatus.Starting );
 
-                EnsureDatabase();
-
                 if( _serviceHost != null )
                     _serviceHost.Close();
 
-                SynapseNodeServer.InitPlanScheduler();
+#if DEBUG
+                _webapp = WebApp.Start<Startup>( $"http://localhost:{Config.WebApiPort}" );
+#else
+                _webapp = WebApp.Start<Startup>( $"http://*:{Config.WebApiPort}" );
+#endif
 
-                _serviceHost = new ServiceHost( typeof( SynapseNodeServer ) );
+                _serviceHost = new ServiceHost( typeof( RuntimeController ) );
                 _serviceHost.Open();
 
                 Logger.Info( ServiceStatus.Running );
@@ -105,8 +102,6 @@ namespace Synapse.Services
             catch( Exception ex )
             {
                 string msg = ex.Message;
-                if( ex.HResult == -2146233052 )
-                    msg += "  Ensure the x86/x64 Sqlite folders are included with the distribution.";
 
                 //_log.Write( Synapse.Common.LogLevel.Fatal, msg );
                 Logger.Fatal( msg );
@@ -120,30 +115,20 @@ namespace Synapse.Services
         protected override void OnStop()
         {
             Logger.Info( ServiceStatus.Stopping );
+
+            _webapp?.Dispose();
+
             if( _serviceHost != null )
                 _serviceHost.Close();
+
             Logger.Info( ServiceStatus.Stopped );
         }
-
-
-        #region ensure database exists
-        void EnsureDatabase()
-        {
-            Logger.Info( "EnsureDatabase: Checking file exists and connection is valid." );
-            SynapseDal.CreateDatabase();
-            Exception testResult = null;
-            string message = string.Empty;
-            if( !SynapseDal.TestConnection( out testResult, out message ) )
-                throw testResult;
-            Logger.Info( $"EnsureDatabase: Success. {message}" );
-        }
-        #endregion
 
 
         #region exception handling
         private static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            string source = "SynapseNodeService";
+            string source = "SynapseService";
             string log = "Application";
 
             string msg = ((Exception)e.ExceptionObject).Message + ((Exception)e.ExceptionObject).InnerException.Message;
@@ -160,7 +145,7 @@ namespace Synapse.Services
             try
             {
                 string logRootPath = System.IO.Directory.CreateDirectory(
-                    SynapseNodeService.Config.GetResolvedServiceLogRootPath() ).FullName;
+                    SynapseControllerService.Config.GetResolvedServiceLogRootPath() ).FullName;
                 string logFilePath = $"{logRootPath}\\UnhandledException_{DateTime.Now.Ticks}.log";
                 Exception ex = (Exception)e.ExceptionObject;
                 string innerMsg = ex.InnerException != null ? ex.InnerException.Message : string.Empty;
@@ -171,7 +156,7 @@ namespace Synapse.Services
 
         void WriteEventLog(string msg, EventLogEntryType entryType = EventLogEntryType.Error)
         {
-            string source = "SynapseService";
+            string source = "SynapseControllerService";
             string log = "Application";
 
             try
@@ -191,7 +176,7 @@ namespace Synapse.Services
             bool haveError = !string.IsNullOrWhiteSpace( errorMessage );
 
             MessageBoxIcon icon = MessageBoxIcon.Information;
-            string msg = $"synapse.node.exe, Version: {typeof( SynapseNodeService ).Assembly.GetName().Version}\r\nSyntax:\r\n  synapse.node.exe /install | /uninstall";
+            string msg = $"synapse.controller.exe, Version: {typeof( SynapseControllerService ).Assembly.GetName().Version}\r\nSyntax:\r\n  synapse.controller.exe /install | /uninstall";
 
             if( haveError )
             {
@@ -199,7 +184,7 @@ namespace Synapse.Services
                 icon = MessageBoxIcon.Error;
             }
 
-            MessageBox.Show( msg, "Synapse Node Service", MessageBoxButtons.OK, icon );
+            MessageBox.Show( msg, "Synapse Controller Service", MessageBoxButtons.OK, icon );
 
             Environment.Exit( haveError ? 1 : 0 );
         }
