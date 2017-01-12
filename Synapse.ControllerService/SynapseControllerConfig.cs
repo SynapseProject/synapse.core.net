@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-
+using System.Net;
 using Synapse.Core.Utilities;
 
 
@@ -13,38 +13,18 @@ namespace Synapse.Services
     {
         public SynapseControllerConfig()
         {
-            Log4NetConversionPattern = "%d{ISO8601}|%-5p|(%t)|%m%n";
-            SerializeResultPlan = true;
-            ValidatePlanSignature = true;
+            AuthenticationScheme = AuthenticationSchemes.IntegratedWindowsAuthentication;
+            NodeServiceUrl = "http://localhost:8000/synapse/node";
         }
 
         public static readonly string CurrentPath = $"{Path.GetDirectoryName( typeof( SynapseControllerConfig ).Assembly.Location )}";
         public static readonly string FileName = $"{Path.GetDirectoryName( typeof( SynapseControllerConfig ).Assembly.Location )}\\Synapse.Controller.config.yaml";
 
         public int MaxServerThreads { get; set; }
-        public string AuditLogRootPath { get; set; }
-        public string ServiceLogRootPath { get; set; }
-        public string Log4NetConversionPattern { get; set; }
-        public bool SerializeResultPlan { get; set; }
-        public bool ValidatePlanSignature { get; set; }
-
+        public AuthenticationSchemes AuthenticationScheme { get; set; }
         public string WebApiPort { get; set; }
+        public string NodeServiceUrl { get; set; }
 
-        public string GetResolvedAuditLogRootPath()
-        {
-            if( Path.IsPathRooted( AuditLogRootPath ) )
-                return AuditLogRootPath;
-            else
-                return PathCombine( CurrentPath, AuditLogRootPath );
-        }
-
-        public string GetResolvedServiceLogRootPath()
-        {
-            if( Path.IsPathRooted( ServiceLogRootPath ) )
-                return ServiceLogRootPath;
-            else
-                return PathCombine( CurrentPath, ServiceLogRootPath );
-        }
 
         /// <summary>
         /// A wrapper on Path.Combine to correct for fronting/trailing backslashes that otherwise fail in Path.Combine.

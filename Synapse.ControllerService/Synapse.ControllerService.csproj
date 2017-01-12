@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Synapse.Services</RootNamespace>
-    <AssemblyName>Synapse.ControllerService</AssemblyName>
+    <AssemblyName>Synapse.Controller</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -83,8 +83,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WebApi\Startup.cs" />
-    <Compile Include="Classes\RuntimeController.cs" />
+    <Compile Include="Classes\PlanServer.cs" />
+    <Compile Include="WebApi\WebServerConfig.cs" />
+    <Compile Include="WebApi\ExecuteController.cs" />
     <Compile Include="Synapse.ControllerService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -112,6 +113,10 @@
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">
       <Project>{4464700a-50ba-4b62-bd7e-16628fda8b94}</Project>
       <Name>Synapse.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Synapse.NodeService.HttpClient\Synapse.NodeService.HttpClient.csproj">
+      <Project>{67051fa7-2226-4411-b150-7c61b7c88233}</Project>
+      <Name>Synapse.NodeService.HttpClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

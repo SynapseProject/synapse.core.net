@@ -89,12 +89,12 @@ namespace Synapse.Services
                     _serviceHost.Close();
 
 #if DEBUG
-                _webapp = WebApp.Start<Startup>( $"http://localhost:{Config.WebApiPort}" );
+                _webapp = WebApp.Start<WebServerConfig>( $"http://localhost:{Config.WebApiPort}" );
 #else
-                _webapp = WebApp.Start<Startup>( $"http://*:{Config.WebApiPort}" );
+                _webapp = WebApp.Start<WebServerConfig>( $"http://*:{Config.WebApiPort}" );
 #endif
 
-                _serviceHost = new ServiceHost( typeof( RuntimeController ) );
+                _serviceHost = new ServiceHost( typeof( ExecuteController ) );
                 _serviceHost.Open();
 
                 Logger.Info( ServiceStatus.Running );
@@ -145,7 +145,7 @@ namespace Synapse.Services
             try
             {
                 string logRootPath = System.IO.Directory.CreateDirectory(
-                    SynapseControllerService.Config.GetResolvedServiceLogRootPath() ).FullName;
+                    SynapseControllerConfig.CurrentPath ).FullName;
                 string logFilePath = $"{logRootPath}\\UnhandledException_{DateTime.Now.Ticks}.log";
                 Exception ex = (Exception)e.ExceptionObject;
                 string innerMsg = ex.InnerException != null ? ex.InnerException.Message : string.Empty;

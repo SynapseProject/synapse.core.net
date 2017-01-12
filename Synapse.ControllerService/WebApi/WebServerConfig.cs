@@ -6,12 +6,12 @@ using Owin;
 
 namespace Synapse.Services
 {
-    public class Startup
+    public class WebServerConfig
     {
         public void Configuration(IAppBuilder app)
         {
             HttpListener listener = (HttpListener)app.Properties["System.Net.HttpListener"];
-            listener.AuthenticationSchemes = AuthenticationSchemes.IntegratedWindowsAuthentication;
+            listener.AuthenticationSchemes = SynapseControllerService.Config.AuthenticationScheme;
 
             // Configure Web API for self-host. 
             HttpConfiguration config = new HttpConfiguration();
