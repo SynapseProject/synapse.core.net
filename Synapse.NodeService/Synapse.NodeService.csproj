@@ -73,6 +73,10 @@
       <Project>{683170de-f380-4f2e-8b91-91c7c9180b2b}</Project>
       <Name>Synapse.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Synapse.ControllerService.HttpClient\Synapse.ControllerService.HttpClient.csproj">
+      <Project>{059d8c9c-6397-422c-9ae1-9206a6c3d324}</Project>
+      <Name>Synapse.ControllerService.HttpClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">
       <Project>{4464700a-50ba-4b62-bd7e-16628fda8b94}</Project>
       <Name>Synapse.Core</Name>

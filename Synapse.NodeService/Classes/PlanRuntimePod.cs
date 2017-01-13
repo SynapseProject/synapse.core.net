@@ -15,6 +15,8 @@ namespace Synapse.Services
         DirectoryInfo _logRootPath = null;
         bool _wantsCancel = false;
         string _ticks = null;
+        ControllerServiceHttpApiClient _controllerService =
+            new ControllerServiceHttpApiClient( SynapseNodeService.Config.ControllerServiceUrl );
 
         public PlanRuntimePod(Plan plan, bool isDryRun = false, Dictionary<string, string> dynamicData = null, int planInstanceId = 0)
         {
@@ -76,6 +78,7 @@ namespace Synapse.Services
                 e.Cancel = true;
 
             //todo: send a message home
+            _controllerService.SetPlanStatusAsync( Plan.Name, PlanInstanceId, e.SerializeSimple() );
         }
 
         private void Plan_LogMessage(object sender, LogMessageEventArgs e)

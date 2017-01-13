@@ -27,6 +27,7 @@ namespace Synapse.Services
         public string Log4NetConversionPattern { get; set; }
         public bool SerializeResultPlan { get; set; }
         public bool ValidatePlanSignature { get; set; }
+        public string ControllerServiceUrl { get; set; }
 
         public string GetResolvedAuditLogRootPath()
         {
