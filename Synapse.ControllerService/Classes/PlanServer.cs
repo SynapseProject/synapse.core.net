@@ -30,7 +30,7 @@ namespace Synapse.Services
             _nodeClient.CancelPlanAsync( instanceId );
         }
 
-        public Plan PlanStatus(string planName, long id)
+        public Plan GetPlanStatus(string planName, long id)
         {
             string planFile = $"{SynapseControllerConfig.CurrentPath}\\Plans\\{planName}.yaml";
             return YamlHelpers.DeserializeFile<Plan>( planFile );

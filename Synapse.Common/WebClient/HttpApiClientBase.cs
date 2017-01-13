@@ -139,6 +139,36 @@ namespace Synapse.Common.WebApi
             return obj;
         }
 
+        protected virtual async Task PostAsyncVoid<T>(T obj, string requestUri)
+        {
+            try
+            {
+                this.Authenticate(); // Placeholder in case we need to specify authentication header
+                ObjectContent<T> content = new ObjectContent<T>( obj, this.Options.Formatter );
+                await content.LoadIntoBufferAsync().ConfigureAwait( false );
+                HttpResponseMessage response =
+                    await this.Client.PostAsync( requestUri, (HttpContent)content ).ConfigureAwait( false );
+                if( !response.IsSuccessStatusCode )
+                    throw this.GetException( response );
+                try
+                {
+                    await response.Content.ReadAsAsync<T>().ConfigureAwait( false );
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+            catch( WebApiClientException ex )
+            {
+                throw ex;
+            }
+            catch( Exception ex )
+            {
+                throw new WebApiClientException( HttpStatusCode.InternalServerError, ex );
+            }
+        }
+
         protected virtual async Task<T> PostAsync<T>(T obj, string requestUri)
         {
             try
@@ -228,6 +258,6 @@ namespace Synapse.Common.WebApi
             }
         }
 
-        #endregion Generic
+        #endregion
     }
 }

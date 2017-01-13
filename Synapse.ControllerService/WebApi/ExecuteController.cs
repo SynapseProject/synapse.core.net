@@ -23,7 +23,7 @@ namespace Synapse.Services
 
         [Route( "{planName}/" )]
         [HttpGet]
-        public IEnumerable<long> GetPlanInstanceIdList()
+        public IEnumerable<long> GetPlanInstanceIdList(string planName)
         {
             return new long[] { 1, 2, 3 };
         }
@@ -35,25 +35,25 @@ namespace Synapse.Services
             return _server.StartPlan( planName, dryRun );
         }
 
-        [Route( "{planName}/{instanceId}/" )]
+        [Route( "{planName}/{planInstanceId}/" )]
         [HttpGet]
-        public Plan PlanStatus(string planName, long instanceId)
+        public Plan GetPlanStatus(string planName, long planInstanceId)
         {
-            return _server.PlanStatus( planName, instanceId );
+            return _server.GetPlanStatus( planName, planInstanceId );
         }
 
-        [Route( "{planName}/{instanceId}/" )]
+        [Route( "{planName}/{planInstanceId}/" )]
         [HttpPost]
-        public void WriteStatus(string planName, long instanceId, [FromBody]string msg)
+        public void WriteStatus(string planName, long planInstanceId, [FromBody]string msg)
         {
             _server.WriteStatus( msg );
         }
 
-        [Route( "{planName}/{instanceId}/" )]
+        [Route( "{planName}/{planInstanceId}/" )]
         [HttpDelete]
-        public void CancelPlan(string planName, long instanceId)
+        public void CancelPlan(string planName, long planInstanceId)
         {
-            _server.CancelPlan( instanceId );
+            _server.CancelPlan( planInstanceId );
         }
 
         public string CurrentUser
