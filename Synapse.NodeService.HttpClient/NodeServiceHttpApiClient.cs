@@ -29,12 +29,12 @@ namespace Synapse.Services
             return await PostAsync<Plan, ExecuteResult>( plan, requestUri );
         }
 
-        public void CancelPlan(int planInstanceId)
+        public void CancelPlan(long planInstanceId)
         {
             CancelPlanAsync( planInstanceId ).Wait();
         }
 
-        public async Task CancelPlanAsync(int planInstanceId)
+        public async Task CancelPlanAsync(long planInstanceId)
         {
             string requestUri = $"{_rootPath}/execute/{planInstanceId}/?action=cancel";
             await GetAsync( requestUri );

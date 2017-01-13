@@ -25,6 +25,18 @@ namespace Synapse.Services
             return pIId;
         }
 
+        public void CancelPlan(long instanceId)
+        {
+            _nodeClient.CancelPlanAsync( instanceId );
+        }
+
+        public Plan PlanStatus(string planName, long id)
+        {
+            string planFile = $"{SynapseControllerConfig.CurrentPath}\\Plans\\{planName}.yaml";
+            return YamlHelpers.DeserializeFile<Plan>( planFile );
+        }
+
+
         public void WriteStatus(string msg)
         {
             SynapseControllerService.Logger.Info( msg );
