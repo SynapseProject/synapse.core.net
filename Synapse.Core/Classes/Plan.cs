@@ -53,6 +53,10 @@ namespace Synapse.Core
         public Plan ResultPlan { get; set; }
 
 
+        public object _id { get; set; }
+        public string ParentPath { get; set; }
+
+
         public string ToYaml()
         {
             string yaml = string.Empty;

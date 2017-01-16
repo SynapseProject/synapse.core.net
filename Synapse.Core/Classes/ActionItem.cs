@@ -92,6 +92,11 @@ namespace Synapse.Core
         }
 
 
+        public object _id { get; set; }
+        public string ParentPath { get; set; }
+
+
+
         public static ActionItem CreateDummy(string name = "xxx")
         {
             return new ActionItem()
