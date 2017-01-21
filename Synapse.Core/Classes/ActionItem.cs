@@ -93,7 +93,7 @@ namespace Synapse.Core
 
 
         public object _id { get; set; }
-        public string ParentPath { get; set; }
+        public long ParentInstanceId { get; set; }
 
 
 
