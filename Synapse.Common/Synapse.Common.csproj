@@ -58,6 +58,7 @@
     <Compile Include="Classes\Logging\FileAppender.cs" />
     <Compile Include="Classes\Logging\LogUtility.cs" />
     <Compile Include="Classes\ServiceStatus.cs" />
+    <Compile Include="CmdLine\HttpApiCliBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebClient\IAuthentication.cs" />
     <Compile Include="WebClient\NoAuthenticaton.cs" />
