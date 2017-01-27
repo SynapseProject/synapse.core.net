@@ -12,7 +12,7 @@ namespace Synapse.Common.CmdLine
 {
     public abstract class HttpApiCliBase
     {
-        protected virtual void RunMethod(object instance, string methodName, string[] args)
+        protected virtual void RunMethod(object instance, string methodName, string[] args, int cmdlineStartIndex = 1, int parmsStartIndex = 0)
         {
             bool needHelp = args.Length == 2 && args[1].ToLower().Contains( "help" );
 
@@ -28,7 +28,7 @@ namespace Synapse.Common.CmdLine
             {
                 List<object> parameters = new List<object>();
                 if( parms.Length > 0 )
-                    parameters = GetMethodParameters( args, 1, parms, 0 );
+                    parameters = GetMethodParameters( args, cmdlineStartIndex, parms, parmsStartIndex );
 
                 try
                 {
@@ -51,9 +51,6 @@ namespace Synapse.Common.CmdLine
         #region utility methods
         protected virtual List<object> GetMethodParameters(string[] args, int cmdlineStartIndex, ParameterInfo[] parms, int parmsStartIndex)
         {
-            if( args.Length < (cmdlineStartIndex + 1) )
-                WriteHelpAndExit( "Not enough arguments specified." );
-
             Dictionary<string, string> options = ParseCmdLine( args, cmdlineStartIndex );
 
             List<object> parameters = new List<object>();
@@ -70,6 +67,9 @@ namespace Synapse.Common.CmdLine
 
         protected virtual Dictionary<string, string> ParseCmdLine(string[] args, int startIndex)
         {
+            if( args.Length < (startIndex + 1) )
+                WriteHelpAndExit( "Not enough arguments specified." );
+
             Dictionary<string, string> options = new Dictionary<string, string>();
 
             string pattern = @"(?<argname>\w+):(?<argvalue>.*)";
