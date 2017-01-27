@@ -40,8 +40,8 @@ namespace Synapse.Core.Runtime
 
 
         [OperationContract]
-        [WebGet( UriTemplate = "/drainstop/?action=stop" ), Description( "[?action=stop] Prevents the TaskScheduler from accepting new work; allows existing threads to complete." )]
-        void Drainstop();
+        [WebGet( UriTemplate = "/drainstop/?action=stop&shutdown={shutdown}" ), Description( "[?action=stop&shutdown=true/false] Prevents the TaskScheduler from accepting new work; allows existing threads to complete; optionally shuts down the service then the queue is fully drained." )]
+        void Drainstop(bool shutdown);
 
         [OperationContract]
         [WebGet( UriTemplate = "/drainstop/?action=unstop" ), Description( "[?action=unstop] Returns the TaskScheduler to a normal state." )]
