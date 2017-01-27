@@ -26,62 +26,74 @@ namespace Synapse.Common.CmdLine
             }
             else
             {
+                bool error = false;
                 List<object> parameters = new List<object>();
                 if( parms.Length > 0 )
-                    parameters = GetMethodParameters( args, cmdlineStartIndex, parms, parmsStartIndex );
+                    parameters = GetMethodParameters( args, cmdlineStartIndex, parms, parmsStartIndex, ref error );
 
-                try
-                {
-                    object result = mi.Invoke( instance, parameters.ToArray() );
-                    if( result is IList && ((IList)result).Count == 1 )
+                if( !error )
+                    try
                     {
-                        result = ((IList)result)[0];
-                    }
+                        object result = mi.Invoke( instance, parameters.ToArray() );
+                        if( result is IList && ((IList)result).Count == 1 )
+                        {
+                            result = ((IList)result)[0];
+                        }
 
-                    string jsonString = JsonConvert.SerializeObject( result, Formatting.Indented );
-                    Console.WriteLine( jsonString );
-                }
-                catch( Exception ex )
-                {
-                    WriteException( ex );
-                }
+                        string jsonString = JsonConvert.SerializeObject( result, Formatting.Indented );
+                        Console.WriteLine( jsonString );
+                    }
+                    catch( Exception ex )
+                    {
+                        WriteException( ex );
+                    }
             }
         }
 
         #region utility methods
-        protected virtual List<object> GetMethodParameters(string[] args, int cmdlineStartIndex, ParameterInfo[] parms, int parmsStartIndex)
+        protected virtual List<object> GetMethodParameters(string[] args, int cmdlineStartIndex, ParameterInfo[] parms, int parmsStartIndex, ref bool error)
         {
-            Dictionary<string, string> options = ParseCmdLine( args, cmdlineStartIndex );
+            Dictionary<string, string> options = ParseCmdLine( args, cmdlineStartIndex, ref error );
 
             List<object> parameters = new List<object>();
-            for( int i = parmsStartIndex; i < parms.Length; i++ )
+            if( !error )
             {
-                ParameterInfo parm = parms[i];
-                if( options.Keys.Contains( parm.Name.ToLower() ) )
-                    parameters.Add( ParseInput( options[parm.Name.ToLower()], parm.ParameterType ) );
-                else
-                    parameters.Add( null );
+                for( int i = parmsStartIndex; i < parms.Length; i++ )
+                {
+                    ParameterInfo parm = parms[i];
+                    if( options.Keys.Contains( parm.Name.ToLower() ) )
+                        parameters.Add( ParseInput( options[parm.Name.ToLower()], parm.ParameterType ) );
+                    else
+                        parameters.Add( null );
+                }
             }
+
             return parameters;
         }
 
-        protected virtual Dictionary<string, string> ParseCmdLine(string[] args, int startIndex)
+        protected virtual Dictionary<string, string> ParseCmdLine(string[] args, int startIndex, ref bool error, bool suppressErrorMessages = false)
         {
-            if( args.Length < (startIndex + 1) )
-                WriteHelpAndExit( "Not enough arguments specified." );
-
             Dictionary<string, string> options = new Dictionary<string, string>();
 
-            string pattern = @"(?<argname>\w+):(?<argvalue>.*)";
-            for( int i = startIndex; i < args.Length; i++ )
+            if( args.Length < (startIndex + 1) )
             {
-                Match match = Regex.Match( args[i], pattern );
+                error = true;
+                if( !suppressErrorMessages )
+                    WriteHelpAndExit( "Not enough arguments specified." );
+            }
+            else
+            {
+                string pattern = @"(?<argname>\w+):(?<argvalue>.*)";
+                for( int i = startIndex; i < args.Length; i++ )
+                {
+                    Match match = Regex.Match( args[i], pattern );
 
-                // If match not found, command line args are improperly formed.
-                if( match.Success )
-                    options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value.ToLower();
-                else
-                    WriteHelpAndExit( "The command line arguments are not valid or are improperly formed. Use 'argname:argvalue' for extended arguments." );
+                    // If match not found, command line args are improperly formed.
+                    if( match.Success )
+                        options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value.ToLower();
+                    else if( !suppressErrorMessages )
+                        WriteHelpAndExit( "The command line arguments are not valid or are improperly formed. Use 'argname:argvalue' for extended arguments." );
+                }
             }
 
             return options;
