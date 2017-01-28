@@ -17,8 +17,8 @@ namespace Synapse.Core.Runtime
         string Hello();
 
         [OperationContract]
-        [WebGet( UriTemplate = "/hello/whoami/" ), Description( "Get security/connection information: /hello/?whoshere" )]
-        string WhosHere();
+        [WebGet( UriTemplate = "/hello/whoami/" ), Description( "Get security/connection information: /hello/?whoami" )]
+        string WhoAmI();
 
         //[OperationContract]
         //[WebGet( UriTemplate = "/hello/?whoami" ), Description( "Get security/connection information: /hello/?whoami" )]
