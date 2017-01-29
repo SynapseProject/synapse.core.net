@@ -35,6 +35,21 @@ namespace Synapse.Core
         [YamlIgnore()]
         public bool HasException { get { return Exception != null; } }
 
+        public ActionItem ToActionItem()
+        {
+            ExecuteResult result = new ExecuteResult()
+            {
+                Status = this.Status,
+                Message = $"Context: {this.Context}, Message: {this.Message}",
+                Sequence = this.Sequence,
+            };
+            return new ActionItem()
+            {
+                InstanceId = Id,
+                Name = ActionName,
+                Result = result,
+            };
+        }
 
         public string SerializeSimple(bool asYaml = false)
         {

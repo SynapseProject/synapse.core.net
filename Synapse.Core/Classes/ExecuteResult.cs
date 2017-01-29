@@ -16,6 +16,10 @@ namespace Synapse.Core
         public object ExitData { get; set; }
         public StatusType BranchStatus { get; set; }
 
+        public int Sequence { get; set; }
+        public string Message { get; set; }
+
+
         public void SetBranchStatusChecked(ExecuteResult compareResult)
         {
             //get the highest Status value
