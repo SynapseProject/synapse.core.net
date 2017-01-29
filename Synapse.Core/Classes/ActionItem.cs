@@ -88,7 +88,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return string.Format( "{0}-->{1}", Name, Handler.Type );
+            return string.Format( "Name: {0}-->Handler: {1}", Name, Handler?.ToString() ?? "Unspecified" );
         }
 
 

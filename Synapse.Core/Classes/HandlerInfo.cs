@@ -25,5 +25,10 @@ namespace Synapse.Core
                 handler.Config = Config.Clone( shallow );
             return handler;
         }
+
+        public override string ToString()
+        {
+            return Type;
+        }
     }
 }

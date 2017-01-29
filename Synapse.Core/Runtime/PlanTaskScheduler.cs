@@ -18,7 +18,7 @@ namespace Synapse.Core.Runtime
 
         // list of current tasks
         List<Task> _tasks = new List<Task>();
-        Dictionary<int, InProcPlanInfo> _plans = new Dictionary<int, InProcPlanInfo>();
+        Dictionary<long, InProcPlanInfo> _plans = new Dictionary<long, InProcPlanInfo>();
 
         // handles max threading
         LimitedConcurrencyLevelTaskScheduler _limitedConcurTaskSched = null;
