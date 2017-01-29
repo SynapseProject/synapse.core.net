@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Enums\StatusUpdateStrategy.cs" />
     <Compile Include="Classes\ForEach.cs" />
     <Compile Include="Classes\Enums\LogLevel.cs" />
     <Compile Include="Classes\ExecuteResult.cs" />
