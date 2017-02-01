@@ -10,6 +10,7 @@ namespace Synapse.Core
     public partial class Plan
     {
         SynapseDal _dal = new SynapseDal();
+        long _instanceId = 0;
 
         internal struct Fields
         {
@@ -100,8 +101,11 @@ values
                 c.Open();
 
                 _dal.ExecuteNonQuery( sql, c );
-                InstanceId = _dal.GetLastRowId( c ).Value;
+                _instanceId = _dal.GetLastRowId( c ).Value;
             }
+
+            if( InstanceId == 0 )
+                InstanceId = _instanceId;
         }
 
         internal void UpdateInstanceStatus(StatusType status, string message)
@@ -113,7 +117,7 @@ set
     ,{Fields.StatusMsg} = '{message}'
     ,{Fields.Dttm} = {_dal.GetEpoch()}
 where
-    {Fields.Id} = {InstanceId}
+    {Fields.Id} = {_instanceId}
 ";
 
             _dal.ExecuteNonQuery( sql );
