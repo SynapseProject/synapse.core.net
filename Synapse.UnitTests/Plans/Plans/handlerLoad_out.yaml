@@ -3,7 +3,7 @@ Description: Load handlers with full or partial names.  Hierarchy below to enabl
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
-    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
   Result:
     ExitData: EmptyHandler ExitData default value.
@@ -11,7 +11,7 @@ Actions:
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
     Result:
       ExitData: EmptyHandler ExitData default value.
@@ -19,7 +19,7 @@ Actions:
     Actions:
     - Name: SimpleClassName
       Handler:
-        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
       Result:
         ExitData: EmptyHandler ExitData default value.
@@ -27,7 +27,7 @@ Actions:
       Actions:
       - Name: AbbreviatedClassName
         Handler:
-          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
         Result:
           ExitData: EmptyHandler ExitData default value.
@@ -35,17 +35,18 @@ Actions:
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
           Handler:
-            Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.0.0.5, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+            Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
             Config: {}
           Result:
             ExitData: EmptyHandler ExitData default value.
           Parameters: {}
           Actions: []
-          InstanceId: 496
-        InstanceId: 495
-      InstanceId: 494
-    InstanceId: 493
-  InstanceId: 492
+          InstanceId: 303
+        InstanceId: 302
+      InstanceId: 301
+    InstanceId: 300
+  InstanceId: 299
 StartInfo: {}
 Result: {}
-InstanceId: 133
+InstanceId: 151
+LastModified: 2/1/2017 6:04:28 PM

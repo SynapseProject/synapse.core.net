@@ -16,7 +16,7 @@ namespace Synapse.Tester
         static Plan plan = null;
         static void Main(string[] args)
         {
-            EnsureDatabaseExists();
+            //EnsureDatabaseExists();
 
 
             //string __root = @"C:\Devo\synapse\synapse.core.net\Synapse.UnitTests";
@@ -63,6 +63,11 @@ namespace Synapse.Tester
             //File.WriteAllText( $"{__plansOut}\\{plan03.Name}_out.yaml", plan03.ResultPlan.ToYaml() );
 
             //Environment.Exit( 0 );
+
+
+            Plan guy = Plan.FromYaml( @"..\..\yaml\guy.yml" );
+            guy.Start( null );
+
 
 
             string path = @"..\..\yaml\example.yml";

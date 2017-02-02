@@ -129,7 +129,8 @@ namespace Synapse.Core
             StatusType queryStatus = parentResult.Status;
 
             #region actionGroup
-            if( actionGroup != null && ((actionGroup.ExecuteCase & parentResult.Status) == actionGroup.ExecuteCase) )
+            if( actionGroup != null &&
+                (((actionGroup.ExecuteCase & parentResult.Status) == actionGroup.ExecuteCase) || (actionGroup.ExecuteCase == StatusType.Any)) )
             {
                 actionGroup.EnsureInitialized();
 
@@ -201,7 +202,8 @@ namespace Synapse.Core
 
 
             #region actions
-            IEnumerable<ActionItem> actionList = actions.Where( a => ((a.ExecuteCase & queryStatus) == a.ExecuteCase) );
+            IEnumerable<ActionItem> actionList =
+                actions.Where( a => (((a.ExecuteCase & queryStatus) == a.ExecuteCase) || (a.ExecuteCase == StatusType.Any)) );
 
             List<ActionItem> resolvedParmsActions = new List<ActionItem>();
             Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
