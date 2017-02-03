@@ -21,7 +21,7 @@ $vers = ([regex]::Match( $file, $pattern )).Groups
 
 $now = [DateTime]::Now
 $build = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
-[int]$revision = [int]$version.Revision
+[int]$revision = 1
 if( $version.Build.ToString() -eq $build )
 {
     $revision = [int]$version.Revision + 1
@@ -30,6 +30,6 @@ if( $version.Build.ToString() -eq $build )
 $v = 'AssemblyFileVersion( "{0}.{1}.{2}.{3}" )' -f $major, $minor, $build, $revision
 $file = ([regex]::Replace( $file, $pattern, $v ))
 
-Write-Host $file
+#Write-Host $file
 [System.IO.File]::SetAttributes( $path, [System.IO.FileAttributes]::Normal );
 [System.IO.File]::WriteAllText( $path, $file )
