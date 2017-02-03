@@ -1,22 +1,35 @@
-$path = "c:\Users\$($env:username)\desktop\AssemblyInfo.cs" 
-$assm = Get-Content $path
-$vers = $assm -match 'AssemblyFileVersion\( \"(?<v>.*)\" \)'
-$vers = ([regex]::Match( $assm, 'AssemblyFileVersion\( \"(?<v>.*)\" \)' )).Groups
-Write-Host $vers.Groups[1]
-$version = $vers.Groups[1].Value
-[Version]$currVer = [Version]$version
-#$foo.Revision = $foo.Revision + 1
-#Write-Host $foo
+param (
+    [string]$path, # = "c:\Users\$($env:username)\desktop\AssemblyInfo.cs",
+    [int]$major = 1,
+    [int]$minor = 0
+ )
+
+$file = Get-Content $path | Out-String
+
+#adjust AssemblyVersion
+$pattern = 'AssemblyVersion\( \"(?<v>\d.\d.\d.\d)\" \)'
+$vers = ([regex]::Match( $file, $pattern )).Groups
+[Version]$version = [Version]$vers.Groups[1].Value
+$v = 'AssemblyVersion( "{0}.{1}.{2}.{3}" )' -f $major, $minor, $version.Build, $version.Revision
+$file = ([regex]::Replace( $file, $pattern, $v ))
+
+
+#adjust AssemblyFileVersion
+$pattern = 'AssemblyFileVersion\( \"(?<v>.*)\" \)'
+$vers = ([regex]::Match( $file, $pattern )).Groups
+[Version]$version = [Version]$vers.Groups[1].Value
 
 $now = [DateTime]::Now
-$newBuild = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
-[int]$newRevision = [int]$currVer.Revision
-if( $currVer.Build.ToString() -eq $newBuild )
+$build = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
+[int]$revision = [int]$version.Revision
+if( $version.Build.ToString() -eq $build )
 {
-    $newRevision = [int]$currVer.Revision + 1
+    $revision = [int]$version.Revision + 1
 }
 
-#[int]$newRevision = [int]$currVer.Revision + 1
-$v = '{0}.{1}.{2}.{3}' -f $currVer.Major, $currVer.Minor, $newBuild, $newRevision
-[Version]$newVer = [Version]$v
-Write-Host $v
+$v = 'AssemblyFileVersion( "{0}.{1}.{2}.{3}" )' -f $major, $minor, $build, $revision
+$file = ([regex]::Replace( $file, $pattern, $v ))
+
+#Write-Host $file
+[File]::SetAttributes( $path, [FileAttributes]::Normal );
+Set-Content -Path $path -Value $file
