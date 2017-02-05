@@ -40,7 +40,6 @@ Actions:
         Values:
           ReturnStatus: Initializing
       Actions: []
-      InstanceId: 292
     - Name: ac0.g
       ExecuteCase: Any
       Handler:
@@ -53,20 +52,6 @@ Actions:
         Values:
           ReturnStatus: Complete
       Actions:
-      - Name: ac0.g.1
-        ExecuteCase: Complete
-        Handler:
-          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
-        Result:
-          Status: Waiting
-          ExitData: EmptyHandler ExitData default value.
-          BranchStatus: Waiting
-        Parameters:
-          Values:
-            ReturnStatus: Waiting
-        Actions: []
-        InstanceId: 294
       - Name: ac0.g.0
         ExecuteCase: Complete
         Handler:
@@ -80,8 +65,19 @@ Actions:
           Values:
             ReturnStatus: Failed
         Actions: []
-        InstanceId: 295
-      InstanceId: 293
+      - Name: ac0.g.1
+        ExecuteCase: Complete
+        Handler:
+          Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config: {}
+        Result:
+          Status: Waiting
+          ExitData: EmptyHandler ExitData default value.
+          BranchStatus: Waiting
+        Parameters:
+          Values:
+            ReturnStatus: Waiting
+        Actions: []
   Actions:
   - Name: ac0.1
     ExecuteCase: Complete
@@ -118,10 +114,6 @@ Actions:
           Values:
             ReturnStatus: CompletedWithErrors
         Actions: []
-        InstanceId: 298
-      InstanceId: 297
-    InstanceId: 296
-  InstanceId: 290
 - Name: ac2
   Handler:
     Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -134,10 +126,8 @@ Actions:
     Values:
       ReturnStatus: CompletedWithErrors
   Actions: []
-  InstanceId: 291
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-InstanceId: 150
-LastModified: 2/1/2017 6:04:24 PM
+LastModified: 2/5/2017 9:55:48 AM

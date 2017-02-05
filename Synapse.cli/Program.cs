@@ -131,21 +131,23 @@ namespace Synapse.cli
 
             Console_WriteLine( $"synapse.cli.exe, Version: {typeof( Program ).Assembly.GetName().Version}\r\n", ConsoleColor.Green );
             Console.WriteLine( "Syntax:" );
-            Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1}", ConsoleColor.Cyan, "{", "}" );
-            Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [/dryRun:true|false]", "{", "}" );
-            Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
+            //Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1}", ConsoleColor.Cyan, "{", "}" );
+            //Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [/dryRun:true|false]", "{", "}" );
+            //Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
+            Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1} [/dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
+            Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [dynamic parameters]\r\n", "{", "}" );
             Console_WriteLine( "  /plan{0,-8}- filePath: Valid path to plan file.", ConsoleColor.Green, "" );
-            Console.WriteLine( "{0,-15}- [or] encodedPlanString: Inline base64 encoded plan string.", "" );
-            Console.WriteLine( "  /resultPlan{0,-2}- filePath: Valid path to write ResultPlan output file.", "" );
-            Console.WriteLine( "{0,-15}- [or]: 'true' will write to same path as /plan as *.result.*", "" );
+            //Console.WriteLine( "{0,-15}- [or] encodedPlanString: Inline base64 encoded plan string.", "" );
             Console.WriteLine( "  /dryRun{0,-6}Specifies whether to execute the plan as a DryRun only.", "" );
             Console.WriteLine( "{0,-15}  Default is false.", "" );
-            Console.WriteLine( "  /taskModel{0,-3}Specifies whether to execute the plan on an internal", "" );
-            Console.WriteLine( "{0,-15}  thread or shell process.  Default is InProc.", "" );
-            Console.WriteLine( "  /render{0,-6}- encode: Returns the base64 encoded value of the", "" );
-            Console.WriteLine( "{0,-15}  specifed plan file.", "" );
-            Console.WriteLine( "{0,-15}- decode: Returns the base64 decoded value of the specified", "" );
-            Console.WriteLine( "{0,-15}  encodedPlanString.", "" );
+            Console.WriteLine( "  /resultPlan{0,-2}- filePath: Valid path to write ResultPlan output file.", "" );
+            Console.WriteLine( "{0,-15}- [or]: 'true' will write to same path as /plan as *.result.*", "" );
+            //Console.WriteLine( "  /taskModel{0,-3}Specifies whether to execute the plan on an internal", "" );
+            //Console.WriteLine( "{0,-15}  thread or shell process.  Default is InProc.", "" );
+            //Console.WriteLine( "  /render{0,-6}- encode: Returns the base64 encoded value of the", "" );
+            //Console.WriteLine( "{0,-15}  specifed plan file.", "" );
+            //Console.WriteLine( "{0,-15}- decode: Returns the base64 decoded value of the specified", "" );
+            //Console.WriteLine( "{0,-15}  encodedPlanString.", "" );
             Console.WriteLine( "  dynamic{0,-6}Any remaining /arg:value pairs will passed to the plan", "" );
             Console.WriteLine( "{0,-15}  as dynamic parms.", "" );
 

@@ -210,4 +210,40 @@ namespace Synapse.Common.CmdLine
 
         protected abstract void WriteHelpAndExit(string s);
     }
+
+    public class CmdLineUtilities
+    {
+        public static Dictionary<string, string> ParseCmdLine(string[] args, int startIndex, ref bool error, ref string message, Action<string> onErrorMethod)
+        {
+            Dictionary<string, string> options = new Dictionary<string, string>();
+
+            if( args.Length < (startIndex + 1) )
+            {
+                error = true;
+                message = "Not enough arguments specified.";
+                onErrorMethod?.Invoke( message );
+            }
+            else
+            {
+                string pattern = @"(?<argname>\w+):(?<argvalue>.*)";
+                for( int i = startIndex; i < args.Length; i++ )
+                {
+                    Match match = Regex.Match( args[i], pattern );
+
+                    // If match not found, command line args are improperly formed.
+                    if( match.Success )
+                    {
+                        options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value.ToLower();
+                    }
+                    else
+                    {
+                        message = "The command line arguments are not valid or are improperly formed. Use 'argname:argvalue' for extended arguments.";
+                        onErrorMethod?.Invoke( message );
+                    }
+                }
+            }
+
+            return options;
+        }
+    }
 }
