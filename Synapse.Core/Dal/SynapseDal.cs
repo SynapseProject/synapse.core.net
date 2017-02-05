@@ -1,4 +1,27 @@
-﻿using System;
+﻿//#define sqlite  //uncomment this line to enable dal
+
+#if !sqlite
+namespace Synapse.Core.DataAccessLayer
+{
+    public partial class SynapseDal
+    {
+        public SynapseDal() { }
+
+        static public void CreateDatabase() { }
+
+        static public bool TestConnection(out System.Exception exception, out string message)
+        {
+            exception = null;
+            message = null;
+            return true;
+        }
+    }
+}
+#endif
+
+#if sqlite
+
+using System;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
@@ -117,3 +140,5 @@ namespace Synapse.Core.DataAccessLayer
         }
     }
 }
+
+#endif

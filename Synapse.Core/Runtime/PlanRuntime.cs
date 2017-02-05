@@ -4,7 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
+#if sqlite
 using Synapse.Core.DataAccessLayer;
+#endif
+
 using Synapse.Core.Utilities;
 
 namespace Synapse.Core
@@ -90,8 +93,10 @@ namespace Synapse.Core
 
         public ExecuteResult Start(Dictionary<string, string> dynamicData, bool dryRun = false, bool inProc = true)
         {
+#if sqlite
             SynapseDal.CreateDatabase();
             CreateInstance();
+#endif
 
             ResultPlan = new Plan();
             ResultPlan.Name = Name;
@@ -108,7 +113,9 @@ namespace Synapse.Core
             ResultPlan.Result.Status = ResultPlan.Result.BranchStatus;
             Result = ResultPlan.Result;
 
+#if sqlite
             UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
+#endif
 
             return Result;
         }
@@ -149,8 +156,9 @@ namespace Synapse.Core
 
                     Parallel.ForEach( resolvedParmsActionGroup, a =>   // foreach( ActionItem a in resolvedParmsActionGroup )
                     {
+#if sqlite
                         a.CreateInstance( parentContext, InstanceId );
-
+#endif
                         ActionItem clone = a.Clone();
                         agclone.Actions.Add( clone );
 
@@ -176,8 +184,9 @@ namespace Synapse.Core
                 #region actionGroup-single
                 else
                 {
+#if sqlite
                     actionGroup.CreateInstance( parentContext, InstanceId );
-
+#endif
                     ActionItem clone = actionGroup.Clone();
                     parentContext.ActionGroup = clone;
 
@@ -212,8 +221,9 @@ namespace Synapse.Core
 
             Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
             {
+#if sqlite
                 a.CreateInstance( parentContext, InstanceId );
-
+#endif
                 ActionItem clone = a.Clone();
                 parentContext.Actions.Add( clone );
 
@@ -341,8 +351,9 @@ namespace Synapse.Core
             p.Start();
 
             result.PId = p.Id;
+#if sqlite
             a.UpdateInstanceStatus( StatusType.None, "SpawnExternal", 0, p.Id );
-
+#endif
             #region read this
             // best practice information on accessing stdout/stderr from mdsn article:
             //  https://msdn.microsoft.com/en-us/library/system.diagnostics.processstartinfo.redirectstandardoutput%28v=vs.110%29.aspx
@@ -468,7 +479,9 @@ namespace Synapse.Core
         void rt_Progress(object sender, HandlerProgressCancelEventArgs e)
         {
             if( _wantsCancel ) { e.Cancel = true; }
+#if sqlite
             SynapseDal.UpdateActionInstance( e.Id, e.Status, e.Message, e.Sequence );
+#endif
             OnProgress( e );
             if( e.Cancel ) { _wantsCancel = true; }
         }

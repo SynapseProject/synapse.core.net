@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if sqlite
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -143,3 +145,5 @@ where
         }
     }
 }
+
+#endif
