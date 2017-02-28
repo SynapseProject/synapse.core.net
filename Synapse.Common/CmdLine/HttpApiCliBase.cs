@@ -113,6 +113,10 @@ namespace Synapse.Common.CmdLine
             {
                 return int.Parse( input );
             }
+            else if( type == typeof( long? ) || type == typeof( long ) )
+            {
+                return long.Parse( input );
+            }
             else if( type == typeof( bool? ) || type == typeof( bool ) )
             {
                 return bool.Parse( input );
