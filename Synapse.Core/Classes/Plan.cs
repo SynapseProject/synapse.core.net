@@ -56,6 +56,8 @@ namespace Synapse.Core
         public object _id { get; set; }
         public string LastModified { get; set; } = DateTime.Now.ToString();
 
+        public string Signature { get; set; }
+
 
         public string ToYaml()
         {

@@ -19,6 +19,7 @@ namespace Synapse.UnitTests
         static string __plansOut = $@"{__plansRoot}\Plans";
         static string __config = $@"{__plansRoot}\Config";
         static string __parms = $@"{__plansRoot}\Parms";
+        static string __crypto = $@"{__plansRoot}\crypto";
 
         [OneTimeSetUp]
         public void Init()
@@ -447,6 +448,31 @@ namespace Synapse.UnitTests
 
             // Assert
             Assert.IsNull( msg );
+        }
+
+
+        [Test]
+        [Category( "Crypto" )]
+        [TestCase( "executeCase.yaml" )]
+        public void SignPlan(string planFile)
+        {
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+            plan.Sign( "foo", $"{__crypto}\\pubPriv.xml", System.Security.Cryptography.CspProviderFlags.NoFlags );
+            File.WriteAllText( $"{__plansOut}\\{plan.Name}_signed.yaml", plan.ToYaml() );
+        }
+
+        [Test]
+        [Category( "Crypto" )]
+        [TestCase( "executeCase_signed.yaml" )]
+        public void VerifyPlanSignature(string planFile)
+        {
+            Plan plan = Plan.FromYaml( $"{__plansOut}\\{planFile}" );
+            bool ok = plan.VerifySignature( "foo", $"{__crypto}\\pubOnly.xml", System.Security.Cryptography.CspProviderFlags.NoFlags );
+            Assert.IsTrue( ok );
+
+            plan.Name += "foo";
+            ok = plan.VerifySignature( "foo", $"{__crypto}\\pubOnly.xml", System.Security.Cryptography.CspProviderFlags.NoFlags );
+            Assert.IsFalse( ok );
         }
     }
 }
