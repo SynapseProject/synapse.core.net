@@ -52,10 +52,14 @@ namespace Synapse.Common.WebApi
                     while( exceptions.Count > 0 )
                     {
                         Exception e = exceptions.Pop();
-                        msg.Append( $"{e.Message}{lineEnd}" );
 
                         if( e.InnerException != null )
                             exceptions.Push( e.InnerException );
+
+                        msg.Append( $"{e.Message}{lineEnd}" );
+
+                        if( e is WebApiClientException && ((WebApiClientException)e).Details != null )
+                            msg.Append( $"{((WebApiClientException)e).Details.Message}{lineEnd}" );
                     }
                 }
             }
