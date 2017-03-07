@@ -30,7 +30,7 @@ namespace Synapse.Core.Utilities
             }
 
             if( string.IsNullOrWhiteSpace( defaultHandler ) )
-                defaultHandler = "Synapse.Handlers.CommandLine:CommandLineHandler";
+                defaultHandler = "Synapse.Handlers.CommandLine:CommandHandler";
             if( string.IsNullOrWhiteSpace( handlerType ) )
                 handlerType = defaultHandler;
             else if( !handlerType.ToLower().EndsWith( "handler" ) )
