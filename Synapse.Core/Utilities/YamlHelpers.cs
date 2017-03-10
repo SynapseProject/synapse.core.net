@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core.Utilities
@@ -148,8 +148,8 @@ namespace Synapse.Core.Utilities
                 int index = 0;
                 if( k.EndsWith( "]" ) )
                 {
+                    index = int.Parse( Regex.Match( k, @"\d" ).Value );
                     k = k.Substring( 0, k.IndexOf( '[' ) );
-                    index = 0;
                 }
 
                 if( source.ContainsKey( k ) && patch[key] is Dictionary<object, object> )
@@ -164,17 +164,30 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static void ApplyPatchValues(List<object> source, int index, Dictionary<object, object> patch)
+        static void ApplyPatchValues(List<object> source, int i, Dictionary<object, object> patch)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
             foreach( object key in patch.Keys )
             {
-                if( source.Count >= index + 1 && patch[key] is Dictionary<object, object> )
-                    ApplyPatchValues( (Dictionary<object, object>)source[index], (Dictionary<object, object>)patch[key] );
+                string k = key.ToString();
+                int index = 0;
+                if( k.EndsWith( "]" ) )
+                {
+                    index = int.Parse( Regex.Match( k, @"\d" ).Value );
+                    k = k.Substring( 0, k.IndexOf( '[' ) );
+                }
+
+                if( source.Count >= i + 1 && patch[key] is Dictionary<object, object> )
+                {
+                    if( source[i] is Dictionary<object, object> )
+                        ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch[key] );
+                    else
+                        ApplyPatchValues( (List<object>)source[i], index, (Dictionary<object, object>)patch[key] );
+                }
                 else
-                    ((Dictionary<object, object>)source[index])[key] = patch[key];
+                    ((Dictionary<object, object>)source[i])[key] = patch[key];
             }
         }
         #endregion
