@@ -1,0 +1,27 @@
+Name: TestRCA
+Description: Test RemoteCommand Handler
+IsActive: true
+Actions:
+- Name: Hostname
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Config:
+      Type: Yaml
+      Values:
+        WorkingDirectory: C:\Devo\synapse\synapse.server.net\Synapse.Server\bin\Debug\Synapse.Controller.Dal.FileSystem\Plans
+        Command: powershell.exe
+        TimeoutMills: 30000
+        TimeoutAction: Error
+  Parameters:
+    Type: Yaml
+    Values:
+      Parser: Regex
+      Arguments:
+        ArgString: -ExecutionPolicy Bypass -File C:\Devo\synapse\synapse.server.net\Synapse.Server\bin\Debug\Synapse.Controller.Dal.FileSystem\Plans\ad-test.ps1 ~~PARAMS~~
+        Expressions:
+        - Find: ~~PARAMS~~
+          ReplaceWith: dummyValue
+          Encoding: Base64
+    Dynamic:
+    - Name: jsonPayload
+      Path: Arguments:Expressions[0]:ReplaceWith

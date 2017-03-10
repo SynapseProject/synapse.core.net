@@ -148,6 +148,18 @@ namespace Synapse.Common.CmdLine
                 Console.WriteLine( $"\tNo additional parameter options." );
         }
 
+        protected virtual void WriteMethodParametersHelp(Dictionary<string, Type> parms, string prefix = null)
+        {
+            int count = 0;
+            foreach( string key in parms.Keys )
+            {
+                count++;
+                Console.WriteLine( "\t{0,-30}{1}", key, GetTypeFriendlyName( parms[key], prefix ) );
+            }
+            if( count == 0 )
+                Console.WriteLine( $"\tNo additional parameter options." );
+        }
+
         protected virtual string GetTypeFriendlyName(Type type, string prefix)
         {
             string typeName = type.ToString().ToLower();

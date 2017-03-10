@@ -4,186 +4,21 @@ IsActive: true
 Actions:
 - Name: ac0
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-    Config:
-      Type: Yaml
-      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
-      Values:
-        Magical: Mystery1
-        Lucy: In the sky1
-        Kitten:
-          Cat: Tommy1
-          Color: Rat1
+    Type: foo
   Parameters:
-    Name: PepeLePew
-    Type: Yaml
-    Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
-    Values:
-      Magical: Mystery1
-      Lucy: In the sky1
-      Kitten:
-        Cat: Tommy1
-        Color: Rat1
-    Dynamic:
-    - Name: app
-      Path: Magical
-    - Name: type
-      Path: Kitten:Color
-  ActionGroup:
-    Name: ac0.g
-    ExecuteCase: Failed
-    Handler:
-      Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-      Config:
-        Type: Yaml
-        Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
-        Values:
-          Magical: Mystery1
-          Lucy: In the sky1
-          Kitten:
-            Cat: Tommy1
-            Color: Rat1
-    Parameters:
-      Name: PepeLePew
-      Type: Yaml
-      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.yml
-      ForEach:
-      - Path: Lucy
-        Values:
-        - x0
-        - x1
-        - x2
-      - Path: Kitten:Cat
-        Values:
-        - y0
-        - y1
-        - y2
-    Actions:
-    - Name: ac0.g.0
-      ExecuteCase: Failed
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Yaml
-        InheritFrom: PepeLePew
-    - Name: ac0.g.1
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Yaml
-        InheritFrom: PepeLePew
+    Values: foo
   Actions:
-  - Name: ac0.1
-    ExecuteCase: Failed
+  - Name: ac1
     Handler:
-      Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
-    Actions:
-    - Name: ac0.1.1
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Xml
-        Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-        Values: <xml attr="value1"><data>foo1</data></xml>
-        Dynamic:
-        - Name: app
-          Path: /xml[1]/data[1]
-        - Name: type
-          Path: /xml[1]/@attr
-        ForEach:
-        - Path: /xml[1]/data[1]
-          Values:
-          - x0
-          - x1
-          - x2
-        - Path: /xml[1]/@attr
-          Values:
-          - y0
-          - y1
-          - y2
-      Actions: []
-    - Name: ac0.1.2
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Xml
-        Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-        Values: <xml attr="value1"><data>foo1</data></xml>
-        Dynamic:
-        - Name: app
-          Path: /xml[1]/data[1]
-        - Name: type
-          Path: /xml[1]/@attr
-        ForEach:
-        - Path: /xml[1]/data[1]
-          Values:
-          - x0
-          - x1
-          - x2
-        - Path: /xml[1]/@attr
-          Values:
-          - y0
-          - y1
-          - y2
-      Actions: []
-    - Name: ac0.1.3
-      Handler:
-        Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-        Config:
-          Type: Xml
-          Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-      Parameters:
-        Type: Yaml
-        InheritFrom: PepeLePew
-- Name: ac1
-  ExecuteCase: Complete
+      Type: foo
+    Parameters:
+      Values: foo
+    Actions: []
+- Name: ac2
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.FooHandler
-    Config:
-      Type: Xml
-      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
+    Type: foo
   Parameters:
     Values: foo
   Actions: []
-- Name: ac2
-  Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.BarHandler
-    Config:
-      Type: Xml
-      Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.xml
-  Parameters:
-    Type: Json
-    Uri: file://C:/Devo/git/Synapse/synapse.net/Synapse.Tester/yaml/parms.json
-    Values:
-      {
-        "ApplicationName": "steve1",
-        "EnvironmentName": "dev1",
-        "Tier": {
-            "Name": "webserver1",
-            "Type": "python1",
-            "Version": "1.0"
-        },
-      }
-    Dynamic:
-    - Name: app
-      Path: ApplicationName
-      Options:
-      - Key: 1
-        Value: TheOne
-      - Key: 2
-        Value: Shoe
-    - Name: type
-      Path: Tier:Type
-  Actions: []
+StartInfo: {}
+LastModified: 3/9/2017 5:50:07 PM

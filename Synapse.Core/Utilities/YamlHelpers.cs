@@ -144,10 +144,37 @@ namespace Synapse.Core.Utilities
 
             foreach( object key in patch.Keys )
             {
-                if( source.ContainsKey( key ) && patch[key] is Dictionary<object, object> )
-                    ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                string k = key.ToString();
+                int index = 0;
+                if( k.EndsWith( "]" ) )
+                {
+                    k = k.Substring( 0, k.IndexOf( '[' ) );
+                    index = 0;
+                }
+
+                if( source.ContainsKey( k ) && patch[key] is Dictionary<object, object> )
+                {
+                    if( source[k] is Dictionary<object, object> )
+                        ApplyPatchValues( (Dictionary<object, object>)source[k], (Dictionary<object, object>)patch[key] );
+                    else
+                        ApplyPatchValues( (List<object>)source[k], index, (Dictionary<object, object>)patch[key] );
+                }
                 else
                     source[key] = patch[key];
+            }
+        }
+
+        static void ApplyPatchValues(List<object> source, int index, Dictionary<object, object> patch)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            foreach( object key in patch.Keys )
+            {
+                if( source.Count >= index + 1 && patch[key] is Dictionary<object, object> )
+                    ApplyPatchValues( (Dictionary<object, object>)source[index], (Dictionary<object, object>)patch[key] );
+                else
+                    ((Dictionary<object, object>)source[index])[key] = patch[key];
             }
         }
         #endregion

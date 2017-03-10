@@ -65,8 +65,11 @@ namespace Synapse.Tester
             //Environment.Exit( 0 );
 
 
-            Plan guy = Plan.FromYaml( @"..\..\yaml\guy.yml" );
-            guy.Start( null );
+            Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
+            Dictionary<string, string> p = new Dictionary<string, string>();
+            p.Add( "jsonPayload", "{ GroupName: \"MyNewGroup\", Users: [ \"Guy Michael Waguespack\", \"Steven James Shortt\", \"Kitten Foo\", \"Matthew Paige Damon\" ] }" );
+            guy.Start( p );
+            Environment.Exit( 0 );
 
 
 
