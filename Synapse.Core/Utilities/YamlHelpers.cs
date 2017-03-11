@@ -175,9 +175,19 @@ namespace Synapse.Core.Utilities
                 if( source.ContainsKey( key ) && !(source[key] is string) )
                 {
                     if( source[key] is Dictionary<object, object> )
-                        ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                    {
+                        if( patch[key] is Dictionary<object, object> )
+                            ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                        else
+                            throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
+                    }
                     else if( source[key] is List<object> )
-                        ApplyPatchValues( (List<object>)source[key], (IndexedKey)patch[key] );
+                    {
+                        if( patch[key] is IndexedKey )
+                            ApplyPatchValues( (List<object>)source[key], (IndexedKey)patch[key] );
+                        else
+                            throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
+                    }
                 }
                 else
                     source[key] = patch[key];
@@ -191,8 +201,9 @@ namespace Synapse.Core.Utilities
 
             foreach( object key in patch.Values.Keys )
             {
-                int i = (int)key;
-                if( source.Count >= i + 1 )
+                int i = 0;
+                bool ok = int.TryParse( key.ToString(), out i );
+                if( ok && source.Count >= i + 1 )
                 {
                     if( source[i] is Dictionary<object, object> )
                         ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key] );
