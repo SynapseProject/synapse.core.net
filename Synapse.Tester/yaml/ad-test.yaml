@@ -22,6 +22,29 @@ Actions:
         - Find: ~~PARAMS~~
           ReplaceWith: dummyValue
           Encoding: Base64
+        - Find: ~~foo~~
+          ReplaceWith: dummyValue
+          ItemCollection:
+          - Item0: v0.0
+            Prop0: v0.1
+          - Item1: v1.0
+            Prop1: v1.1
+          - Item2: v2.0
+            Prop2: v2.1
+          Encoding: Base64
+        - Find: ~~foop~~
+          ReplaceWith: dummyValue
+          Container:
+            ItemCollection:
+            - Item0: v0.0
+              Prop0: v0.1
+            - Item1: v1.0
+              Prop1: v1.1
+          Encoding: Base64
     Dynamic:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
+    - Name: prop0
+      Path: Arguments:Expressions[1]:ItemCollection[2]:Prop2
+    - Name: prop1
+      Path: Arguments:Expressions[2]:Container:ItemCollection[1]:Prop1

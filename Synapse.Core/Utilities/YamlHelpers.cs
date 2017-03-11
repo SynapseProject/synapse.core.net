@@ -106,8 +106,64 @@ namespace Synapse.Core.Utilities
             //if( values == null || (values != null && values.Count == 0) )
             //    return;
 
-            Dictionary<object, object> p = ConvertDynamicValuesToDict( patch, values );
+            Dictionary<object, object> p = ConvertDynamicValuesToDictionary( patch, values );
+
+            //Dictionary<object, object> p = ConvertDynamicValuesToDict( patch, values );
             ApplyPatchValues( source, p );
+        }
+
+        static Dictionary<object, object> ConvertDynamicValuesToDictionary(List<DynamicValue> patch, Dictionary<string, string> values)
+        {
+            Dictionary<object, object> dict = new Dictionary<object, object>();
+
+            Dictionary<object, object> d = dict;
+            foreach( DynamicValue v in patch )
+            {
+                string[] keys = v.Path.ToString().Split( ':' );
+                int lastIndex = keys.Length - 1;
+
+                for( int i = 0; i < lastIndex; i++ )
+                {
+                    IndexedKey pk = new IndexedKey( keys[i] );
+
+                    if( !d.ContainsKey( pk.Key ) )
+                    {
+                        if( pk.IsIndexed )
+                        {
+                            pk.Values = new Dictionary<object, object>();
+                            pk.Values[pk.Index] = new Dictionary<object, object>();
+                            d[pk.Key] = pk;
+                            d = (Dictionary<object, object>)pk.Values[pk.Index];
+                        }
+                        else
+                        {
+                            d[pk.Key] = new Dictionary<object, object>();
+                            d = (Dictionary<object, object>)d[pk.Key];
+                        }
+                    }
+                    else
+                    {
+                        if( d[pk.Key] is IndexedKey )
+                        {
+                            d = ((IndexedKey)d[pk.Key]).Values;
+                            if( pk.IsIndexed )
+                            {
+                                d[pk.Index] = new Dictionary<object, object>();
+                                d = (Dictionary<object, object>)d[pk.Index];
+                            }
+                        }
+                        else
+                            d = (Dictionary<object, object>)d[pk.Key];
+                    }
+                }
+
+                if( values.ContainsKey( v.Name ) )
+                    d[keys[lastIndex]] = values[v.Name];
+
+                d = dict;
+            }
+
+            return dict;
         }
 
         static Dictionary<object, object> ConvertDynamicValuesToDict(List<DynamicValue> patch, Dictionary<string, string> values)
@@ -144,50 +200,35 @@ namespace Synapse.Core.Utilities
 
             foreach( object key in patch.Keys )
             {
-                string k = key.ToString();
-                int index = 0;
-                if( k.EndsWith( "]" ) )
+                if( source.ContainsKey( key ) && !(source[key] is string) )
                 {
-                    index = int.Parse( Regex.Match( k, @"\d" ).Value );
-                    k = k.Substring( 0, k.IndexOf( '[' ) );
-                }
-
-                if( source.ContainsKey( k ) && patch[key] is Dictionary<object, object> )
-                {
-                    if( source[k] is Dictionary<object, object> )
-                        ApplyPatchValues( (Dictionary<object, object>)source[k], (Dictionary<object, object>)patch[key] );
-                    else
-                        ApplyPatchValues( (List<object>)source[k], index, (Dictionary<object, object>)patch[key] );
+                    if( source[key] is Dictionary<object, object> )
+                        ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                    else if( source[key] is List<object> )
+                        ApplyPatchValues( (List<object>)source[key], (IndexedKey)patch[key] );
                 }
                 else
                     source[key] = patch[key];
             }
         }
 
-        static void ApplyPatchValues(List<object> source, int i, Dictionary<object, object> patch)
+        static void ApplyPatchValues(List<object> source, IndexedKey patch)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
-            foreach( object key in patch.Keys )
+            foreach( object key in patch.Values.Keys )
             {
-                string k = key.ToString();
-                int index = 0;
-                if( k.EndsWith( "]" ) )
-                {
-                    index = int.Parse( Regex.Match( k, @"\d" ).Value );
-                    k = k.Substring( 0, k.IndexOf( '[' ) );
-                }
-
-                if( source.Count >= i + 1 && patch[key] is Dictionary<object, object> )
+                int i = (int)key;
+                if( source.Count >= i + 1 )
                 {
                     if( source[i] is Dictionary<object, object> )
-                        ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch[key] );
+                        ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key] );
                     else
-                        ApplyPatchValues( (List<object>)source[i], index, (Dictionary<object, object>)patch[key] );
+                        ApplyPatchValues( (List<object>)source[i], (IndexedKey)patch.Values[key] );
                 }
                 else
-                    ((Dictionary<object, object>)source[i])[key] = patch[key];
+                    ((Dictionary<object, object>)source[i])[key] = patch.Values[key];
             }
         }
         #endregion
@@ -256,5 +297,30 @@ namespace Synapse.Core.Utilities
             return copy;
         }
         #endregion
+    }
+
+
+    class IndexedKey
+    {
+        public IndexedKey(object key)
+        {
+            string k = key.ToString();
+            int index = -1;
+            if( k.EndsWith( "]" ) )
+            {
+                index = int.Parse( System.Text.RegularExpressions.Regex.Match( k, @"\d" ).Value );
+                k = k.Substring( 0, k.IndexOf( '[' ) );
+            }
+
+            Key = k;
+            if( index > -1 )
+                Index = index;
+        }
+
+        public object Key { get; }
+        public int? Index { get; set; }
+        public bool IsIndexed { get { return Index.HasValue; } }
+
+        public Dictionary<object, object> Values { get; set; }
     }
 }

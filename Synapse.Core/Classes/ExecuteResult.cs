@@ -13,6 +13,7 @@ namespace Synapse.Core
 
         public int PId { get; set; }
         public StatusType Status { get; set; }
+        public object ExitCode { get; set; }
         public object ExitData { get; set; }
         public StatusType BranchStatus { get; set; }
 

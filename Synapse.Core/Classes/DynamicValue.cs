@@ -11,10 +11,9 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return string.Format( "[{0}]::[{1}]", Name, Path );
+            return $"[{Name}]::[{Path}]";
         }
     }
-
     public class Option
     {
         public string Key { get; set; }
@@ -22,7 +21,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return string.Format( "[{0}]::[{1}]", Key, Value );
+            return $"[{Key}]::[{Value}]";
         }
     }
 }

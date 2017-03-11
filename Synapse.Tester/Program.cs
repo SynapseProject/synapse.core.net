@@ -68,7 +68,10 @@ namespace Synapse.Tester
             Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
             Dictionary<string, string> p = new Dictionary<string, string>();
             p.Add( "jsonPayload", "{ GroupName: \"MyNewGroup\", Users: [ \"Guy Michael Waguespack\", \"Steven James Shortt\", \"Kitten Foo\", \"Matthew Paige Damon\" ] }" );
+            p.Add( "prop0", "value0" );
+            p.Add( "prop1", "value1" );
             guy.Start( p );
+            string rp = guy.ResultPlan.ToYaml();
             Environment.Exit( 0 );
 
 
@@ -141,7 +144,7 @@ namespace Synapse.Tester
             Console.WriteLine( "ActionName: {0}, Context:{1}, Message:{2}, StatusType:{3}, {4}", e.ActionName, e.Context, e.Message, e.Status, ++_count );
         }
 
-        
+
         #region ensure database exists
         static void EnsureDatabaseExists()
         {
