@@ -108,7 +108,6 @@ namespace Synapse.Core.Utilities
 
             Dictionary<object, object> p = ConvertDynamicValuesToDictionary( patch, values );
 
-            //Dictionary<object, object> p = ConvertDynamicValuesToDict( patch, values );
             ApplyPatchValues( source, p );
         }
 
@@ -166,33 +165,6 @@ namespace Synapse.Core.Utilities
             return dict;
         }
 
-        static Dictionary<object, object> ConvertDynamicValuesToDict(List<DynamicValue> patch, Dictionary<string, string> values)
-        {
-            Dictionary<object, object> dict = new Dictionary<object, object>();
-
-            Dictionary<object, object> d = dict;
-            foreach( DynamicValue v in patch )
-            {
-                string[] keys = v.Path.ToString().Split( ':' );
-                int lastIndex = keys.Length - 1;
-                for( int i = 0; i < lastIndex; i++ )
-                {
-                    string key = keys[i];
-                    if( !d.ContainsKey( key ) )
-                        d[key] = new Dictionary<object, object>();
-
-                    d = (Dictionary<object, object>)d[key];
-                }
-
-                if( values.ContainsKey( v.Name ) )
-                    d[keys[lastIndex]] = values[v.Name];
-
-                d = dict;
-            }
-
-            return dict;
-        }
-
         static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
@@ -228,7 +200,7 @@ namespace Synapse.Core.Utilities
                         ApplyPatchValues( (List<object>)source[i], (IndexedKey)patch.Values[key] );
                 }
                 else
-                    ((Dictionary<object, object>)source[i])[key] = patch.Values[key];
+                    source.Add( patch.Values[key] );
             }
         }
         #endregion

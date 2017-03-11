@@ -45,6 +45,6 @@ Actions:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
     - Name: prop0
-      Path: Arguments:Expressions[1]:ItemCollection[2]:Prop2
+      Path: Arguments:Expressions[1]:ItemCollection[3]:Prop2
     - Name: prop1
-      Path: Arguments:Expressions[2]:Container:ItemCollection[1]:Prop1
+      Path: Arguments:Expressions[2]:Container:ItemCollectionX[1]:Prop1
