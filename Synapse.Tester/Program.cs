@@ -70,6 +70,9 @@ namespace Synapse.Tester
             p.Add( "jsonPayload", "{ GroupName: \"MyNewGroup\", Users: [ \"Guy Michael Waguespack\", \"Steven James Shortt\", \"Kitten Foo\", \"Matthew Paige Damon\" ] }" );
             p.Add( "prop0", "value0" );
             p.Add( "prop1", "value1" );
+            p.Add( "prop2", "value2" );
+            p.Add( "prop3", "value3" );
+            p.Add( "prop4", "value4" );
             guy.Start( p );
             string rp = guy.ResultPlan.ToYaml();
             Environment.Exit( 0 );

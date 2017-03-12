@@ -186,7 +186,8 @@ namespace Synapse.Core.Utilities
                         if( patch[key] is IndexedKey )
                             ApplyPatchValues( (List<object>)source[key], (IndexedKey)patch[key] );
                         else
-                            throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
+                            ((List<object>)source[key]).Add( patch[key] );
+                            //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
                     }
                 }
                 else
@@ -291,7 +292,7 @@ namespace Synapse.Core.Utilities
             int index = -1;
             if( k.EndsWith( "]" ) )
             {
-                index = int.Parse( System.Text.RegularExpressions.Regex.Match( k, @"\d" ).Value );
+                index = int.Parse( Regex.Match( k, @"\d" ).Value );
                 k = k.Substring( 0, k.IndexOf( '[' ) );
             }
 
@@ -301,6 +302,7 @@ namespace Synapse.Core.Utilities
         }
 
         public object Key { get; }
+        [YamlIgnore]
         public int? Index { get; set; }
         public bool IsIndexed { get { return Index.HasValue; } }
 

@@ -42,9 +42,5 @@ Actions:
               Prop1: v1.1
           Encoding: Base64
     Dynamic:
-    - Name: jsonPayload
-      Path: Arguments:Expressions[0]:ReplaceWith
-    - Name: prop0
-      Path: Arguments:Expressions[1]:ItemCollection[3]:Prop2
-    - Name: prop1
-      Path: Arguments:Expressions:Container[2]:ItemCollectionX[1]:Prop1
+    - Name: prop4
+      Path: Arguments:Expressions:Container:ItemCollection:Prop1
