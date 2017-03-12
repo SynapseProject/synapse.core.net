@@ -179,7 +179,8 @@ namespace Synapse.Core.Utilities
                         if( patch[key] is Dictionary<object, object> )
                             ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
                         else
-                            throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
+                            ((Dictionary<object, object>)source[key]).Add( "MergeError", patch[key] );
+                            //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
                     }
                     else if( source[key] is List<object> )
                     {
@@ -207,9 +208,19 @@ namespace Synapse.Core.Utilities
                 if( ok && source.Count >= i + 1 )
                 {
                     if( source[i] is Dictionary<object, object> )
-                        ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key] );
+                    {
+                        if( patch.Values[key] is Dictionary<object, object> )
+                            ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key] );
+                        else
+                            ((Dictionary<object, object>)source[i]).Add( "MergeError", patch.Values[key] );
+                    }
                     else
-                        ApplyPatchValues( (List<object>)source[i], (IndexedKey)patch.Values[key] );
+                    {
+                        if( patch.Values[key] is IndexedKey )
+                            ApplyPatchValues( (List<object>)source[i], (IndexedKey)patch.Values[key] );
+                        else
+                            ((List<object>)source[i]).Add( patch.Values[key] );
+                    }
                 }
                 else
                     source.Add( patch.Values[key] );

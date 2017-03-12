@@ -4,11 +4,11 @@ IsActive: true
 Actions:
 - Name: Hostname
   Handler:
-    Type: Synapse.Core:Synapse.Core.Runtime.EchoHandler
+    Type: Synapse.Handlers.CommandLine:CommandHandler
     Config:
       Type: Yaml
       Values:
-        WorkingDirectory: C:\Devo\synapse\synapse.server.net\Synapse.Server\bin\Debug\Synapse.Controller.Dal.FileSystem\Plans
+        WorkingDirectory: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml
         Command: powershell.exe
         TimeoutMills: 30000
         TimeoutAction: Error
@@ -17,30 +17,11 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: -ExecutionPolicy Bypass -File C:\Devo\synapse\synapse.server.net\Synapse.Server\bin\Debug\Synapse.Controller.Dal.FileSystem\Plans\ad-test.ps1 ~~PARAMS~~
+        ArgString: -ExecutionPolicy Bypass -File C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\ad-test.ps1 ~~PARAMS~~
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: dummyValue
           Encoding: Base64
-        - Find: ~~foo~~
-          ReplaceWith: dummyValue
-          ItemCollection:
-          - Item0: v0.0
-            Prop0: v0.1
-          - Item1: v1.0
-            Prop1: v1.1
-          - Item2: v2.0
-            Prop2: v2.1
-          Encoding: Base64
-        - Find: ~~foop~~
-          ReplaceWith: dummyValue
-          Container:
-            ItemCollection:
-            - Item0: v0.0
-              Prop0: v0.1
-            - Item1: v1.0
-              Prop1: v1.1
-          Encoding: Base64
     Dynamic:
-    - Name: prop4
-      Path: Arguments:Expressions:Container:ItemCollection:Prop1
+    - Name: jsonPayload
+      Path: Arguments:Expressions[0]:ReplaceWith
