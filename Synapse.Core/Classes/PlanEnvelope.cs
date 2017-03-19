@@ -28,7 +28,7 @@ namespace Synapse.Core
             if( isEncoded )
                 yaml = CryptoHelpers.Decode( yaml );
 
-            return YamlHelpers.Deserialize<StartPlanEnvelope>( yaml );
+            return YamlHelpers.Deserialize<StartPlanEnvelope>( yaml, ignoreUnmatchedProperties: false );
         }
     }
 }
