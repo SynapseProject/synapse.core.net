@@ -16,6 +16,8 @@ namespace Synapse.Core
             RequestUser = si.RequestUser;
         }
 
+        public long PlanInstanceId { get; internal set; }
+
         public long InstanceId { get; internal set; }
 
         public bool IsDryRun { get; internal set; }

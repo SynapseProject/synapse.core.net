@@ -103,6 +103,7 @@ namespace Synapse.Core
             ResultPlan.UniqueName = UniqueName;
             ResultPlan.Description = Description;
             ResultPlan.InstanceId = InstanceId;
+            ResultPlan.StartInfo = StartInfo;
             ResultPlan.Result = new ExecuteResult();
 
             if( inProc )
@@ -261,6 +262,7 @@ namespace Synapse.Core
                     {
                         Parameters = parms,
                         IsDryRun = dryRun,
+                        PlanInstanceId = InstanceId,
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData
                     };
