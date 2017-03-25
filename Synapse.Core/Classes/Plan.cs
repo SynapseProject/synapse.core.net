@@ -53,8 +53,9 @@ namespace Synapse.Core
         public Plan ResultPlan { get; set; }
 
 
-        [YamlIgnore]
-        public object _id { get; set; }
+        //24 Mar, 2017: not in use
+        //[YamlIgnore]
+        //public object _id { get; set; }
         public string LastModified { get; set; } = DateTime.Now.ToString();
 
         public string Signature { get; set; }

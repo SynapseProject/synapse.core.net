@@ -94,8 +94,9 @@ namespace Synapse.Core
         }
 
 
-        [YamlIgnore]
-        public object _id { get; set; }
+        //24 Mar, 2017: not in use
+        //[YamlIgnore]
+        //public object _id { get; set; }
         [YamlIgnore]
         public long ParentInstanceId { get; set; }
 
