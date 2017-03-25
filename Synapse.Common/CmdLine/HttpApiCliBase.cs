@@ -83,14 +83,14 @@ namespace Synapse.Common.CmdLine
             }
             else
             {
-                string pattern = @"(?<argname>\w+):(?<argvalue>.*)";
+                string pattern = "(?<argname>.*):(?<argvalue>.*)"; //@"(?<argname>\w+):(?<argvalue>.*)";
                 for( int i = startIndex; i < args.Length; i++ )
                 {
                     Match match = Regex.Match( args[i], pattern );
 
                     // If match not found, command line args are improperly formed.
                     if( match.Success )
-                        options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value.ToLower();
+                        options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value;  //.ToLower();
                     else if( !suppressErrorMessages )
                         WriteHelpAndExit( "The command line arguments are not valid or are improperly formed. Use 'argname:argvalue' for extended arguments." );
                 }

@@ -55,6 +55,11 @@ namespace Synapse.Core
         }
         #endregion
 
+
+        //this is a stub feature
+        static long ActionInstanceIdCounter = 0;// DateTime.Now.Ticks;
+
+
         bool _wantsCancel = false;
         bool _wantsPause = false;
 
@@ -151,6 +156,7 @@ namespace Synapse.Core
                     foreach( ActionItem ai in resolvedParmsActionGroup )
                         ai.Parameters.ForEach = null;
 
+                    actionGroup.InstanceId = ActionInstanceIdCounter++;
                     ActionItem agclone = actionGroup.Clone();
                     agclone.Result = new ExecuteResult();
                     parentContext.ActionGroup = agclone;
@@ -160,6 +166,7 @@ namespace Synapse.Core
 #if sqlite
                         a.CreateInstance( parentContext, InstanceId );
 #endif
+                        a.InstanceId = ActionInstanceIdCounter++;
                         ActionItem clone = a.Clone();
                         agclone.Actions.Add( clone );
 
@@ -188,6 +195,7 @@ namespace Synapse.Core
 #if sqlite
                     actionGroup.CreateInstance( parentContext, InstanceId );
 #endif
+                    actionGroup.InstanceId = ActionInstanceIdCounter++;
                     ActionItem clone = actionGroup.Clone();
                     parentContext.ActionGroup = clone;
 
@@ -225,6 +233,7 @@ namespace Synapse.Core
 #if sqlite
                 a.CreateInstance( parentContext, InstanceId );
 #endif
+                a.InstanceId = ActionInstanceIdCounter++;
                 ActionItem clone = a.Clone();
                 parentContext.Actions.Add( clone );
 
@@ -315,6 +324,7 @@ namespace Synapse.Core
             List<string> args = new List<string>();
 
             Plan container = new Plan();
+            a.InstanceId = ActionInstanceIdCounter++;
             container.Name = $"{Name}:{a.Name}";
             container.Actions.Add( a.Clone() );
             container.StartInfo = StartInfo;
@@ -447,6 +457,7 @@ namespace Synapse.Core
                     {
                         Parameters = a.Parameters.GetSerializedValues(),
                         IsDryRun = dryRun,
+                        PlanInstanceId = InstanceId,
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData
                     };
@@ -497,7 +508,7 @@ namespace Synapse.Core
         {
             //todo: serialize exception to composite string
             string context = "Synapse.Core PlanRuntime";
-            string message = $"An unhandled exeption occurred in {a.Name}, Plan/Action Instance: {a.PlanInstanceId}/{a.InstanceId}. Message: {ex.Message}.";
+            string message = $"An unhandled exeption occurred in {a.Name}, Plan/Action Instance: {InstanceId}/{a.InstanceId}. Message: {ex.Message}.";
 
             if( writeProgress )
             {

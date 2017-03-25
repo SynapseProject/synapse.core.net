@@ -82,7 +82,9 @@ namespace Synapse.Core
             return a;
         }
 
-        public long PlanInstanceId { get; set; }
+        //24 Mar, 2017: not in use
+        //[YamlIgnore]
+        //public long PlanInstanceId { get; set; }
 
         public long InstanceId { get; set; }
 
@@ -92,7 +94,9 @@ namespace Synapse.Core
         }
 
 
+        [YamlIgnore]
         public object _id { get; set; }
+        [YamlIgnore]
         public long ParentInstanceId { get; set; }
 
 

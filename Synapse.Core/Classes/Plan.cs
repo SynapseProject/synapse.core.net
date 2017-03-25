@@ -53,6 +53,7 @@ namespace Synapse.Core
         public Plan ResultPlan { get; set; }
 
 
+        [YamlIgnore]
         public object _id { get; set; }
         public string LastModified { get; set; } = DateTime.Now.ToString();
 
