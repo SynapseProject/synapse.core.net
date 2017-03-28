@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -12,6 +10,8 @@ namespace Synapse.Core
         public ParameterInfo Config { get; set; }
         [YamlIgnore]
         public bool HasConfig { get { return Config != null; } }
+
+        public HandlerStartInfoData StartInfo { get; set; }
 
         object ICloneable.Clone()
         {

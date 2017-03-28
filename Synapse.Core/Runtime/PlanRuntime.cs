@@ -174,6 +174,7 @@ namespace Synapse.Core
                         parentContext.ActionGroup.Result.SetBranchStatusChecked( r );
                         parentContext.Result.SetBranchStatusChecked( r );
                         clone.Handler.Type = actionGroup.Handler.Type;
+                        clone.Handler.StartInfo = actionGroup.Handler.StartInfo;
                         clone.Result = r;
 
                         if( r.Status > queryStatus ) queryStatus = r.Status;
@@ -202,6 +203,7 @@ namespace Synapse.Core
                     ExecuteResult r = executeHandlerMethod( parentSecurityContext, actionGroup, dynamicData, parentResult.ExitData, dryRun );
                     parentContext.Result.SetBranchStatusChecked( r );
                     clone.Handler.Type = actionGroup.Handler.Type;
+                    clone.Handler.StartInfo = actionGroup.Handler.StartInfo;
                     clone.Result = r;
 
                     if( r.Status > queryStatus ) queryStatus = r.Status;
@@ -240,6 +242,7 @@ namespace Synapse.Core
                 ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, parentResult.ExitData, dryRun );
                 parentContext.Result.SetBranchStatusChecked( r );
                 clone.Handler.Type = a.Handler.Type;
+                clone.Handler.StartInfo = a.Handler.StartInfo;
                 clone.Result = r;
 
                 if( a.HasActions )
@@ -275,6 +278,8 @@ namespace Synapse.Core
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData
                     };
+                    a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
+
                     SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                     sc?.Impersonate();
                     a.Result = rt.Execute( startInfo );

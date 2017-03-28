@@ -26,4 +26,20 @@ namespace Synapse.Core
 
         public object ParentExitData { get; internal set; }
     }
+
+    public class HandlerStartInfoData
+    {
+        public HandlerStartInfoData()
+        { }
+
+        public HandlerStartInfoData(HandlerStartInfo handlerStartInfo)
+        {
+            Parameters = handlerStartInfo.Parameters;
+            ParentExitData = handlerStartInfo.ParentExitData;
+        }
+
+        public string Parameters { get; set; }
+
+        public object ParentExitData { get; set; }
+    }
 }
