@@ -11,7 +11,6 @@ namespace Synapse.Core
     public class CryptoProvider
     {
         public string KeyFile { get; set; }
-        //public string PublicKeyFile { get; set; }
         public string KeyContainerName { get; set; }
         public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
 
@@ -22,20 +21,19 @@ namespace Synapse.Core
         [YamlIgnore]
         public RSACryptoServiceProvider Rsa { get; private set; }
 
-        public void LoadRsaKeys(bool forDecrypt = true)
+        public void LoadRsaKeys()
         {
-            _isDecrypt = forDecrypt;
-            string keyFile = forDecrypt ? PublicKeyFile : KeyFile;
-            Rsa = CryptoHelpers.LoadRsaKeys( KeyContainerName, keyFile, CspFlags );
+            Rsa = CryptoHelpers.LoadRsaKeys( KeyContainerName, KeyFile, CspFlags );
         }
 
-        bool _isDecrypt = true;
+        [YamlIgnore]
+        internal bool IsEncryptMode { get; set; } = true;
         internal string HandleCrypto(string s)
         {
-            if( _isDecrypt )
-                return CryptoHelpers.Decrypt( Rsa, s );
-            else
+            if( IsEncryptMode )
                 return CryptoHelpers.Encrypt( Rsa, s );
+            else
+                return CryptoHelpers.Decrypt( Rsa, s );
         }
 
         public string Encrypt(string s)

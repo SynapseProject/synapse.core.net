@@ -297,11 +297,18 @@ namespace Synapse.Core.Utilities
         #region crypto
         public static Dictionary<object, object> EncryptPlan(Plan p)
         {
-            p.Crypto.LoadRsaKeys( forDecrypt: false );
+            //convert the Plan instance to a dictionary
             string yaml = p.ToYaml();
             Dictionary<object, object> planDict = Plan.FromYamlAsDictionary( yaml );
+
+            //collect the element paths to encrypt
             Dictionary<object, object> cryptoPaths = ConvertCryptoElementsToDictionary( p.Crypto );
+
+            //encrypt the data
+            p.Crypto.LoadRsaKeys();
+            p.Crypto.IsEncryptMode = true;
             HandleCrypto( planDict, cryptoPaths, p.Crypto );
+
             return planDict;
         }
 
@@ -314,9 +321,12 @@ namespace Synapse.Core.Utilities
             string scp = Serialize( ocp );
             CryptoProvider cp = Deserialize<CryptoProvider>( scp );
 
-            //decrypt the data
-            cp.LoadRsaKeys( forDecrypt: true );
+            //collect the element paths to decrypt
             Dictionary<object, object> cryptoPaths = ConvertCryptoElementsToDictionary( cp );
+
+            //decrypt the data
+            cp.LoadRsaKeys();
+            cp.IsEncryptMode = false;
             HandleCrypto( planDict, cryptoPaths, cp );
 
             //convert the dictionary-based representation of Plan into a class instance
