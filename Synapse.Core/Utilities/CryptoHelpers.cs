@@ -7,6 +7,7 @@ namespace Synapse.Core.Utilities
 {
     public class CryptoHelpers
     {
+        #region base64
         public static string Encode(string value)
         {
             byte[] valueBytes = ASCIIEncoding.ASCII.GetBytes( value );
@@ -43,7 +44,10 @@ namespace Synapse.Core.Utilities
                 return false;
             }
         }
+        #endregion
 
+
+        #region rsa
         public static void GenerateRsaKeys(string keyContainerName, string pubPrivFilePath, string pubOnlyFilePath)
         {
             CspParameters cspParams = new CspParameters();
@@ -100,5 +104,20 @@ namespace Synapse.Core.Utilities
                 return null;
             }
         }
+
+        public static string Encrypt(RSACryptoServiceProvider rsa, string value)
+        {
+            byte[] valueBytes = ASCIIEncoding.ASCII.GetBytes( value );
+            byte[] encrypted = rsa.Encrypt( valueBytes, false );
+            return Convert.ToBase64String( encrypted );
+        }
+
+        public static string Decrypt(RSACryptoServiceProvider rsa, string value)
+        {
+            byte[] valueBytes = Convert.FromBase64String( value );
+            byte[] decrypted = rsa.Decrypt( valueBytes, false );
+            return ASCIIEncoding.ASCII.GetString( decrypted );
+        }
+        #endregion
     }
 }

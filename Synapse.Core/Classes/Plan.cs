@@ -39,6 +39,10 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
 
+        public CryptoProvider Crypto { get; set; }
+        [YamlIgnore]
+        public bool HasCrypto { get { return Crypto != null; } }
+
         public PlanStartInfo StartInfo { get; set; }
         [YamlIgnore]
         public bool HasStartInfo { get { return StartInfo != null; } }
@@ -91,6 +95,19 @@ namespace Synapse.Core
             using( StreamReader sr = new StreamReader( path ) )
                 plan = Plan.FromYaml( sr );
             return plan;
+        }
+
+        public static Dictionary<object, object> FromYamlAsDictionary(string plan)
+        {
+            object o = null;
+
+            using( StringReader reader = new StringReader( plan ) )
+            {
+                Deserializer deserializer = new Deserializer();
+                o = deserializer.Deserialize( reader );
+            }
+
+            return o as Dictionary<object, object>;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 using Synapse.Core;
 using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Runtime;
-
+using Synapse.Core.Utilities;
 
 namespace Synapse.Tester
 {
@@ -65,7 +65,13 @@ namespace Synapse.Tester
             //Environment.Exit( 0 );
 
 
+
             Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
+
+            guy = YamlHelpers.HandleCrypto( guy, false );
+            guy = YamlHelpers.HandleCrypto( guy, true );
+
+
             Dictionary<string, string> p = new Dictionary<string, string>();
             p.Add( "jsonPayload", "{ GroupName: \"MyNewGroup\", Users: [ \"Guy Michael Waguespack\", \"Steven James Shortt\", \"Kitten Foo\", \"Matthew Paige Damon\" ] }" );
             p.Add( "prop0", "value0" );

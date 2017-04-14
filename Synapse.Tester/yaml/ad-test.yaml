@@ -1,6 +1,12 @@
 Name: TestRCA
 Description: Test RemoteCommand Handler
 IsActive: true
+Crypto:
+  PublicPrivateKeyFile: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+  KeyContainerName: foo
+  Elements:
+  - IsActive
+  - Actions[0]:Name
 Actions:
 - Name: Hostname
   Handler:
