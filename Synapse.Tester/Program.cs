@@ -68,8 +68,8 @@ namespace Synapse.Tester
 
             Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
 
-            guy = YamlHelpers.HandleCrypto( guy, false );
-            guy = YamlHelpers.HandleCrypto( guy, true );
+            Dictionary<object, object> o = YamlHelpers.EncryptPlan( guy );
+            guy = YamlHelpers.DecryptPlan( o );
 
 
             Dictionary<string, string> p = new Dictionary<string, string>();

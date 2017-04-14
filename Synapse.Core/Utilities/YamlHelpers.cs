@@ -180,7 +180,7 @@ namespace Synapse.Core.Utilities
                             ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
                         else
                             ((Dictionary<object, object>)source[key]).Add( "MergeError", patch[key] );
-                            //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
+                        //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
                     }
                     else if( source[key] is List<object> )
                     {
@@ -188,7 +188,7 @@ namespace Synapse.Core.Utilities
                             ApplyPatchValues( (List<object>)source[key], (IndexedKey)patch[key] );
                         else
                             ((List<object>)source[key]).Add( patch[key] );
-                            //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
+                        //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
                     }
                 }
                 else
@@ -295,16 +295,32 @@ namespace Synapse.Core.Utilities
 
 
         #region crypto
-        public static Plan HandleCrypto(Plan p, bool isDecrypt)
+        public static Dictionary<object, object> EncryptPlan(Plan p)
         {
-            p.Crypto.LoadRsaKeys( forDecrypt: isDecrypt );
+            p.Crypto.LoadRsaKeys( forDecrypt: false );
             string yaml = p.ToYaml();
             Dictionary<object, object> planDict = Plan.FromYamlAsDictionary( yaml );
             Dictionary<object, object> cryptoPaths = ConvertCryptoElementsToDictionary( p.Crypto );
             HandleCrypto( planDict, cryptoPaths, p.Crypto );
-            yaml = Serialize( planDict );
+            return planDict;
+        }
 
-            Plan result = null;
+        public static Plan DecryptPlan(Dictionary<object, object> planDict)
+        {
+            Plan result = new Plan();
+
+            //convert the dictionary-based representation of Crypto into a class instance
+            object ocp = planDict[nameof( result.Crypto )];
+            string scp = Serialize( ocp );
+            CryptoProvider cp = Deserialize<CryptoProvider>( scp );
+
+            //decrypt the data
+            cp.LoadRsaKeys( forDecrypt: true );
+            Dictionary<object, object> cryptoPaths = ConvertCryptoElementsToDictionary( cp );
+            HandleCrypto( planDict, cryptoPaths, cp );
+
+            //convert the dictionary-based representation of Plan into a class instance
+            string yaml = Serialize( planDict );
             using( StringReader reader = new StringReader( yaml ) )
                 result = Plan.FromYaml( reader );
             return result;

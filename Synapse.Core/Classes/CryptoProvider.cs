@@ -10,8 +10,8 @@ namespace Synapse.Core
 {
     public class CryptoProvider
     {
-        public string PublicPrivateKeyFile { get; set; }
-        public string PublicKeyFile { get; set; }
+        public string KeyFile { get; set; }
+        //public string PublicKeyFile { get; set; }
         public string KeyContainerName { get; set; }
         public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
 
@@ -25,7 +25,7 @@ namespace Synapse.Core
         public void LoadRsaKeys(bool forDecrypt = true)
         {
             _isDecrypt = forDecrypt;
-            string keyFile = forDecrypt ? PublicKeyFile : PublicPrivateKeyFile;
+            string keyFile = forDecrypt ? PublicKeyFile : KeyFile;
             Rsa = CryptoHelpers.LoadRsaKeys( KeyContainerName, keyFile, CspFlags );
         }
 
