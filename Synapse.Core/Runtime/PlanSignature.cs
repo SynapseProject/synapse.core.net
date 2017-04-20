@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -45,6 +46,16 @@ namespace Synapse.Core
             Signature = sig;
 
             return ok;
+        }
+
+        public Plan EncryptElements()
+        {
+            return YamlHelpers.EncryptPlan( this );
+        }
+
+        public static Plan DecryptElements(Dictionary<object, object> plan)
+        {
+            return YamlHelpers.DecryptPlan( plan );
         }
     }
 }

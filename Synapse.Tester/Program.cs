@@ -68,8 +68,9 @@ namespace Synapse.Tester
 
             Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
 
-            Dictionary<object, object> o = YamlHelpers.EncryptPlan( guy );
-            guy = YamlHelpers.DecryptPlan( o );
+            Plan encrypted = guy.EncryptElements();
+            YamlHelpers.SerializeFile( @"..\..\yaml\ad-test.encr.yaml", encrypted );
+            //guy = Plan.DecryptElements( encrypted );
 
 
             Dictionary<string, string> p = new Dictionary<string, string>();

@@ -10,7 +10,7 @@ namespace Synapse.Core
 {
     public class CryptoProvider
     {
-        public string KeyFile { get; set; }
+        public string KeyUri { get; set; }
         public string KeyContainerName { get; set; }
         public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
 
@@ -23,7 +23,7 @@ namespace Synapse.Core
 
         public void LoadRsaKeys()
         {
-            Rsa = CryptoHelpers.LoadRsaKeys( KeyContainerName, KeyFile, CspFlags );
+            Rsa = CryptoHelpers.LoadRsaKeys( KeyContainerName, KeyUri, CspFlags );
         }
 
         [YamlIgnore]

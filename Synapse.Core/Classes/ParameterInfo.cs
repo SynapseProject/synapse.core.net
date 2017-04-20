@@ -38,6 +38,10 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 
+        public CryptoProvider Crypto { get; set; }
+        [YamlIgnore]
+        public bool HasCrypto { get { return Crypto != null; } }
+
         public string GetSerializedValues()
         {
             string v = null;

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security;
-
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -16,6 +16,11 @@ namespace Synapse.Core
         public string Password { get; set; }
         public string Provider { get; set; } //ad, aws, azure
         public ParameterInfo Config { get; set; }
+
+        public CryptoProvider Crypto { get; set; }
+        [YamlIgnore]
+        public bool HasCrypto { get { return Crypto != null; } }
+
 
         public override string ToString()
         {

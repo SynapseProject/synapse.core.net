@@ -50,10 +50,6 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
 
-        public CryptoProvider Crypto { get; set; }
-        [YamlIgnore]
-        public bool HasCrypto { get { return Crypto != null; } }
-
         object ICloneable.Clone()
         {
             return Clone( true );

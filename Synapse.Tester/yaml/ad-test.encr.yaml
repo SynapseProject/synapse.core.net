@@ -1,0 +1,35 @@
+Name: TestRCA
+Description: Test RemoteCommand Handler
+IsActive: PBcy4PVRI6isfbT7T/ojBLDkCC5jrsmgdpqLklo1xqfRVYgnLNAqGHmvSecqp3EhXQXDt2iwgXsGa045C8Rm7pIqKKzwQqy4x1dd9UqL/AwDOwm66jqgD7vRkn+ZUcRsaDfFE4JGWwjLfcJy0VS1xWNQRrg5enkQhgWMHb7QQXw=
+Actions:
+- Name: Hostname
+  Handler:
+    Type: Synapse.Handlers.CommandLine:CommandHandler
+    Config:
+      Values:
+        WorkingDirectory: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml
+        Command: powershell.exe
+        TimeoutMills: 30000
+        TimeoutAction: Error
+  Parameters:
+    Values:
+      Parser: Regex
+      Arguments:
+        ArgString: -ExecutionPolicy Bypass -File C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\ad-test.ps1 ~~PARAMS~~
+        Expressions:
+        - Find: ~~PARAMS~~
+          ReplaceWith: dummyValue
+          Encoding: qd1wnkKqK+mzy6NwUsBArj4tF9f99jFON6ofj5TsaykPP1uCd4KAqOj9/8/fTB57kUqQ8sR3D0FT8/DN655ucXP8km3ahOXm6S7bfmbMVuxPtsd+I5F5bRvn46qy+oX9t+xEj0Mr+YI/+Li+3HQ5YziH+3Dv2c1NIVrbzcXVWJU=
+    Dynamic:
+    - Name: jsonPayload
+      Path: Arguments:Expressions[0]:ReplaceWith
+  Actions: []
+Crypto:
+  KeyFile: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+  KeyContainerName: foo
+  Elements:
+  - IsActive
+  - Actions[0]:Name
+  - Actions[0]:Parameters:Values:Arguments:Expressions[0]:Encoding
+StartInfo: {}
+LastModified: 4/14/2017 8:51:01 PM

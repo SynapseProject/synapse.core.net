@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
@@ -8,6 +9,9 @@ namespace Synapse.Core.Utilities
 {
     public class YamlHelpers
     {
+        static readonly string __sli = "SynapseListIndex";
+
+        #region Serialize/Deserialize
         public static void Serialize(TextWriter tw, object data, bool serializeAsJson = false, bool emitDefaultValues = false)
         {
             Serializer serializer = null;
@@ -86,7 +90,7 @@ namespace Synapse.Core.Utilities
             }
             return ssc;
         }
-
+        #endregion
 
 
         #region merge for yaml/json
@@ -295,7 +299,121 @@ namespace Synapse.Core.Utilities
 
 
         #region crypto
-        public static Dictionary<object, object> EncryptPlan(Plan p)
+        public static Plan EncryptPlan(Plan p)
+        {
+            Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
+            actionLists.Push( p.Actions );
+
+            while( actionLists.Count > 0 )
+            {
+                List<ActionItem> actions = actionLists.Pop();
+                foreach( ActionItem a in actions )
+                {
+                    if( a.HasParameters && a.Parameters.HasCrypto )
+                    {
+                        a.Parameters.Crypto.LoadRsaKeys();
+                        a.Parameters.Crypto.IsEncryptMode = true;
+
+                        string p0 = Serialize( a.Parameters );
+                        Dictionary<object, object> source = Deserialize( p0 );
+                        foreach( string element in a.Parameters.Crypto.Elements )
+                        {
+                            Dictionary<object, object> patch = ConvertPathElementToDict( element );
+                            HandleElementCrypto( source, patch, a.Parameters.Crypto );
+                        }
+                        p0 = Serialize( source );
+                        a.Parameters = Deserialize<ParameterInfo>( p0 );
+                    }
+                }
+            }
+
+            return p;
+        }
+
+        static void HandleElementCrypto(Dictionary<object, object> source, Dictionary<object, object> patch, CryptoProvider crypto)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            foreach( object key in patch.Keys )
+            {
+                if( source.ContainsKey( key ) )
+                {
+                    if( source[key] is string )
+                        source[key] = crypto.HandleCrypto( source[key].ToString() );
+                    else
+                    {
+                        if( source[key] is Dictionary<object, object> )
+                        {
+                            if( patch[key] is Dictionary<object, object> )
+                                HandleElementCrypto( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], crypto );
+                            else
+                                ((Dictionary<object, object>)source[key]).Add( "MergeError", patch[key] );
+                            //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
+                        }
+                        else if( source[key] is List<object> )
+                        {
+                            if( patch[key] is List<object> )
+                                HandleElementCrypto( (List<object>)source[key], (List<object>)patch[key], crypto );
+                            else
+                                ((List<object>)source[key]).Add( patch[key] );
+                            //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
+                        }
+                    }
+                }
+            }
+        }
+
+        static void HandleElementCrypto(List<object> source, List<object> patch, CryptoProvider crypto)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            Dictionary<object, object> patchItem = null;
+            if( patch.Count > 0 && patch[0] is Dictionary<object, object> )
+                patchItem = (Dictionary<object, object>)patch[0];
+            else
+                return;
+
+            int i = 0;
+            bool ok = patchItem.ContainsKey( __sli ) && int.TryParse( patchItem[__sli].ToString(), out i );
+            if( ok && source.Count >= i + 1 )
+            {
+                patchItem.Remove( __sli );
+                object patchKey = null;
+                foreach( object key in patchItem.Keys )
+                    patchKey = key;
+
+                if( source[i] is Dictionary<object, object> )
+                {
+                    Dictionary<object, object> currSource = (Dictionary<object, object>)source[i];
+
+                      object patchValue = null;
+                    if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
+                        patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+
+                    if( patchValue is Dictionary<object, object> )
+                        HandleElementCrypto( (Dictionary<object, object>)currSource[patchKey], (Dictionary<object, object>)patchValue, crypto );
+                    else if( patchValue is List<object> )
+                        HandleElementCrypto( (List<object>)currSource[patchKey], (List<object>)patchValue, crypto );
+                    else if( patchValue == null )
+                        ((Dictionary<object, object>)source[i])[patchKey] = crypto.HandleCrypto( (((Dictionary<object, object>)source[i])[patchKey]).ToString() );
+                    else
+                        ((Dictionary<object, object>)source[i]).Add( "MergeError", patchKey );
+                }
+                else
+                {
+                    if( patchKey is List<object> )
+                        HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
+                    else
+                        ((List<object>)source[i]).Add( patchKey );
+                }
+            }
+            //else
+            //    source.Add( key );
+        }
+
+        public static Dictionary<object, object> EncryptPlan_X(Plan p)
         {
             //convert the Plan instance to a dictionary
             string yaml = p.ToYaml();
@@ -451,6 +569,42 @@ namespace Synapse.Core.Utilities
                 else
                     source.Add( patch.Values[key] );
             }
+        }
+        #endregion
+
+
+        #region util
+        static Dictionary<object, object> ConvertPathElementToDict(string path)
+        {
+            StringBuilder yaml = new StringBuilder();
+
+            string[] lines = path.Split( ':' );
+            for( int i = 0; i < lines.Length; i++ )
+            {
+                int index = -1;
+                string newLine = CheckPathElementIsIndexed( lines[i], out index );
+                yaml.AppendLine( newLine.PadLeft( (2 * i) + newLine.Length ) + ":" );
+
+                if( index > -1 )
+                {
+                    string sli = $"- {__sli}: {index}";
+                    yaml.AppendLine( sli.PadLeft( (2 * i) + sli.Length ) );
+                }
+            }
+
+            return Deserialize( yaml.ToString() );
+        }
+
+        static string CheckPathElementIsIndexed(string element, out int index)
+        {
+            index = -1;
+            if( element.EndsWith( "]" ) )
+            {
+                index = int.Parse( Regex.Match( element, @"\d" ).Value );
+                element = element.Substring( 0, element.IndexOf( '[' ) );
+            }
+
+            return element;
         }
         #endregion
     }
