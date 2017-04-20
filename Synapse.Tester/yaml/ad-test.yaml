@@ -21,7 +21,8 @@ Actions:
       - Type
       - Values:Arguments:ArgString
       - Values:Arguments:Expressions[0]:Encoding
-      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[11]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v31
     Values:
       Parser: Regex
       Arguments:
@@ -38,7 +39,14 @@ Actions:
               - v1: 1
           Encoding: Base64
         - Find: ~~2~~
-          ReplaceWith: foo
+          ReplaceWith:
+            foo:
+            - bar:
+              - v0: 0
+              - v1: 1
+            - bar:
+              - v2: 2
+              - v3: 3
           Encoding: Base64
     Dynamic:
     - Name: jsonPayload

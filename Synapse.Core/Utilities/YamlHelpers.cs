@@ -380,26 +380,38 @@ namespace Synapse.Core.Utilities
             if( ok && source.Count >= i + 1 )
             {
                 patchItem.Remove( __sli );
+
                 object patchKey = null;
+                object patchValue = null;
+
                 foreach( object key in patchItem.Keys )
                     patchKey = key;
 
+                if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
+                    patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+
+
                 if( source[i] is Dictionary<object, object> )
                 {
-                    Dictionary<object, object> currSource = (Dictionary<object, object>)source[i];
-
-                      object patchValue = null;
-                    if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
-                        patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
-
-                    if( patchValue is Dictionary<object, object> )
-                        HandleElementCrypto( (Dictionary<object, object>)currSource[patchKey], (Dictionary<object, object>)patchValue, crypto );
-                    else if( patchValue is List<object> )
-                        HandleElementCrypto( (List<object>)currSource[patchKey], (List<object>)patchValue, crypto );
-                    else if( patchValue == null )
-                        ((Dictionary<object, object>)source[i])[patchKey] = crypto.HandleCrypto( (((Dictionary<object, object>)source[i])[patchKey]).ToString() );
+                    Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
+                    if( listItemValue.ContainsKey( patchKey ) )
+                    {
+                        try
+                        {
+                            if( patchValue is Dictionary<object, object> )
+                                HandleElementCrypto( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, crypto );
+                            else if( patchValue is List<object> )
+                                HandleElementCrypto( (List<object>)listItemValue[patchKey], (List<object>)patchValue, crypto );
+                            else if( patchValue == null )
+                                listItemValue[patchKey] = crypto.HandleCrypto( ((listItemValue)[patchKey]).ToString() );
+                        }
+                        catch
+                        {
+                            listItemValue.Add( "CryptoError", patchKey );
+                        }
+                    }
                     else
-                        ((Dictionary<object, object>)source[i]).Add( "MergeError", patchKey );
+                        listItemValue.Add( "CryptoError", patchKey );
                 }
                 else
                 {
