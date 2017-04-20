@@ -421,8 +421,12 @@ namespace Synapse.Core.Utilities
                         ((List<object>)source[i]).Add( patchKey );
                 }
             }
-            //else
-            //    source.Add( key );
+            else
+            {
+                Dictionary<object, object> err = new Dictionary<object, object>();
+                err.Add( "CryptoError", Serialize( patch ).Replace( "\r\n", "/" ) ); //.Replace( " ", "" ) );
+                source.Add( err );
+            }
         }
 
         public static Dictionary<object, object> EncryptPlan_X(Plan p)
@@ -612,7 +616,7 @@ namespace Synapse.Core.Utilities
             index = -1;
             if( element.EndsWith( "]" ) )
             {
-                index = int.Parse( Regex.Match( element, @"\d" ).Value );
+                index = int.Parse( Regex.Match( element, @"\d+" ).Value );
                 element = element.Substring( 0, element.IndexOf( '[' ) );
             }
 
@@ -630,7 +634,7 @@ namespace Synapse.Core.Utilities
             int index = -1;
             if( k.EndsWith( "]" ) )
             {
-                index = int.Parse( Regex.Match( k, @"\d" ).Value );
+                index = int.Parse( Regex.Match( k, @"\d+" ).Value );
                 k = k.Substring( 0, k.IndexOf( '[' ) );
             }
 

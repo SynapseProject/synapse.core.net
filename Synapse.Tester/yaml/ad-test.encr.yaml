@@ -1,6 +1,6 @@
 Name: TestRCA
 Description: Test RemoteCommand Handler
-IsActive: PBcy4PVRI6isfbT7T/ojBLDkCC5jrsmgdpqLklo1xqfRVYgnLNAqGHmvSecqp3EhXQXDt2iwgXsGa045C8Rm7pIqKKzwQqy4x1dd9UqL/AwDOwm66jqgD7vRkn+ZUcRsaDfFE4JGWwjLfcJy0VS1xWNQRrg5enkQhgWMHb7QQXw=
+IsActive: true
 Actions:
 - Name: Hostname
   Handler:
@@ -15,21 +15,42 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: -ExecutionPolicy Bypass -File C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\ad-test.ps1 ~~PARAMS~~
+        ArgString: XkEb6LsHQfwPZDPJBYtkP/Z/yeSOQRBofAOopk8sKvzz0uSWd0wCZc9JTAflCQPqrbB01qiEvurSvEz26c7lYCLlTCe21h3DnM5VJQU4fpMPp4N6ClkrYR2qwxremBGRH7S65ciNUMiER/QjbBYvT0FkdD0e3WqE45Wt00/kUPM=
         Expressions:
         - Find: ~~PARAMS~~
-          ReplaceWith: dummyValue
-          Encoding: qd1wnkKqK+mzy6NwUsBArj4tF9f99jFON6ofj5TsaykPP1uCd4KAqOj9/8/fTB57kUqQ8sR3D0FT8/DN655ucXP8km3ahOXm6S7bfmbMVuxPtsd+I5F5bRvn46qy+oX9t+xEj0Mr+YI/+Li+3HQ5YziH+3Dv2c1NIVrbzcXVWJU=
+          ReplaceWith: foo
+          Encoding: b3Md/ko7zGXTN5x+iB2A5KsePWWJ7O+1G933gvv9lxqeqOScwkP6wYww2Lu2/jcdVjBCTJoiaouz385HnvsxzhK3wJYBLTjNkbriRcny94CxxfHaSjirlhqIi8GkEn5L4A2ahpxWWUmhIpIyD8JbJUbugulka7EbpKdw0IEbAcA=
+        - Find: ~~1~~
+          ReplaceWith:
+            foo:
+              bar:
+              - v0: 0
+              - v1: 1
+          Encoding: Base64
+        - Find: ~~2~~
+          ReplaceWith:
+            foo:
+            - bar:
+              - v0: 0
+              - v1: 1
+            - bar:
+              - v2: 2
+              - v3: 3
+                CryptoError: v31
+          Encoding: Base64
+        - CryptoError: 42
     Dynamic:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
+    Crypto:
+      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+      KeyContainerName: foo
+      Elements:
+      - Type
+      - Values:Arguments:ArgString
+      - Values:Arguments:Expressions[0]:Encoding
+      - Values:Arguments:Expressions[42]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v31
   Actions: []
-Crypto:
-  KeyFile: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
-  KeyContainerName: foo
-  Elements:
-  - IsActive
-  - Actions[0]:Name
-  - Actions[0]:Parameters:Values:Arguments:Expressions[0]:Encoding
 StartInfo: {}
-LastModified: 4/14/2017 8:51:01 PM
+LastModified: 4/20/2017 5:54:42 PM

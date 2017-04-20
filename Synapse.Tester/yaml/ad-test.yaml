@@ -21,7 +21,7 @@ Actions:
       - Type
       - Values:Arguments:ArgString
       - Values:Arguments:Expressions[0]:Encoding
-      - Values:Arguments:Expressions[11]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[42]:ReplaceWith:foo:bar[1]:v1
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v31
     Values:
       Parser: Regex
