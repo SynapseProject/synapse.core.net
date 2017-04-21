@@ -14,8 +14,9 @@ namespace Synapse.Core
         public string KeyContainerName { get; set; }
         public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
 
-        public List<string> Elements { get; set; }
+        public List<string> Elements { get; set; } = new List<string>();
 
+        public List<string> Errors { get; set; } = new List<string>();
 
         #region helper methods
         [YamlIgnore]
