@@ -176,45 +176,23 @@ namespace Synapse.Core
 
         public ParameterInfo GetCryptoValues(bool isEncryptMode = true)
         {
-            return YamlHelpers.GetCryptoValues( this, isEncryptMode );
-        }
-
-        public ParameterInfo GetCryptoValues_(bool isEncryptMode = true)
-        {
-            ParameterInfo result = null;
-
-            if( HasCrypto )
+            switch( Type )
             {
-                Crypto.LoadRsaKeys();
-                Crypto.IsEncryptMode = isEncryptMode;
-
-                List<string> errors = new List<string>();
-                string p = YamlHelpers.Serialize( this );
-                Dictionary<object, object> source = YamlHelpers.Deserialize( p );
-                foreach( string element in Crypto.Elements )
+                case SerializationType.Xml:
                 {
-                    try
-                    {
-                        Dictionary<object, object> patch = YamlHelpers.ConvertPathElementToDict( element );
-                        YamlHelpers.HandleElementCrypto( source, patch, Crypto );
-                    }
-                    catch
-                    {
-                        errors.Add( element );
-                    }
+                    return null;
                 }
-
-                p = YamlHelpers.Serialize( source );
-                result = YamlHelpers.Deserialize<ParameterInfo>( p );
-
-                if( errors.Count == 0 )
-                    result.Crypto.Errors = null;
-                else
-                    foreach( string error in errors )
-                        result.Crypto.Errors.Add( error );
+                case SerializationType.Yaml:
+                case SerializationType.Json:
+                {
+                    return YamlHelpers.GetCryptoValues( this, isEncryptMode );
+                }
+                case SerializationType.Unspecified:
+                default:
+                {
+                    return this;
+                }
             }
-
-            return result;
         }
     }
 }
