@@ -5,10 +5,13 @@ using System.Security;
 using System.Security.Permissions;
 using System.Security.Principal;
 
+using Synapse.Core.Utilities;
+
+
 namespace Synapse.Core
 {
     //adapted from https://msdn.microsoft.com/en-us/library/w070t6ka(v=vs.110).aspx
-    public partial class SecurityContext
+    public partial class SecurityContext : ICrypto
     {
         [DllImport( "advapi32.dll", SetLastError = true )]
         public static extern bool LogonUser(String lpszUsername, String lpszDomain,
@@ -61,5 +64,10 @@ namespace Synapse.Core
         }
 
         public bool IsImpersonating { get { return _impContext != null; } }
+
+        public SecurityContext GetCryptoValues(bool isEncryptMode = true)
+        {
+            return YamlHelpers.GetCryptoValues( this, isEncryptMode );
+        }
     }
 }

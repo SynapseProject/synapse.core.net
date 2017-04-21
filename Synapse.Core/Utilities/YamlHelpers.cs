@@ -299,53 +299,64 @@ namespace Synapse.Core.Utilities
 
 
         #region crypto
+        public static T GetCryptoValues<T>(T c, bool isEncryptMode = true) where T : class, ICrypto
+        {
+            T result = null;
+
+            if( c.HasCrypto )
+            {
+                c.Crypto.LoadRsaKeys();
+                c.Crypto.IsEncryptMode = isEncryptMode;
+
+                List<string> errors = new List<string>();
+                string p = Serialize( c );
+                Dictionary<object, object> source = Deserialize( p );
+                foreach( string element in c.Crypto.Elements )
+                {
+                    try
+                    {
+                        Dictionary<object, object> patch = ConvertPathElementToDict( element );
+                        HandleElementCrypto( source, patch, c.Crypto );
+                    }
+                    catch
+                    {
+                        errors.Add( element );
+                    }
+                }
+
+                p = Serialize( source );
+                result = Deserialize<T>( p );
+
+                if( errors.Count == 0 )
+                    result.Crypto.Errors = null;
+                else
+                    foreach( string error in errors )
+                        result.Crypto.Errors.Add( error );
+            }
+
+            return result;
+        }
+
         public static Plan HandlePlanCrypto(Plan p, bool isEncryptMode = true)
         {
-            Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
+            Stack<IEnumerable<ActionItem>> actionLists = new Stack<IEnumerable<ActionItem>>();
             actionLists.Push( p.Actions );
 
             while( actionLists.Count > 0 )
             {
-                List<ActionItem> actions = actionLists.Pop();
+                IEnumerable<ActionItem> actions = actionLists.Pop();
+
                 foreach( ActionItem a in actions )
                 {
+                    if( a.Handler.HasConfig && a.Handler.Config.HasCrypto )
+                        a.Handler.Config = a.Handler.Config.GetCryptoValues( isEncryptMode );
                     if( a.HasParameters && a.Parameters.HasCrypto )
-                    {
-                        a.Parameters.Crypto.LoadRsaKeys();
-                        a.Parameters.Crypto.IsEncryptMode = isEncryptMode;
+                        a.Parameters = a.Parameters.GetCryptoValues( isEncryptMode );
 
-                        List<string> errors = new List<string>();
-                        string p0 = Serialize( a.Parameters );
-                        Dictionary<object, object> source = Deserialize( p0 );
-                        foreach( string element in a.Parameters.Crypto.Elements )
-                        {
-                            try
-                            {
-                                Dictionary<object, object> patch = ConvertPathElementToDict( element );
-                                HandleElementCrypto( source, patch, a.Parameters.Crypto );
-                            }
-                            catch
-                            {
-                                errors.Add( element );
-                            }
-                        }
-                        p0 = Serialize( source );
-                        a.Parameters = Deserialize<ParameterInfo>( p0 );
-                        if( errors.Count == 0 )
-                            a.Parameters.Crypto.Errors = null;
-                        else
-                            foreach( string error in errors )
-                                a.Parameters.Crypto.Errors.Add( error );
-                    }
-
+                    if( a.HasActionGroup )
+                        actionLists.Push( new ActionItem[] { a.ActionGroup } );
                     if( a.HasActions )
                         actionLists.Push( a.Actions );
-                    if( a.HasActionGroup )
-                    {
-                        List<ActionItem> list = new List<ActionItem>();
-                        list.Add( a.ActionGroup );
-                        actionLists.Push( list );
-                    }
                 }
             }
 
@@ -370,7 +381,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static void HandleElementCrypto(List<object> source, List<object> patch, CryptoProvider crypto)
+        internal static void HandleElementCrypto(List<object> source, List<object> patch, CryptoProvider crypto)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -406,164 +417,6 @@ namespace Synapse.Core.Utilities
             else
                 source[i] = crypto.HandleCrypto( source[i].ToString() );
         }
-
-        public static Dictionary<object, object> EncryptPlan_X(Plan p)
-        {
-            //convert the Plan instance to a dictionary
-            string yaml = p.ToYaml();
-            Dictionary<object, object> planDict = Plan.FromYamlAsDictionary( yaml );
-
-            //collect the element paths to encrypt
-            Dictionary<object, object> cryptoPaths = ConvertCryptoElementsToDictionary( p.Crypto );
-
-            //encrypt the data
-            p.Crypto.LoadRsaKeys();
-            p.Crypto.IsEncryptMode = true;
-            HandleCrypto( planDict, cryptoPaths, p.Crypto );
-
-            return planDict;
-        }
-
-        public static Plan DecryptPlan(Dictionary<object, object> planDict)
-        {
-            Plan result = new Plan();
-
-            //convert the dictionary-based representation of Crypto into a class instance
-            object ocp = planDict[nameof( result.Crypto )];
-            string scp = Serialize( ocp );
-            CryptoProvider cp = Deserialize<CryptoProvider>( scp );
-
-            //collect the element paths to decrypt
-            Dictionary<object, object> cryptoPaths = ConvertCryptoElementsToDictionary( cp );
-
-            //decrypt the data
-            cp.LoadRsaKeys();
-            cp.IsEncryptMode = false;
-            HandleCrypto( planDict, cryptoPaths, cp );
-
-            //convert the dictionary-based representation of Plan into a class instance
-            string yaml = Serialize( planDict );
-            using( StringReader reader = new StringReader( yaml ) )
-                result = Plan.FromYaml( reader );
-            return result;
-        }
-
-        static Dictionary<object, object> ConvertCryptoElementsToDictionary(CryptoProvider crypto)  //, Dictionary<string, string> values
-        {
-            Dictionary<object, object> dict = new Dictionary<object, object>();
-
-            Dictionary<object, object> d = dict;
-            foreach( string element in crypto.Elements )
-            {
-                string[] keys = element.Split( ':' );
-                int lastIndex = keys.Length - 1;
-
-                for( int i = 0; i <= lastIndex; i++ )
-                {
-                    IndexedKey pk = new IndexedKey( keys[i] );
-
-                    if( !d.ContainsKey( pk.Key ) )
-                    {
-                        if( pk.IsIndexed )
-                        {
-                            pk.Values = new Dictionary<object, object>();
-                            pk.Values[pk.Index] = new Dictionary<object, object>();
-                            d[pk.Key] = pk;
-                            d = (Dictionary<object, object>)pk.Values[pk.Index];
-                        }
-                        else
-                        {
-                            d[pk.Key] = new Dictionary<object, object>();
-                            d = (Dictionary<object, object>)d[pk.Key];
-                        }
-                    }
-                    else
-                    {
-                        if( d[pk.Key] is IndexedKey )
-                        {
-                            d = ((IndexedKey)d[pk.Key]).Values;
-                            if( pk.IsIndexed )
-                            {
-                                d[pk.Index] = new Dictionary<object, object>();
-                                d = (Dictionary<object, object>)d[pk.Index];
-                            }
-                        }
-                        else
-                            d = (Dictionary<object, object>)d[pk.Key];
-                    }
-                }
-
-                string xxx = keys[lastIndex];
-                if( !d.ContainsKey( xxx ) )
-                    d[xxx] = null;
-
-                d = dict;
-            }
-
-            return dict;
-        }
-
-        static void HandleCrypto(Dictionary<object, object> source, Dictionary<object, object> patch, CryptoProvider crypto)
-        {
-            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
-
-            foreach( object key in patch.Keys )
-            {
-                if( source.ContainsKey( key ) && !(source[key] is string) )
-                {
-                    if( source[key] is Dictionary<object, object> )
-                    {
-                        if( patch[key] is Dictionary<object, object> )
-                            HandleCrypto( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], crypto );
-                        else
-                            ((Dictionary<object, object>)source[key]).Add( "MergeError", patch[key] );
-                        //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
-                    }
-                    else if( source[key] is List<object> )
-                    {
-                        if( patch[key] is IndexedKey )
-                            HandleCrypto( (List<object>)source[key], (IndexedKey)patch[key], crypto );
-                        else
-                            ((List<object>)source[key]).Add( patch[key] );
-                        //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
-                    }
-                }
-                else
-                    source[key] = crypto.HandleCrypto( source[key].ToString() );
-            }
-        }
-
-        static void HandleCrypto(List<object> source, IndexedKey patch, CryptoProvider crypto)
-        {
-            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
-
-            foreach( object key in patch.Values.Keys )
-            {
-                int i = 0;
-                bool ok = int.TryParse( key.ToString(), out i );
-                if( ok && source.Count >= i + 1 )
-                {
-                    if( source[i] is Dictionary<object, object> )
-                    {
-                        if( patch.Values[key] is Dictionary<object, object> )
-                            HandleCrypto( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key], crypto );
-                        else
-                            ((Dictionary<object, object>)source[i]).Add( "MergeError", patch.Values[key] );
-                    }
-                    else
-                    {
-                        if( patch.Values[key] is IndexedKey )
-                            HandleCrypto( (List<object>)source[i], (IndexedKey)patch.Values[key], crypto );
-                        else
-                            ((List<object>)source[i]).Add( patch.Values[key] );
-                    }
-                }
-                else
-                    source.Add( patch.Values[key] );
-            }
-        }
         #endregion
 
 
@@ -589,7 +442,7 @@ namespace Synapse.Core.Utilities
             return Deserialize( yaml.ToString() );
         }
 
-        static string CheckPathElementIsIndexed(string element, out int index)
+        internal static string CheckPathElementIsIndexed(string element, out int index)
         {
             index = -1;
             if( element.EndsWith( "]" ) )

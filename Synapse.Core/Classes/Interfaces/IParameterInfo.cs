@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public interface IParameterInfo
+    public interface IParameterInfo : ICrypto
     {
         string Name { get; set; }
         bool HasName { get; }
@@ -31,7 +31,7 @@ namespace Synapse.Core
 
         CryptoProvider Crypto { get; set; }
         bool HasCrypto { get; }
-        IParameterInfo GetCryptoValues(bool isEncryptMode = true);
+        ParameterInfo GetCryptoValues(bool isEncryptMode = true);
 
         string GetSerializedValues();
 

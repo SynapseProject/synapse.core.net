@@ -174,7 +174,12 @@ namespace Synapse.Core
             return await client.GetStringAsync( uri );
         }
 
-        public IParameterInfo GetCryptoValues(bool isEncryptMode = true)
+        public ParameterInfo GetCryptoValues(bool isEncryptMode = true)
+        {
+            return YamlHelpers.GetCryptoValues( this, isEncryptMode );
+        }
+
+        public ParameterInfo GetCryptoValues_(bool isEncryptMode = true)
         {
             ParameterInfo result = null;
 

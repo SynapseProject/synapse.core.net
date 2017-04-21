@@ -66,6 +66,7 @@
     <Compile Include="Classes\Interfaces\IHandlerRuntime.cs" />
     <Compile Include="Classes\Interfaces\IParameterInfo.cs" />
     <Compile Include="Classes\Interfaces\IActionContainer.cs" />
+    <Compile Include="Classes\Interfaces\ICrypto.cs" />
     <Compile Include="Classes\Interfaces\IPlanRuntimeContainer.cs" />
     <Compile Include="Classes\Interfaces\IStartInfo.cs" />
     <Compile Include="Classes\LogMessageEventArgs.cs" />
