@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: XkEb6LsHQfwPZDPJBYtkP/Z/yeSOQRBofAOopk8sKvzz0uSWd0wCZc9JTAflCQPqrbB01qiEvurSvEz26c7lYCLlTCe21h3DnM5VJQU4fpMPp4N6ClkrYR2qwxremBGRH7S65ciNUMiER/QjbBYvT0FkdD0e3WqE45Wt00/kUPM=
+        ArgString: gPtBtPpajOjQGLR6t4tMakt+f2MROqTqHztH+yJzNwAZA9pO3itIwvTbjbYhiqGSalBAw4adJ2aQ/OR/ZilVCpmiews8pvjPeS85HIGj/PQAJzAZwfgaak+zCocw/kNl2q1g1OgUpuwD90I5DpCK/4OqNkJDLpe1NXEy4koRdds=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: b3Md/ko7zGXTN5x+iB2A5KsePWWJ7O+1G933gvv9lxqeqOScwkP6wYww2Lu2/jcdVjBCTJoiaouz385HnvsxzhK3wJYBLTjNkbriRcny94CxxfHaSjirlhqIi8GkEn5L4A2ahpxWWUmhIpIyD8JbJUbugulka7EbpKdw0IEbAcA=
+          Encoding: PQzQqdLNm+V4G4nENuV+Jr+27+HSK6puzsOoQiQa/JTt13SfaMi9eNKoWak12wYLaIs8ssCWJlEK1qoqsI7ns2yxeaWgxJY0lsmsjQbJlZMXQY7IQumYLRS48PPvkyV+SsYpRHDHVggLZdjRLsxCf7hhnHdmEFx0yim19oaUgyI=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: 1
+              - v1: jDxeqGN7LksFDBr2NgnIxvyKAKCc4fnaStmEjb3zMa7N16dBKpahzUnDWv0FkJwAG9XQtpm2DFkOBB3WuSbuZSbUCxSsaeQtYMIInkH+sp1FNWRQ7vkeUmldrVsbSSCIZbxyuqt52cbWdCV+h2ZurFrh9z9BnzctnsHO5k25IdQ=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,10 +35,8 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: 3
-                CryptoError: v31
+              - v3: nUVRkXYHPK5/hkvrGtd0BoTSXeajxfwxj9ITHqgRr9stQrrjg4DPV8cE/+aHMyt2bU2K0A/MYiDx6o5ecqIJXJboWGsN8Ok69dWdpEVFEXA2vAtwIcc7wLOW5JbnsefHNeVSMs9gYS3/EkFhBXdoLjrmx3Zr17252FprLD4HfQ8=
           Encoding: Base64
-        - CryptoError: 42
     Dynamic:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
@@ -49,8 +47,10 @@ Actions:
       - Type
       - Values:Arguments:ArgString
       - Values:Arguments:Expressions[0]:Encoding
-      - Values:Arguments:Expressions[42]:ReplaceWith:foo:bar[1]:v1
-      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v31
+      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
+      Errors:
+      - Type
   Actions: []
 StartInfo: {}
-LastModified: 4/20/2017 5:54:42 PM
+LastModified: 4/20/2017 11:41:36 PM

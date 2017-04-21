@@ -50,12 +50,12 @@ namespace Synapse.Core
 
         public Plan EncryptElements()
         {
-            return YamlHelpers.EncryptPlan( this );
+            return YamlHelpers.HandlePlanCrypto( this );
         }
 
-        public static Plan DecryptElements(Dictionary<object, object> plan)
+        public Plan DecryptElements()
         {
-            return YamlHelpers.DecryptPlan( plan );
+            return YamlHelpers.HandlePlanCrypto( this, isEncryptMode: false );
         }
     }
 }

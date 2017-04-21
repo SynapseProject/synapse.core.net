@@ -173,5 +173,43 @@ namespace Synapse.Core
             HttpClient client = new HttpClient();
             return await client.GetStringAsync( uri );
         }
+
+        public IParameterInfo GetCryptoValues(bool isEncryptMode = true)
+        {
+            ParameterInfo result = null;
+
+            if( HasCrypto )
+            {
+                Crypto.LoadRsaKeys();
+                Crypto.IsEncryptMode = isEncryptMode;
+
+                List<string> errors = new List<string>();
+                string p = YamlHelpers.Serialize( this );
+                Dictionary<object, object> source = YamlHelpers.Deserialize( p );
+                foreach( string element in Crypto.Elements )
+                {
+                    try
+                    {
+                        Dictionary<object, object> patch = YamlHelpers.ConvertPathElementToDict( element );
+                        YamlHelpers.HandleElementCrypto( source, patch, Crypto );
+                    }
+                    catch
+                    {
+                        errors.Add( element );
+                    }
+                }
+
+                p = YamlHelpers.Serialize( source );
+                result = YamlHelpers.Deserialize<ParameterInfo>( p );
+
+                if( errors.Count == 0 )
+                    result.Crypto.Errors = null;
+                else
+                    foreach( string error in errors )
+                        result.Crypto.Errors.Add( error );
+            }
+
+            return result;
+        }
     }
 }

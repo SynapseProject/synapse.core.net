@@ -299,7 +299,7 @@ namespace Synapse.Core.Utilities
 
 
         #region crypto
-        public static Plan EncryptPlan(Plan p)
+        public static Plan HandlePlanCrypto(Plan p, bool isEncryptMode = true)
         {
             Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
             actionLists.Push( p.Actions );
@@ -312,7 +312,7 @@ namespace Synapse.Core.Utilities
                     if( a.HasParameters && a.Parameters.HasCrypto )
                     {
                         a.Parameters.Crypto.LoadRsaKeys();
-                        a.Parameters.Crypto.IsEncryptMode = true;
+                        a.Parameters.Crypto.IsEncryptMode = isEncryptMode;
 
                         List<string> errors = new List<string>();
                         string p0 = Serialize( a.Parameters );
@@ -337,6 +337,15 @@ namespace Synapse.Core.Utilities
                             foreach( string error in errors )
                                 a.Parameters.Crypto.Errors.Add( error );
                     }
+
+                    if( a.HasActions )
+                        actionLists.Push( a.Actions );
+                    if( a.HasActionGroup )
+                    {
+                        List<ActionItem> list = new List<ActionItem>();
+                        list.Add( a.ActionGroup );
+                        actionLists.Push( list );
+                    }
                 }
             }
 
@@ -345,7 +354,7 @@ namespace Synapse.Core.Utilities
 
         //note: [ss]: I removed all the error handling out of this (and List overload below), so if they fail
         //            they'll just throw an Exception to be caught by the topmost try/catch, where the path is logged as in-error.
-        static void HandleElementCrypto(Dictionary<object, object> source, Dictionary<object, object> patch, CryptoProvider crypto)
+        internal static void HandleElementCrypto(Dictionary<object, object> source, Dictionary<object, object> patch, CryptoProvider crypto)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -559,7 +568,7 @@ namespace Synapse.Core.Utilities
 
 
         #region util
-        static Dictionary<object, object> ConvertPathElementToDict(string path)
+        internal static Dictionary<object, object> ConvertPathElementToDict(string path)
         {
             StringBuilder yaml = new StringBuilder();
 

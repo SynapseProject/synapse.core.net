@@ -70,7 +70,7 @@ namespace Synapse.Tester
 
             Plan encrypted = guy.EncryptElements();
             YamlHelpers.SerializeFile( @"..\..\yaml\ad-test.encr.yaml", encrypted );
-            //guy = Plan.DecryptElements( encrypted );
+            guy = encrypted.DecryptElements();
 
 
             Dictionary<string, string> p = new Dictionary<string, string>();
