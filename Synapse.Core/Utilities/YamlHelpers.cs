@@ -314,15 +314,28 @@ namespace Synapse.Core.Utilities
                         a.Parameters.Crypto.LoadRsaKeys();
                         a.Parameters.Crypto.IsEncryptMode = true;
 
+                        List<string> errors = new List<string>();
                         string p0 = Serialize( a.Parameters );
                         Dictionary<object, object> source = Deserialize( p0 );
                         foreach( string element in a.Parameters.Crypto.Elements )
                         {
-                            Dictionary<object, object> patch = ConvertPathElementToDict( element );
-                            HandleElementCrypto( source, patch, a.Parameters.Crypto );
+                            try
+                            {
+                                Dictionary<object, object> patch = ConvertPathElementToDict( element );
+                                HandleElementCrypto( source, patch, a.Parameters.Crypto );
+                            }
+                            catch
+                            {
+                                errors.Add( element );
+                            }
                         }
                         p0 = Serialize( source );
                         a.Parameters = Deserialize<ParameterInfo>( p0 );
+                        if( errors.Count == 0 )
+                            a.Parameters.Crypto.Errors = null;
+                        else
+                            foreach( string error in errors )
+                                a.Parameters.Crypto.Errors.Add( error );
                     }
                 }
             }
@@ -330,6 +343,8 @@ namespace Synapse.Core.Utilities
             return p;
         }
 
+        //note: [ss]: I removed all the error handling out of this (and List overload below), so if they fail
+        //            they'll just throw an Exception to be caught by the topmost try/catch, where the path is logged as in-error.
         static void HandleElementCrypto(Dictionary<object, object> source, Dictionary<object, object> patch, CryptoProvider crypto)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
@@ -337,30 +352,12 @@ namespace Synapse.Core.Utilities
 
             foreach( object key in patch.Keys )
             {
-                if( source.ContainsKey( key ) )
-                {
-                    if( source[key] is string )
-                        source[key] = crypto.HandleCrypto( source[key].ToString() );
-                    else
-                    {
-                        if( source[key] is Dictionary<object, object> )
-                        {
-                            if( patch[key] is Dictionary<object, object> )
-                                HandleElementCrypto( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], crypto );
-                            else
-                                ((Dictionary<object, object>)source[key]).Add( "MergeError", patch[key] );
-                            //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
-                        }
-                        else if( source[key] is List<object> )
-                        {
-                            if( patch[key] is List<object> )
-                                HandleElementCrypto( (List<object>)source[key], (List<object>)patch[key], crypto );
-                            else
-                                ((List<object>)source[key]).Add( patch[key] );
-                            //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
-                        }
-                    }
-                }
+                if( source[key] is Dictionary<object, object> )
+                    HandleElementCrypto( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], crypto );
+                else if( source[key] is List<object> )
+                    HandleElementCrypto( (List<object>)source[key], (List<object>)patch[key], crypto );
+                else //( source[key] is string )
+                    source[key] = crypto.HandleCrypto( source[key].ToString() );
             }
         }
 
@@ -369,64 +366,36 @@ namespace Synapse.Core.Utilities
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
-            Dictionary<object, object> patchItem = null;
-            if( patch.Count > 0 && patch[0] is Dictionary<object, object> )
-                patchItem = (Dictionary<object, object>)patch[0];
-            else
-                return;
+            Dictionary<object, object> patchItem = (Dictionary<object, object>)patch[0];
 
-            int i = 0;
-            bool ok = patchItem.ContainsKey( __sli ) && int.TryParse( patchItem[__sli].ToString(), out i );
-            if( ok && source.Count >= i + 1 )
+            int i = int.Parse( patchItem[__sli].ToString() );
+            patchItem.Remove( __sli );
+
+            object patchKey = null;
+            object patchValue = null;
+
+            foreach( object key in patchItem.Keys )
+                patchKey = key;
+
+            if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
+                patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+
+
+            if( source[i] is Dictionary<object, object> )
             {
-                patchItem.Remove( __sli );
+                Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
 
-                object patchKey = null;
-                object patchValue = null;
-
-                foreach( object key in patchItem.Keys )
-                    patchKey = key;
-
-                if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
-                    patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
-
-
-                if( source[i] is Dictionary<object, object> )
-                {
-                    Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
-                    if( listItemValue.ContainsKey( patchKey ) )
-                    {
-                        try
-                        {
-                            if( patchValue is Dictionary<object, object> )
-                                HandleElementCrypto( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, crypto );
-                            else if( patchValue is List<object> )
-                                HandleElementCrypto( (List<object>)listItemValue[patchKey], (List<object>)patchValue, crypto );
-                            else if( patchValue == null )
-                                listItemValue[patchKey] = crypto.HandleCrypto( ((listItemValue)[patchKey]).ToString() );
-                        }
-                        catch
-                        {
-                            listItemValue.Add( "CryptoError", patchKey );
-                        }
-                    }
-                    else
-                        listItemValue.Add( "CryptoError", patchKey );
-                }
-                else
-                {
-                    if( patchKey is List<object> )
-                        HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
-                    else
-                        ((List<object>)source[i]).Add( patchKey );
-                }
+                if( patchValue is Dictionary<object, object> )
+                    HandleElementCrypto( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, crypto );
+                else if( patchValue is List<object> )
+                    HandleElementCrypto( (List<object>)listItemValue[patchKey], (List<object>)patchValue, crypto );
+                else //if( patchValue == null )
+                    listItemValue[patchKey] = crypto.HandleCrypto( ((listItemValue)[patchKey]).ToString() );
             }
+            else if( source[i] is List<object> )
+                HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
             else
-            {
-                Dictionary<object, object> err = new Dictionary<object, object>();
-                err.Add( "CryptoError", Serialize( patch ).Replace( "\r\n", "/" ) ); //.Replace( " ", "" ) );
-                source.Add( err );
-            }
+                source[i] = crypto.HandleCrypto( source[i].ToString() );
         }
 
         public static Dictionary<object, object> EncryptPlan_X(Plan p)
@@ -616,8 +585,10 @@ namespace Synapse.Core.Utilities
             index = -1;
             if( element.EndsWith( "]" ) )
             {
-                index = int.Parse( Regex.Match( element, @"\d+" ).Value );
-                element = element.Substring( 0, element.IndexOf( '[' ) );
+                int left = element.LastIndexOf( '[' );
+                string num = element.Substring( left, element.Length - left );
+                index = int.Parse( Regex.Match( num, @"\d+" ).Value );
+                element = element.Substring( 0, left );
             }
 
             return element;
