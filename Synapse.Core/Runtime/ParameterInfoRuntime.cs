@@ -108,9 +108,7 @@ namespace Synapse.Core
 
                 if( parms != null )
                 {
-                    object values = null;
-                    using( StringReader sr = new StringReader( uriContent ) )
-                        values = YamlHelpers.Deserialize<object>( sr );
+                    object values = YamlHelpers.Deserialize<object>( uriContent );
 
                     Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                     Dictionary<object, object> uv = (Dictionary<object, object>)values;
@@ -118,8 +116,7 @@ namespace Synapse.Core
                 }
                 else
                 {
-                    using( StringReader sr = new StringReader( uriContent ) )
-                        parms = YamlHelpers.Deserialize<object>( sr );
+                    parms = YamlHelpers.Deserialize<object>( uriContent );
                 }
             }
 

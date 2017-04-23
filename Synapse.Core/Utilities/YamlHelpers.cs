@@ -90,32 +90,99 @@ namespace Synapse.Core.Utilities
             }
             return ssc;
         }
-        #endregion
 
-
-        #region merge for yaml/json
         public static Dictionary<object, object> Deserialize(string source)
         {
             return Deserialize<Dictionary<object, object>>( source );
         }
+        #endregion
 
+
+        #region merge for yaml/json
         public static void Merge(ref Dictionary<object, object> source, Dictionary<object, object> patch)
         {
             ApplyPatchValues( source, patch );
         }
 
-        public static void Merge(ref Dictionary<object, object> source, List<DynamicValue> patch, Dictionary<string, string> values)
+        public static void Merge(ref Dictionary<object, object> source, List<DynamicValue> dynamicValues, Dictionary<string, string> values)
         {
             //if there's nothing to do, get out!
-            //if( values == null || (values != null && values.Count == 0) )
-            //    return;
+            if( values == null || (values != null && values.Count == 0) )
+                return;
 
-            Dictionary<object, object> p = ConvertDynamicValuesToDictionary( patch, values );
+            //Dictionary<object, object> p = ConvertDynamicValuesToDictionary_xx( patch, values );
+            //ApplyPatchValues_xx( source, p );
 
-            ApplyPatchValues( source, p );
+            foreach( DynamicValue dv in dynamicValues )
+            {
+                if( values.ContainsKey( dv.Name ) )
+                {
+                    Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, values[dv.Name] );
+                    ApplyPatchValues( source, patch );
+                }
+            }
         }
 
-        static Dictionary<object, object> ConvertDynamicValuesToDictionary(List<DynamicValue> patch, Dictionary<string, string> values)
+        internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            foreach( object key in patch.Keys )
+            {
+                if( source.ContainsKey( key ) )
+                {
+                    if( source[key] is Dictionary<object, object> )
+                        ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                    else if( source[key] is List<object> )
+                        ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key] );
+                    else //( source[key] is string )
+                        source[key] = patch[key];
+                }
+                else
+                    source[key] = patch[key];
+            }
+        }
+
+        internal static void ApplyPatchValues(List<object> source, List<object> patch)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            Dictionary<object, object> patchItem = (Dictionary<object, object>)patch[0];
+
+            int i = int.Parse( patchItem[__sli].ToString() );
+            patchItem.Remove( __sli );
+
+            object patchKey = null;
+            object patchValue = null;
+
+            foreach( object key in patchItem.Keys )
+                patchKey = key;
+
+            if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
+                patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+
+
+            if( source[i] is Dictionary<object, object> )
+            {
+                Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
+
+                if( patchValue is Dictionary<object, object> )
+                    ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue);
+                else if( patchValue is List<object> )
+                    ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue);
+                else //if( patchValue is 'the value' )
+                    listItemValue[patchKey] = patchValue;
+            }
+            else if( source[i] is List<object> )
+                ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey);
+            else
+                source[i] = patchValue;
+        }
+
+
+        static Dictionary<object, object> ConvertDynamicValuesToDictionary_xx(List<DynamicValue> patch, Dictionary<string, string> values)
         {
             Dictionary<object, object> dict = new Dictionary<object, object>();
 
@@ -169,7 +236,7 @@ namespace Synapse.Core.Utilities
             return dict;
         }
 
-        static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch)
+        static void ApplyPatchValues_xx(Dictionary<object, object> source, Dictionary<object, object> patch)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -181,7 +248,7 @@ namespace Synapse.Core.Utilities
                     if( source[key] is Dictionary<object, object> )
                     {
                         if( patch[key] is Dictionary<object, object> )
-                            ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                            ApplyPatchValues_xx( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
                         else
                             ((Dictionary<object, object>)source[key]).Add( "MergeError", patch[key] );
                         //throw new Exception( $"Dictionary: patch[key] is {(patch[key]).GetType()}" );
@@ -189,7 +256,7 @@ namespace Synapse.Core.Utilities
                     else if( source[key] is List<object> )
                     {
                         if( patch[key] is IndexedKey )
-                            ApplyPatchValues( (List<object>)source[key], (IndexedKey)patch[key] );
+                            ApplyPatchValues_xx( (List<object>)source[key], (IndexedKey)patch[key] );
                         else
                             ((List<object>)source[key]).Add( patch[key] );
                         //throw new Exception( $"IndexedKey: patch[key] is {(patch[key]).GetType()}" );
@@ -200,7 +267,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static void ApplyPatchValues(List<object> source, IndexedKey patch)
+        static void ApplyPatchValues_xx(List<object> source, IndexedKey patch)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -214,14 +281,14 @@ namespace Synapse.Core.Utilities
                     if( source[i] is Dictionary<object, object> )
                     {
                         if( patch.Values[key] is Dictionary<object, object> )
-                            ApplyPatchValues( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key] );
+                            ApplyPatchValues_xx( (Dictionary<object, object>)source[i], (Dictionary<object, object>)patch.Values[key] );
                         else
                             ((Dictionary<object, object>)source[i]).Add( "MergeError", patch.Values[key] );
                     }
                     else
                     {
                         if( patch.Values[key] is IndexedKey )
-                            ApplyPatchValues( (List<object>)source[i], (IndexedKey)patch.Values[key] );
+                            ApplyPatchValues_xx( (List<object>)source[i], (IndexedKey)patch.Values[key] );
                         else
                             ((List<object>)source[i]).Add( patch.Values[key] );
                     }
@@ -421,7 +488,7 @@ namespace Synapse.Core.Utilities
 
 
         #region util
-        internal static Dictionary<object, object> ConvertPathElementToDict(string path)
+        internal static Dictionary<object, object> ConvertPathElementToDict(string path, string value = null)
         {
             StringBuilder yaml = new StringBuilder();
 
@@ -439,7 +506,11 @@ namespace Synapse.Core.Utilities
                 }
             }
 
-            return Deserialize( yaml.ToString() );
+            string buf = yaml.ToString().Trim();
+            if( !string.IsNullOrWhiteSpace( value ) )
+                buf = $"{buf} {value}";
+
+            return Deserialize( buf );
         }
 
         internal static string CheckPathElementIsIndexed(string element, out int index)
