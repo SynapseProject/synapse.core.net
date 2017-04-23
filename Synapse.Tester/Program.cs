@@ -68,6 +68,17 @@ namespace Synapse.Tester
 
             Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
 
+            object elements = YamlHelpers.SelectElements( guy,
+                new string[] { "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith",
+                    "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3" } );
+
+            Plan json = Plan.FromYaml( @"..\..\yaml\training_636282261765752616.yaml" );
+            elements = YamlHelpers.SelectElements( json,
+                new string[] { "Actions[0]:Result:ExitData" } );
+
+            Newtonsoft.Json.Linq.JObject o = Newtonsoft.Json.Linq.JObject.Parse( elements.ToString() );
+
+
             Plan encrypted = guy.EncryptElements();
             YamlHelpers.SerializeFile( @"..\..\yaml\ad-test.encr.yaml", encrypted );
             guy = encrypted.DecryptElements();

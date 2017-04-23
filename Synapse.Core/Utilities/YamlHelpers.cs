@@ -169,14 +169,14 @@ namespace Synapse.Core.Utilities
                 Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
 
                 if( patchValue is Dictionary<object, object> )
-                    ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue);
+                    ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
                 else if( patchValue is List<object> )
-                    ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue);
+                    ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
                 else //if( patchValue is 'the value' )
                     listItemValue[patchKey] = patchValue;
             }
             else if( source[i] is List<object> )
-                ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey);
+                ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey );
             else
                 source[i] = patchValue;
         }
@@ -366,6 +366,95 @@ namespace Synapse.Core.Utilities
                 HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
             else
                 source[i] = crypto.HandleCrypto( source[i].ToString() );
+        }
+        #endregion
+
+
+        #region select yaml/json node from doc
+        public static object SelectElements(Plan plan, IEnumerable<string> elementPaths)
+        {
+            Dictionary<object, object> source = Deserialize( plan.ToYaml() );
+            return SelectElements( source, elementPaths );
+        }
+
+        public static object SelectElements(Dictionary<object, object> source, IEnumerable<string> elementPaths)
+        {
+            List<object> returnSet = new List<object>();
+            foreach( string elementPath in elementPaths )
+            {
+                Dictionary<object, object> el = ConvertPathElementToDict( elementPath );
+                returnSet.Add( FindElement( source, el ) );
+            }
+
+            if( returnSet.Count == 1 )
+                return returnSet[0];
+            else
+                return returnSet;
+        }
+
+        internal static object FindElement(Dictionary<object, object> source, Dictionary<object, object> patch)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            object result = null;
+
+            foreach( object key in patch.Keys )
+            {
+                if( source.ContainsKey( key ) )
+                {
+                    if( source[key] is Dictionary<object, object> )
+                        result = FindElement( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                    else if( source[key] is List<object> )
+                        result = FindElement( (List<object>)source[key], (List<object>)patch[key] );
+                    else //( source[key] is string )
+                        result = source[key];
+                }
+            }
+
+            return result;
+        }
+
+        internal static object FindElement(List<object> source, List<object> patch)
+        {
+            if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
+            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+
+            object result = null;
+
+            Dictionary<object, object> patchItem = (Dictionary<object, object>)patch[0];
+
+            int i = int.Parse( patchItem[__sli].ToString() );
+            patchItem.Remove( __sli );
+
+            object patchKey = null;
+            object patchValue = null;
+
+            foreach( object key in patchItem.Keys )
+                patchKey = key;
+
+            if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
+                patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+
+
+            if( source[i] is Dictionary<object, object> )
+            {
+                Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
+
+                if( patchValue is Dictionary<object, object> )
+                    result = FindElement( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
+                else if( patchValue is List<object> )
+                    result = FindElement( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
+                else //if( patchValue is 'the value' )
+                    result = listItemValue[patchKey];
+            }
+            else if( source[i] is List<object> )
+                result = FindElement( (List<object>)source[i], (List<object>)patchKey );
+            else
+                result = source[i];
+
+
+            return result;
         }
         #endregion
 

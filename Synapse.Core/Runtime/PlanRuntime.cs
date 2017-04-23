@@ -9,6 +9,7 @@ using Synapse.Core.DataAccessLayer;
 #endif
 
 using Synapse.Core.Utilities;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -70,6 +71,7 @@ namespace Synapse.Core
         public void Stop() { _wantsCancel = true; }
         public void Pause() { _wantsPause = true; }
         public void Continue() { _wantsPause = false; }
+        [YamlIgnore]
         public bool IsPaused { get { return _wantsPause; } }
         void CheckPause() //todo: this is just a stub method
         {
