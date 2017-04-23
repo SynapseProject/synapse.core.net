@@ -53,8 +53,13 @@ Actions:
             ExitData: Could not load file or assembly 'Synapse.CoreFoo' or one of its dependencies. The system cannot find the file specified.
           Parameters: {}
           Actions: []
+          InstanceId: 19
+        InstanceId: 18
+      InstanceId: 17
+    InstanceId: 16
+  InstanceId: 15
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 2/5/2017 9:55:49 AM
+LastModified: 4/23/2017 11:45:13 AM

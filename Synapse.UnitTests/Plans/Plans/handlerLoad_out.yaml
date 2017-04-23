@@ -5,6 +5,7 @@ Actions:
   Handler:
     Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
+    StartInfo: {}
   Result:
     ExitData: EmptyHandler ExitData default value.
   Parameters: {}
@@ -13,6 +14,8 @@ Actions:
     Handler:
       Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
+      StartInfo:
+        ParentExitData: EmptyHandler ExitData default value.
     Result:
       ExitData: EmptyHandler ExitData default value.
     Parameters: {}
@@ -21,6 +24,8 @@ Actions:
       Handler:
         Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
+        StartInfo:
+          ParentExitData: EmptyHandler ExitData default value.
       Result:
         ExitData: EmptyHandler ExitData default value.
       Parameters: {}
@@ -29,6 +34,8 @@ Actions:
         Handler:
           Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
+          StartInfo:
+            ParentExitData: EmptyHandler ExitData default value.
         Result:
           ExitData: EmptyHandler ExitData default value.
         Parameters: {}
@@ -37,10 +44,17 @@ Actions:
           Handler:
             Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
             Config: {}
+            StartInfo:
+              ParentExitData: EmptyHandler ExitData default value.
           Result:
             ExitData: EmptyHandler ExitData default value.
           Parameters: {}
           Actions: []
+          InstanceId: 14
+        InstanceId: 13
+      InstanceId: 12
+    InstanceId: 11
+  InstanceId: 10
 StartInfo: {}
 Result: {}
-LastModified: 2/5/2017 9:55:49 AM
+LastModified: 4/23/2017 11:45:13 AM

@@ -5,6 +5,10 @@ Actions:
   Handler:
     Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
+    StartInfo:
+      Parameters: >+
+        ReturnStatus: New
+
   Result:
     Status: New
     ExitData: EmptyHandler ExitData default value.
@@ -40,6 +44,7 @@ Actions:
         Values:
           ReturnStatus: Initializing
       Actions: []
+      InstanceId: 3
     - Name: ac0.g
       ExecuteCase: Any
       Handler:
@@ -57,6 +62,11 @@ Actions:
         Handler:
           Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
+          StartInfo:
+            Parameters: >+
+              ReturnStatus: Failed
+
+            ParentExitData: EmptyHandler ExitData default value.
         Result:
           Status: Failed
           ExitData: EmptyHandler ExitData default value.
@@ -65,11 +75,17 @@ Actions:
           Values:
             ReturnStatus: Failed
         Actions: []
+        InstanceId: 5
       - Name: ac0.g.1
         ExecuteCase: Complete
         Handler:
           Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
+          StartInfo:
+            Parameters: >+
+              ReturnStatus: Waiting
+
+            ParentExitData: EmptyHandler ExitData default value.
         Result:
           Status: Waiting
           ExitData: EmptyHandler ExitData default value.
@@ -78,12 +94,17 @@ Actions:
           Values:
             ReturnStatus: Waiting
         Actions: []
+        InstanceId: 6
+      InstanceId: 4
+    InstanceId: 2
   Actions:
   - Name: ac0.1
     ExecuteCase: Complete
     Handler:
       Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
+      StartInfo:
+        ParentExitData: EmptyHandler ExitData default value.
     Result:
       ExitData: EmptyHandler ExitData default value.
       BranchStatus: CompletedWithErrors
@@ -93,6 +114,11 @@ Actions:
       Handler:
         Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
+        StartInfo:
+          Parameters: >+
+            ReturnStatus: Complete
+
+          ParentExitData: EmptyHandler ExitData default value.
       Result:
         Status: Complete
         ExitData: EmptyHandler ExitData default value.
@@ -106,6 +132,11 @@ Actions:
         Handler:
           Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
+          StartInfo:
+            Parameters: >+
+              ReturnStatus: CompletedWithErrors
+
+            ParentExitData: EmptyHandler ExitData default value.
         Result:
           Status: CompletedWithErrors
           ExitData: EmptyHandler ExitData default value.
@@ -114,10 +145,17 @@ Actions:
           Values:
             ReturnStatus: CompletedWithErrors
         Actions: []
+        InstanceId: 9
+      InstanceId: 8
+    InstanceId: 7
 - Name: ac2
   Handler:
     Type: Synapse.Handlers.EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
+    StartInfo:
+      Parameters: >+
+        ReturnStatus: CompletedWithErrors
+
   Result:
     Status: CompletedWithErrors
     ExitData: EmptyHandler ExitData default value.
@@ -126,8 +164,9 @@ Actions:
     Values:
       ReturnStatus: CompletedWithErrors
   Actions: []
+  InstanceId: 1
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 2/5/2017 9:55:48 AM
+LastModified: 4/23/2017 11:45:13 AM
