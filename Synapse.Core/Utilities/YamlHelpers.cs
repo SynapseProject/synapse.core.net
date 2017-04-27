@@ -382,8 +382,8 @@ namespace Synapse.Core.Utilities
             List<object> returnSet = new List<object>();
             foreach( string elementPath in elementPaths )
             {
-                Dictionary<object, object> el = ConvertPathElementToDict( elementPath );
-                returnSet.Add( FindElement( source, el ) );
+                Dictionary<object, object> searchPath = ConvertPathElementToDict( elementPath );
+                returnSet.Add( FindElement( source, searchPath ) );
             }
 
             if( returnSet.Count == 1 )
@@ -392,21 +392,24 @@ namespace Synapse.Core.Utilities
                 return returnSet;
         }
 
-        internal static object FindElement(Dictionary<object, object> source, Dictionary<object, object> patch)
+        internal static object FindElement(Dictionary<object, object> source, Dictionary<object, object> searchPath)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+            if( searchPath == null ) { throw new ArgumentException( "SearchPath cannot be null.", "searchPath" ); }
 
             object result = null;
 
-            foreach( object key in patch.Keys )
+            foreach( object key in searchPath.Keys )
             {
                 if( source.ContainsKey( key ) )
                 {
                     if( source[key] is Dictionary<object, object> )
-                        result = FindElement( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                        if( searchPath[key] is Dictionary<object, object> )
+                            result = FindElement( (Dictionary<object, object>)source[key], (Dictionary<object, object>)searchPath[key] );
+                        else
+                            result = source[key];
                     else if( source[key] is List<object> )
-                        result = FindElement( (List<object>)source[key], (List<object>)patch[key] );
+                        result = FindElement( (List<object>)source[key], (List<object>)searchPath[key] );
                     else //( source[key] is string )
                         result = source[key];
                 }
@@ -415,14 +418,14 @@ namespace Synapse.Core.Utilities
             return result;
         }
 
-        internal static object FindElement(List<object> source, List<object> patch)
+        internal static object FindElement(List<object> source, List<object> searchPath)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
+            if( searchPath == null ) { throw new ArgumentException( "SearchPath cannot be null.", "searchPath" ); }
 
             object result = null;
 
-            Dictionary<object, object> patchItem = (Dictionary<object, object>)patch[0];
+            Dictionary<object, object> patchItem = (Dictionary<object, object>)searchPath[0];
 
             int i = int.Parse( patchItem[__sli].ToString() );
             patchItem.Remove( __sli );
@@ -433,8 +436,8 @@ namespace Synapse.Core.Utilities
             foreach( object key in patchItem.Keys )
                 patchKey = key;
 
-            if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
-                patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+            if( ((Dictionary<object, object>)searchPath[0]).ContainsKey( patchKey ) )
+                patchValue = ((Dictionary<object, object>)searchPath[0])[patchKey];
 
 
             if( source[i] is Dictionary<object, object> )

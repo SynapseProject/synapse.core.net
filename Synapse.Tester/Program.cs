@@ -74,6 +74,8 @@ namespace Synapse.Tester
 
             Plan json = Plan.FromYaml( @"..\..\yaml\training_636282261765752616.yaml" );
             elements = YamlHelpers.SelectElements( json,
+                new string[] { "Result" } );
+            elements = YamlHelpers.SelectElements( json,
                 new string[] { "Actions[0]:Result:ExitData" } );
 
             Newtonsoft.Json.Linq.JObject o = Newtonsoft.Json.Linq.JObject.Parse( elements.ToString() );
