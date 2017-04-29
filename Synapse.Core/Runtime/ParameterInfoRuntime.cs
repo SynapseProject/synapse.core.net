@@ -180,7 +180,11 @@ namespace Synapse.Core
             {
                 case SerializationType.Xml:
                 {
-                    return null;
+                    XmlDocument values = new XmlDocument();
+                    values.LoadXml( Values.ToString() );
+                    ParameterInfo pi = XmlHelpers.GetCryptoValues( this, ref values, isEncryptMode );
+                    pi.Values = XmlHelpers.Serialize<string>( values );
+                    return pi;
                 }
                 case SerializationType.Yaml:
                 case SerializationType.Json:
