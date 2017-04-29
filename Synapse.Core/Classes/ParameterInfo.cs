@@ -42,29 +42,33 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasCrypto { get { return Crypto != null; } }
 
-        public string GetSerializedValues()
+        public string GetSerializedValues(CryptoProvider planCrypto = null)
         {
+            ParameterInfo pi = this;
+            if( HasCrypto )
+                pi = GetCryptoValues( planCrypto, isEncryptMode: false );
+
             string v = null;
             switch( Type )
             {
                 case SerializationType.Yaml:
                 {
-                    v = Utilities.YamlHelpers.Serialize( Values );
+                    v = Utilities.YamlHelpers.Serialize( pi.Values );
                     break;
                 }
                 case SerializationType.Json:
                 {
-                    v = Utilities.YamlHelpers.Serialize( Values, serializeAsJson: true );
+                    v = Utilities.YamlHelpers.Serialize( pi.Values, serializeAsJson: true );
                     break;
                 }
                 case SerializationType.Xml:
                 {
-                    v = Utilities.XmlHelpers.Serialize<object>( Values );
+                    v = Utilities.XmlHelpers.Serialize<object>( pi.Values );
                     break;
                 }
                 case SerializationType.Unspecified:
                 {
-                    v = Values.ToString();
+                    v = pi.Values.ToString();
                     break;
                 }
             }

@@ -29,11 +29,9 @@ namespace Synapse.Core
         List<DynamicValue> Dynamic { get; set; }
         bool HasDynamic { get; }
 
-        CryptoProvider Crypto { get; set; }
-        bool HasCrypto { get; }
-        ParameterInfo GetCryptoValues(bool isEncryptMode = true);
+        ParameterInfo GetCryptoValues(CryptoProvider crypto = null, bool isEncryptMode = true);
 
-        string GetSerializedValues();
+        string GetSerializedValues(CryptoProvider crypto = null);
 
         object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null);
     }

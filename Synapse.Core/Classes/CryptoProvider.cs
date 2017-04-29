@@ -14,6 +14,19 @@ namespace Synapse.Core
         public string KeyContainerName { get; set; }
         public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
 
+        public void InheritSettingsIfRequired(CryptoProvider provider)
+        {
+            if( provider == null )
+                return;
+
+            if( string.IsNullOrWhiteSpace( KeyUri ) || string.IsNullOrWhiteSpace( KeyContainerName ) )
+            {
+                KeyUri = provider.KeyUri;
+                KeyContainerName = provider.KeyContainerName;
+                CspFlags = provider.CspFlags;
+            }
+        }
+
         public List<string> Elements { get; set; } = new List<string>();
 
         public List<string> Errors { get; set; } = new List<string>();
