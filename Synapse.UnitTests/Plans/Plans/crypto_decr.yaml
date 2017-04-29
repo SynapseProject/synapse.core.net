@@ -1,29 +1,17 @@
-Name: TestRCA
+Name: crypto
 Description: Test RemoteCommand Handler
 IsActive: true
-Crypto:
-  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
-  KeyContainerName: foo
 Actions:
 - Name: Hostname
   Handler:
     Type: Synapse.Handlers.CommandLine:CommandHandler
     Config:
-      Type: Yaml
       Values:
         WorkingDirectory: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml
         Command: powershell.exe
         TimeoutMills: 30000
         TimeoutAction: Error
   Parameters:
-    Type: Yaml
-    Crypto:
-      Elements:
-      - Type
-      - Values:Arguments:ArgString
-      - Values:Arguments:Expressions[0]:Encoding
-      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
-      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
     Values:
       Parser: Regex
       Arguments:
@@ -52,3 +40,23 @@ Actions:
     Dynamic:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
+    Crypto:
+      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+      KeyContainerName: foo
+      Elements:
+      - Type
+      - Values:Arguments:ArgString
+      - Values:Arguments:Expressions[0]:Encoding
+      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
+      Errors:
+      - Type
+      - Type
+  Actions: []
+Crypto:
+  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+  KeyContainerName: foo
+  Elements: []
+  Errors: []
+StartInfo: {}
+LastModified: 4/29/2017 12:41:42 AM

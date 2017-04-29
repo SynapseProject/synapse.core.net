@@ -1,4 +1,4 @@
-Name: TestRCA
+Name: crypto
 Description: Test RemoteCommand Handler
 IsActive: true
 Actions:
@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: RMD7e2hG4geIU3OdsZtC5BhcW6x6/27J11aGLMONL0kiiWTvpaXs2DZOxYY7/nhyXQzjbsS7unm1xA/7guIUcqYRFtm3LlN4XA+qW1B9GDL8hKWsxxW3Nnjj+SjMxEk+e70srtotLRa4PR+EtnV/ZN67KTBqzUSSucuYIcfbv4I=
+        ArgString: paMNkVdY9gZxL7M6dmdjbvMaLgnRQ5Uy2GyIjxaoGW5WpIKji4GYo4sRIoHCHOgWm00PPskYmMls84fjgLs1cAa2ZEt2LS2EFOfN/YYOA9JLLTR2av4M3Cq3cPxJtZpC7/ECYSjrp+IvmjEZekqLSPKsRGUh9tX1SlGXrVsgUa4=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: udPyzRT5VQWBiSTs1nLkNDf76U2zRTip+jjUuMeNwmNaidoCZVKSHEP47mD8nPovhsdbH578SZxmOS5s5xgB9xASdQn6izDWYLqGTKOR0MpFhNm7dTR9c6IMbImVEyLoKZhkA/EwNw10s4eR+F0qsrxu41yyA2u8lH47eADDpwk=
+          Encoding: 3qJa2Kln+Q5wX2gS27S6cGLnlGXwnjbeVmpP3I2oZRwsh9W52u+bQKDi+2q+9FckG4sPo3POcAYusn9uVBHbzujsanEqt1tEthip145M8GES3ZiE4M1vBxOFUrTOCOh2lg2FNVg8SzoNFX03eK+RX0H9myjVovC0X8VKIncN/1A=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: j44ZMuTp/It9DZQu/sE48mAmwET4C9KmVvfstN+Fvz7sTUnlUU0KFczhBzsW4kJqfhRsCb9GYEkmX6IYnKEcYf+Dn2TzqJSihlIJD85hbag990cWr5Cd3JGf+lc64CLGDlWZh9M46IH+VyX32+trMgmwtOv0adN5Z/YHbFIJ4uQ=
+              - v1: kfSEviNCJjXbcHzZ4+o03gu+CWLn0esNz2xOfLvxKb8nk/FPxOxNJIdBW4b344JYAkQH60yU6oE3Gkew0rODxe2hfd3lU3aGYmjzzCAgzfnMUsZzCJmI6EnObTrcZrg3fcsjGAiSoCJ+de1WHvyW/eq689UCE4Jf0Dau3WQxVns=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: G8oTjhLAjHXFvOmHFhHz7miH0wbTmoQvugsvmD9NFwgq+8RhEesAcZM12MmYpi2Kq7ZS16+AXdj7NbYsEZ4yePYdnl4qcD8jEYoYOJTmj+s2fFKNwL9lQTi+44AT6AF4wE4RJOKpxR7xuwhpbGZHWSIQrzZAtwTnpQpwty+MQ2M=
+              - v3: Oyw9SJ9BpxzwaaIQZ2SDNJNedf5sLYcX9R3P2YwMzoGfcCQASBySVrTUUGartc6/R+s4qTAo5KC1L1EttL2jlXOaiFYXsxV8nKWdbpjcKrK5ed1SeXNsL0n8yZ/DdW7+d7sjvt6Z9zS/LV1hB9dcB1h+88NPv1I3aXNpfsahQW4=
           Encoding: Base64
     Dynamic:
     - Name: jsonPayload
@@ -58,4 +58,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 4/29/2017 12:41:42 AM
+LastModified: 4/29/2017 2:11:59 AM
