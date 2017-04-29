@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 using Synapse.Core;
 using Synapse.Core.Runtime;
-
+using Synapse.Core.Utilities;
 
 namespace Synapse.UnitTests
 {
@@ -473,6 +473,54 @@ namespace Synapse.UnitTests
             plan.Name += "foo";
             ok = plan.VerifySignature( "foo", $"{__crypto}\\pubOnly.xml", System.Security.Cryptography.CspProviderFlags.NoFlags );
             Assert.IsFalse( ok );
+        }
+
+        [Test]
+        [Category( "Crypto" )]
+        [TestCase( "crypto" )]
+        public void EncryptPlan(string planName)
+        {
+            string[] parts = new string[] {
+                "Actions[0]:Parameters:Values:Arguments:ArgString",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[0]:Encoding",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3" };
+
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planName}.yaml" );
+            object e = YamlHelpers.SelectElements( plan, parts );
+
+            Plan crypto = plan.EncryptElements();
+            object a = YamlHelpers.SelectElements( crypto, parts );
+
+            List<object> exp = (List<object>)e;
+            List<object> act = (List<object>)a;
+
+            for( int i = 0; i < exp.Count; i++ )
+                Assert.AreNotEqual( exp[i], act[i] );
+        }
+
+        [Test]
+        [Category( "Crypto" )]
+        [TestCase( "crypto" )]
+        public void DecryptPlan(string planName)
+        {
+            string[] parts = new string[] {
+                "Actions[0]:Parameters:Values:Arguments:ArgString",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[0]:Encoding",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3" };
+
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planName}.yaml" );
+            object e = YamlHelpers.SelectElements( plan, parts );
+
+            Plan crypto = plan.DecryptElements();
+            object a = YamlHelpers.SelectElements( crypto, parts );
+
+            List<object> exp = (List<object>)e;
+            List<object> act = (List<object>)a;
+
+            for( int i = 0; i < exp.Count; i++ )
+                Assert.AreEqual( exp[i], act[i] );
         }
     }
 }

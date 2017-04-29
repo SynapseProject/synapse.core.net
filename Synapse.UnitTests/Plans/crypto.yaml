@@ -1,6 +1,9 @@
-Name: TestRCA
+Name: crypto
 Description: Test RemoteCommand Handler
 IsActive: true
+Crypto:
+  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+  KeyContainerName: foo
 Actions:
 - Name: Hostname
   Handler:
@@ -15,8 +18,6 @@ Actions:
   Parameters:
     Type: Yaml
     Crypto:
-      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
-      KeyContainerName: foo
       Elements:
       - Type
       - Values:Arguments:ArgString
