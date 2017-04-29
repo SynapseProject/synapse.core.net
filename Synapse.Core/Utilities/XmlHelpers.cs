@@ -65,6 +65,7 @@ namespace Synapse.Core.Utilities
             return (T)s.Deserialize( reader );
         }
 
+
         #region merge
         //works, but is horrifically inefficient.
         //todo: rewrite to calc all xpaths upfront, then select/update from source
@@ -189,6 +190,7 @@ namespace Synapse.Core.Utilities
         }
         #endregion
 
+
         #region ForEach
         internal static List<object> ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
         {
@@ -221,6 +223,54 @@ namespace Synapse.Core.Utilities
                 else
                     matrix.Add( (XmlDocument)source.Clone() );
             }
+        }
+        #endregion
+
+
+        #region crypto
+        public static T GetCryptoValues<T>(T c, ref XmlDocument source, bool isEncryptMode = true) where T : class, ICrypto
+        {
+            T result = null;
+
+            if( c.HasCrypto )
+            {
+                c.Crypto.LoadRsaKeys();
+                c.Crypto.IsEncryptMode = isEncryptMode;
+
+                List<string> errors = new List<string>();
+
+                foreach( string element in c.Crypto.Elements )
+                {
+                    try
+                    {
+                        XmlNode src = source.SelectSingleNode( element );
+                        if( src != null )
+                        {
+                            if( src.NodeType == XmlNodeType.Element )
+                                src.InnerText = c.Crypto.HandleCrypto( src.InnerText );
+                            else
+                                src.Value = c.Crypto.HandleCrypto( src.Value );
+                        }
+                        else
+                            errors.Add( element );
+                    }
+                    catch
+                    {
+                        errors.Add( element );
+                    }
+                }
+
+                string p = YamlHelpers.Serialize( c );
+                result = YamlHelpers.Deserialize<T>( p );
+
+                if( errors.Count == 0 )
+                    result.Crypto.Errors = null;
+                else
+                    foreach( string error in errors )
+                        result.Crypto.Errors.Add( error );
+            }
+
+            return result;
         }
         #endregion
     }

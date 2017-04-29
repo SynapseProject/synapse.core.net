@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: RMD7e2hG4geIU3OdsZtC5BhcW6x6/27J11aGLMONL0kiiWTvpaXs2DZOxYY7/nhyXQzjbsS7unm1xA/7guIUcqYRFtm3LlN4XA+qW1B9GDL8hKWsxxW3Nnjj+SjMxEk+e70srtotLRa4PR+EtnV/ZN67KTBqzUSSucuYIcfbv4I=
+        ArgString: rTlCeBvGyjjEIuPX3X/sBuq3HT/pqK2ncloSzu6ZpQtAPc4zT8koMnhM38OrNUo6o805aRPTRZtrO8eLLc7CcgMKu1STTOBRTZE7ujKbcw3fdofGJra4oJFl3b5gDdHDeqrm5ZdtVEeE40C+KFYr4NTUOCHsnggVJyexrG0b4RY=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: udPyzRT5VQWBiSTs1nLkNDf76U2zRTip+jjUuMeNwmNaidoCZVKSHEP47mD8nPovhsdbH578SZxmOS5s5xgB9xASdQn6izDWYLqGTKOR0MpFhNm7dTR9c6IMbImVEyLoKZhkA/EwNw10s4eR+F0qsrxu41yyA2u8lH47eADDpwk=
+          Encoding: yelP1IMc0w6iEKloEni3ghcRPQkQd2bAyut1Z2kF6h86NW6rpM1NiivuFT7kj78UYaJOPYXoGScwyWIiygtnYMQDQ5eQm2swggk+yZucgMH4z1iNB8Acforp1wBGAW6OqCZgkmXB2/6s9tHXvukGqtXcOM3EvNgWI8nflw+Xb5Q=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: j44ZMuTp/It9DZQu/sE48mAmwET4C9KmVvfstN+Fvz7sTUnlUU0KFczhBzsW4kJqfhRsCb9GYEkmX6IYnKEcYf+Dn2TzqJSihlIJD85hbag990cWr5Cd3JGf+lc64CLGDlWZh9M46IH+VyX32+trMgmwtOv0adN5Z/YHbFIJ4uQ=
+              - v1: vEPKahFdVSbQUmbyfkkkcNgkxY/x8YePEBxlqWcPCwSMuA4tCoy96yI871ZTtUhYbsUqe7+U1BhML3g7D511p9+O+U8/eOhv3fqLdkEsqS6npJzizUlnzgNmP34o3ph8aLO9Ve18J2V2/WAanPIcae+YuOzZBevV+F0KGxG5NMo=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: G8oTjhLAjHXFvOmHFhHz7miH0wbTmoQvugsvmD9NFwgq+8RhEesAcZM12MmYpi2Kq7ZS16+AXdj7NbYsEZ4yePYdnl4qcD8jEYoYOJTmj+s2fFKNwL9lQTi+44AT6AF4wE4RJOKpxR7xuwhpbGZHWSIQrzZAtwTnpQpwty+MQ2M=
+              - v3: UPifvokbpiZHFMayERJ9BfoR0o8eXWlBtZE31+kztyRkjO2ISaCTWoUR4mrQPVxe+VpHbC5Ja7XqpwvENvbGRBBwjgfO8Pbn/9kSys/0dDLiZ9PMyfCwdmo1+AlnWt1vMHZuSBlNLQmD/vHIvVc1iBU6EZ4YA7TBt6sY4Xf9IzQ=
           Encoding: Base64
     Dynamic:
     - Name: jsonPayload
@@ -52,10 +52,42 @@ Actions:
       Errors:
       - Type
   Actions: []
+- Name: Xml
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+    Config:
+      Name: ConfigSet00
+      Type: Xml
+      Values: >-
+        <CXmlDoc>
+
+          <CNode0>J15po58dj5ee0ctexPUJoUWJMUpLA8qztqZFNdoN7jSt4+qNxp3ROTGdLfkTyrseF97fPe3dYQ9FEIKFrrcew/rLMdFoJAZ02v85URXKL1J/qeuj0NtllOm5twLnet2rwThZh0mfDRVeijAws8RQz8eeZELAbPPwMFVaccMjRuY=</CNode0>
+
+          <CNode1>CValue1_inline</CNode1>
+
+          <CNode3>
+
+            <CNode3_1 CAttr3_1="mRRZwbRflIJyKKEktuewT2UJdVTXtoAbm1jP7qCg04xp26KNR0sN4SsB//HTL8v/tJkzymcfvoKvcvo83dUxs/5SEUt09RCKsbXkrfavvtutOY8GBVRYEGjhvss5NvHlrlrFyG0MhPrsR6ccgBxVyxTxlYLTWF1Dj2zwF0xgFbE=">CValue3_1_inline</CNode3_1>
+
+            <CNode3_2>CValue3_2_inline</CNode3_2>
+
+          </CNode3>
+
+        </CXmlDoc>
+      Crypto:
+        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+        KeyContainerName: foo
+        Elements:
+        - /CXmlDoc[1]/CNode0[1]
+        - /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
+        - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
+        Errors:
+        - /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
+  Actions: []
 Crypto:
   KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
   KeyContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 4/29/2017 12:41:42 AM
+LastModified: 4/29/2017 11:19:06 AM
