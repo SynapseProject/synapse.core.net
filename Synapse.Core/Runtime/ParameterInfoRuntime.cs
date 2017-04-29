@@ -171,8 +171,11 @@ namespace Synapse.Core
             return await client.GetStringAsync( uri );
         }
 
-        public ParameterInfo GetCryptoValues(bool isEncryptMode = true)
+        public ParameterInfo GetCryptoValues(CryptoProvider planCrypto = null, bool isEncryptMode = true)
         {
+            if( HasCrypto )
+                Crypto.InheritSettingsIfRequired( planCrypto );
+
             switch( Type )
             {
                 case SerializationType.Xml:

@@ -27,14 +27,21 @@ namespace Synapse.Core
         private WindowsImpersonationContext _impContext = null;
 
         [PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
-        public void Impersonate()
+        public void Impersonate(CryptoProvider crypto)
         {
             if( !IsImpersonating )
             {
                 _token = IntPtr.Zero;
 
-                bool ok = LogonUser( UserName, Domain, Password,
+                SecurityContext sc = this;
+                if( HasCrypto )
+                    sc = GetCryptoValues( crypto, isEncryptMode: false );
+
+                bool ok = LogonUser( sc.UserName, sc.Domain, sc.Password,
                    LOGON32_LOGON_INTERACTIVE, LOGON32_PROVIDER_DEFAULT, ref _token );
+
+                if( HasCrypto )
+                    sc = null;
 
                 //try { password.Dispose(); } catch { }
 
@@ -65,8 +72,10 @@ namespace Synapse.Core
 
         public bool IsImpersonating { get { return _impContext != null; } }
 
-        public SecurityContext GetCryptoValues(bool isEncryptMode = true)
+        public SecurityContext GetCryptoValues(CryptoProvider planCrypto = null, bool isEncryptMode = true)
         {
+            if( HasCrypto )
+                Crypto.InheritSettingsIfRequired( planCrypto );
             return YamlHelpers.GetCryptoValues( this, isEncryptMode );
         }
     }

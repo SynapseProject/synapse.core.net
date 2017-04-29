@@ -299,9 +299,9 @@ namespace Synapse.Core.Utilities
                 foreach( ActionItem a in actions )
                 {
                     if( a.Handler.HasConfig && a.Handler.Config.HasCrypto )
-                        a.Handler.Config = a.Handler.Config.GetCryptoValues( isEncryptMode );
+                        a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode  );
                     if( a.HasParameters && a.Parameters.HasCrypto )
-                        a.Parameters = a.Parameters.GetCryptoValues( isEncryptMode );
+                        a.Parameters = a.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
 
                     if( a.HasActionGroup )
                         actionLists.Push( new ActionItem[] { a.ActionGroup } );

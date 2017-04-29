@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public partial class Plan : IActionContainer
+    public partial class Plan : IActionContainer, ICrypto
     {
         public Plan()
         {

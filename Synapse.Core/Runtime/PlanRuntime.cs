@@ -264,7 +264,7 @@ namespace Synapse.Core
             try
             {
                 //string parms = ResolveConfigAndParameters( a, dynamicData );
-                string parms = a.Parameters.GetSerializedValues();
+                string parms = a.Parameters.GetSerializedValues( Crypto );
 
                 IHandlerRuntime rt = CreateHandlerRuntime( a );
                 rt.Progress += rt_Progress;
@@ -283,7 +283,7 @@ namespace Synapse.Core
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
 
                     SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
-                    sc?.Impersonate();
+                    sc?.Impersonate( Crypto );
                     a.Result = rt.Execute( startInfo );
                     a.Result.BranchStatus = a.Result.Status;
                     sc?.Undo();
@@ -462,13 +462,13 @@ namespace Synapse.Core
                 {
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
                     {
-                        Parameters = a.Parameters.GetSerializedValues(),
+                        Parameters = a.Parameters.GetSerializedValues( Crypto ),
                         IsDryRun = dryRun,
                         PlanInstanceId = InstanceId,
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData
                     };
-                    a.RunAs?.Impersonate();
+                    a.RunAs?.Impersonate( Crypto );
                     ExecuteResult r = rt.Execute( startInfo );
                     a.RunAs?.Undo();
 
@@ -574,7 +574,7 @@ namespace Synapse.Core
                 handler.Type = hr.RuntimeType;
                 hr.ActionName = a.Name;
 
-                string config = handler.HasConfig ? handler.Config.GetSerializedValues() : null;
+                string config = handler.HasConfig ? handler.Config.GetSerializedValues( Crypto ) : null;
                 hr.Initialize( config );
             }
             else
