@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: paMNkVdY9gZxL7M6dmdjbvMaLgnRQ5Uy2GyIjxaoGW5WpIKji4GYo4sRIoHCHOgWm00PPskYmMls84fjgLs1cAa2ZEt2LS2EFOfN/YYOA9JLLTR2av4M3Cq3cPxJtZpC7/ECYSjrp+IvmjEZekqLSPKsRGUh9tX1SlGXrVsgUa4=
+        ArgString: V0fghmVybHrsytQopLy0Vmh9vSHcf8CcnT8Nq2xejuR+OEOlzwq8HnT2YE2vsEQf38CDEz3utfuyqTxlMkKfCCcqVVb/cZ5XuZn2uoER5MyhH/Z5pHmaiwhP5TYr9mXQMUvVOry0swgn4gzHtTmNpc8LN9OaUeVNCQKbbJupXRU=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: 3qJa2Kln+Q5wX2gS27S6cGLnlGXwnjbeVmpP3I2oZRwsh9W52u+bQKDi+2q+9FckG4sPo3POcAYusn9uVBHbzujsanEqt1tEthip145M8GES3ZiE4M1vBxOFUrTOCOh2lg2FNVg8SzoNFX03eK+RX0H9myjVovC0X8VKIncN/1A=
+          Encoding: teQgZfS4xnDrroT8g4fgplVYPdCa+JJjQbL6efgvu5wSkVAXZIAminMN5R4oMfUEZTBt2ZuB+j3XFjNjga/gpc1b1SkG6YNyoVjBd79lzXoxr+RAjmHAIYL2ak7lBMA3G3q0yt23n/bGolnLc4W8C73KWtF3mjPWxW4Oqx+Yawg=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: kfSEviNCJjXbcHzZ4+o03gu+CWLn0esNz2xOfLvxKb8nk/FPxOxNJIdBW4b344JYAkQH60yU6oE3Gkew0rODxe2hfd3lU3aGYmjzzCAgzfnMUsZzCJmI6EnObTrcZrg3fcsjGAiSoCJ+de1WHvyW/eq689UCE4Jf0Dau3WQxVns=
+              - v1: sCgIiUV7IscOaMtltxxywzmGLHXr6Dujt6JYHMvKJJObqO9pRDXC+CzsFtKbc5ISA6hcNHqHYycn6ZOElCSCG+oGAuCPCK/kre4zaQRb+OuX2xEpWZmC6C3Y76qmokC6vco6OLfqbPAKZHO5OJyMfgfJLl53wx+4bvwRyBGwEGk=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,13 +35,13 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: Oyw9SJ9BpxzwaaIQZ2SDNJNedf5sLYcX9R3P2YwMzoGfcCQASBySVrTUUGartc6/R+s4qTAo5KC1L1EttL2jlXOaiFYXsxV8nKWdbpjcKrK5ed1SeXNsL0n8yZ/DdW7+d7sjvt6Z9zS/LV1hB9dcB1h+88NPv1I3aXNpfsahQW4=
+              - v3: 3A3ffcZcnCHZjNLQ/ym6Xq0r1N7RYY5nf5hb2lHo9qmW4ic958Kp2ncVVOv4v3qhAvTYn5DZVwwE6Em8jFXZa0HQV3fdJ97Cq6/2787RaKbXR/HeD0DciwnqEZBnZI3S+M+cp7RDAQT7fSS77UPHdOsLhR2WeCQbL0dmbIeXLnM=
           Encoding: Base64
     Dynamic:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
     Crypto:
-      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
       KeyContainerName: foo
       Elements:
       - Type
@@ -52,10 +52,40 @@ Actions:
       Errors:
       - Type
   Actions: []
+- Name: Xml
+  Handler:
+    Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
+    Config:
+      Name: ConfigSet00
+      Type: Xml
+      Values: >-
+        <CXmlDoc>
+
+          <CNode0>OixzEA7cwM8cGga3Qlu0eyYzeTFFf/rqaZraMWgKuUKzS4yQRC8gpeLiUELcQ08TJiC97q/33UeQRUbkBRrc+iiLLHF5cbt5+XXAFhX3lkih6Jcv0P5nIxjSQhufiAgK9qXMrJznRKCkWZJew+/6R0t0SmEcUcIWkaHs50Y7XZs=</CNode0>
+
+          <CNode1>CValue1_inline</CNode1>
+
+          <CNode3>
+
+            <CNode3_1 CAttr3_1="0SdjZSv1BdYvM6SEu4ZEgjnLnIdj1ZHW8yKIaUTuG+qCC9kDvemrecVxJGN9pOcU3JXyeVvSkb7gF8iGLc2LAXkFjS+7QzsxRVVJoCu+iBTGMOd9mhO1ZVMCDrSCKCf/wT6y/ZlVOWuVFK3CMm+DoeI+iMgj07XJTFgpsdtMM1c=">CValue3_1_inline</CNode3_1>
+
+            <CNode3_2>fWP1wCrSDOifuu8ZgpywvyirS++lJNRmbDb3Y+V+vbSXua6P8Mcr+tkeguqYh+X/2tlS5gjpzMq9bQ66Y6NLGpVeOdVS/gUveyQryvmXmYZvjfENY5q8ZzzBBJlfTuKTI4Bu4aGe+ZcdbFylew8/iXcQScQ/njXjubZ1n/B0Tx4=</CNode3_2>
+
+          </CNode3>
+
+        </CXmlDoc>
+      Crypto:
+        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        KeyContainerName: foo
+        Elements:
+        - /CXmlDoc[1]/CNode0[1]
+        - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
+        - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
+  Actions: []
 Crypto:
-  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml
+  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
   KeyContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 4/29/2017 2:11:59 AM
+LastModified: 4/29/2017 11:35:47 AM

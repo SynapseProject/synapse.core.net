@@ -491,6 +491,7 @@ namespace Synapse.UnitTests
 
             Plan crypto = plan.EncryptElements();
             object a = YamlHelpers.SelectElements( crypto, parts );
+            File.WriteAllText( $"{__plansOut}\\{planName}_encr.yaml", crypto.ToYaml() );
 
             List<object> exp = (List<object>)e;
             List<object> act = (List<object>)a;
@@ -515,6 +516,7 @@ namespace Synapse.UnitTests
 
             Plan crypto = plan.DecryptElements();
             object a = YamlHelpers.SelectElements( crypto, parts );
+            File.WriteAllText( $"{__plansOut}\\{planName}_decr.yaml", crypto.ToYaml() );
 
             List<object> exp = (List<object>)e;
             List<object> act = (List<object>)a;
