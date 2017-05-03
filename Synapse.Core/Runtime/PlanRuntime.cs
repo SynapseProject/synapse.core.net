@@ -111,6 +111,7 @@ namespace Synapse.Core
             ResultPlan.Description = Description;
             ResultPlan.InstanceId = InstanceId;
             ResultPlan.StartInfo = StartInfo;
+            ResultPlan.Signature = Signature;
             ResultPlan.Result = new ExecuteResult();
 
             if( inProc )
