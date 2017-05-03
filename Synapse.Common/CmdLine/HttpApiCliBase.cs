@@ -83,7 +83,7 @@ namespace Synapse.Common.CmdLine
             }
             else
             {
-                string pattern = "(?<argname>.*):(?<argvalue>.*)"; //@"(?<argname>\w+):(?<argvalue>.*)";
+                string pattern = "(?<argname>.*?):(?<argvalue>.*)"; //@"(?<argname>\w+):(?<argvalue>.*)";
                 for( int i = startIndex; i < args.Length; i++ )
                 {
                     Match match = Regex.Match( args[i], pattern );
@@ -241,7 +241,7 @@ namespace Synapse.Common.CmdLine
             }
             else
             {
-                string pattern = @"(?<argname>\w+):(?<argvalue>.*)";
+                string pattern = @"(?<argname>.*?):(?<argvalue>.*)";
                 for( int i = startIndex; i < args.Length; i++ )
                 {
                     Match match = Regex.Match( args[i], pattern );
