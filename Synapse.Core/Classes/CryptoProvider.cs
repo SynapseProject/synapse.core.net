@@ -42,6 +42,25 @@ namespace Synapse.Core
 
         [YamlIgnore]
         internal bool IsEncryptMode { get; set; } = true;
+        internal string SafeHandleCrypto(string s)
+        {
+            string response = s;
+
+            if( IsEncryptMode )
+            {
+                //try to decrypt
+                // - if success, then the value is already encrypted with these RSA keys, return orig string (s)
+                // - if failure, needs to be encrypted
+                string decrypted = null;
+                if( !TryDecryptOrValue( s, out decrypted ) )
+                    TryEncryptOrValue( s, out response );
+            }
+            else
+                TryDecryptOrValue( s, out response );
+
+            return response;
+        }
+
         internal string HandleCrypto(string s)
         {
             if( IsEncryptMode )
@@ -49,6 +68,7 @@ namespace Synapse.Core
             else
                 return CryptoHelpers.Decrypt( Rsa, s );
         }
+
 
         public string Encrypt(string s)
         {
@@ -58,6 +78,34 @@ namespace Synapse.Core
         public string Decrypt(string s)
         {
             return CryptoHelpers.Decrypt( Rsa, s );
+        }
+
+        public bool TryEncryptOrValue(string value, out string encryptedValue)
+        {
+            bool ok = false;
+            encryptedValue = value;
+            try
+            {
+                encryptedValue = CryptoHelpers.Encrypt( Rsa, value );
+                ok = true;
+            }
+            catch { }
+
+            return ok;
+        }
+
+        public bool TryDecryptOrValue(string value, out string decryptedValue)
+        {
+            bool ok = false;
+            decryptedValue = value;
+            try
+            {
+                decryptedValue = CryptoHelpers.Decrypt( Rsa, value );
+                ok = true;
+            }
+            catch { }
+
+            return ok;
         }
         #endregion
     }
