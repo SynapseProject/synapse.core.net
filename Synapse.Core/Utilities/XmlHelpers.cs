@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -175,18 +176,34 @@ namespace Synapse.Core.Utilities
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
             if( values == null ) { throw new ArgumentException( "Values cannot be null.", "values" ); }
 
-            foreach( DynamicValue v in patch )
+            foreach( DynamicValue dv in patch )
             {
-                if( values.ContainsKey( v.Name ) )
+                if( values.ContainsKey( dv.Name ) )
                 {
-                    XmlNode src = source.SelectSingleNode( v.Path );
+                    XmlNode src = source.SelectSingleNode( dv.Path );
                     if( src != null )
                         if( src.NodeType == XmlNodeType.Element )
-                            src.InnerText = values[v.Name];
+                            src.InnerText = RegexReplaceOrValue( src.InnerText, values[dv.Name], dv );
                         else
-                            src.Value = values[v.Name];
+                            src.Value = RegexReplaceOrValue( src.Value, values[dv.Name], dv );
                 }
             }
+        }
+
+        internal static string RegexReplaceOrValue(string input, string replacement, DynamicValue dv)
+        {
+            string value = replacement;
+
+            if( dv != null )
+            {
+                if( !string.IsNullOrWhiteSpace( dv.Replace ) )
+                    value = Regex.Replace( input, dv.Replace, replacement );
+
+                if( !string.IsNullOrWhiteSpace( dv.Encode ) && dv.Encode.ToLower() == "base64" )
+                    value = CryptoHelpers.Encode( value );
+            }
+
+            return value;
         }
         #endregion
 

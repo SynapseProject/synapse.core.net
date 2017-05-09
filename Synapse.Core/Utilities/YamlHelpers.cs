@@ -118,12 +118,12 @@ namespace Synapse.Core.Utilities
                 if( values.ContainsKey( dv.Name ) )
                 {
                     Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, values[dv.Name] );
-                    ApplyPatchValues( source, patch );
+                    ApplyPatchValues( source, patch, dv );
                 }
             }
         }
 
-        internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch)
+        internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch, DynamicValue dv = null)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -133,18 +133,18 @@ namespace Synapse.Core.Utilities
                 if( source.ContainsKey( key ) )
                 {
                     if( source[key] is Dictionary<object, object> )
-                        ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key] );
+                        ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], dv );
                     else if( source[key] is List<object> )
-                        ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key] );
+                        ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key], dv );
                     else //( source[key] is string )
-                        source[key] = patch[key];
+                        source[key] = RegexReplaceOrValue( source[key], patch[key], dv );
                 }
                 else
                     source[key] = patch[key];
             }
         }
 
-        internal static void ApplyPatchValues(List<object> source, List<object> patch)
+        internal static void ApplyPatchValues(List<object> source, List<object> patch, DynamicValue dv = null)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -169,16 +169,32 @@ namespace Synapse.Core.Utilities
                 Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
 
                 if( patchValue is Dictionary<object, object> )
-                    ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
+                    ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
                 else if( patchValue is List<object> )
-                    ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
+                    ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
                 else //if( patchValue is 'the value' )
                     listItemValue[patchKey] = patchValue;
             }
             else if( source[i] is List<object> )
-                ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey );
+                ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey, dv );
             else
-                source[i] = patchValue;
+                source[i] = RegexReplaceOrValue( source[i], patchValue, dv );
+        }
+
+        internal static object RegexReplaceOrValue(object input, object replacement, DynamicValue dv)
+        {
+            object value = replacement;
+
+            if( dv != null )
+            {
+                if( !string.IsNullOrWhiteSpace( dv.Replace ) )
+                    value = Regex.Replace( input.ToString(), dv.Replace, replacement.ToString() );
+
+                if( !string.IsNullOrWhiteSpace( dv.Encode ) && dv.Encode.ToLower() == "base64" )
+                    value = CryptoHelpers.Encode( value.ToString() );
+            }
+
+            return value;
         }
         #endregion
 
