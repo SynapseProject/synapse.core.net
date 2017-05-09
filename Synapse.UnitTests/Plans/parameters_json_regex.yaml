@@ -1,0 +1,73 @@
+﻿Name: plan0
+Description: planDesc
+IsActive: true
+Actions:
+- Name: action0
+  Handler:
+    Type: Synapse.Core:Synapse.Handlers.EmptyHandler
+    Config:
+      Name: ConfigSet00
+      Type: Json
+      Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Config/json_in.json
+      Values:
+        {
+          "CNode0": "CValue0_inline",
+          "CNode1": "CValue1_inline",
+          "CNode3": {
+            "CNode3_1": "CValue3_1_inline",
+            "CNode3_2": "CValue3_2_inline",
+          }
+        }
+      Dynamic:
+      - Name: cnode0Dynamic
+        Path: CNode0
+      - Name: cnode2_1Dynamic
+        Path: CNode2:CNode2_1
+      - Name: cnode3_1Dynamic
+        Path: CNode3:CNode3_1
+  Parameters:
+    Name: ParamSet00
+    Type: Json
+    Uri: file://C:/Devo/synapse/synapse.core.net/Synapse.UnitTests/Plans/Parms/json_in.json
+    Values:
+      {
+        "PNode0": "PValue0_inline",
+        "PNode1": "PValue1_inline",
+        "PNode3": {
+          "PNode3_1": "PValue3_1_inline",
+          "PNode3_2": "PValue3_2_inline",
+        }
+      }
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+  Actions:
+  - Name: action1
+    Handler:
+      Type: Synapse.Core:Synapse.Handlers.EmptyHandler
+      Config:
+        Name: ConfigSet01
+        InheritFrom: ConfigSet00
+        Type: Json
+        Values:
+          {
+            "CNode0": "CValue0_inline_1",
+            "CNode3": {
+              "CNode3_1": "CValue3_1_inline_1",
+            },
+          }
+    Parameters:
+      Name: ParamSet01
+      InheritFrom: ParamSet00
+      Type: Json
+      Values:
+        {
+          "PNode1": "PValue1_inline_1",
+          "PNode3": {
+            "PNode3_2": "PValue3_2_inline_1",
+          },
+        }
