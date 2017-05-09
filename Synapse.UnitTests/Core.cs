@@ -56,12 +56,16 @@ namespace Synapse.UnitTests
             Assert.AreEqual( expectedMergeParms, actualMergedParms );
         }
 
+
         [Test]
         [Category( "Parameters" )]
         [Category( "Parameters_Dynamic" )]
         [TestCase( "parameters_yaml_single.yaml" )]
+        [TestCase( "parameters_yaml_regex.yaml" )]
         [TestCase( "parameters_json_single.yaml" )]
+        //[TestCase( "parameters_json_regex.yaml" )]
         [TestCase( "parameters_xml_single.yaml" )]
+        //[TestCase( "parameters_xml_regex.yaml" )]
         public void MergeParameters_Dynamic(string planFile)
         {
             // Arrange
