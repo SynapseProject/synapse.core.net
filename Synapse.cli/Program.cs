@@ -24,7 +24,28 @@ namespace Synapse.cli
             if( !a.IsParsed )
                 WriteHelpAndExit( a.Message );
 
-            if( a.Render != RenderAction.None )
+            if( a.IsCrypto )
+            {
+                if( a.IsEncrypt )
+                {
+                    string path = a.Encrypt;
+                    Plan plan = YamlHelpers.DeserializeFile<Plan>( path );
+                    plan = plan.EncryptElements();
+                    if( a.HasOut )
+                        path = a.Out;
+                    YamlHelpers.SerializeFile( path, plan );
+                }
+                else
+                {
+                    string path = a.Decrypt;
+                    Plan plan = YamlHelpers.DeserializeFile<Plan>( path );
+                    plan = plan.DecryptElements();
+                    if( a.HasOut )
+                        path = a.Out;
+                    YamlHelpers.SerializeFile( path, plan );
+                }
+            }
+            else if( a.Render != RenderAction.None )
             {
                 if( a.Render == RenderAction.Encode )
                     Console.WriteLine( CryptoHelpers.Encode( a.Plan ) );
@@ -134,13 +155,13 @@ namespace Synapse.cli
             //Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1}", ConsoleColor.Cyan, "{", "}" );
             //Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [/dryRun:true|false]", "{", "}" );
             //Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
-            Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1} [/dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
-            Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [dynamic parameters]\r\n", "{", "}" );
-            Console_WriteLine( "  /plan{0,-8}- filePath: Valid path to plan file.", ConsoleColor.Green, "" );
+            Console_WriteLine( " synapse.cli.exe plan:{0}filePath{1} [dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
+            Console.WriteLine( "   [resultPlan:{0}filePath{1}|true] [dynamic parameters]\r\n", "{", "}" );
+            Console_WriteLine( "  plan{0,-8} - filePath: Valid path to plan file.", ConsoleColor.Green, "" );
             //Console.WriteLine( "{0,-15}- [or] encodedPlanString: Inline base64 encoded plan string.", "" );
-            Console.WriteLine( "  /dryRun{0,-6}Specifies whether to execute the plan as a DryRun only.", "" );
+            Console.WriteLine( "  dryRun{0,-6} Specifies whether to execute the plan as a DryRun only.", "" );
             Console.WriteLine( "{0,-15}  Default is false.", "" );
-            Console.WriteLine( "  /resultPlan{0,-2}- filePath: Valid path to write ResultPlan output file.", "" );
+            Console.WriteLine( "  resultPlan{0,-2} - filePath: Valid path to write ResultPlan output file.", "" );
             Console.WriteLine( "{0,-15}- [or]: 'true' will write to same path as /plan as *.result.*", "" );
             //Console.WriteLine( "  /taskModel{0,-3}Specifies whether to execute the plan on an internal", "" );
             //Console.WriteLine( "{0,-15}  thread or shell process.  Default is InProc.", "" );
@@ -148,8 +169,13 @@ namespace Synapse.cli
             //Console.WriteLine( "{0,-15}  specifed plan file.", "" );
             //Console.WriteLine( "{0,-15}- decode: Returns the base64 decoded value of the specified", "" );
             //Console.WriteLine( "{0,-15}  encodedPlanString.", "" );
-            Console.WriteLine( "  dynamic{0,-6}Any remaining /arg:value pairs will passed to the plan", "" );
-            Console.WriteLine( "{0,-15}  as dynamic parms.", "" );
+            Console.WriteLine( "  dynamic{0,-6}Any remaining arg:value pairs will passed to the plan", "" );
+            Console.WriteLine( "{0,-15}  as dynamic parms.\r\n", "" );
+            Console_WriteLine( " synapse.cli.exe encrypt|decrypt:{0}filePath{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
+            Console_WriteLine( "\r\n  encrypt{0,5} - filePath: Valid path to plan file to encrypt.", ConsoleColor.Green, "" );
+            Console.WriteLine( "  decrypt{0,5} - filePath: Valid path to plan file to decrypt.", "" );
+            Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
+            Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.", "" );
 
             if( haveError )
                 Console_WriteLine( $"\r\n\r\n*** Last error:\r\n{errorMessage}\r\n", ConsoleColor.Red );
@@ -175,6 +201,9 @@ namespace Synapse.cli
         const string __taskmodel = "taskmodel";
         const string __render = "render";
         const string __resultplan = "resultplan";
+        const string __encrypt = "encrypt";
+        const string __decrypt = "decrypt";
+        const string __out = "out";
 
         public Arguments(string[] args)
         {
@@ -216,7 +245,7 @@ namespace Synapse.cli
                 }
                 else
                 {
-                    Message = "No plan specified.";
+                    //Message = "No plan specified.";
                 }
                 #endregion
 
@@ -294,6 +323,42 @@ namespace Synapse.cli
                     ResultPlan = string.Empty;
                 }
                 #endregion
+
+                #region Encrypt
+                if( Args.Keys.Contains( __encrypt ) )
+                {
+                    Encrypt = Args[__encrypt];
+                    Args.Remove( __encrypt );
+                }
+                else
+                {
+                    Encrypt = string.Empty;
+                }
+                #endregion
+
+                #region Decrypt
+                if( Args.Keys.Contains( __decrypt ) )
+                {
+                    Decrypt = Args[__decrypt];
+                    Args.Remove( __decrypt );
+                }
+                else
+                {
+                    Decrypt = string.Empty;
+                }
+                #endregion
+
+                #region Out
+                if( Args.Keys.Contains( __out ) )
+                {
+                    Out = Args[__out];
+                    Args.Remove( __out );
+                }
+                else
+                {
+                    Out = string.Empty;
+                }
+                #endregion
             }
 
             IsParsed &= string.IsNullOrWhiteSpace( Message );
@@ -309,13 +374,21 @@ namespace Synapse.cli
         public string ResultPlan { get; set; }
         public string Message { get; internal set; }
         public bool IsParsed { get; internal set; }
+        public string Encrypt { get; internal set; }
+        public string Decrypt { get; internal set; }
+        public string Out { get; internal set; }
+        public bool IsCrypto { get { return IsEncrypt || IsDecrypt; } }
+        public bool IsEncrypt { get { return !string.IsNullOrWhiteSpace( Encrypt ); } }
+        public bool IsDecrypt { get { return !string.IsNullOrWhiteSpace( Decrypt ); } }
+        public bool HasOut { get { return !string.IsNullOrWhiteSpace( Out ); } }
 
         Dictionary<string, string> ParseCmdLine(string[] args)
         {
             IsParsed = true;
             Dictionary<string, string> options = new Dictionary<string, string>();
 
-            string pattern = @"(?<argname>/\w+):(?<argvalue>.*)";
+            string pattern = "(?<argname>.*?):(?<argvalue>.*)";
+            //string pattern = @"(?<argname>/\w+):(?<argvalue>.*)";
             for( int i = 0; i < args.Length; i++ )
             {
                 Match match = Regex.Match( args[i], pattern );

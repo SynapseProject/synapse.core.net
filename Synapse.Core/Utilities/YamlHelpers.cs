@@ -343,7 +343,7 @@ namespace Synapse.Core.Utilities
                 else if( source[key] is List<object> )
                     HandleElementCrypto( (List<object>)source[key], (List<object>)patch[key], crypto );
                 else //( source[key] is string )
-                    source[key] = crypto.HandleCrypto( source[key].ToString() );
+                    source[key] = crypto.SafeHandleCrypto( source[key].ToString() );
             }
         }
 
@@ -376,12 +376,12 @@ namespace Synapse.Core.Utilities
                 else if( patchValue is List<object> )
                     HandleElementCrypto( (List<object>)listItemValue[patchKey], (List<object>)patchValue, crypto );
                 else //if( patchValue == null )
-                    listItemValue[patchKey] = crypto.HandleCrypto( ((listItemValue)[patchKey]).ToString() );
+                    listItemValue[patchKey] = crypto.SafeHandleCrypto( ((listItemValue)[patchKey]).ToString() );
             }
             else if( source[i] is List<object> )
                 HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
             else
-                source[i] = crypto.HandleCrypto( source[i].ToString() );
+                source[i] = crypto.SafeHandleCrypto( source[i].ToString() );
         }
         #endregion
 

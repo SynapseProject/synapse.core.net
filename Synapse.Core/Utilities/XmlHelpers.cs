@@ -264,9 +264,9 @@ namespace Synapse.Core.Utilities
                         if( src != null )
                         {
                             if( src.NodeType == XmlNodeType.Element )
-                                src.InnerText = c.Crypto.HandleCrypto( src.InnerText );
+                                src.InnerText = c.Crypto.SafeHandleCrypto( src.InnerText );
                             else
-                                src.Value = c.Crypto.HandleCrypto( src.Value );
+                                src.Value = c.Crypto.SafeHandleCrypto( src.Value );
                         }
                         else
                             errors.Add( element );
