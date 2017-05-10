@@ -156,7 +156,8 @@ namespace Synapse.cli
             //Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [/dryRun:true|false]", "{", "}" );
             //Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
             Console_WriteLine( " synapse.cli.exe plan:{0}filePath{1} [dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
-            Console.WriteLine( "   [resultPlan:{0}filePath{1}|true] [dynamic parameters]\r\n", "{", "}" );
+            Console.WriteLine( "   [resultPlan:{0}filePath{1}|true] [dynamic parameters]", "{", "}" );
+            Console_WriteLine( "\r\n  - Execute Plans.\r\n", ConsoleColor.Green, "" );
             Console_WriteLine( "  plan{0,-8} - filePath: Valid path to plan file.", ConsoleColor.Green, "" );
             //Console.WriteLine( "{0,-15}- [or] encodedPlanString: Inline base64 encoded plan string.", "" );
             Console.WriteLine( "  dryRun{0,-6} Specifies whether to execute the plan as a DryRun only.", "" );
@@ -172,7 +173,8 @@ namespace Synapse.cli
             Console.WriteLine( "  dynamic{0,-6}Any remaining arg:value pairs will passed to the plan", "" );
             Console.WriteLine( "{0,-15}  as dynamic parms.\r\n", "" );
             Console_WriteLine( " synapse.cli.exe encrypt|decrypt:{0}filePath{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
-            Console_WriteLine( "\r\n  encrypt{0,5} - filePath: Valid path to plan file to encrypt.", ConsoleColor.Green, "" );
+            Console_WriteLine( "\r\n  - Encrypt/decrypt Plan elements based on Plan/Action Crypto sections.\r\n", ConsoleColor.Green, "" );
+            Console.WriteLine( "  encrypt{0,5} - filePath: Valid path to plan file to encrypt.", "" );
             Console.WriteLine( "  decrypt{0,5} - filePath: Valid path to plan file to decrypt.", "" );
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
             Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.", "" );
@@ -328,6 +330,8 @@ namespace Synapse.cli
                 if( Args.Keys.Contains( __encrypt ) )
                 {
                     Encrypt = Args[__encrypt];
+                    if( !File.Exists( Args[__encrypt] ) )
+                        Message = "  * Unable to resolve Plan to encrypt.";
                     Args.Remove( __encrypt );
                 }
                 else
@@ -340,6 +344,8 @@ namespace Synapse.cli
                 if( Args.Keys.Contains( __decrypt ) )
                 {
                     Decrypt = Args[__decrypt];
+                    if( !File.Exists( Args[__decrypt] ) )
+                        Message = "  * Unable to resolve Plan to decrypt.";
                     Args.Remove( __decrypt );
                 }
                 else
