@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Synapse.Core
 {
@@ -25,6 +26,10 @@ namespace Synapse.Core
         public string Parameters { get; internal set; }
 
         public object ParentExitData { get; internal set; }
+
+        public SecurityContext RunAs { get; internal set; }
+
+        public List<string> CryptoPaths { get; internal set; }
     }
 
     public class HandlerStartInfoData

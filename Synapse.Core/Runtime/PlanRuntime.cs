@@ -273,17 +273,21 @@ namespace Synapse.Core
 
                 if( !WantsStopOrPause() )
                 {
+                    SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
+                    sc?.Crypto?.InheritSettingsIfRequired( Crypto );
+
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
                     {
                         Parameters = parms,
                         IsDryRun = dryRun,
                         PlanInstanceId = InstanceId,
                         InstanceId = a.InstanceId,
-                        ParentExitData = parentExitData
+                        ParentExitData = parentExitData,
+                        RunAs = sc,
+                        CryptoPaths = a.Parameters?.Crypto?.Elements
                     };
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
 
-                    SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
                     sc?.Impersonate( Crypto );
                     a.Result = rt.Execute( startInfo );
                     a.Result.BranchStatus = a.Result.Status;
