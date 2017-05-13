@@ -229,7 +229,7 @@ namespace Synapse.Common.CmdLine
 
     public class CmdLineUtilities
     {
-        public static Dictionary<string, string> ParseCmdLine(string[] args, int startIndex, ref bool error, ref string message, Action<string> onErrorMethod)
+        public static Dictionary<string, string> ParseCmdLine(string[] args, int startIndex, ref bool error, ref string message, Action<string> onErrorMethod, bool suppressErrorMessages = false)
         {
             Dictionary<string, string> options = new Dictionary<string, string>();
 
@@ -237,7 +237,8 @@ namespace Synapse.Common.CmdLine
             {
                 error = true;
                 message = "Not enough arguments specified.";
-                onErrorMethod?.Invoke( message );
+                if( !suppressErrorMessages )
+                    onErrorMethod?.Invoke( message );
             }
             else
             {
@@ -253,8 +254,11 @@ namespace Synapse.Common.CmdLine
                     }
                     else
                     {
+                        error = true;
                         message = "The command line arguments are not valid or are improperly formed. Use 'argname:argvalue' for extended arguments.";
-                        onErrorMethod?.Invoke( message );
+                        if( !suppressErrorMessages )
+                            onErrorMethod?.Invoke( message );
+                        break;
                     }
                 }
             }
