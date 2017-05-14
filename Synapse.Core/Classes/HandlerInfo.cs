@@ -30,5 +30,17 @@ namespace Synapse.Core
         {
             return Type;
         }
+
+
+        public static HandlerInfo CreateSample()
+        {
+            HandlerInfo handler = new HandlerInfo()
+            {
+                Type = "Synapse.Handlers.CommandLine:CommandHandler",
+                Config = ParameterInfo.CreateSample()
+            };
+
+            return handler;
+        }
     }
 }

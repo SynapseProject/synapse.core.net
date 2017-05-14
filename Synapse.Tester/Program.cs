@@ -126,9 +126,9 @@ namespace Synapse.Tester
             }
             else
             {
-                ActionItem ac2 = ActionItem.CreateDummy( "ac2" );
-                ActionItem ac1 = ActionItem.CreateDummy( "ac1" );
-                ActionItem ac0 = ActionItem.CreateDummy( "ac0" );
+                ActionItem ac2 = ActionItem.CreateSample( "ac2" );
+                ActionItem ac1 = ActionItem.CreateSample( "ac1" );
+                ActionItem ac0 = ActionItem.CreateSample( "ac0" );
                 ac0.Actions = new List<ActionItem>();
                 ac0.Actions.Add( ac1 );
                 List<ActionItem> actions = new List<ActionItem>();

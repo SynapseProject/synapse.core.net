@@ -109,5 +109,23 @@ namespace Synapse.Core
 
             return o as Dictionary<object, object>;
         }
+
+        public static Plan CreateSample()
+        {
+            Plan p = new Plan()
+            {
+                Name = "SamplePlan",
+                Description = "Sample Plan, all features shown.",
+                UniqueName = "Human-knowable name for database lookups",
+                DefaultHandlerType = "Synapse.Handlers.CommandLine:CommandHandler",
+                InstanceId = 0,
+                IsActive = true,
+                Signature = "RSA Cryptographic signature, applied at runtime.",
+                Crypto = CryptoProvider.CreateSample()
+            };
+            p.Actions.Add( ActionItem.CreateSample() );
+
+            return p;
+        }
     }
 }
