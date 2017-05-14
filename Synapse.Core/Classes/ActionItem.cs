@@ -102,14 +102,16 @@ namespace Synapse.Core
 
 
 
-        public static ActionItem CreateDummy(string name = "xxx")
+        public static ActionItem CreateSample(string name = null)
         {
             return new ActionItem()
             {
-                Name = name,
-                Handler = new HandlerInfo() { Type = "foo" },
-                Parameters = new ParameterInfo() { Values = "foo" },
-                Actions = new List<ActionItem>()
+                Name = string.IsNullOrWhiteSpace( name ) ? "Sample Action" : name,
+                Description = "Sample Action friendly description.",
+                ExecuteCase = StatusType.Success | StatusType.Failed | StatusType.Tombstoned,
+                Proxy = "Future-use: http://host:port/synapse/node",
+                Handler = HandlerInfo.CreateSample(),
+                Parameters = ParameterInfo.CreateSample()
             };
         }
     }

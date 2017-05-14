@@ -26,5 +26,20 @@ namespace Synapse.Core
         {
             return string.Format( "{0}-->{1}", UserName, Password );
         }
+
+        public static SecurityContext CreateSample()
+        {
+            SecurityContext sc = new SecurityContext()
+            {
+                Domain = "AD Domain",
+                UserName = "username",
+                Password = "Use Crypto to Encrypt this value",
+                Provider = "Reserved for uture use: AD, AWS, Azure, etc.",
+
+                Crypto = CryptoProvider.CreateSample()
+            };
+
+            return sc;
+        }
     }
 }

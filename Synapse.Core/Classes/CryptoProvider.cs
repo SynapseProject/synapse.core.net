@@ -31,6 +31,7 @@ namespace Synapse.Core
 
         public List<string> Errors { get; set; } = new List<string>();
 
+
         #region helper methods
         [YamlIgnore]
         public RSACryptoServiceProvider Rsa { get; private set; }
@@ -108,5 +109,20 @@ namespace Synapse.Core
             return ok;
         }
         #endregion
+
+
+        public static CryptoProvider CreateSample()
+        {
+            CryptoProvider cp = new CryptoProvider()
+            {
+                KeyUri = "Filepath to RSA key file; http support in future.",
+                KeyContainerName = "RSA=supported container name",
+                CspFlags = CspProviderFlags.NoFlags
+            };
+            cp.Elements.Add( "Element:IndexedElement[0]:Element" );
+            cp.Elements.Add( "Element:IndexedElement[1]:Element" );
+
+            return cp;
+        }
     }
 }

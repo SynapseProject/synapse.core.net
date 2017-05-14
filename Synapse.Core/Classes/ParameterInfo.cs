@@ -85,5 +85,25 @@ namespace Synapse.Core
         {
             return (ParameterInfo)MemberwiseClone();
         }
+
+
+        public static ParameterInfo CreateSample()
+        {
+            ParameterInfo p = new ParameterInfo()
+            {
+                Name = "NameSupportsInheritance",
+                Type = SerializationType.Yaml,
+                Uri = "http://host/path",
+                InheritFrom = "APrecedingNamedParamInfo",
+                Crypto = CryptoProvider.CreateSample(),
+                Values = "Custom values as defined by Handler/Provider"
+            };
+            p.Dynamic = new List<DynamicValue>();
+            p.Dynamic.Add( DynamicValue.CreateSample() );
+            p.ForEach = new List<ForEach>();
+            p.ForEach.Add( Core.ForEach.CreateSample() );
+
+            return p;
+        }
     }
 }

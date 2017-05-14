@@ -47,7 +47,7 @@ namespace Synapse.cli
             }
             else if( a.IsSample )
             {
-                CreateSamplePlan( a.Sample, a.Out );
+                CreateSamplePlan( a.Sample, a.Out, a.Verbose );
             }
             else if( a.Render != RenderAction.None )
             {
@@ -127,7 +127,7 @@ namespace Synapse.cli
 
 
         #region Create Sample Plan
-        static void CreateSamplePlan(string handlerCsvList, string outPath)
+        static void CreateSamplePlan(string handlerCsvList, string outPath, bool verbose = false)
         {
             if( string.IsNullOrWhiteSpace( handlerCsvList ) )
                 return;
@@ -138,9 +138,11 @@ namespace Synapse.cli
                 Description = "Example Config/Parameters",
                 StartInfo = null
             };
+            if( verbose )
+                p = Plan.CreateSample();
 
             string[] handlers = handlerCsvList.Split( ',' );
-            foreach(string handlerType in handlers)
+            foreach( string handlerType in handlers )
             {
                 ActionItem a = new ActionItem()
                 {
@@ -233,10 +235,12 @@ namespace Synapse.cli
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
             Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.\r\n", "" );
             Console_WriteLine( " synapse.cli.exe sample:{0}handlerLib:handlerName,...{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
+            Console.WriteLine( "   [verbose:true|false]", "{", "}" );
             Console_WriteLine( "\r\n  - Create a sample Plan with the specified Handler(s).\r\n", ConsoleColor.Green, "" );
             Console.WriteLine( "  sample{0,5}  - A csv list of handlerLib:handlerName pairs.", "" );
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
             Console.WriteLine( "     {0,10}If [out] not specified, will output to screen.", "" );
+            Console.WriteLine( "  verbose{0,5} - If true, adds example values for all Plan options.", "" );
 
             if( haveError )
                 Console_WriteLine( $"\r\n\r\n*** Last error:\r\n{errorMessage}\r\n", ConsoleColor.Red );
@@ -266,6 +270,7 @@ namespace Synapse.cli
         const string __decrypt = "decrypt";
         const string __out = "out";
         const string __sample = "sample";
+        const string __verbose = "verbose";
 
         public Arguments(string[] args)
         {
@@ -437,6 +442,20 @@ namespace Synapse.cli
                     Sample = string.Empty;
                 }
                 #endregion
+
+                #region Verbose
+                if( Args.Keys.Contains( __verbose ) )
+                {
+                    bool verbose = false;
+                    if( bool.TryParse( Args[__verbose], out verbose ) )
+                        Verbose = verbose;
+                    Args.Remove( __verbose );
+                }
+                else
+                {
+                    Verbose = false;
+                }
+                #endregion
             }
 
             IsParsed &= string.IsNullOrWhiteSpace( Message );
@@ -461,6 +480,7 @@ namespace Synapse.cli
         public bool HasOut { get { return !string.IsNullOrWhiteSpace( Out ); } }
         public string Sample { get; internal set; }
         public bool IsSample { get { return !string.IsNullOrWhiteSpace( Sample ); } }
+        public bool Verbose { get; internal set; }
 
         Dictionary<string, string> ParseCmdLine(string[] args)
         {
