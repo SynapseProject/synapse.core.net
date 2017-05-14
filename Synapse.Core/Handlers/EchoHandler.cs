@@ -10,6 +10,9 @@ namespace Synapse.Handlers
     {
         string _config = null;
 
+        public override object GetConfigInstance() { return null; }
+        public override object GetParametersInstance() { return null; }
+
         public override IHandlerRuntime Initialize(string config)
         {
             _config = config;

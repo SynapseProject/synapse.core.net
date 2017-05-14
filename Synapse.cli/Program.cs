@@ -45,6 +45,10 @@ namespace Synapse.cli
                     YamlHelpers.SerializeFile( path, plan );
                 }
             }
+            else if( a.IsSample )
+            {
+                CreateSamplePlan( a.Sample, a.Out );
+            }
             else if( a.Render != RenderAction.None )
             {
                 if( a.Render == RenderAction.Encode )
@@ -122,6 +126,56 @@ namespace Synapse.cli
         }
 
 
+        #region Create Sample Plan
+        static void CreateSamplePlan(string handlerCsvList, string outPath)
+        {
+            if( string.IsNullOrWhiteSpace( handlerCsvList ) )
+                return;
+
+            Plan p = new Plan()
+            {
+                Name = "SamplePlan",
+                Description = "Example Config/Parameters",
+                StartInfo = null
+            };
+
+            string[] handlers = handlerCsvList.Split( ',' );
+            foreach(string handlerType in handlers)
+            {
+                ActionItem a = new ActionItem()
+                {
+                    Name = handlerType,
+                    Description = $"Example Action for {handlerType}."
+                };
+                a.Handler = new HandlerInfo();
+                a.Actions = null;
+
+                IHandlerRuntime hr = AssemblyLoader.Load( handlerType, handlerType );
+
+                if( hr != null )
+                {
+                    a.Handler.Type = hr.RuntimeType;
+                    a.Handler.Config = new ParameterInfo();
+                    a.Handler.Config.Values = hr.GetConfigInstance();
+                    a.Parameters = new ParameterInfo();
+                    a.Parameters.Values = hr.GetParametersInstance();
+                }
+                else
+                {
+                    a.Handler.Type = $"Could not load {handlerType}.";
+                }
+
+                p.Actions.Add( a );
+            }
+
+            if( !string.IsNullOrWhiteSpace( outPath ) )
+                File.WriteAllText( outPath, p.ToYaml() );
+            else
+                Console.WriteLine( p.ToYaml() );
+        }
+        #endregion
+
+
         #region ensure database exists
         static void EnsureDatabaseExists()
         {
@@ -177,7 +231,12 @@ namespace Synapse.cli
             Console.WriteLine( "  encrypt{0,5} - filePath: Valid path to plan file to encrypt.", "" );
             Console.WriteLine( "  decrypt{0,5} - filePath: Valid path to plan file to decrypt.", "" );
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
-            Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.", "" );
+            Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.\r\n", "" );
+            Console_WriteLine( " synapse.cli.exe sample:{0}handlerLib:handlerName,...{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
+            Console_WriteLine( "\r\n  - Create a sample Plan with the specified Handler(s).\r\n", ConsoleColor.Green, "" );
+            Console.WriteLine( "  sample{0,5}  - A csv list of handlerLib:handlerName pairs.", "" );
+            Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
+            Console.WriteLine( "     {0,10}If [out] not specified, will output to screen.", "" );
 
             if( haveError )
                 Console_WriteLine( $"\r\n\r\n*** Last error:\r\n{errorMessage}\r\n", ConsoleColor.Red );
@@ -206,6 +265,7 @@ namespace Synapse.cli
         const string __encrypt = "encrypt";
         const string __decrypt = "decrypt";
         const string __out = "out";
+        const string __sample = "sample";
 
         public Arguments(string[] args)
         {
@@ -365,6 +425,18 @@ namespace Synapse.cli
                     Out = string.Empty;
                 }
                 #endregion
+
+                #region Sample
+                if( Args.Keys.Contains( __sample ) )
+                {
+                    Sample = Args[__sample];
+                    Args.Remove( __sample );
+                }
+                else
+                {
+                    Sample = string.Empty;
+                }
+                #endregion
             }
 
             IsParsed &= string.IsNullOrWhiteSpace( Message );
@@ -387,6 +459,8 @@ namespace Synapse.cli
         public bool IsEncrypt { get { return !string.IsNullOrWhiteSpace( Encrypt ); } }
         public bool IsDecrypt { get { return !string.IsNullOrWhiteSpace( Decrypt ); } }
         public bool HasOut { get { return !string.IsNullOrWhiteSpace( Out ); } }
+        public string Sample { get; internal set; }
+        public bool IsSample { get { return !string.IsNullOrWhiteSpace( Sample ); } }
 
         Dictionary<string, string> ParseCmdLine(string[] args)
         {
