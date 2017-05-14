@@ -6,6 +6,8 @@ namespace Synapse.Handlers
 {
     public class EmptyHandler : HandlerRuntimeBase
     {
+        public override object GetConfigInstance() { return null; }
+        public override object GetParametersInstance() { return new EmptyHandlerParameters() { ReturnStatus = StatusType.Success, ExitData = "Sample Value" }; }
         override public ExecuteResult Execute(HandlerStartInfo startInfo)
         {
             EmptyHandlerParameters parms = DeserializeOrNew<EmptyHandlerParameters>( startInfo.Parameters );

@@ -9,6 +9,9 @@ namespace Synapse.Core
 
         public string RuntimeType { get; set; }
 
+        public abstract object GetConfigInstance();
+        public abstract object GetParametersInstance();
+
         //public abstract string Parameters { get; set; }
         public abstract ExecuteResult Execute(HandlerStartInfo startInfo);
 

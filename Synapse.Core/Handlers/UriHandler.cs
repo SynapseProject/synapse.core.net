@@ -8,6 +8,9 @@ namespace Synapse.Handlers
 {
     public class UriHandler : HandlerRuntimeBase
     {
+        public override object GetConfigInstance() { return null; }
+        public override object GetParametersInstance() { return new UriHandlerParameters() { Uri = "http://sample/uri" }; }
+
         override public ExecuteResult Execute(HandlerStartInfo startInfo)
         {
             ExecuteResult result = new ExecuteResult() { Status = StatusType.Complete };
