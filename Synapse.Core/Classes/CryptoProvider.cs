@@ -111,7 +111,7 @@ namespace Synapse.Core
         #endregion
 
 
-        public static CryptoProvider CreateSample()
+        public static CryptoProvider CreateSample(bool addElements = true)
         {
             CryptoProvider cp = new CryptoProvider()
             {
@@ -119,8 +119,14 @@ namespace Synapse.Core
                 KeyContainerName = "RSA=supported container name",
                 CspFlags = CspProviderFlags.NoFlags
             };
-            cp.Elements.Add( "Element:IndexedElement[0]:Element" );
-            cp.Elements.Add( "Element:IndexedElement[1]:Element" );
+            cp.Errors = null;
+            if( addElements )
+            {
+                cp.Elements.Add( "Element:IndexedElement[0]:Element" );
+                cp.Elements.Add( "Element:IndexedElement[1]:Element" );
+            }
+            else
+                cp.Elements = null;
 
             return cp;
         }

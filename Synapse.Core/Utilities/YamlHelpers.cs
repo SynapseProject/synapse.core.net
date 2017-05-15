@@ -314,7 +314,9 @@ namespace Synapse.Core.Utilities
 
                 foreach( ActionItem a in actions )
                 {
-                    if( a.Handler.HasConfig && a.Handler.Config.HasCrypto )
+                    if( a.HasRunAs && a.RunAs.HasCrypto )
+                        a.RunAs = a.RunAs.GetCryptoValues( p.Crypto, isEncryptMode );
+                    if( a.Handler != null && a.Handler.HasConfig && a.Handler.Config.HasCrypto )
                         a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode  );
                     if( a.HasParameters && a.Parameters.HasCrypto )
                         a.Parameters = a.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );

@@ -111,7 +111,8 @@ namespace Synapse.Core
                 ExecuteCase = StatusType.Success | StatusType.Failed | StatusType.Tombstoned,
                 Proxy = "Future-use: http://host:port/synapse/node",
                 Handler = HandlerInfo.CreateSample(),
-                Parameters = ParameterInfo.CreateSample()
+                Parameters = ParameterInfo.CreateSample(),
+                RunAs = SecurityContext.CreateSample()
             };
         }
     }
