@@ -44,6 +44,7 @@ namespace Synapse.Handlers
             RequestNumber = hsi.RequestNumber;
             ParentExitData = hsi.ParentExitData;
             Parameters = hsi.Parameters;
+            RunAs = hsi.RunAs;
             Config = config;
         }
 
@@ -58,6 +59,7 @@ namespace Synapse.Handlers
             s.AppendFormat( "RequestUser: {0}\r\n", RequestUser );
             s.AppendFormat( "RequestNumber: {0}\r\n", RequestNumber );
             s.AppendFormat( "ParentExitData: {0}\r\n", ParentExitData );
+            s.AppendFormat( "RunAs: {0}\r\n", RunAs );
             s.AppendLine( "Config:" );
             s.AppendLine( Config );
             s.AppendLine( "Parameters:" );

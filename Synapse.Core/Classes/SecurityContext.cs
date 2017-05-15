@@ -24,7 +24,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return string.Format( "{0}-->{1}", UserName, Password );
+            return string.Format( $"[{Domain}]::[{UserName}]" );
         }
 
         public static SecurityContext CreateSample()
