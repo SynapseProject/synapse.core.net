@@ -46,9 +46,11 @@ namespace Synapse.Handlers
             Parameters = hsi.Parameters;
             RunAs = hsi.RunAs;
             Config = config;
+            CurrentPrincipal = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
         }
 
         public string Config { get; internal set; }
+        public string CurrentPrincipal { get; internal set; }
 
         public override string ToString()
         {
@@ -60,6 +62,7 @@ namespace Synapse.Handlers
             s.AppendFormat( "RequestNumber: {0}\r\n", RequestNumber );
             s.AppendFormat( "ParentExitData: {0}\r\n", ParentExitData );
             s.AppendFormat( "RunAs: {0}\r\n", RunAs );
+            s.AppendLine( $"CurrentPrincipal:{CurrentPrincipal}");
             s.AppendLine( "Config:" );
             s.AppendLine( Config );
             s.AppendLine( "Parameters:" );
