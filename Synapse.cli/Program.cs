@@ -156,7 +156,8 @@ namespace Synapse.cli
 
                 if( hr != null )
                 {
-                    a.Handler.Type = hr.RuntimeType;
+                    a.Description = $"Resolved Handler from [{hr.RuntimeType}].";
+                    a.Handler.Type = handlerType;
                     a.Handler.Config = new ParameterInfo();
                     a.Handler.Config.Values = hr.GetConfigInstance();
                     a.Parameters = new ParameterInfo();
@@ -164,7 +165,7 @@ namespace Synapse.cli
                 }
                 else
                 {
-                    a.Handler.Type = $"Could not load {handlerType}.";
+                    a.Handler.Type = $"Could not load [{handlerType}].";
                 }
 
                 p.Actions.Add( a );
