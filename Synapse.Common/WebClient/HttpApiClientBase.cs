@@ -22,6 +22,8 @@ namespace Synapse.Common.WebApi
 
         public HttpApiClientBase(string baseUrl, string messageFormatType = "application/json")
         {
+            BaseUrl = baseUrl;
+
             WebApiClientOptions options = new WebApiClientOptions()
             {
                 BaseAddress = baseUrl,
@@ -43,6 +45,8 @@ namespace Synapse.Common.WebApi
             this.Headers.Accept.Clear();
             this.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( this.Options.ContentType ) );
         }
+
+        public string BaseUrl { get; private set; }
 
         #region Generic
         /// Gets the Authorization header
