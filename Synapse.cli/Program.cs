@@ -152,7 +152,12 @@ namespace Synapse.cli
                 a.Handler = new HandlerInfo();
                 a.Actions = null;
 
-                IHandlerRuntime hr = AssemblyLoader.Load( handlerType, handlerType );
+                IHandlerRuntime hr = null;
+                try
+                {
+                    hr = AssemblyLoader.Load( handlerType, handlerType );
+                }
+                catch { }
 
                 if( hr != null )
                 {
@@ -165,7 +170,7 @@ namespace Synapse.cli
                 }
                 else
                 {
-                    a.Handler.Type = $"Could not load [{handlerType}].";
+                    a.Handler.Type = $"** Error - Could not load [{handlerType}].";
                 }
 
                 p.Actions.Add( a );
