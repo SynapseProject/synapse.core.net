@@ -141,45 +141,69 @@ namespace Synapse.cli
             if( verbose )
                 p = Plan.CreateSample();
 
+            //todo: [ss] this is absolute $#!+ loop structure, need to fix
             string[] handlers = handlerCsvList.Split( ',' );
             foreach( string handlerType in handlers )
             {
-                ActionItem a = new ActionItem()
+                if( handlerType.ToLower().EndsWith( ":all" ) )
                 {
-                    Name = handlerType,
-                    Description = $"Example Action for {handlerType}."
-                };
-                a.Handler = new HandlerInfo();
-                a.Actions = null;
-
-                IHandlerRuntime hr = null;
-                try
-                {
-                    hr = AssemblyLoader.Load( handlerType, handlerType );
-                }
-                catch { }
-
-                if( hr != null )
-                {
-                    a.Description = $"Resolved Handler from [{hr.RuntimeType}].";
-                    a.Handler.Type = handlerType;
-                    a.Handler.Config = new ParameterInfo();
-                    a.Handler.Config.Values = hr.GetConfigInstance();
-                    a.Parameters = new ParameterInfo();
-                    a.Parameters.Values = hr.GetParametersInstance();
+                    string[] parts = handlerType.Split( ':' );
+                    CreateSamplePlanAll( parts[0], outPath, verbose );
                 }
                 else
                 {
-                    a.Handler.Type = $"** Error - Could not load [{handlerType}].";
-                }
+                    ActionItem a = new ActionItem()
+                    {
+                        Name = handlerType,
+                        Description = $"Example Action for {handlerType}."
+                    };
+                    a.Handler = new HandlerInfo();
+                    a.Actions = null;
 
-                p.Actions.Add( a );
+                    IHandlerRuntime hr = null;
+                    try
+                    {
+                        hr = AssemblyLoader.Load( handlerType, handlerType );
+                    }
+                    catch { }
+
+                    if( hr != null )
+                    {
+                        a.Description = $"Resolved Handler from [{hr.RuntimeType}].";
+                        a.Handler.Type = handlerType;
+                        a.Handler.Config = new ParameterInfo();
+                        a.Handler.Config.Values = hr.GetConfigInstance();
+                        a.Parameters = new ParameterInfo();
+                        a.Parameters.Values = hr.GetParametersInstance();
+                    }
+                    else
+                    {
+                        a.Handler.Type = $"** Error - Could not load [{handlerType}].";
+                    }
+
+                    p.Actions.Add( a );
+                }
             }
 
             if( !string.IsNullOrWhiteSpace( outPath ) )
                 File.WriteAllText( outPath, p.ToYaml() );
             else
                 Console.WriteLine( p.ToYaml() );
+        }
+
+        static void CreateSamplePlanAll(string handlerLib, string outPath, bool verbose = false)
+        {
+            //probe all the Types, looking for partial match in name
+            try
+            {
+                System.Reflection.Assembly hrAsm = System.Reflection.Assembly.Load( handlerLib );
+
+                Type[] types = hrAsm.GetTypes();
+                foreach( Type t in types )
+                    if( t.GetInterfaces().Contains( typeof( IHandlerRuntime ) ) )
+                        CreateSamplePlan( $"{handlerLib}:{t.Name}", outPath, verbose );
+            }
+            catch( Exception ex ) { throw; }
         }
         #endregion
 
@@ -240,10 +264,11 @@ namespace Synapse.cli
             Console.WriteLine( "  decrypt{0,5} - filePath: Valid path to plan file to decrypt.", "" );
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
             Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.\r\n", "" );
-            Console_WriteLine( " synapse.cli.exe sample:{0}handlerLib:handlerName,...{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
+            Console_WriteLine( " synapse.cli.exe sample:{0}handlerLib:{0}all|handlerName{1},...{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
             Console.WriteLine( "   [verbose:true|false]", "{", "}" );
             Console_WriteLine( "\r\n  - Create a sample Plan with the specified Handler(s).\r\n", ConsoleColor.Green, "" );
             Console.WriteLine( "  sample{0,5}  - A csv list of handlerLib:handlerName pairs.", "" );
+            Console.WriteLine( "     {0,10}Use handlerLib:all to discover all Handlers in a lib.", "" );
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
             Console.WriteLine( "     {0,10}If [out] not specified, will output to screen.", "" );
             Console.WriteLine( "  verbose{0,5} - If true, adds example values for all Plan options.", "" );
