@@ -1,0 +1,35 @@
+Name: RunAs
+Description: Test change of security context
+DefaultHandlerType: Synapse.Core:Synapse.Handlers.EchoHandler
+Actions:
+- Name: 0
+  Actions:
+  RunAs:
+    Domain: ss-mekhano
+    UserName: synapse0
+    Password: OmwBUBtWKJWKFTeVCHCMEOHNRqtMgjAksRunYE7A/DICYvvLpV5CsVEHfWxxxXJQHIGDtavO0YBvSFb5LwWx43wEsaK+zzoAJkAcBybGtvDv+ADNeVuiahvDywltWuRdWhf+CBA9HaIiwL6sNhcwbvPX3z8Zpp7Cp9WFWv1/oR0=
+    Crypto:
+      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+      KeyContainerName: foo
+      Elements:
+      - Password
+  - Name: 0.1
+    Actions: []
+    RunAs:
+      Domain: ss-mekhano
+      UserName: synapse1
+      Password: BnsK2g0N8jvnRb3zfc/NIaiMhNduw9/WtR2hKfCCUqnpWV2/sEn2+T0jpdVy8WATfzTWJhv8oeJ5Nn6gD2/LL20pjtOsk7NSqobio7XB1CkIgnGgbcQS8/Y9A1TPxQiBq2umo5LsCZYS+L3++o8wV1cXdBvT7elLNKyz8wHtlMc=
+      Crypto:
+        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        KeyContainerName: foo
+        Elements:
+        - Password
+- Name: 1
+  Actions: []
+Crypto:
+  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+  KeyContainerName: foo
+  Elements: []
+  Errors: []
+StartInfo: {}
+LastModified: 5/15/2017 7:07:42 AM
