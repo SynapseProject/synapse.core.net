@@ -141,48 +141,39 @@ namespace Synapse.cli
             if( verbose )
                 p = Plan.CreateSample();
 
-            //todo: [ss] this is absolute $#!+ loop structure, need to fix
-            string[] handlers = handlerCsvList.Split( ',' );
+            List<string> handlers = GetHandlerList( handlerCsvList );
             foreach( string handlerType in handlers )
             {
-                if( handlerType.ToLower().EndsWith( ":all" ) )
+                ActionItem a = new ActionItem()
                 {
-                    string[] parts = handlerType.Split( ':' );
-                    CreateSamplePlanAll( parts[0], outPath, verbose );
+                    Name = handlerType,
+                    Description = $"Example Action for {handlerType}."
+                };
+                a.Handler = new HandlerInfo();
+                a.Actions = null;
+
+                IHandlerRuntime hr = null;
+                try
+                {
+                    hr = AssemblyLoader.Load( handlerType, handlerType );
+                }
+                catch { }
+
+                if( hr != null )
+                {
+                    a.Description = $"Resolved Handler from [{hr.RuntimeType}].";
+                    a.Handler.Type = handlerType;
+                    a.Handler.Config = new ParameterInfo();
+                    a.Handler.Config.Values = hr.GetConfigInstance();
+                    a.Parameters = new ParameterInfo();
+                    a.Parameters.Values = hr.GetParametersInstance();
                 }
                 else
                 {
-                    ActionItem a = new ActionItem()
-                    {
-                        Name = handlerType,
-                        Description = $"Example Action for {handlerType}."
-                    };
-                    a.Handler = new HandlerInfo();
-                    a.Actions = null;
-
-                    IHandlerRuntime hr = null;
-                    try
-                    {
-                        hr = AssemblyLoader.Load( handlerType, handlerType );
-                    }
-                    catch { }
-
-                    if( hr != null )
-                    {
-                        a.Description = $"Resolved Handler from [{hr.RuntimeType}].";
-                        a.Handler.Type = handlerType;
-                        a.Handler.Config = new ParameterInfo();
-                        a.Handler.Config.Values = hr.GetConfigInstance();
-                        a.Parameters = new ParameterInfo();
-                        a.Parameters.Values = hr.GetParametersInstance();
-                    }
-                    else
-                    {
-                        a.Handler.Type = $"** Error - Could not load [{handlerType}].";
-                    }
-
-                    p.Actions.Add( a );
+                    a.Handler.Type = $"** Error - Could not load [{handlerType}].";
                 }
+
+                p.Actions.Add( a );
             }
 
             if( !string.IsNullOrWhiteSpace( outPath ) )
@@ -191,7 +182,26 @@ namespace Synapse.cli
                 Console.WriteLine( p.ToYaml() );
         }
 
-        static void CreateSamplePlanAll(string handlerLib, string outPath, bool verbose = false)
+        static List<string> GetHandlerList(string handlerCsvList)
+        {
+            List<string> result = new List<string>();
+            string[] handlers = handlerCsvList.Split( ',' );
+            foreach( string handlerType in handlers )
+            {
+                if( handlerType.ToLower().EndsWith( ":all" ) )
+                {
+                    string[] parts = handlerType.Split( ':' );
+                    DiscoverHandlers( parts[0], ref result );
+                }
+                else
+                {
+                    result.Add( handlerType );
+                }
+            }
+            return result;
+        }
+
+        static void DiscoverHandlers(string handlerLib, ref List<string> handlers)
         {
             //probe all the Types, looking for partial match in name
             try
@@ -201,9 +211,9 @@ namespace Synapse.cli
                 Type[] types = hrAsm.GetTypes();
                 foreach( Type t in types )
                     if( t.GetInterfaces().Contains( typeof( IHandlerRuntime ) ) )
-                        CreateSamplePlan( $"{handlerLib}:{t.Name}", outPath, verbose );
+                        handlers.Add( $"{handlerLib}:{t.Name}" );
             }
-            catch( Exception ex ) { throw; }
+            catch {  } //throw;
         }
         #endregion
 
