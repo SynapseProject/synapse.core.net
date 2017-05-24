@@ -188,7 +188,7 @@ namespace Synapse.Core.Utilities
             if( dv != null )
             {
                 if( !string.IsNullOrWhiteSpace( dv.Replace ) )
-                    value = Regex.Replace( input.ToString(), dv.Replace, replacement.ToString() );
+                    value = Regex.Replace( input.ToString(), dv.Replace, replacement.ToString(), RegexOptions.IgnoreCase );
 
                 if( !string.IsNullOrWhiteSpace( dv.Encode ) && dv.Encode.ToLower() == "base64" )
                     value = CryptoHelpers.Encode( value.ToString() );
