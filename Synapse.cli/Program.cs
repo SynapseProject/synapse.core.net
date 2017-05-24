@@ -330,7 +330,8 @@ namespace Synapse.cli
 
             if( IsParsed )
             {
-                Args = ParseCmdLine( args );
+                Dictionary<string, string> origcase = new Dictionary<string, string>();
+                Args = ParseCmdLine( args, ref origcase );
 
                 #region Plan
                 if( Args.Keys.Contains( __plan ) )
@@ -497,6 +498,12 @@ namespace Synapse.cli
                     Verbose = false;
                 }
                 #endregion
+
+                //this returns a colleection with original casing from the cmdline parms
+                Dictionary<string, string> newArgs = new Dictionary<string, string>();
+                foreach( string key in Args.Keys )
+                    newArgs.Add( origcase[key], Args[key] );
+                Args = newArgs;
             }
 
             IsParsed &= string.IsNullOrWhiteSpace( Message );
@@ -523,7 +530,7 @@ namespace Synapse.cli
         public bool IsSample { get { return !string.IsNullOrWhiteSpace( Sample ); } }
         public bool Verbose { get; internal set; }
 
-        Dictionary<string, string> ParseCmdLine(string[] args)
+        Dictionary<string, string> ParseCmdLine(string[] args, ref Dictionary<string, string> origcase)
         {
             IsParsed = true;
             Dictionary<string, string> options = new Dictionary<string, string>();
@@ -537,8 +544,10 @@ namespace Synapse.cli
                 // If match not found, command line args are improperly formed.
                 if( match.Success )
                 {
-                    options[match.Groups["argname"].Value.ToLower().TrimStart( '/' )] =
-                        match.Groups["argvalue"].Value;
+                    string orig = match.Groups["argname"].Value.TrimStart( '/' );
+                    string lcase = orig.ToLower();
+                    options[lcase] = match.Groups["argvalue"].Value;
+                    origcase[lcase] = orig;
                 }
                 else
                 {
