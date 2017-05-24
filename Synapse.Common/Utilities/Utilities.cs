@@ -39,7 +39,7 @@ namespace Synapse.Common.WebApi
         public static Dictionary<string, string> ParseQueryString(this Uri uri)
         {
             NameValueCollection nvc = HttpUtility.ParseQueryString( uri.Query );
-            Dictionary<string, string> d = new Dictionary<string, string>( nvc.Count );
+            Dictionary<string, string> d = new Dictionary<string, string>( nvc.Count, StringComparer.OrdinalIgnoreCase );
             foreach( string key in nvc.AllKeys )
                 d[key] = nvc[key];
             return d;

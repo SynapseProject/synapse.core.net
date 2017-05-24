@@ -16,7 +16,7 @@ namespace Synapse.Core
 
         public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null)
         {
-            _dynamicData = dynamicData ?? new Dictionary<string, string>();
+            _dynamicData = dynamicData ?? new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
             forEachParms = new List<object>();
 
             object parms = null;

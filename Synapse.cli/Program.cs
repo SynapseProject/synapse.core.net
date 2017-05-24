@@ -330,9 +330,9 @@ namespace Synapse.cli
 
             if( IsParsed )
             {
-                Dictionary<string, string> origcase = new Dictionary<string, string>();
-                Args = ParseCmdLine( args, ref origcase );
+                Args = ParseCmdLine( args );
 
+                #region known parms
                 #region Plan
                 if( Args.Keys.Contains( __plan ) )
                 {
@@ -498,12 +498,7 @@ namespace Synapse.cli
                     Verbose = false;
                 }
                 #endregion
-
-                //this returns a colleection with original casing from the cmdline parms
-                Dictionary<string, string> newArgs = new Dictionary<string, string>();
-                foreach( string key in Args.Keys )
-                    newArgs.Add( origcase[key], Args[key] );
-                Args = newArgs;
+                #endregion
             }
 
             IsParsed &= string.IsNullOrWhiteSpace( Message );
@@ -530,10 +525,10 @@ namespace Synapse.cli
         public bool IsSample { get { return !string.IsNullOrWhiteSpace( Sample ); } }
         public bool Verbose { get; internal set; }
 
-        Dictionary<string, string> ParseCmdLine(string[] args, ref Dictionary<string, string> origcase)
+        Dictionary<string, string> ParseCmdLine(string[] args)
         {
             IsParsed = true;
-            Dictionary<string, string> options = new Dictionary<string, string>();
+            Dictionary<string, string> options = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
             string pattern = "(?<argname>.*?):(?<argvalue>.*)";
             //string pattern = @"(?<argname>/\w+):(?<argvalue>.*)";
@@ -544,10 +539,8 @@ namespace Synapse.cli
                 // If match not found, command line args are improperly formed.
                 if( match.Success )
                 {
-                    string orig = match.Groups["argname"].Value.TrimStart( '/' );
-                    string lcase = orig.ToLower();
-                    options[lcase] = match.Groups["argvalue"].Value;
-                    origcase[lcase] = orig;
+                    options[match.Groups["argname"].Value.TrimStart( '/' )] =       //.ToLower()
+                        match.Groups["argvalue"].Value;
                 }
                 else
                 {

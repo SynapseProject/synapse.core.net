@@ -61,8 +61,8 @@ namespace Synapse.Common.CmdLine
                 for( int i = parmsStartIndex; i < parms.Length; i++ )
                 {
                     ParameterInfo parm = parms[i];
-                    if( options.Keys.Contains( parm.Name.ToLower() ) )
-                        parameters.Add( ParseInput( options[parm.Name.ToLower()], parm.ParameterType ) );
+                    if( options.Keys.Contains( parm.Name ) )  //.ToLower()
+                        parameters.Add( ParseInput( options[parm.Name], parm.ParameterType ) ); //.ToLower()
                     else
                         parameters.Add( null );
                 }
@@ -73,7 +73,7 @@ namespace Synapse.Common.CmdLine
 
         protected virtual Dictionary<string, string> ParseCmdLine(string[] args, int startIndex, ref bool error, bool suppressErrorMessages = false)
         {
-            Dictionary<string, string> options = new Dictionary<string, string>();
+            Dictionary<string, string> options = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
             if( args.Length < (startIndex + 1) )
             {
@@ -90,7 +90,7 @@ namespace Synapse.Common.CmdLine
 
                     // If match not found, command line args are improperly formed.
                     if( match.Success )
-                        options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value;  //.ToLower();
+                        options[match.Groups["argname"].Value] = match.Groups["argvalue"].Value;  //.ToLower();.ToLower()
                     else if( !suppressErrorMessages )
                         WriteHelpAndExit( "The command line arguments are not valid or are improperly formed. Use 'argname:argvalue' for extended arguments." );
                 }
@@ -231,7 +231,7 @@ namespace Synapse.Common.CmdLine
     {
         public static Dictionary<string, string> ParseCmdLine(string[] args, int startIndex, ref bool error, ref string message, Action<string> onErrorMethod, bool suppressErrorMessages = false)
         {
-            Dictionary<string, string> options = new Dictionary<string, string>();
+            Dictionary<string, string> options = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
 
             if( args.Length < (startIndex + 1) )
             {
@@ -250,7 +250,7 @@ namespace Synapse.Common.CmdLine
                     // If match not found, command line args are improperly formed.
                     if( match.Success )
                     {
-                        options[match.Groups["argname"].Value.ToLower()] = match.Groups["argvalue"].Value.ToLower();
+                        options[match.Groups["argname"].Value] = match.Groups["argvalue"].Value;        //.ToLower();.ToLower()
                     }
                     else
                     {
