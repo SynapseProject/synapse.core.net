@@ -211,7 +211,7 @@ namespace Synapse.cli
                 Type[] types = hrAsm.GetTypes();
                 foreach( Type t in types )
                     if( t.GetInterfaces().Contains( typeof( IHandlerRuntime ) ) )
-                        handlers.Add( $"{handlerLib}:{t.Name}" );
+                        handlers.Add( $"{handlerLib}:{t.FullName}" );
             }
             catch {  } //throw;
         }
