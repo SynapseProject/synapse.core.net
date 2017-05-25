@@ -284,7 +284,7 @@ namespace Synapse.Core
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData,
                         RunAs = sc,
-                        CryptoPaths = a.Parameters?.Crypto?.Elements
+                        Crypto = a.Parameters?.Crypto
                     };
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
 

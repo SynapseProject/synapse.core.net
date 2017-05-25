@@ -29,7 +29,7 @@ namespace Synapse.Core
 
         public SecurityContext RunAs { get; internal set; }
 
-        public List<string> CryptoPaths { get; internal set; }
+        public CryptoProvider Crypto { get; internal set; }
     }
 
     public class HandlerStartInfoData
