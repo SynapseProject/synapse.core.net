@@ -1,6 +1,6 @@
 Name: planScheduler
 Description: Runs two instances of Foo, each of which takes 5 seconds.  Total execution time 10s.
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.FooHandler
+DefaultHandlerType: Synapse.Core:FooHandler
 Actions:
 - Name: one
   Actions:

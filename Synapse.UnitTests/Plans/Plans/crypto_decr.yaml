@@ -40,6 +40,7 @@ Actions:
     Dynamic:
     - Name: jsonPayload
       Path: Arguments:Expressions[0]:ReplaceWith
+      Options: []
     Crypto:
       KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
       KeyContainerName: foo
@@ -51,10 +52,6 @@ Actions:
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
       Errors:
       - Type
-      - Values:Arguments:ArgString
-      - Values:Arguments:Expressions[0]:Encoding
-      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
-      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
   Actions: []
 - Name: Xml
   Handler:
@@ -85,10 +82,6 @@ Actions:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
-        Errors:
-        - /CXmlDoc[1]/CNode0[1]
-        - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
-        - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
   Actions: []
 Crypto:
   KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -96,4 +89,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 5/8/2017 6:57:58 PM
+LastModified: 5/26/2017 7:30:12 AM

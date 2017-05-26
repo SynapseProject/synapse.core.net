@@ -1,6 +1,6 @@
 Name: executeCase
 Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.EmptyHandler
+DefaultHandlerType: Synapse.Core:EmptyHandler
 Actions:
 - Name: ac0
   Parameters:

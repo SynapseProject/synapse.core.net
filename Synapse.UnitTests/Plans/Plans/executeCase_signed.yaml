@@ -1,6 +1,6 @@
 Name: executeCase
 Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.EmptyHandler
+DefaultHandlerType: Synapse.Core:EmptyHandler
 Actions:
 - Name: ac0
   Parameters:
@@ -75,5 +75,5 @@ Actions:
       ReturnStatus: CompletedWithErrors
   Actions: []
 StartInfo: {}
-LastModified: 5/8/2017 6:57:59 PM
-Signature: PZUhsxNIZHdgt6/PfEtphgaHnbT05PmDLbwWlaUglLVFDokJV7ZyaJCNrfNWImEsfTvilef7a7fjxLWQKu1T08EYqH6+Eyl7PflFK9uF7dok8hn5MRl8GUTEr/dztD/HvifuhCYTvY9c9CyP2R4q8aVdPV4h+lmpV8brFMgdEz8=
+LastModified: 5/26/2017 7:30:13 AM
+Signature: HSt/UeW+aZvGjJz0Z4RQtds5IMjYlZvfHzjen5ho8a6ifNCmDbdoawx2pDpWU1N02idlbqieZNNVOeCnFOSSLNXWuWe2TV5HRSc5CtgSf0zMuscVr+6iAZg0N6eXgIhsEEZHBqiNcfBg25SJOj6Plj6efisjNhhasGKeMYBV9xw=

@@ -1,6 +1,6 @@
 Name: statusPropagation_forEach
 Description: Tests ExecuteResult.Status propagation
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.EmptyHandler
+DefaultHandlerType: Synapse.Core:EmptyHandler
 Actions:
 - Name: ac0
   Parameters:
