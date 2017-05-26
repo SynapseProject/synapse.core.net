@@ -1,14 +1,14 @@
 ﻿Name: handlerLoad
 Description: Load handlers with full or partial names.  Hierarchy below to enable synchronous execution.
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.EmptyHandler
+DefaultHandlerType: Synapse.Core:EmptyHandler
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
-    Type: Synapse.Core:Synapse.Handlers.EmptyHandler
+    Type: Synapse.Core:EmptyHandler
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: Synapse.Handlers.EmptyHandler
+      Type: EmptyHandler
     Actions:
     - Name: SimpleClassName
       Handler:

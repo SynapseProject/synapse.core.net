@@ -3,7 +3,7 @@ Description: Test change of security context
 Actions:
 - Name: 0
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   Result:
@@ -25,7 +25,7 @@ Actions:
   Actions:
   - Name: 0.1
     Handler:
-      Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: *o0
@@ -53,7 +53,7 @@ Actions:
   RunAs: *o2
 - Name: 1
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   Result:

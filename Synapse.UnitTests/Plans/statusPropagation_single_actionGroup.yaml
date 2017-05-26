@@ -1,6 +1,6 @@
 Name: statusPropagation_single_actionGroup
 Description: Tests ExecuteResult.Status propagation from an ActionGroup
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.EmptyHandler
+DefaultHandlerType: Synapse.Core:EmptyHandler
 Actions:
 - Name: ac0
   Parameters:

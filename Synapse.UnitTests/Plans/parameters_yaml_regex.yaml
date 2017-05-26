@@ -4,7 +4,7 @@ IsActive: true
 Actions:
 - Name: action0
   Handler:
-    Type: Synapse.Core:Synapse.Handlers.EmptyHandler
+    Type: Synapse.Core:EmptyHandler
     Config:
       Name: ConfigSet00
       Type: Yaml
@@ -44,7 +44,7 @@ Actions:
   Actions:
   - Name: action1
     Handler:
-      Type: Synapse.Core:Synapse.Handlers.EmptyHandler
+      Type: Synapse.Core:EmptyHandler
       Config:
         Name: ConfigSet01
         InheritFrom: ConfigSet00

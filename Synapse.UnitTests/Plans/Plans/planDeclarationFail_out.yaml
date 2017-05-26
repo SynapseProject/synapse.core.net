@@ -4,7 +4,7 @@ Actions:
 - Name: ac0
   Description: Fully formed, correctly structured Action; here for reference
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config:
       Values:
         CNode0: CValue0_inline
@@ -38,7 +38,8 @@ Actions:
 
           CNode3_2: CValue3_2_inline
 
-      InstanceId: 86
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 92
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -63,31 +64,139 @@ Actions:
     Dynamic:
     - Name: pnode0Dynamic
       Path: PNode0
+      Options: []
     - Name: pnode2_1Dynamic
       Path: PNode2:PNode2_1
+      Options: []
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
+      Options: []
   Actions: []
-  InstanceId: 86
-- Name: ac3
-  Description: Has Handler, but no Handler.Config.  No Parameters
+  InstanceId: 92
+- Name: ac4
+  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 93
+      IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+    BranchStatus: Complete
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+      Options: []
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+      Options: []
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+      Options: []
+  Actions: []
+  InstanceId: 93
+- Name: ''
+  Description: No Name, no declaration at all
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   Result:
     Status: Complete
     ExitData:
-      InstanceId: 87
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 94
       IsDryRun: true
     BranchStatus: Complete
   Parameters: {}
   Actions: []
-  InstanceId: 87
+  InstanceId: 94
+- Name: ac1
+  Description: No Parameters declaration
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config:
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData:
+      Config: >+
+        CNode0: CValue0_inline
+
+        CNode1: CValue1_inline
+
+        CNode3:
+
+          CNode3_1: CValue3_1_inline
+
+          CNode3_2: CValue3_2_inline
+
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 95
+      IsDryRun: true
+    BranchStatus: Complete
+  Parameters: {}
+  Actions: []
+  InstanceId: 95
+- Name: ac3
+  Description: Has Handler, but no Handler.Config.  No Parameters
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 96
+      IsDryRun: true
+    BranchStatus: Complete
+  Parameters: {}
+  Actions: []
+  InstanceId: 96
 - Name: ac5
   Description: No Handler declaration, partially formed Parameters
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo:
       Parameters: >+
@@ -96,7 +205,8 @@ Actions:
   Result:
     Status: Complete
     ExitData:
-      InstanceId: 88
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 97
       IsDryRun: true
       Parameters: >+
         {}
@@ -108,99 +218,19 @@ Actions:
     Dynamic:
     - Name: pnode0Dynamic
       Path: PNode0
+      Options: []
     - Name: pnode2_1Dynamic
       Path: PNode2:PNode2_1
+      Options: []
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
+      Options: []
   Actions: []
-  InstanceId: 88
-- Name: ac1
-  Description: No Parameters declaration
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config:
-      Values:
-        CNode0: CValue0_inline
-        CNode1: CValue1_inline
-        CNode3:
-          CNode3_1: CValue3_1_inline
-          CNode3_2: CValue3_2_inline
-    StartInfo: {}
-  Result:
-    Status: Complete
-    ExitData:
-      Config: >+
-        CNode0: CValue0_inline
-
-        CNode1: CValue1_inline
-
-        CNode3:
-
-          CNode3_1: CValue3_1_inline
-
-          CNode3_2: CValue3_2_inline
-
-      InstanceId: 89
-      IsDryRun: true
-    BranchStatus: Complete
-  Parameters: {}
-  Actions: []
-  InstanceId: 89
-- Name: ac4
-  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-  Result:
-    Status: Complete
-    ExitData:
-      InstanceId: 90
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-    BranchStatus: Complete
-  Parameters:
-    Name: myYamlParms
-    Values:
-      PNode0: PValue0_inline
-      PNode1: PValue1_inline
-      PNode3:
-        PNode3_1: PValue3_1_inline
-        PNode3_2: PValue3_2_inline
-    Dynamic:
-    - Name: pnode0Dynamic
-      Path: PNode0
-    - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
-  Actions: []
-  InstanceId: 90
+  InstanceId: 97
 - Name: ac2
   Description: No Handler declaration
   Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo:
       Parameters: >+
@@ -217,7 +247,8 @@ Actions:
   Result:
     Status: Complete
     ExitData:
-      InstanceId: 91
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 98
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -242,29 +273,17 @@ Actions:
     Dynamic:
     - Name: pnode0Dynamic
       Path: PNode0
+      Options: []
     - Name: pnode2_1Dynamic
       Path: PNode2:PNode2_1
+      Options: []
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
+      Options: []
   Actions: []
-  InstanceId: 91
-- Name: ''
-  Description: No Name, no declaration at all
-  Handler:
-    Type: Synapse.Handlers.EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo: {}
-  Result:
-    Status: Complete
-    ExitData:
-      InstanceId: 92
-      IsDryRun: true
-    BranchStatus: Complete
-  Parameters: {}
-  Actions: []
-  InstanceId: 92
+  InstanceId: 98
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 5/8/2017 6:57:59 PM
+LastModified: 5/26/2017 7:30:13 AM

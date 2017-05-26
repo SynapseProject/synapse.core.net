@@ -1,6 +1,6 @@
 Name: RunAs
 Description: Test change of security context
-DefaultHandlerType: Synapse.Core:Synapse.Handlers.EchoHandler
+DefaultHandlerType: Synapse.Core:EchoHandler
 Actions:
 - Name: 0
   Actions:
