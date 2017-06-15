@@ -28,7 +28,7 @@ namespace Synapse.Core.Utilities
             serializer.Serialize( tw, data );
         }
 
-        public static string Serialize(object data, bool serializeAsJson = false, bool emitDefaultValues = false)
+        public static string Serialize(object data, bool serializeAsJson = false, bool formatJson = true, bool emitDefaultValues = false)
         {
             string result = null;
 
@@ -36,13 +36,13 @@ namespace Synapse.Core.Utilities
                 using( StringWriter writer = new StringWriter() )
                 {
                     Serialize( writer, data, serializeAsJson, emitDefaultValues );
-                    result = serializeAsJson ? JsonHelpers.FormatJson( writer.ToString() ) : writer.ToString();
+                    result = serializeAsJson && formatJson ? JsonHelpers.FormatJson( writer.ToString() ) : writer.ToString();
                 }
 
             return result;
         }
 
-        public static void SerializeFile(string path, object data, bool serializeAsJson = false, bool emitDefaultValues = false)
+        public static void SerializeFile(string path, object data, bool serializeAsJson = false, bool formatJson = true, bool emitDefaultValues = false)
         {
             if( !serializeAsJson )
             {
@@ -51,7 +51,7 @@ namespace Synapse.Core.Utilities
             }
             else //gets formatted json
             {
-                string result = Serialize( data, serializeAsJson, emitDefaultValues );
+                string result = Serialize( data, serializeAsJson, formatJson, emitDefaultValues );
                 File.WriteAllText( path, result );
             }
         }
