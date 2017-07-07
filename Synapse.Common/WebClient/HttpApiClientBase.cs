@@ -39,8 +39,10 @@ namespace Synapse.Common.WebApi
 
             this.Options = options;
             this.Handler = handler;
-            this.Client = new HttpClient( (HttpMessageHandler)handler );
-            this.Client.BaseAddress = new Uri( this.Options.BaseAddress );
+            this.Client = new HttpClient( (HttpMessageHandler)handler )
+            {
+                BaseAddress = new Uri( this.Options.BaseAddress )
+            };
             this.Headers = this.Client.DefaultRequestHeaders;
             this.Headers.Accept.Clear();
             this.Headers.Accept.Add( new MediaTypeWithQualityHeaderValue( this.Options.ContentType ) );
