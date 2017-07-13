@@ -22,14 +22,22 @@ namespace Synapse.Common.WebApi
             Password = password;
         }
 
-        public BasicAuthentication(string authHeaderStr)
+        public BasicAuthentication(AuthenticationHeaderValue authHeader)
         {
-            String userpass = authHeaderStr.Replace( "Basic ", "" );
-            byte[] bytes = Convert.FromBase64String( userpass );
-            String decodedStr = Encoding.UTF8.GetString( bytes );
-            String[] parts = decodedStr.Split( ':' );
-            UserName = parts[0];
-            Password = parts[1];
+            if ( authHeader != null )
+            {
+                if ( authHeader.Scheme?.ToLower() == "basic" )
+                {
+                    String userpass = authHeader.Parameter;
+                    byte[] bytes = Convert.FromBase64String( userpass );
+                    String decodedStr = Encoding.UTF8.GetString( bytes );
+                    String[] parts = decodedStr.Split( ':' );
+                    UserName = parts[0];
+                    Password = parts[1];
+                }
+                else
+                    throw new Exception( $"Invalid AuthenticationHeader Type [{authHeader.Scheme}] Provided." );
+            }
         }
 
         /// <summary>Not used</summary>
