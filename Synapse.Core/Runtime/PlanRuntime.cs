@@ -291,6 +291,7 @@ namespace Synapse.Core
                     sc?.Impersonate( Crypto );
                     a.Result = rt.Execute( startInfo );
                     a.Result.BranchStatus = a.Result.Status;
+                    a.Result.SecurityContext = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
                     sc?.Undo();
                 }
 
