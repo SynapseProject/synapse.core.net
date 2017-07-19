@@ -19,6 +19,7 @@ namespace Synapse.Core
 
         public int Sequence { get; set; }
         public string Message { get; set; }
+        public string SecurityContext { get; set; }
 
 
         public void SetBranchStatusChecked(ExecuteResult compareResult)
