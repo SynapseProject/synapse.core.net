@@ -72,8 +72,13 @@ namespace log4net.Appender.Dynamic
         }
     }
 
-    public class DynamicFileAppender : IDisposable
-    {
+	public interface IDynamicAppender : IDisposable
+	{
+		ILog Log { get; }
+	}
+
+	public class DynamicFileAppender : IDynamicAppender
+	{
         string _loggerName = string.Empty;
         IAppender _appender = null;
         ILog _log = null;
@@ -91,13 +96,14 @@ namespace log4net.Appender.Dynamic
 
         public void Dispose()
         {
+			_appender.Close();
             FileAppenderFactory.RemoveAppender( _loggerName, _appender );
             _log = null;
         }
     }
 
-    public class RollingFileAppenderHelper : IDisposable
-    {
+    public class RollingFileAppenderHelper : IDynamicAppender
+	{
         string _loggerName = string.Empty;
         IAppender _appender = null;
         ILog _log = null;
@@ -115,7 +121,8 @@ namespace log4net.Appender.Dynamic
 
         public void Dispose()
         {
-            FileAppenderFactory.RemoveAppender( _loggerName, _appender );
+			_appender.Close();
+			FileAppenderFactory.RemoveAppender( _loggerName, _appender );
             _log = null;
         }
     }
