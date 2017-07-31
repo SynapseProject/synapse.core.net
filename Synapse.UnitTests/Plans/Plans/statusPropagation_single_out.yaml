@@ -72,7 +72,7 @@ Actions:
           ReturnStatus: Waiting
       Actions: []
       InstanceId: 134
-    InstanceId: 131
+    InstanceId: 132
   Actions:
   - Name: ac0.1
     ExecuteCase: Any
@@ -86,6 +86,24 @@ Actions:
       BranchStatus: Cancelled
     Parameters: {}
     Actions:
+    - Name: ac0.1.1
+      Handler:
+        Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Config: {}
+        StartInfo:
+          Parameters: >+
+            ReturnStatus: Cancelled
+
+          ParentExitData: EmptyHandler ExitData default value.
+      Result:
+        Status: Cancelled
+        ExitData: EmptyHandler ExitData default value.
+        BranchStatus: Cancelled
+      Parameters:
+        Values:
+          ReturnStatus: Cancelled
+      Actions: []
+      InstanceId: 136
     - Name: ac0.1.2
       ExecuteCase: Any
       Handler:
@@ -124,24 +142,6 @@ Actions:
           ReturnStatus: Complete
       Actions: []
       InstanceId: 138
-    - Name: ac0.1.1
-      Handler:
-        Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-        Config: {}
-        StartInfo:
-          Parameters: >+
-            ReturnStatus: Cancelled
-
-          ParentExitData: EmptyHandler ExitData default value.
-      Result:
-        Status: Cancelled
-        ExitData: EmptyHandler ExitData default value.
-        BranchStatus: Cancelled
-      Parameters:
-        Values:
-          ReturnStatus: Cancelled
-      Actions: []
-      InstanceId: 136
     InstanceId: 135
   InstanceId: 129
 - Name: ac1
@@ -178,9 +178,9 @@ Actions:
     Values:
       ReturnStatus: CompletedWithErrors
   Actions: []
-  InstanceId: 132
+  InstanceId: 131
 StartInfo: {}
 Result:
   Status: Cancelled
   BranchStatus: Cancelled
-LastModified: 5/26/2017 7:30:13 AM
+LastModified: 6/15/2017 5:08:11 PM

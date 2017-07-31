@@ -18,8 +18,9 @@ namespace Synapse.Common
     {
         bool _disposed = false;
 
-        //public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseNodeServer" );
+		//public static readonly ILog Default = log4net.LogManager.GetLogger( "SynapseNodeServer" );
 
+		public IDynamicAppender _dynamicAppender = null;
         public ILog _logger = null;
 
         public LogUtility()
@@ -33,14 +34,16 @@ namespace Synapse.Common
         public void InitDefaultLogger(string loggerName, string appenderName,
             string logfileName, string conversionPattern, string levelName = "ALL")
         {
-            //_logger = log4net.LogManager.GetLogger( "SynapseNodeServer" );
-            _logger = new RollingFileAppenderHelper( loggerName, appenderName, logfileName, conversionPattern, levelName ).Log;
+			//_logger = log4net.LogManager.GetLogger( "SynapseNodeServer" );
+			_dynamicAppender = new RollingFileAppenderHelper( loggerName, appenderName, logfileName, conversionPattern, levelName );
+			_logger =_dynamicAppender.Log;
         }
 
         public void InitDynamicFileAppender(string loggerName, string appenderName,
             string logfileName, string conversionPattern, string levelName = "ALL")
         {
-            _logger = new DynamicFileAppender( loggerName, appenderName, logfileName, conversionPattern, levelName ).Log;
+			_dynamicAppender = new DynamicFileAppender( loggerName, appenderName, logfileName, conversionPattern, levelName );
+			_logger = _dynamicAppender.Log;
         }
 
         #region Write/WriteFormat
@@ -91,6 +94,11 @@ namespace Synapse.Common
             }
         }
         #endregion
+
+		public void CloseLog()
+		{
+			_dynamicAppender.Dispose();
+		} 
 
         #region IDisposable Members
         public void Dispose()
