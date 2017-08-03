@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Web;
 
@@ -24,11 +25,25 @@ namespace Synapse.Common.WebApi
             string delim = asPartialQueryString ? "&" : "?";
             foreach( string key in dynamicData.Keys )
             {
-                qs.Append( $"{delim}{HttpUtility.UrlEncode( key )}={HttpUtility.UrlEncode( dynamicData[key] )}" );
+                string value = dynamicData[key];
+                if( value.Contains( ":" ) ) value = $"'{value}'";
+                qs.Append( $"{delim}{HttpUtility.UrlEncode( key )}={HttpUtility.UrlEncode( value )}" );
                 delim = "&";
             }
 
             return qs.ToString();
+        }
+
+        public static void PrepareValuesForPost(this IDictionary<string, string> dynamicData)
+        {
+            if( dynamicData == null || dynamicData.Count <= 0 )
+                return;
+
+            foreach( string key in dynamicData.Keys.ToArray() )
+            {
+                string value = dynamicData[key];
+                if( value.Contains( ":" ) ) dynamicData[key] = $"'{value}'";
+            }
         }
 
         /// <summary>
