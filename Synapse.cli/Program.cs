@@ -16,97 +16,104 @@ namespace Synapse.cli
 
         static void Main(string[] args)
         {
-            int exitCode = 11;
-
-            EnsureDatabaseExists();
-
-            Arguments a = new Arguments( args );
-            if( !a.IsParsed )
-                WriteHelpAndExit( a.Message );
-
-            if( a.IsCrypto )
+            try
             {
-                if( a.IsEncrypt )
-                {
-                    string path = a.Encrypt;
-                    Plan plan = YamlHelpers.DeserializeFile<Plan>( path );
-                    plan = plan.EncryptElements();
-                    if( a.HasOut )
-                        path = a.Out;
-                    YamlHelpers.SerializeFile( path, plan );
-                }
-                else
-                {
-                    string path = a.Decrypt;
-                    Plan plan = YamlHelpers.DeserializeFile<Plan>( path );
-                    plan = plan.DecryptElements();
-                    if( a.HasOut )
-                        path = a.Out;
-                    YamlHelpers.SerializeFile( path, plan );
-                }
-            }
-            else if( a.IsSample )
-            {
-                CreateSamplePlan( a.Sample, a.Out, a.Verbose );
-            }
-            else if( a.Render != RenderAction.None )
-            {
-                if( a.Render == RenderAction.Encode )
-                    Console.WriteLine( CryptoHelpers.Encode( a.Plan ) );
-                else
-                    Console.WriteLine( a.Plan );
-            }
-            else
-            {
-                ExecuteResult result = null;
+                int exitCode = 11;
 
-                Plan plan = YamlHelpers.Deserialize<Plan>( a.Plan );
-                plan.Progress += plan_Progress;
-                plan.LogMessage += plan_LogMessage;
+                EnsureDatabaseExists();
 
-                switch( a.TaskModel )
+                Arguments a = new Arguments( args );
+                if( !a.IsParsed )
+                    WriteHelpAndExit( a.Message );
+
+                if( a.IsCrypto )
                 {
-                    case TaskModel.InProc:
+                    if( a.IsEncrypt )
                     {
-                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: true ) );
-                        t.Wait();
-                        break;
-                    }
-                    case TaskModel.External:
-                    {
-                        Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: false ) );
-                        t.Wait();
-                        break;
-                    }
-                    case TaskModel.Single:
-                    {
-                        Console.WriteLine( a.Plan );
-                        _isSingleTaskModel = true;
-                        result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.Data, a.DryRun );
-                        break;
-                    }
-                }
-                exitCode = (int)result.Status;
-                //exitCode = (int)plan.Result.Status;
-                if( a.TaskModel != TaskModel.Single && !string.IsNullOrWhiteSpace( a.ResultPlan ) )
-                {
-                    bool isTrue = false;
-                    isTrue = Boolean.TryParse( a.ResultPlan, out isTrue );
-                    if( isTrue )
-                    {
-                        string extension = new FileInfo( a.PlanFilePath ).Extension;
-                        string resultFile = a.PlanFilePath.Replace( extension, $".result{extension}" );
-                        File.WriteAllText( resultFile, plan.ResultPlan.ToYaml() );
+                        string path = a.Encrypt;
+                        Plan plan = YamlHelpers.DeserializeFile<Plan>( path );
+                        plan = plan.EncryptElements();
+                        if( a.HasOut )
+                            path = a.Out;
+                        YamlHelpers.SerializeFile( path, plan );
                     }
                     else
                     {
-                        File.WriteAllText( a.ResultPlan, plan.ResultPlan.ToYaml() );
+                        string path = a.Decrypt;
+                        Plan plan = YamlHelpers.DeserializeFile<Plan>( path );
+                        plan = plan.DecryptElements();
+                        if( a.HasOut )
+                            path = a.Out;
+                        YamlHelpers.SerializeFile( path, plan );
                     }
                 }
-            }
+                else if( a.IsSample )
+                {
+                    CreateSamplePlan( a.Sample, a.Out, a.Verbose );
+                }
+                else if( a.Render != RenderAction.None )
+                {
+                    if( a.Render == RenderAction.Encode )
+                        Console.WriteLine( CryptoHelpers.Encode( a.Plan ) );
+                    else
+                        Console.WriteLine( a.Plan );
+                }
+                else
+                {
+                    ExecuteResult result = null;
 
-            //Console.WriteLine( $"exitCode:{exitCode}" );
-            Environment.Exit( exitCode );
+                    Plan plan = YamlHelpers.Deserialize<Plan>( a.Plan );
+                    plan.Progress += plan_Progress;
+                    plan.LogMessage += plan_LogMessage;
+
+                    switch( a.TaskModel )
+                    {
+                        case TaskModel.InProc:
+                        {
+                            Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: true ) );
+                            t.Wait();
+                            break;
+                        }
+                        case TaskModel.External:
+                        {
+                            Task t = Task.Run( () => result = plan.Start( a.Args, a.DryRun, inProc: false ) );
+                            t.Wait();
+                            break;
+                        }
+                        case TaskModel.Single:
+                        {
+                            Console.WriteLine( a.Plan );
+                            _isSingleTaskModel = true;
+                            result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.Data, a.DryRun );
+                            break;
+                        }
+                    }
+                    exitCode = (int)result.Status;
+                    //exitCode = (int)plan.Result.Status;
+                    if( a.TaskModel != TaskModel.Single && !string.IsNullOrWhiteSpace( a.ResultPlan ) )
+                    {
+                        bool isTrue = false;
+                        isTrue = Boolean.TryParse( a.ResultPlan, out isTrue );
+                        if( isTrue )
+                        {
+                            string extension = new FileInfo( a.PlanFilePath ).Extension;
+                            string resultFile = a.PlanFilePath.Replace( extension, $".result{extension}" );
+                            File.WriteAllText( resultFile, plan.ResultPlan.ToYaml() );
+                        }
+                        else
+                        {
+                            File.WriteAllText( a.ResultPlan, plan.ResultPlan.ToYaml() );
+                        }
+                    }
+                }
+
+                //Console.WriteLine( $"exitCode:{exitCode}" );
+                Environment.Exit( exitCode );
+            }
+            catch( Exception ex )
+            {
+                WriteHelpAndExit( ex.Message );
+            }
         }
 
         private static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
@@ -213,7 +220,7 @@ namespace Synapse.cli
                     if( t.GetInterfaces().Contains( typeof( IHandlerRuntime ) ) )
                         handlers.Add( $"{handlerLib}:{t.FullName}" );
             }
-            catch {  } //throw;
+            catch { } //throw;
         }
         #endregion
 
