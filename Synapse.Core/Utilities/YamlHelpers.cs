@@ -501,7 +501,10 @@ namespace Synapse.Core.Utilities
 
             string buf = yaml.ToString().Trim();
             if( !string.IsNullOrWhiteSpace( value ) )
+            {
+                if( value.Contains( ":" ) ) value = $"'{value}'";
                 buf = $"{buf} {value}";
+            }
 
             return Deserialize( buf );
         }
