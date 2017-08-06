@@ -502,7 +502,7 @@ namespace Synapse.Core.Utilities
             string buf = yaml.ToString().Trim();
             if( !string.IsNullOrWhiteSpace( value ) )
             {
-                if( value.Contains( ":" ) ) value = $"'{value}'";
+                if( value.Contains( ":" ) ) value = EncapsulateWith( value, "'" );
                 buf = $"{buf} {value}";
             }
 
@@ -521,6 +521,14 @@ namespace Synapse.Core.Utilities
             }
 
             return element;
+        }
+
+
+        internal static string EncapsulateWith(string s, string c)
+        {
+            if( !s.StartsWith( c ) ) { s = $"{c}{s}"; }
+            if( !s.EndsWith( c ) ) { s = $"{s}{c}"; }
+            return s;
         }
         #endregion
     }
