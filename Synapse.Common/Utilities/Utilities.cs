@@ -26,7 +26,7 @@ namespace Synapse.Common.WebApi
             foreach( string key in dynamicData.Keys )
             {
                 string value = dynamicData[key];
-                if( value.Contains( ":" ) ) value = $"'{value}'";
+                if( value.Contains( ":" ) ) value = value.EncapsulateWith( "'" );
                 qs.Append( $"{delim}{HttpUtility.UrlEncode( key )}={HttpUtility.UrlEncode( value )}" );
                 delim = "&";
             }
@@ -42,7 +42,7 @@ namespace Synapse.Common.WebApi
             foreach( string key in dynamicData.Keys.ToArray() )
             {
                 string value = dynamicData[key];
-                if( value.Contains( ":" ) ) dynamicData[key] = $"'{value}'";
+                if( value.Contains( ":" ) ) dynamicData[key] = value.EncapsulateWith( "'" );
             }
         }
 
@@ -58,6 +58,14 @@ namespace Synapse.Common.WebApi
             foreach( string key in nvc.AllKeys )
                 d[key] = nvc[key];
             return d;
+        }
+
+
+        public static string EncapsulateWith(this string s, string c)
+        {
+            if( !s.StartsWith( c ) ) { s = $"{c}{s}"; }
+            if( !s.EndsWith( c ) ) { s = $"{s}{c}"; }
+            return s;
         }
     }
 }
