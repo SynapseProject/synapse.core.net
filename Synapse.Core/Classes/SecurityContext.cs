@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 namespace Synapse.Core
 {
     //todo: resolve config, use config to get decryption info, use u/p to auth to provider for impersonation thread
-    public partial class SecurityContext
+    public partial class SecurityContext : IInheritable
     {
         public SecurityContext()
         {
@@ -20,6 +20,10 @@ namespace Synapse.Core
         public CryptoProvider Crypto { get; set; }
         [YamlIgnore]
         public bool HasCrypto { get { return Crypto != null; } }
+
+
+        public bool Inheritable { get; set; } = true;
+        public bool AllowInheritance { get; set; } = true;
 
 
         public override string ToString()
