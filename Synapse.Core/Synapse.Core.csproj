@@ -66,6 +66,7 @@
     <Compile Include="Classes\Enums\LogLevel.cs" />
     <Compile Include="Classes\ExecuteResult.cs" />
     <Compile Include="Classes\Interfaces\ICancelEventArgs.cs" />
+    <Compile Include="Classes\Interfaces\IInheritable.cs" />
     <Compile Include="Classes\Interfaces\IHandlerRuntime.cs" />
     <Compile Include="Classes\Interfaces\IParameterInfo.cs" />
     <Compile Include="Classes\Interfaces\IActionContainer.cs" />

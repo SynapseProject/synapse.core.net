@@ -13,6 +13,7 @@ Actions:
     Status: New
     ExitData: EmptyHandler ExitData default value.
     BranchStatus: Failed
+    SecurityContext: SS-Mekhano\Steve Shortt
   Parameters:
     Values:
       ReturnStatus: New
@@ -40,6 +41,7 @@ Actions:
         Status: Initializing
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Initializing
+        SecurityContext: SS-Mekhano\Steve Shortt
       Parameters:
         Values:
           ReturnStatus: Initializing
@@ -53,6 +55,7 @@ Actions:
         Status: Complete
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Failed
+        SecurityContext: SS-Mekhano\Steve Shortt
       Parameters:
         Values:
           ReturnStatus: Complete
@@ -71,6 +74,7 @@ Actions:
           Status: Failed
           ExitData: EmptyHandler ExitData default value.
           BranchStatus: Failed
+          SecurityContext: SS-Mekhano\Steve Shortt
         Parameters:
           Values:
             ReturnStatus: Failed
@@ -90,6 +94,7 @@ Actions:
           Status: Waiting
           ExitData: EmptyHandler ExitData default value.
           BranchStatus: Waiting
+          SecurityContext: SS-Mekhano\Steve Shortt
         Parameters:
           Values:
             ReturnStatus: Waiting
@@ -108,6 +113,7 @@ Actions:
     Result:
       ExitData: EmptyHandler ExitData default value.
       BranchStatus: CompletedWithErrors
+      SecurityContext: SS-Mekhano\Steve Shortt
     Parameters: {}
     Actions:
     - Name: ac0.1.1
@@ -123,6 +129,7 @@ Actions:
         Status: Complete
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: CompletedWithErrors
+        SecurityContext: SS-Mekhano\Steve Shortt
       Parameters:
         Values:
           ReturnStatus: Complete
@@ -141,6 +148,7 @@ Actions:
           Status: CompletedWithErrors
           ExitData: EmptyHandler ExitData default value.
           BranchStatus: CompletedWithErrors
+          SecurityContext: SS-Mekhano\Steve Shortt
         Parameters:
           Values:
             ReturnStatus: CompletedWithErrors
@@ -160,6 +168,7 @@ Actions:
     Status: CompletedWithErrors
     ExitData: EmptyHandler ExitData default value.
     BranchStatus: CompletedWithErrors
+    SecurityContext: SS-Mekhano\Steve Shortt
   Parameters:
     Values:
       ReturnStatus: CompletedWithErrors
@@ -169,4 +178,4 @@ StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 6/15/2017 5:08:08 PM
+LastModified: 9/3/2017 10:25:05 AM

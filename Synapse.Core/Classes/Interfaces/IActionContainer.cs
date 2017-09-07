@@ -8,6 +8,8 @@ namespace Synapse.Core
         string Name { get; set; }
         string Description { get; set; }
 
+        SecurityContext RunAs { get; set; }
+
         ActionItem ActionGroup { get; set; }
         List<ActionItem> Actions { get; set; }
         //bool IsAction { get; }
