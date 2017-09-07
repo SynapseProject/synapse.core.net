@@ -47,6 +47,12 @@ namespace Synapse.cli
                         YamlHelpers.SerializeFile( path, plan );
                     }
                 }
+                else if( a.IsGenKey )
+                {
+                    CryptoHelpers.GenerateRsaKeys( a.KeyContainerName, $"{a.GenKey}.pubPriv", $"{a.GenKey}.pubOnly" );
+                    Console.WriteLine( $"Created public/private keypair in [{a.GenKey}.pubPriv]." );
+                    Console.WriteLine( $"Created public key (only) in [{a.GenKey}.pubOnly]." );
+                }
                 else if( a.IsSample )
                 {
                     CreateSamplePlan( a.Sample, a.Out, a.Verbose );
@@ -184,9 +190,14 @@ namespace Synapse.cli
             }
 
             if( !string.IsNullOrWhiteSpace( outPath ) )
+            {
                 File.WriteAllText( outPath, p.ToYaml() );
+                Console.WriteLine( $"Created sample Plan at [{outPath}]." );
+            }
             else
+            {
                 Console.WriteLine( p.ToYaml() );
+            }
         }
 
         static List<string> GetHandlerList(string handlerCsvList)
@@ -275,6 +286,12 @@ namespace Synapse.cli
             //Console.WriteLine( "{0,-15}  encodedPlanString.", "" );
             Console.WriteLine( "  dynamic{0,-6}Any remaining arg:value pairs will passed to the plan", "" );
             Console.WriteLine( "{0,-15}  as dynamic parms.\r\n", "" );
+            Console_WriteLine( " synapse.cli.exe genkey:{0}filePath{1} [kcn:{0}keyContainerName{1}]", ConsoleColor.Cyan, "{", "}" );
+            Console_WriteLine( "\r\n  - Create RSA keypair for use in encrypt/decrypt actions.\r\n", ConsoleColor.Green, "" );
+            Console.WriteLine( "  genkey{0,5}  - filePath: Valid path to create keys.", "" );
+            Console.WriteLine( "  kcn{0,9} - keyContainerName: Optional container within file.", "" );
+            Console.WriteLine( "     {0,10}If keyContainerName is specified, it must be used in", "" );
+            Console.WriteLine( "     {0,12}encrypt/decrypt actions (specified in Plans settings).\r\n", "" );
             Console_WriteLine( " synapse.cli.exe encrypt|decrypt:{0}filePath{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
             Console_WriteLine( "\r\n  - Encrypt/decrypt Plan elements based on Plan/Action Crypto sections.\r\n", ConsoleColor.Green, "" );
             Console.WriteLine( "  encrypt{0,5} - filePath: Valid path to plan file to encrypt.", "" );
@@ -317,6 +334,8 @@ namespace Synapse.cli
         const string __encrypt = "encrypt";
         const string __decrypt = "decrypt";
         const string __out = "out";
+        const string __genkey = "genkey";
+        const string __keycontainername = "kcn";
         const string __sample = "sample";
         const string __verbose = "verbose";
 
@@ -480,6 +499,30 @@ namespace Synapse.cli
                 }
                 #endregion
 
+                #region GenKey
+                if( Args.Keys.Contains( __genkey ) )
+                {
+                    GenKey = Args[__genkey];
+                    Args.Remove( __genkey );
+                }
+                else
+                {
+                    GenKey = string.Empty;
+                }
+                #endregion
+
+                #region KeyContainerName
+                if( Args.Keys.Contains( __keycontainername ) )
+                {
+                    KeyContainerName = Args[__keycontainername];
+                    Args.Remove( __keycontainername );
+                }
+                else
+                {
+                    KeyContainerName = string.Empty;
+                }
+                #endregion
+
                 #region Sample
                 if( Args.Keys.Contains( __sample ) )
                 {
@@ -528,6 +571,9 @@ namespace Synapse.cli
         public bool IsEncrypt { get { return !string.IsNullOrWhiteSpace( Encrypt ); } }
         public bool IsDecrypt { get { return !string.IsNullOrWhiteSpace( Decrypt ); } }
         public bool HasOut { get { return !string.IsNullOrWhiteSpace( Out ); } }
+        public string GenKey { get; internal set; }
+        public bool IsGenKey { get { return !string.IsNullOrWhiteSpace( GenKey ); } }
+        public string KeyContainerName { get; internal set; }
         public string Sample { get; internal set; }
         public bool IsSample { get { return !string.IsNullOrWhiteSpace( Sample ); } }
         public bool Verbose { get; internal set; }
