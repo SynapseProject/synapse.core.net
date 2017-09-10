@@ -1,0 +1,55 @@
+Name: RunAs
+Description: Test change of security context
+DefaultHandlerType: Synapse.Core:EchoHandler
+Actions:
+- Name: 0
+  Actions:
+  - Name: 0.1
+    Actions: []
+    RunAs:
+      Domain: LAPTOP-TK2D9TB6
+      UserName: synapse1
+      Password: ',^e-2:3mtk3!j-Py'
+      Crypto:
+        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        KeyContainerName: foo
+        Elements:
+        - Password
+      Inheritable: true
+      AllowInheritance: true
+  - Name: 0.2
+    Actions: []
+  RunAs:
+    Domain: LAPTOP-TK2D9TB6
+    UserName: synapse0
+    Password: ',^e-2:3mtk3!j-Py'
+    Crypto:
+      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+      KeyContainerName: foo
+      Elements:
+      - Password
+    Inheritable: true
+    AllowInheritance: true
+- Name: 1
+  Actions:
+  - Name: 1.1
+    Actions: []
+RunAs:
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse2
+  Password: OmwBUBtWKJWKFTeVCHCMEOHNRqtMgjAksRunYE7A/DICYvvLpV5CsVEHfWxxxXJQHIGDtavO0YBvSFb5LwWx43wEsaK+zzoAJkAcBybGtvDv+ADNeVuiahvDywltWuRdWhf+CBA9HaIiwL6sNhcwbvPX3z8Zpp7Cp9WFWv1/oR0=
+  Crypto:
+    KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+    KeyContainerName: foo
+    Elements:
+    - Password
+    Errors: []
+  Inheritable: true
+  AllowInheritance: true
+Crypto:
+  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+  KeyContainerName: foo
+  Elements: []
+  Errors: []
+StartInfo: {}
+LastModified: 5/15/2017 7:07:42 AM

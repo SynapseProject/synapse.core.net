@@ -66,5 +66,17 @@ namespace Synapse.Core
                         resolvedActions.Add( clone );
                     }
         }
+
+        /// <summary>
+        /// Evaluates RunAs and parentSecurity(parent RunAs) for whether to inherit settings.
+        /// </summary>
+        /// <param name="parentSecurityContext">Reference SecurityContext from parent Plan/Action.</param>
+        public void IngestParentSecurityContext(SecurityContext parentSecurityContext)
+        {
+            if( HasRunAs )
+                RunAs.InheritSettingsIfAllowed( parentSecurityContext );
+            else if( (parentSecurityContext?.IsInheritable).Value )
+                RunAs = parentSecurityContext;
+        }
     }
 }

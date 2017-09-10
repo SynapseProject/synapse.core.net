@@ -8,13 +8,20 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
+    public enum CryptoInheritElementAction
+    {
+        None,
+        Merge,
+        Replace
+    }
+
     public class CryptoProvider
     {
         public string KeyUri { get; set; }
         public string KeyContainerName { get; set; }
         public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
 
-        public void InheritSettingsIfRequired(CryptoProvider provider)
+        public void InheritSettingsIfRequired(CryptoProvider provider, CryptoInheritElementAction inheritElementAction = CryptoInheritElementAction.None)
         {
             if( provider == null )
                 return;
@@ -24,6 +31,16 @@ namespace Synapse.Core
                 KeyUri = provider.KeyUri;
                 KeyContainerName = provider.KeyContainerName;
                 CspFlags = provider.CspFlags;
+            }
+
+            if( inheritElementAction != CryptoInheritElementAction.None )
+            {
+                if( inheritElementAction == CryptoInheritElementAction.Replace || Elements == null )
+                    Elements = new List<string>();
+
+                if( provider.Elements != null && provider.Elements.Count > 0 )
+                    foreach( string el in provider.Elements )
+                        Elements.Add( el );
             }
         }
 

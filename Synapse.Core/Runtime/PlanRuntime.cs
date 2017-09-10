@@ -112,6 +112,8 @@ namespace Synapse.Core
             ResultPlan.InstanceId = InstanceId;
             ResultPlan.StartInfo = StartInfo;
             ResultPlan.Signature = Signature;
+            ResultPlan.RunAs = RunAs;
+            ResultPlan.Crypto = Crypto;
             ResultPlan.Result = new ExecuteResult();
 
             if( inProc )
@@ -213,7 +215,7 @@ namespace Synapse.Core
 
                     if( actionGroup.HasActions )
                     {
-                        ProcessRecursive( clone, parentSecurityContext, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                        ProcessRecursive( clone, actionGroup.RunAs, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
                         parentContext.Result.SetBranchStatusChecked( clone.Result );
 
                         if( clone.Result.Status > queryStatus ) queryStatus = clone.Result.Status;
@@ -273,7 +275,8 @@ namespace Synapse.Core
 
                 if( !WantsStopOrPause() )
                 {
-                    SecurityContext sc = a.HasRunAs ? a.RunAs : parentSecurityContext;
+                    a.IngestParentSecurityContext( parentSecurityContext );
+                    SecurityContext sc = a.RunAs; //just an alias
                     sc?.Crypto?.InheritSettingsIfRequired( Crypto );
 
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
@@ -314,8 +317,8 @@ namespace Synapse.Core
             {
                 try
                 {
-                    if( !a.HasRunAs )
-                        a.RunAs = parentSecurityContext;
+                    //if( !a.HasRunAs ) a.RunAs = parentSecurityContext;
+                    a.IngestParentSecurityContext( parentSecurityContext );
                     a.Result = SpawnExternal( a, dynamicData, parentExitData, dryRun );
                     return a.Result;
                 }
