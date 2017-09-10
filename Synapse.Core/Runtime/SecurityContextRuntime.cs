@@ -29,6 +29,9 @@ namespace Synapse.Core
         [PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
         public void Impersonate(CryptoProvider crypto)
         {
+            if( !IsValid )
+                return;
+
             if( !IsImpersonating )
             {
                 _token = IntPtr.Zero;

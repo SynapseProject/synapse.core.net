@@ -3,33 +3,42 @@ Description: Test change of security context
 DefaultHandlerType: Synapse.Core:EchoHandler
 Actions:
 - Name: 0
-  Actions:
   RunAs:
-    Domain: ss-mekhano
+    Domain: LAPTOP-TK2D9TB6
     UserName: synapse0
-    Password: OmwBUBtWKJWKFTeVCHCMEOHNRqtMgjAksRunYE7A/DICYvvLpV5CsVEHfWxxxXJQHIGDtavO0YBvSFb5LwWx43wEsaK+zzoAJkAcBybGtvDv+ADNeVuiahvDywltWuRdWhf+CBA9HaIiwL6sNhcwbvPX3z8Zpp7Cp9WFWv1/oR0=
+    Password: C2vBIZJkN29rI2qH7bbZ3bpqG/qUBH3srqbjisonaVfhMujt4Oqd4+uoEfOdlQsd6/nowVd6pU3cI1RIqz3jIKAGvaL5L4SLtad8cufYrG/X7V02Hxb994Wn3WTuqwj8r0SOuZrutcT+Sh89tW0pmF6e8+EVkeGFlusQcva3POc=
     Crypto:
       KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
       KeyContainerName: foo
       Elements:
       - Password
+  Actions:
   - Name: 0.1
-    Actions: []
     RunAs:
-      Domain: ss-mekhano
+      Domain: LAPTOP-TK2D9TB6
       UserName: synapse1
-      Password: BnsK2g0N8jvnRb3zfc/NIaiMhNduw9/WtR2hKfCCUqnpWV2/sEn2+T0jpdVy8WATfzTWJhv8oeJ5Nn6gD2/LL20pjtOsk7NSqobio7XB1CkIgnGgbcQS8/Y9A1TPxQiBq2umo5LsCZYS+L3++o8wV1cXdBvT7elLNKyz8wHtlMc=
+      Password: I8fu58fzs220PQdjToRMikTRaB1GsAeVMklLKqLmIXw42eMw9wjIEppJHDu1GI8bDNXVM+qKKIsaZgwdLbSO5oGU85VBLSVBrudeu2DNyUMjPIO3soxlmFpl1WH1jtk04G5EeDzNI/sSd7TYn2H0QSMyoBVkx5R6UAxQ+Pur8/c=
       Crypto:
         KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
         KeyContainerName: foo
         Elements:
         - Password
+  - Name: 0.2
 - Name: 1
-  Actions: []
+  Actions:
+  - Name: 1.1
+    RunAs:
+      BlockInheritance: true
 Crypto:
   KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
   KeyContainerName: foo
-  Elements: []
-  Errors: []
-StartInfo: {}
-LastModified: 5/15/2017 7:07:42 AM
+RunAs:
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse2
+  Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+  Crypto:
+    KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+    KeyContainerName: foo
+    Elements:
+    - Password
+  Inheritable: true

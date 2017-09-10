@@ -1,0 +1,72 @@
+Name: RunAs
+Description: Test change of security context
+Actions:
+- Name: 0
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData: &o0
+      CurrentPrincipal: SS-Mekhano\synapse0
+      RunAs: &o2
+        Domain: ss-mekhano
+        UserName: synapse0
+        Password: OmwBUBtWKJWKFTeVCHCMEOHNRqtMgjAksRunYE7A/DICYvvLpV5CsVEHfWxxxXJQHIGDtavO0YBvSFb5LwWx43wEsaK+zzoAJkAcBybGtvDv+ADNeVuiahvDywltWuRdWhf+CBA9HaIiwL6sNhcwbvPX3z8Zpp7Cp9WFWv1/oR0=
+        Crypto:
+          KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          KeyContainerName: foo
+          Elements:
+          - Password
+          Errors: []
+    BranchStatus: Complete
+  Parameters: {}
+  Actions:
+  - Name: 0.1
+    Handler:
+      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        ParentExitData: *o0
+    Result:
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: SS-Mekhano\synapse1
+        InstanceId: 2
+        ParentExitData: *o0
+        RunAs: &o1
+          Domain: ss-mekhano
+          UserName: synapse1
+          Password: BnsK2g0N8jvnRb3zfc/NIaiMhNduw9/WtR2hKfCCUqnpWV2/sEn2+T0jpdVy8WATfzTWJhv8oeJ5Nn6gD2/LL20pjtOsk7NSqobio7XB1CkIgnGgbcQS8/Y9A1TPxQiBq2umo5LsCZYS+L3++o8wV1cXdBvT7elLNKyz8wHtlMc=
+          Crypto:
+            KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+            KeyContainerName: foo
+            Elements:
+            - Password
+            Errors: []
+      BranchStatus: Complete
+    Parameters: {}
+    Actions: []
+    RunAs: *o1
+    InstanceId: 2
+  RunAs: *o2
+- Name: 1
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: SS-Mekhano\Steve Shortt
+      InstanceId: 1
+    BranchStatus: Complete
+  Parameters: {}
+  Actions: []
+  InstanceId: 1
+StartInfo: {}
+Result:
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 5/15/2017 9:46:11 AM

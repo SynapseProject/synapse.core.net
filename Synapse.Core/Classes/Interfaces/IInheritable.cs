@@ -6,7 +6,7 @@ namespace Synapse.Core
 {
     public interface IInheritable
     {
-        bool Inheritable { get; set; }
-        bool AllowInheritance { get; set; }
+        bool IsInheritable { get; set; }
+        bool BlockInheritance { get; set; }
     }
 }

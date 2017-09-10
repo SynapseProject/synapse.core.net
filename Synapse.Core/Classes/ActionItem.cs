@@ -49,6 +49,8 @@ namespace Synapse.Core
         public SecurityContext RunAs { get; set; }
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
+        [YamlIgnore]
+        public bool HasValidRunAs { get { return (RunAs?.IsValid).Value; } }
 
         object ICloneable.Clone()
         {
