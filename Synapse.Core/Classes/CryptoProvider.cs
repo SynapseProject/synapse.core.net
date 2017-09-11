@@ -15,22 +15,30 @@ namespace Synapse.Core
         Replace
     }
 
+    public class CryptoKeyInfo
+    {
+        public string Uri { get; set; }
+        public string ContainerName { get; set; }
+        public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
+    }
+
     public class CryptoProvider
     {
-        public string KeyUri { get; set; }
-        public string KeyContainerName { get; set; }
-        public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
+        public CryptoKeyInfo Key { get; set; }
 
         public void InheritSettingsIfRequired(CryptoProvider provider, CryptoInheritElementAction inheritElementAction = CryptoInheritElementAction.None)
         {
             if( provider == null )
                 return;
 
-            if( string.IsNullOrWhiteSpace( KeyUri ) || string.IsNullOrWhiteSpace( KeyContainerName ) )
+            if( Key == null )
+                Key = new CryptoKeyInfo();
+
+            if( string.IsNullOrWhiteSpace( Key.Uri ) || string.IsNullOrWhiteSpace( Key.ContainerName ) )
             {
-                KeyUri = provider.KeyUri;
-                KeyContainerName = provider.KeyContainerName;
-                CspFlags = provider.CspFlags;
+                Key.Uri = provider.Key.Uri;
+                Key.ContainerName = provider.Key.ContainerName;
+                Key.CspFlags = provider.Key.CspFlags;
             }
 
             if( inheritElementAction != CryptoInheritElementAction.None )
@@ -55,7 +63,7 @@ namespace Synapse.Core
 
         public void LoadRsaKeys()
         {
-            Rsa = CryptoHelpers.LoadRsaKeys( KeyContainerName, KeyUri, CspFlags );
+            Rsa = CryptoHelpers.LoadRsaKeys( Key.ContainerName, Key.Uri, Key.CspFlags );
         }
 
         [YamlIgnore]
@@ -132,9 +140,12 @@ namespace Synapse.Core
         {
             CryptoProvider cp = new CryptoProvider()
             {
-                KeyUri = "Filepath to RSA key file; http support in future.",
-                KeyContainerName = "RSA=supported container name",
-                CspFlags = CspProviderFlags.NoFlags
+                Key = new CryptoKeyInfo()
+                {
+                    Uri = "Filepath to RSA key file; http support in future.",
+                    ContainerName = "RSA=supported container name",
+                    CspFlags = CspProviderFlags.NoFlags
+                }
             };
             cp.Errors = null;
             if( addElements )

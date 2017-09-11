@@ -1,15 +1,32 @@
 Name: RunAs
 Description: Test change of security context
 DefaultHandlerType: Synapse.Core:EchoHandler
+Crypto:
+  Key: &o1
+    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+    ContainerName: foo
+RunAs:
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse2
+  Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+  IsInheritable: true
+  BlockInheritance: true
+  Crypto:
+    Key: *o1
+    Elements:
+    - Password
 Actions:
 - Name: 0
   RunAs:
     Domain: LAPTOP-TK2D9TB6
     UserName: synapse0
-    Password: C2vBIZJkN29rI2qH7bbZ3bpqG/qUBH3srqbjisonaVfhMujt4Oqd4+uoEfOdlQsd6/nowVd6pU3cI1RIqz3jIKAGvaL5L4SLtad8cufYrG/X7V02Hxb994Wn3WTuqwj8r0SOuZrutcT+Sh89tW0pmF6e8+EVkeGFlusQcva3POc=
+    Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
+    IsInheritable: true
+    BlockInheritance: true
     Crypto:
-      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-      KeyContainerName: foo
+      Key:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        ContainerName: foo
       Elements:
       - Password
   Actions:
@@ -18,9 +35,12 @@ Actions:
       Domain: LAPTOP-TK2D9TB6
       UserName: synapse1
       Password: I8fu58fzs220PQdjToRMikTRaB1GsAeVMklLKqLmIXw42eMw9wjIEppJHDu1GI8bDNXVM+qKKIsaZgwdLbSO5oGU85VBLSVBrudeu2DNyUMjPIO3soxlmFpl1WH1jtk04G5EeDzNI/sSd7TYn2H0QSMyoBVkx5R6UAxQ+Pur8/c=
+      IsInheritable: true
+      BlockInheritance: true
       Crypto:
-        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        KeyContainerName: foo
+        Key:
+          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          ContainerName: foo
         Elements:
         - Password
   - Name: 0.2
@@ -28,17 +48,5 @@ Actions:
   Actions:
   - Name: 1.1
     RunAs:
+      IsInheritable: true
       BlockInheritance: true
-Crypto:
-  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-  KeyContainerName: foo
-RunAs:
-  Domain: LAPTOP-TK2D9TB6
-  UserName: synapse2
-  Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
-  Crypto:
-    KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    KeyContainerName: foo
-    Elements:
-    - Password
-  Inheritable: true
