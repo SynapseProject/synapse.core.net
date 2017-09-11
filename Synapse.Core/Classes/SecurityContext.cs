@@ -68,7 +68,7 @@ namespace Synapse.Core
 
         public void InheritSettingsIfAllowed(SecurityContext sourceContext)
         {
-            if( (sourceContext?.IsInheritable).Value && !this.BlockInheritance )
+            if( sourceContext != null && sourceContext.IsInheritable && !this.BlockInheritance )
             {
                 Domain = sourceContext.Domain;
                 UserName = sourceContext.UserName;
