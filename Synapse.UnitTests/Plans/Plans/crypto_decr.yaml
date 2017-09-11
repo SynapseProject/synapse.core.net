@@ -42,8 +42,9 @@ Actions:
       Path: Arguments:Expressions[0]:ReplaceWith
       Options: []
     Crypto:
-      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-      KeyContainerName: foo
+      Key:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        ContainerName: foo
       Elements:
       - Type
       - Values:Arguments:ArgString
@@ -76,17 +77,19 @@ Actions:
 
         </CXmlDoc>
       Crypto:
-        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        KeyContainerName: foo
+        Key:
+          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          ContainerName: foo
         Elements:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
   Actions: []
 Crypto:
-  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-  KeyContainerName: foo
+  Key:
+    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+    ContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 9/3/2017 10:25:03 AM
+LastModified: 9/11/2017 12:40:32 AM

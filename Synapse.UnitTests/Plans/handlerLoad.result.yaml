@@ -5,61 +5,57 @@ Actions:
   Handler:
     Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
-    StartInfo: {}
   Result:
-    ExitData: EmptyHandler ExitData default value.
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
+    Status: Failed
+    ExitData: Nullable object must have a value.
+    BranchStatus: Failed
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
       Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
-      StartInfo:
-        ParentExitData: EmptyHandler ExitData default value.
     Result:
-      ExitData: EmptyHandler ExitData default value.
-      SecurityContext: LAPTOP-TK2D9TB6\Steve
+      Status: Failed
+      ExitData: Nullable object must have a value.
+      BranchStatus: Failed
     Parameters: {}
     Actions:
     - Name: SimpleClassName
       Handler:
         Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
-        StartInfo:
-          ParentExitData: EmptyHandler ExitData default value.
       Result:
-        ExitData: EmptyHandler ExitData default value.
-        SecurityContext: LAPTOP-TK2D9TB6\Steve
+        Status: Failed
+        ExitData: Nullable object must have a value.
+        BranchStatus: Failed
       Parameters: {}
       Actions:
       - Name: AbbreviatedClassName
         Handler:
           Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
-          StartInfo:
-            ParentExitData: EmptyHandler ExitData default value.
         Result:
-          ExitData: EmptyHandler ExitData default value.
-          SecurityContext: LAPTOP-TK2D9TB6\Steve
+          Status: Failed
+          ExitData: Nullable object must have a value.
+          BranchStatus: Failed
         Parameters: {}
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
           Handler:
             Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
             Config: {}
-            StartInfo:
-              ParentExitData: EmptyHandler ExitData default value.
           Result:
-            ExitData: EmptyHandler ExitData default value.
-            SecurityContext: LAPTOP-TK2D9TB6\Steve
+            Status: Failed
+            ExitData: Nullable object must have a value.
           Parameters: {}
           Actions: []
-          InstanceId: 14
-        InstanceId: 13
-      InstanceId: 12
-    InstanceId: 11
-  InstanceId: 10
+          InstanceId: 4
+        InstanceId: 3
+      InstanceId: 2
+    InstanceId: 1
 StartInfo: {}
-Result: {}
-LastModified: 9/11/2017 12:40:32 AM
+Result:
+  Status: Failed
+  BranchStatus: Failed
+LastModified: 9/11/2017 12:25:53 AM

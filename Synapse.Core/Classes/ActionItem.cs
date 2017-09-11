@@ -50,7 +50,7 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
         [YamlIgnore]
-        public bool HasValidRunAs { get { return (RunAs?.IsValid).Value; } }
+        public bool HasValidRunAs { get { return RunAs != null && RunAs.IsValid; } }
 
         object ICloneable.Clone()
         {

@@ -75,7 +75,7 @@ namespace Synapse.Core
         {
             if( HasRunAs )
                 RunAs.InheritSettingsIfAllowed( parentSecurityContext );
-            else if( (parentSecurityContext?.IsInheritable).Value )
+            else if( parentSecurityContext != null && parentSecurityContext.IsInheritable )
                 RunAs = parentSecurityContext;
         }
     }
