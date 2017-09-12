@@ -1,0 +1,20 @@
+Name: Test
+Description: Echo Test
+DefaultHandlerType: Synapse.Core:EchoHandler
+IsActive: true
+RunAs:
+  Domain: DESKTOP-WAGUG0
+  UserName: test001
+  Password: password
+Actions:
+- Name: Action001
+  RunAs:
+    Domain: DESKTOP-WAGUG0
+    UserName: test002
+    Password: password
+    IsInheritable: true
+    BlockInheritance: false
+  Actions:
+  - Name: Action002
+    RunAs:
+      IsInheritable: true
