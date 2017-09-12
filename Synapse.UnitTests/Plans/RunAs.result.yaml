@@ -9,13 +9,13 @@ Actions:
   Result:
     Status: Complete
     ExitData: &o0
-      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-      RunAs: &o1
+      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+      RunAs: &o2
         Domain: LAPTOP-TK2D9TB6
-        UserName: synapse0
-        Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
+        UserName: synapse2
+        Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
         IsInheritable: true
-        BlockInheritance: true
+        IsInherited: true
         Crypto:
           Key:
             Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -24,27 +24,9 @@ Actions:
           - Password
           Errors: []
     BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse0
+    SecurityContext: LAPTOP-TK2D9TB6\synapse2
   Parameters: {}
   Actions:
-  - Name: 0.2
-    Handler:
-      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
-      StartInfo:
-        ParentExitData: *o0
-    Result:
-      Status: Complete
-      ExitData:
-        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-        InstanceId: 3
-        ParentExitData: *o0
-        RunAs: *o1
-      BranchStatus: Complete
-      SecurityContext: LAPTOP-TK2D9TB6\synapse0
-    Parameters: {}
-    Actions: []
-    InstanceId: 3
   - Name: 0.1
     Handler:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -57,7 +39,7 @@ Actions:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
         InstanceId: 2
         ParentExitData: *o0
-        RunAs: &o2
+        RunAs: &o1
           Domain: LAPTOP-TK2D9TB6
           UserName: synapse1
           Password: I8fu58fzs220PQdjToRMikTRaB1GsAeVMklLKqLmIXw42eMw9wjIEppJHDu1GI8bDNXVM+qKKIsaZgwdLbSO5oGU85VBLSVBrudeu2DNyUMjPIO3soxlmFpl1WH1jtk04G5EeDzNI/sSd7TYn2H0QSMyoBVkx5R6UAxQ+Pur8/c=
@@ -74,9 +56,27 @@ Actions:
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
     Parameters: {}
     Actions: []
-    RunAs: *o2
+    RunAs: *o1
     InstanceId: 2
-  RunAs: *o1
+  - Name: 0.2
+    Handler:
+      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        ParentExitData: *o0
+    Result:
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+        InstanceId: 3
+        ParentExitData: *o0
+        RunAs: *o2
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\synapse2
+    Parameters: {}
+    Actions: []
+    InstanceId: 3
+  RunAs: *o2
 - Name: 1
   Handler:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -135,4 +135,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 9/10/2017 11:15:35 PM
+LastModified: 9/12/2017 8:32:20 AM
