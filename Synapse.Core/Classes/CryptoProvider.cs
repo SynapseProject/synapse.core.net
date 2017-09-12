@@ -28,7 +28,7 @@ namespace Synapse.Core
 
         public void InheritSettingsIfRequired(CryptoProvider provider, CryptoInheritElementAction inheritElementAction = CryptoInheritElementAction.None)
         {
-            if( provider == null )
+            if( provider?.Key == null )
                 return;
 
             if( Key == null )

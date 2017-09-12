@@ -22,7 +22,7 @@ Actions:
     UserName: synapse0
     Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
     IsInheritable: true
-    BlockInheritance: true
+    BlockInheritance: false
     Crypto:
       Key:
         Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -49,4 +49,4 @@ Actions:
   - Name: 1.1
     RunAs:
       IsInheritable: true
-      BlockInheritance: true
+      BlockInheritance: false

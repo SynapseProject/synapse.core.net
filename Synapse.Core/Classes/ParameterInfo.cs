@@ -40,7 +40,7 @@ namespace Synapse.Core
 
         public CryptoProvider Crypto { get; set; }
         [YamlIgnore]
-        public bool HasCrypto { get { return Crypto != null; } }
+        public bool HasCrypto { get { return Crypto?.Key != null; } }
 
         public string GetSerializedValues(CryptoProvider planCrypto = null)
         {
