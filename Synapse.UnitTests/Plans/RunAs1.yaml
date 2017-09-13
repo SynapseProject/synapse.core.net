@@ -1,4 +1,4 @@
-Name: RunAs
+Name: RunAs1
 Description: Test change of security context
 DefaultHandlerType: Synapse.Core:EchoHandler
 RunAs:

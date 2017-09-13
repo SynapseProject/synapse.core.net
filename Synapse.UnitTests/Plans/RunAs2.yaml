@@ -1,17 +1,17 @@
-Name: Test
+Name: RunAs2
 Description: Echo Test
 DefaultHandlerType: Synapse.Core:EchoHandler
 IsActive: true
 RunAs:
-  Domain: DESKTOP-WAGUG0
-  UserName: test001
-  Password: password
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse1
+  Password: ',^e-2:3mtk3!j-Py'
 Actions:
 - Name: Action001
   RunAs:
-    Domain: DESKTOP-WAGUG0
-    UserName: test002
-    Password: password
+    Domain: LAPTOP-TK2D9TB6
+    UserName: synapse2
+    Password: ',^e-2:3mtk3!j-Py'
     IsInheritable: true
     BlockInheritance: false
   Actions:

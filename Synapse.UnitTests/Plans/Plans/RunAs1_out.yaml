@@ -1,0 +1,57 @@
+Name: RunAs1
+Description: Test change of security context
+Actions:
+- Name: 0
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData: &o0
+      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+      InstanceId: 5
+      RunAs: &o2
+        Domain: LAPTOP-TK2D9TB6
+        UserName: synapse0
+        Password: ',^e-2:3mtk3!j-Py'
+        IsInheritable: true
+        BlockInheritance: true
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse0
+  Parameters: {}
+  Actions:
+  - Name: 0.1
+    Handler:
+      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        ParentExitData: *o0
+    Result:
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+        InstanceId: 6
+        ParentExitData: *o0
+        RunAs: &o1
+          IsInheritable: true
+          BlockInheritance: true
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\Steve
+    Parameters: {}
+    Actions: []
+    RunAs: *o1
+    InstanceId: 6
+  RunAs: *o2
+  InstanceId: 5
+RunAs:
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse2
+  Password: ',^e-2:3mtk3!j-Py'
+  IsInheritable: true
+  BlockInheritance: true
+StartInfo: {}
+Result:
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 9/13/2017 2:04:25 PM

@@ -1,0 +1,67 @@
+Name: RunAs2
+Description: Echo Test
+Actions:
+- Name: Action001
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData: &o0
+      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
+      InstanceId: 7
+      RunAs: &o2
+        Domain: LAPTOP-TK2D9TB6
+        UserName: synapse1
+        Password: ',^e-2:3mtk3!j-Py'
+        IsInheritable: true
+        IsInherited: true
+        Crypto:
+          Elements: []
+          Errors: []
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse1
+  Parameters: {}
+  Actions:
+  - Name: Action002
+    Handler:
+      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        ParentExitData: *o0
+    Result:
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
+        InstanceId: 8
+        ParentExitData: *o0
+        RunAs: &o1
+          Domain: LAPTOP-TK2D9TB6
+          UserName: synapse1
+          Password: ',^e-2:3mtk3!j-Py'
+          IsInheritable: true
+          BlockInheritance: true
+          IsInherited: true
+          Crypto:
+            Elements: []
+            Errors: []
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\synapse1
+    Parameters: {}
+    Actions: []
+    RunAs: *o1
+    InstanceId: 8
+  RunAs: *o2
+  InstanceId: 7
+RunAs:
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse1
+  Password: ',^e-2:3mtk3!j-Py'
+  IsInheritable: true
+  BlockInheritance: true
+StartInfo: {}
+Result:
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 9/13/2017 2:04:25 PM

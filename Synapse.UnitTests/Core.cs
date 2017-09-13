@@ -530,5 +530,53 @@ namespace Synapse.UnitTests
             for( int i = 0; i < exp.Count; i++ )
                 Assert.AreEqual( exp[i], act[i] );
         }
+
+
+        [Test]
+        [Category( "RunAs" )]
+        [TestCase( "RunAs0.yaml" )]
+        [TestCase( "RunAs1.yaml" )]
+        [TestCase( "RunAs2.yaml" )]
+        [TestCase( "RunAs3.yaml" )]
+        [TestCase( "RunAs4.yaml" )]
+        [TestCase( "RunAs5.yaml" )]
+        public void RunAs(string planFile)
+        {
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+            plan.Start( null );
+            File.WriteAllText( $"{__plansOut}\\{plan.Name}_out.yaml", plan.ResultPlan.ToYaml() );
+            //File.WriteAllText( $"{__plansOut}\\{plan.Name}.result.yaml", plan.ResultPlan.ToYaml() );
+
+            //Plan planBase = Plan.FromYaml( $"{__plansOut}\\{plan.Name}.base.yaml" );
+
+            // Assert
+            Dictionary<string, string> expectedRunAs = //new Dictionary<string, string>();
+            YamlHelpers.DeserializeFile<Dictionary<string, string>>( $"{__plansOut}\\{plan.Name}.base.yaml" );
+
+
+            Dictionary<string, string> actualRunAs = new Dictionary<string, string>();
+
+            Stack<List<ActionItem>> actionLists = new Stack<List<ActionItem>>();
+            actionLists.Push( plan.ResultPlan.Actions );
+            while( actionLists.Count > 0 )
+            {
+                List<ActionItem> actions = actionLists.Pop();
+                foreach( ActionItem a in actions )
+                {
+                    actualRunAs.Add( a.Name, a.Result.SecurityContext );
+
+                    if( a.HasActionGroup )
+                        actionLists.Push( new List<ActionItem>( new ActionItem[] { a.ActionGroup } ) );
+                    if( a.HasActions )
+                        actionLists.Push( a.Actions );
+                }
+            }
+
+            //string planResult = plan.ResultPlan.ToYaml();
+
+            Assert.AreEqual( expectedRunAs.Count, actualRunAs.Count );
+            foreach( string key in expectedRunAs.Keys )
+                Assert.AreEqual( expectedRunAs[key].ToLower(), actualRunAs[key].ToLower() );
+        }
     }
 }
