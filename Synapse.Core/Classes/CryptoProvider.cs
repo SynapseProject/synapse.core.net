@@ -25,6 +25,17 @@ namespace Synapse.Core
     public class CryptoProvider
     {
         public CryptoKeyInfo Key { get; set; }
+        [YamlIgnore]
+        public bool HasKey { get { return Key != null && !string.IsNullOrWhiteSpace( Key?.Uri ); } }
+
+        public List<string> Elements { get; set; } = new List<string>();
+        [YamlIgnore]
+        public bool HasElements { get { return Elements != null && Elements?.Count > 0; } }
+
+        public List<string> Errors { get; set; } = new List<string>();
+        [YamlIgnore]
+        public bool HasErrors { get { return Errors != null && Errors?.Count > 0; } }
+
 
         public void InheritSettingsIfRequired(CryptoProvider provider, CryptoInheritElementAction inheritElementAction = CryptoInheritElementAction.None)
         {
@@ -52,9 +63,6 @@ namespace Synapse.Core
             }
         }
 
-        public List<string> Elements { get; set; } = new List<string>();
-
-        public List<string> Errors { get; set; } = new List<string>();
 
 
         #region helper methods

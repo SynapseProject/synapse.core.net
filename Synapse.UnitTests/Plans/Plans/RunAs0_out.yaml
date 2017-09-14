@@ -10,6 +10,7 @@ Actions:
     Status: Complete
     ExitData: &o0
       CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+      InstanceId: 99
       RunAs: &o2
         Domain: LAPTOP-TK2D9TB6
         UserName: synapse2
@@ -37,7 +38,7 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 3
+        InstanceId: 101
         ParentExitData: *o0
         RunAs: &o1
           Domain: LAPTOP-TK2D9TB6
@@ -57,7 +58,7 @@ Actions:
     Parameters: {}
     Actions: []
     RunAs: *o1
-    InstanceId: 3
+    InstanceId: 101
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -68,15 +69,16 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 4
+        InstanceId: 102
         ParentExitData: *o0
         RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse2
     Parameters: {}
     Actions: []
-    InstanceId: 4
+    InstanceId: 102
   RunAs: *o2
+  InstanceId: 99
 - Name: 1
   Handler:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -86,7 +88,7 @@ Actions:
     Status: Complete
     ExitData: &o3
       CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-      InstanceId: 1
+      InstanceId: 100
       RunAs: &o5
         Domain: LAPTOP-TK2D9TB6
         UserName: synapse2
@@ -114,7 +116,7 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 2
+        InstanceId: 103
         ParentExitData: *o3
         RunAs: &o4
           Domain: LAPTOP-TK2D9TB6
@@ -134,8 +136,8 @@ Actions:
     Parameters: {}
     Actions: []
     RunAs: *o4
-    InstanceId: 2
-  InstanceId: 1
+    InstanceId: 103
+  InstanceId: 100
 RunAs: *o5
 Crypto:
   Key: *o6
@@ -145,4 +147,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 9/13/2017 2:04:25 PM
+LastModified: 9/13/2017 11:56:02 PM
