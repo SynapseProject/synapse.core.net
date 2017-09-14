@@ -37,7 +37,7 @@ namespace Synapse.Core
                 _token = IntPtr.Zero;
 
                 SecurityContext sc = this;
-                if( HasCrypto )
+                if( HasCrypto && Crypto.HasElements )
                     sc = GetCryptoValues( crypto, isEncryptMode: false );
 
                 bool ok = LogonUser( sc.UserName, sc.Domain, sc.Password,
