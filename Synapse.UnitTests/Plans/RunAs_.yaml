@@ -11,8 +11,9 @@ Actions:
       UserName: synapse1
       Password: ',^e-2:3mtk3!j-Py'
       Crypto:
-        KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        KeyContainerName: foo
+        Key:
+          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          ContainerName: foo
         Elements:
         - Password
       Inheritable: true
@@ -24,8 +25,9 @@ Actions:
     UserName: synapse0
     Password: ',^e-2:3mtk3!j-Py'
     Crypto:
-      KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-      KeyContainerName: foo
+      Key:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        ContainerName: foo
       Elements:
       - Password
     Inheritable: true
@@ -37,18 +39,20 @@ Actions:
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse2
-  Password: OmwBUBtWKJWKFTeVCHCMEOHNRqtMgjAksRunYE7A/DICYvvLpV5CsVEHfWxxxXJQHIGDtavO0YBvSFb5LwWx43wEsaK+zzoAJkAcBybGtvDv+ADNeVuiahvDywltWuRdWhf+CBA9HaIiwL6sNhcwbvPX3z8Zpp7Cp9WFWv1/oR0=
+  Password: ',^e-2:3mtk3!j-Py'
   Crypto:
-    KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    KeyContainerName: foo
+    Key:
+      Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+      ContainerName: foo
     Elements:
     - Password
     Errors: []
   Inheritable: true
   AllowInheritance: true
 Crypto:
-  KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-  KeyContainerName: foo
+  Key:
+    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+    ContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}

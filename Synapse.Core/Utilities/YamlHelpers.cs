@@ -305,6 +305,9 @@ namespace Synapse.Core.Utilities
 
         public static Plan HandlePlanCrypto(Plan p, bool isEncryptMode = true)
         {
+            if( p.HasRunAs && p.RunAs.HasCrypto )
+                p.RunAs = p.RunAs.GetCryptoValues( p.RunAs.Crypto, isEncryptMode );
+
             Stack<IEnumerable<ActionItem>> actionLists = new Stack<IEnumerable<ActionItem>>();
             actionLists.Push( p.Actions );
 
