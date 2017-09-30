@@ -1,4 +1,4 @@
-Name: RunAs0
+Name: RunAs
 Description: Test change of security context
 DefaultHandlerType: Synapse.Core:EchoHandler
 Actions:
@@ -9,7 +9,7 @@ Actions:
     RunAs:
       Domain: LAPTOP-TK2D9TB6
       UserName: synapse1
-      Password: I8fu58fzs220PQdjToRMikTRaB1GsAeVMklLKqLmIXw42eMw9wjIEppJHDu1GI8bDNXVM+qKKIsaZgwdLbSO5oGU85VBLSVBrudeu2DNyUMjPIO3soxlmFpl1WH1jtk04G5EeDzNI/sSd7TYn2H0QSMyoBVkx5R6UAxQ+Pur8/c=
+      Password: KWntj9kzlSly0KsRF3DQK3tCKwsvmXV9vd33/IbIl+KRedIYk6DC3dlKQigfby0XT19QUOnldQzm0pX72+hWdfy+7CsAi+ayjTMBR/yiET6PBSQbxGGXyDPxfuXsLtWZnSS6+HVFJXi6719TVwp5R2dvyuqod49rFqsGkGHnhHo=
       IsInheritable: true
       BlockInheritance: true
       Crypto:
@@ -23,7 +23,7 @@ Actions:
   RunAs:
     Domain: LAPTOP-TK2D9TB6
     UserName: synapse0
-    Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
+    Password: NFMjykp1JBm/61sgEBav7Y34AD2nAh7eIShU2NF7B6iEL1ecLZbFvmI1Yzf+s3kBJFE3GQdOIUnPTeuiN7S+XeP0vMpIqprEk41ZoK+vrW/ivreZaKZTIwSMbaZ88fF7X7OvhhZiwKOXcm2jhqLT2SoQcFbV5Jre2Es7KkTWeUE=
     IsInheritable: true
     BlockInheritance: true
     Crypto:
@@ -36,12 +36,10 @@ Actions:
   Actions:
   - Name: 1.1
     Actions: []
-    RunAs:
-      IsInheritable: true
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse2
-  Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+  Password: LT2i70voTqNWTog93sVODpGnr/GeA2fff55Yg/7Sj+ztogC6PSEh8GSbFCKdxIWrnA5YNvYhUnba+oQsulUNdURl3MN8bmRvEsTdgmWL7PETTsLOE6exlxx2DG10+YwPXvP5y4abfQ2y1zgtJg433+VVtPgoxc5FxIQJpeDqvq8=
   IsInheritable: true
   BlockInheritance: true
   Crypto:
@@ -57,4 +55,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 9/29/2017 5:35:10 AM
+LastModified: 5/15/2017 7:07:42 AM
