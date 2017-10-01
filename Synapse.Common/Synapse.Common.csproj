@@ -59,6 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\FileEnumerator\AboutBase.cs" />
+    <Compile Include="Classes\FileEnumerator\FileData.cs" />
+    <Compile Include="Classes\FileEnumerator\VersionData.cs" />
     <Compile Include="Classes\Impersonation\Impersonator.cs" />
     <Compile Include="Classes\Logging\FileAppender.cs" />
     <Compile Include="Classes\Logging\LogUtility.cs" />
