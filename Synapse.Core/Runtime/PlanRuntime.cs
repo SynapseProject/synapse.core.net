@@ -157,7 +157,7 @@ namespace Synapse.Core
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
-                    ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup );
+                    ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup, parentResult.ExitData );
                     foreach( ActionItem ai in resolvedParmsActionGroup )
                         ai.Parameters.ForEach = null;
 
@@ -232,7 +232,7 @@ namespace Synapse.Core
 
             List<ActionItem> resolvedParmsActions = new List<ActionItem>();
             Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
-                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions )
+                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions, parentResult.ExitData )
             );
 
             Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
@@ -459,7 +459,7 @@ namespace Synapse.Core
         {
             ExecuteResult returnResult = new ExecuteResult();
 
-            ResolveConfigAndParameters( a, dynamicData );
+            ResolveConfigAndParameters( a, dynamicData, parentExitData );
 
             IHandlerRuntime rt = CreateHandlerRuntime( a );
             rt.Progress += rt_Progress;
@@ -548,12 +548,12 @@ namespace Synapse.Core
 
 
         #region utility methods
-        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData)
+        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, object parentExitData)
         {
             List<ActionItem> resolvedActions = null;
-            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions );
+            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
         }
-        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions)
+        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions, object parentExitData)
         {
             bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
             if( cancel )
@@ -562,7 +562,7 @@ namespace Synapse.Core
                 return;
             }
 
-            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions );
+            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
         }
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)

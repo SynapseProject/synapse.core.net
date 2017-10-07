@@ -110,15 +110,29 @@ namespace Synapse.Core.Utilities
             if( values == null || (values != null && values.Count == 0) )
                 return;
 
-            //Dictionary<object, object> p = ConvertDynamicValuesToDictionary_xx( patch, values );
-            //ApplyPatchValues_xx( source, p );
-
             foreach( DynamicValue dv in dynamicValues )
             {
                 if( values.ContainsKey( dv.Name ) )
                 {
                     Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, values[dv.Name] );
                     ApplyPatchValues( source, patch, dv );
+                }
+            }
+        }
+
+        public static void Merge(ref Dictionary<object, object> source, List<ParentExitDataValue> parentExitData, Dictionary<object, object> values)
+        {
+            //if there's nothing to do, get out!
+            if( values == null || (values != null && values.Count == 0) )
+                return;
+
+            foreach( ParentExitDataValue ped in parentExitData )
+            {
+                if( values.ContainsKey( ped.Name ) )
+                {
+                    object element = SelectElements( values, new List<string>() { ped.Source } );
+                    Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element?.ToString() );
+                    ApplyPatchValues( source, patch, null );
                 }
             }
         }

@@ -7,14 +7,14 @@ namespace Synapse.Core
     public partial class ActionItem
     {
         public void ResolveConfigAndParameters(Dictionary<string, string> dynamicData,
-            Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets)
+            Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
             List<ActionItem> resolvedActions = null;
-            ResolveConfigAndParameters( dynamicData, globalConfigSets, globalParamSets, ref resolvedActions );
+            ResolveConfigAndParameters( dynamicData, globalConfigSets, globalParamSets, ref resolvedActions, parentExitData );
         }
 
         public void ResolveConfigAndParameters(Dictionary<string, string> dynamicData,
-            Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets, ref List<ActionItem> resolvedActions)
+            Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets, ref List<ActionItem> resolvedActions, object parentExitData)
         {
             if( Handler == null )
                 Handler = new HandlerInfo();
@@ -26,7 +26,7 @@ namespace Synapse.Core
                 if( globalConfigSets != null && c.HasInheritFrom && globalConfigSets.Keys.Contains( c.InheritFrom ) )
                     c.InheritedValues = globalConfigSets[c.InheritFrom];
 
-                c.Resolve( out forEachConfigs, dynamicData );
+                c.Resolve( out forEachConfigs, dynamicData, parentExitData );
 
                 if( globalConfigSets != null && c.HasName )
                     globalConfigSets[c.Name] = c;
@@ -44,7 +44,7 @@ namespace Synapse.Core
                 if( globalParamSets != null && p.HasInheritFrom && globalParamSets.Keys.Contains( p.InheritFrom ) )
                     p.InheritedValues = globalParamSets[p.InheritFrom];
 
-                p.Resolve( out forEachParms, dynamicData );
+                p.Resolve( out forEachParms, dynamicData, parentExitData );
 
                 if( globalParamSets != null && p.HasName )
                     globalParamSets[p.Name] = p;
