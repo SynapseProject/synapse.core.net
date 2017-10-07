@@ -38,6 +38,10 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasDynamic { get { return Dynamic != null && Dynamic.Count > 0; } }
 
+        public List<ParentExitDataValue> ParentExitData { get; set; }
+        [YamlIgnore]
+        public bool HasParentExitData { get { return ParentExitData != null && ParentExitData.Count > 0; } }
+
         public CryptoProvider Crypto { get; set; }
         [YamlIgnore]
         public bool HasCrypto { get { return Crypto != null; } }
@@ -98,10 +102,18 @@ namespace Synapse.Core
                 Crypto = CryptoProvider.CreateSample(),
                 Values = "Custom values as defined by Handler/Provider"
             };
-            p.Dynamic = new List<DynamicValue>();
-            p.Dynamic.Add( DynamicValue.CreateSample() );
-            p.ForEach = new List<ForEach>();
-            p.ForEach.Add( Core.ForEach.CreateSample() );
+            p.Dynamic = new List<DynamicValue>
+            {
+                DynamicValue.CreateSample()
+            };
+            p.ParentExitData = new List<ParentExitDataValue>()
+            {
+                ParentExitDataValue.CreateSample()
+            };
+            p.ForEach = new List<ForEach>
+            {
+                Core.ForEach.CreateSample()
+            };
 
             return p;
         }
