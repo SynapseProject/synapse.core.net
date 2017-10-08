@@ -128,12 +128,14 @@ namespace Synapse.Core.Utilities
 
             foreach( ParentExitDataValue ped in parentExitData )
             {
-                if( values.ContainsKey( ped.Name ) )
-                {
-                    object element = SelectElements( values, new List<string>() { ped.Source } );
-                    Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element?.ToString() );
-                    ApplyPatchValues( source, patch, null );
-                }
+                string[] path = ped.Source?.Split( ':' );
+                if( path.Length > 0 )
+                    if( values.ContainsKey( path[0] ) )
+                    {
+                        object element = SelectElements( values, new List<string>() { ped.Source } );
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element?.ToString() );
+                        ApplyPatchValues( source, patch, null );
+                    }
             }
         }
 
@@ -334,7 +336,7 @@ namespace Synapse.Core.Utilities
                     if( a.HasRunAs && a.RunAs.HasCrypto )
                         a.RunAs = a.RunAs.GetCryptoValues( p.Crypto, isEncryptMode );
                     if( a.Handler != null && a.Handler.HasConfig && a.Handler.Config.HasCrypto )
-                        a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode  );
+                        a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode );
                     if( a.HasParameters && a.Parameters.HasCrypto )
                         a.Parameters = a.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
 
