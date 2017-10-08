@@ -5,7 +5,6 @@ namespace Synapse.Core
 {
     public class ParentExitDataValue
     {
-        public string Name { get; set; }
         public string Source { get; set; }
         public SerializationType SourceType { get; set; }
         public string Destination { get; set; }
@@ -15,7 +14,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return $"[{Name}]::[{Source}]::[{SourceType}]::[{Destination}]::[{Replace}]::[{Encode}]::[{CastToForEachValues}]";
+            return $"[[{Source}]::[{SourceType}]::[{Destination}]::[{Replace}]::[{Encode}]::[{CastToForEachValues}]";
         }
 
 
@@ -23,7 +22,6 @@ namespace Synapse.Core
         {
             ParentExitDataValue dv = new ParentExitDataValue()
             {
-                Name = "URI parameter name",
                 Source = "Element:IndexedElement[0]:Element",
                 SourceType = SerializationType.Yaml,
                 Destination = "Element:IndexedElement[0]:Element",

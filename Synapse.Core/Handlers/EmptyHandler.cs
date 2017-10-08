@@ -32,5 +32,5 @@ public class EmptyHandlerParameters
 
     public int SleepMilliseconds { get; set; }
     public StatusType ReturnStatus { get; set; }
-    public string ExitData { get; set; }
+    public object ExitData { get; set; }
 }
