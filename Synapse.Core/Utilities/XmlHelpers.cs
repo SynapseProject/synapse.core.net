@@ -216,18 +216,12 @@ namespace Synapse.Core.Utilities
                             dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
                     else
                     {
-                        string xml = XPathToNode( ped.Destination, value );
+                        XmlDocument patch = XPathToXmlDocument( ped.Destination, value );
 
                         if( destination.DocumentElement == null )
-                            destination.LoadXml( xml );
+                            destination.LoadXml( patch.OuterXml );
                         else
-                        {
-                            XmlDocument merge = new XmlDocument();
-                            merge.LoadXml( xml );
-                            XmlNode m = merge.SelectSingleNode( ped.Destination );
-                            XmlNode imported = destination.ImportNode( m, true );
-                            destination.DocumentElement.AppendChild( imported );
-                        }
+                            Merge( ref destination, patch );
                     }
                 }
             }
@@ -249,16 +243,31 @@ namespace Synapse.Core.Utilities
             return value;
         }
 
-        static string XPathToNode(string xpath, string value)
+        //todo: this feels insufficient: it only handles simple element/attribute syntax
+        static XmlDocument XPathToXmlDocument(string xpath, string value)
         {
             StringBuilder xml = new StringBuilder();
+
+            //remove indexes, get path parts
+            xpath = Regex.Replace( xpath, @"\[\d\]", string.Empty );
             string[] branches = xpath.Split( new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries );
-            foreach(string branch in branches)
+
+            //create the opening tags
+            foreach( string branch in branches )
                 xml.Append( branch.StartsWith( "@" ) ? $" {branch}=\"" : $"<{branch}>" );
+
+            //include the 'value'
             xml.Append( value );
-            for(int i = branches.Length-1; i>=0; i--)
+
+            //create the closing tags
+            for( int i = branches.Length - 1; i >= 0; i-- )
                 xml.Append( branches[i].StartsWith( "@" ) ? $"\"" : $"</{branches[i]}>" );
-            return xml.ToString();
+
+            //create the return doc
+            XmlDocument merge = new XmlDocument();
+            merge.LoadXml( xml.ToString() );
+
+            return merge;
         }
         #endregion
 
