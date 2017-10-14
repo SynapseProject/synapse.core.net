@@ -72,39 +72,45 @@ namespace Synapse.Core.Utilities
         //todo: rewrite to calc all xpaths upfront, then select/update from source
         public static void Merge(ref XmlDocument source, XmlDocument patch)
         {
-            foreach( XmlNode node in patch.DocumentElement.ChildNodes )
+            if( source.DocumentElement == null )
+                source.LoadXml( patch.OuterXml );
+            else
             {
-                string xpath = FindXPath( node );
-                XmlNode src = source.SelectSingleNode( xpath );
-                if( src == null )
-                {
-                    XmlNode imported = source.ImportNode( node, true );
-                    source.DocumentElement.AppendChild( imported );
-                }
-            }
-
-            Stack<IEnumerable> lists = new Stack<IEnumerable>();
-            lists.Push( patch.ChildNodes );
-
-            while( lists.Count > 0 )
-            {
-                IEnumerable list = lists.Pop();
-                foreach( XmlNode node in list )
+                foreach( XmlNode node in patch.DocumentElement.ChildNodes )
                 {
                     string xpath = FindXPath( node );
                     XmlNode src = source.SelectSingleNode( xpath );
+                    if( src == null )
+                    {
+                        XmlNode imported = source.ImportNode( node, true );
+                        source.DocumentElement.AppendChild( imported );
+                    }
+                }
 
-                    if( src != null && src.Value != node.Value )
-                        if( src.NodeType == XmlNodeType.Element )
-                            src.InnerText = node.InnerText;
-                        else
-                            src.Value = node.Value;
+                //loop through all the nodes/attributes and sync the values
+                Stack<IEnumerable> lists = new Stack<IEnumerable>();
+                lists.Push( patch.ChildNodes );
 
-                    if( node.Attributes != null )
-                        lists.Push( node.Attributes );
+                while( lists.Count > 0 )
+                {
+                    IEnumerable list = lists.Pop();
+                    foreach( XmlNode node in list )
+                    {
+                        string xpath = FindXPath( node );
+                        XmlNode src = source.SelectSingleNode( xpath );
 
-                    if( node.ChildNodes.Count > 0 )
-                        lists.Push( node.ChildNodes );
+                        if( src != null && src.Value != node.Value )
+                            if( src.NodeType == XmlNodeType.Element )
+                                src.InnerText = node.InnerText;
+                            else
+                                src.Value = node.Value;
+
+                        if( node.Attributes != null )
+                            lists.Push( node.Attributes );
+
+                        if( node.ChildNodes.Count > 0 )
+                            lists.Push( node.ChildNodes );
+                    }
                 }
             }
         }
@@ -190,20 +196,69 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static string RegexReplaceOrValue(string input, string replacement, DynamicValue dv)
+        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, XmlDocument values)
+        {
+            foreach( ParentExitDataValue ped in parentExitData )
+            {
+                string value = null;
+                XmlNode src = values.SelectSingleNode( ped.Source );
+                if( src != null )
+                {
+                    if( src.NodeType == XmlNodeType.Element )
+                        value = src.InnerText;
+                    else
+                        value = src.Value;
+                    XmlNode dst = destination.SelectSingleNode( ped.Destination );
+                    if( dst != null )
+                        if( dst.NodeType == XmlNodeType.Element )
+                            dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
+                        else
+                            dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
+                    else
+                    {
+                        string xml = XPathToNode( ped.Destination, value );
+
+                        if( destination.DocumentElement == null )
+                            destination.LoadXml( xml );
+                        else
+                        {
+                            XmlDocument merge = new XmlDocument();
+                            merge.LoadXml( xml );
+                            XmlNode m = merge.SelectSingleNode( ped.Destination );
+                            XmlNode imported = destination.ImportNode( m, true );
+                            destination.DocumentElement.AppendChild( imported );
+                        }
+                    }
+                }
+            }
+        }
+
+        internal static string RegexReplaceOrValue(string input, string replacement, IReplacementValueOptions rv)
         {
             string value = replacement;
 
-            if( dv != null )
+            if( rv != null )
             {
-                if( !string.IsNullOrWhiteSpace( dv.Replace ) )
-                    value = Regex.Replace( input, dv.Replace, replacement, RegexOptions.IgnoreCase );
+                if( !string.IsNullOrWhiteSpace( rv.Replace ) )
+                    value = Regex.Replace( input, rv.Replace, replacement, RegexOptions.IgnoreCase );
 
-                if( !string.IsNullOrWhiteSpace( dv.Encode ) && dv.Encode.ToLower() == "base64" )
+                if( !string.IsNullOrWhiteSpace( rv.Encode ) && rv.Encode.ToLower() == "base64" )
                     value = CryptoHelpers.Encode( value );
             }
 
             return value;
+        }
+
+        static string XPathToNode(string xpath, string value)
+        {
+            StringBuilder xml = new StringBuilder();
+            string[] branches = xpath.Split( new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries );
+            foreach(string branch in branches)
+                xml.Append( branch.StartsWith( "@" ) ? $" {branch}=\"" : $"<{branch}>" );
+            xml.Append( value );
+            for(int i = branches.Length-1; i>=0; i--)
+                xml.Append( branches[i].StartsWith( "@" ) ? $"\"" : $"</{branches[i]}>" );
+            return xml.ToString();
         }
         #endregion
 

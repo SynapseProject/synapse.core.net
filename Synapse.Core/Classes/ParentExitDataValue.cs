@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Synapse.Core
 {
-    public class ParentExitDataValue
+    public class ParentExitDataValue : IReplacementValueOptions
     {
         public string Source { get; set; }
-        public SerializationType SourceType { get; set; }
+        //public SerializationType SourceType { get; set; }
         public string Destination { get; set; }
         public string Replace { get; set; }
         public string Encode { get; set; }
@@ -14,7 +14,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return $"[[{Source}]::[{SourceType}]::[{Destination}]::[{Replace}]::[{Encode}]::[{CastToForEachValues}]";
+            return $"[[{Source}]::[{Destination}]::[{Replace}]::[{Encode}]::[{CastToForEachValues}]";
         }
 
 
@@ -23,7 +23,7 @@ namespace Synapse.Core
             ParentExitDataValue dv = new ParentExitDataValue()
             {
                 Source = "Element:IndexedElement[0]:Element",
-                SourceType = SerializationType.Yaml,
+                //SourceType = SerializationType.Yaml,
                 Destination = "Element:IndexedElement[0]:Element",
                 Replace = "Regex expression",
                 Encode = "Base64"
