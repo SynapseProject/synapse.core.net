@@ -253,15 +253,21 @@ namespace Synapse.Core.Utilities
             string[] branches = xpath.Split( new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries );
 
             //create the opening tags
-            foreach( string branch in branches )
-                xml.Append( branch.StartsWith( "@" ) ? $" {branch}=\"" : $"<{branch}>" );
+            for( int i = 0; i < branches.Length; i++ )
+            {
+                string cur = branches[i];
+                bool nextIsAttr = i + 1 < branches.Length && branches[i + 1].StartsWith( "@" );
+                string tag = nextIsAttr ? " " : ">";
+                xml.Append( cur.StartsWith( "@" ) ? $" {cur.Replace( "@", string.Empty )}=\"{value}\">" : $"<{cur}{tag}" );
+            }
 
             //include the 'value'
-            xml.Append( value );
+            if( !branches[branches.Length - 1].StartsWith( "@" ) )
+                xml.Append( value );
 
             //create the closing tags
             for( int i = branches.Length - 1; i >= 0; i-- )
-                xml.Append( branches[i].StartsWith( "@" ) ? $"\"" : $"</{branches[i]}>" );
+                xml.Append( branches[i].StartsWith( "@" ) ? string.Empty : $"</{branches[i]}>" );
 
             //create the return doc
             XmlDocument merge = new XmlDocument();
