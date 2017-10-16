@@ -39,6 +39,96 @@ Actions:
           CNode3_2: CValue3_2_inline
 
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 90
+      IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Name: pnode0Dynamic
+      Path: PNode0
+      Options: []
+    - Name: pnode2_1Dynamic
+      Path: PNode2:PNode2_1
+      Options: []
+    - Name: pnode3_1Dynamic
+      Path: PNode3:PNode3_1
+      Options: []
+  Actions: []
+  InstanceId: 90
+- Name: ac1
+  Description: No Parameters declaration
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config:
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+    StartInfo: {}
+  Result:
+    Status: Complete
+    ExitData:
+      Config: >+
+        CNode0: CValue0_inline
+
+        CNode1: CValue1_inline
+
+        CNode3:
+
+          CNode3_1: CValue3_1_inline
+
+          CNode3_2: CValue3_2_inline
+
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 91
+      IsDryRun: true
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  Parameters: {}
+  Actions: []
+  InstanceId: 91
+- Name: ac2
+  Description: No Handler declaration
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
       InstanceId: 92
       IsDryRun: true
       Parameters: >+
@@ -74,32 +164,15 @@ Actions:
       Options: []
   Actions: []
   InstanceId: 92
-- Name: ac1
-  Description: No Parameters declaration
+- Name: ac3
+  Description: Has Handler, but no Handler.Config.  No Parameters
   Handler:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config:
-      Values:
-        CNode0: CValue0_inline
-        CNode1: CValue1_inline
-        CNode3:
-          CNode3_1: CValue3_1_inline
-          CNode3_2: CValue3_2_inline
+    Config: {}
     StartInfo: {}
   Result:
     Status: Complete
     ExitData:
-      Config: >+
-        CNode0: CValue0_inline
-
-        CNode1: CValue1_inline
-
-        CNode3:
-
-          CNode3_1: CValue3_1_inline
-
-          CNode3_2: CValue3_2_inline
-
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
       InstanceId: 93
       IsDryRun: true
@@ -108,8 +181,8 @@ Actions:
   Parameters: {}
   Actions: []
   InstanceId: 93
-- Name: ac2
-  Description: No Handler declaration
+- Name: ac4
+  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
   Handler:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
@@ -164,79 +237,6 @@ Actions:
       Options: []
   Actions: []
   InstanceId: 94
-- Name: ac3
-  Description: Has Handler, but no Handler.Config.  No Parameters
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo: {}
-  Result:
-    Status: Complete
-    ExitData:
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 95
-      IsDryRun: true
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  Parameters: {}
-  Actions: []
-  InstanceId: 95
-- Name: ac4
-  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-  Result:
-    Status: Complete
-    ExitData:
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 96
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  Parameters:
-    Name: myYamlParms
-    Values:
-      PNode0: PValue0_inline
-      PNode1: PValue1_inline
-      PNode3:
-        PNode3_1: PValue3_1_inline
-        PNode3_2: PValue3_2_inline
-    Dynamic:
-    - Name: pnode0Dynamic
-      Path: PNode0
-      Options: []
-    - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
-      Options: []
-    - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
-      Options: []
-  Actions: []
-  InstanceId: 96
 - Name: ac5
   Description: No Handler declaration, partially formed Parameters
   Handler:
@@ -250,7 +250,7 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 97
+      InstanceId: 95
       IsDryRun: true
       Parameters: >+
         {}
@@ -271,7 +271,7 @@ Actions:
       Path: PNode3:PNode3_1
       Options: []
   Actions: []
-  InstanceId: 97
+  InstanceId: 95
 - Name: ''
   Description: No Name, no declaration at all
   Handler:
@@ -282,15 +282,15 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 98
+      InstanceId: 96
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
   Parameters: {}
   Actions: []
-  InstanceId: 98
+  InstanceId: 96
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 9/28/2017 3:40:41 PM
+LastModified: 10/16/2017 5:24:53 PM
