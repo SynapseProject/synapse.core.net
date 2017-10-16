@@ -101,7 +101,10 @@ namespace Synapse.Core.Utilities
 
                         if( src != null && src.Value != node.Value )
                             if( src.NodeType == XmlNodeType.Element )
-                                src.InnerText = node.InnerText;
+                                if( src.SelectNodes( "*" ).Count > 0 )
+                                    src.InnerXml = node.InnerXml;
+                                else
+                                    src.InnerText = node.InnerText;
                             else
                                 src.Value = node.Value;
 
@@ -189,7 +192,10 @@ namespace Synapse.Core.Utilities
                     XmlNode src = source.SelectSingleNode( dv.Path );
                     if( src != null )
                         if( src.NodeType == XmlNodeType.Element )
-                            src.InnerText = RegexReplaceOrValue( src.InnerText, values[dv.Name], dv );
+                            if( src.SelectNodes( "*" ).Count > 0 )
+                                src.InnerXml = RegexReplaceOrValue( src.InnerXml, values[dv.Name], dv );
+                            else
+                                src.InnerText = RegexReplaceOrValue( src.InnerText, values[dv.Name], dv );
                         else
                             src.Value = RegexReplaceOrValue( src.Value, values[dv.Name], dv );
                 }
@@ -205,13 +211,19 @@ namespace Synapse.Core.Utilities
                 if( src != null )
                 {
                     if( src.NodeType == XmlNodeType.Element )
-                        value = src.InnerText;
+                        if( src.SelectNodes( "*" ).Count > 0 )
+                            value = src.InnerXml;
+                        else
+                            value = src.InnerText;
                     else
                         value = src.Value;
                     XmlNode dst = destination.SelectSingleNode( ped.Destination );
                     if( dst != null )
                         if( dst.NodeType == XmlNodeType.Element )
-                            dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
+                            if( src.SelectNodes( "*" ).Count > 0 )
+                                dst.InnerXml = RegexReplaceOrValue( dst.InnerXml, value, ped );
+                            else
+                                dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
                         else
                             dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
                     else
@@ -301,7 +313,10 @@ namespace Synapse.Core.Utilities
                 XmlNode src = source.SelectSingleNode( fe.Path );
                 if( src != null )
                     if( src.NodeType == XmlNodeType.Element )
-                        src.InnerText = v;
+                        if( src.SelectNodes( "*" ).Count > 0 )
+                            src.InnerXml = v;
+                        else
+                            src.InnerText = v;
                     else
                         src.Value = v;
 
@@ -334,7 +349,10 @@ namespace Synapse.Core.Utilities
                         if( src != null )
                         {
                             if( src.NodeType == XmlNodeType.Element )
-                                src.InnerText = c.Crypto.SafeHandleCrypto( src.InnerText );
+                                if( src.SelectNodes( "*" ).Count > 0 )
+                                    src.InnerXml = c.Crypto.SafeHandleCrypto( src.InnerXml );
+                                else
+                                    src.InnerText = c.Crypto.SafeHandleCrypto( src.InnerText );
                             else
                                 src.Value = c.Crypto.SafeHandleCrypto( src.Value );
                         }
