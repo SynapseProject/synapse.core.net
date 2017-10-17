@@ -29,10 +29,13 @@ namespace Synapse.Core
         List<DynamicValue> Dynamic { get; set; }
         bool HasDynamic { get; }
 
+        List<ParentExitDataValue> ParentExitData { get; set; }
+        bool HasParentExitData { get; }
+
         ParameterInfo GetCryptoValues(CryptoProvider crypto = null, bool isEncryptMode = true);
 
         string GetSerializedValues(CryptoProvider crypto = null);
 
-        object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null);
+        object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null);
     }
 }

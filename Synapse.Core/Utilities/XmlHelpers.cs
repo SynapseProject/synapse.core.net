@@ -72,39 +72,48 @@ namespace Synapse.Core.Utilities
         //todo: rewrite to calc all xpaths upfront, then select/update from source
         public static void Merge(ref XmlDocument source, XmlDocument patch)
         {
-            foreach( XmlNode node in patch.DocumentElement.ChildNodes )
+            if( source.DocumentElement == null )
+                source.LoadXml( patch.OuterXml );
+            else
             {
-                string xpath = FindXPath( node );
-                XmlNode src = source.SelectSingleNode( xpath );
-                if( src == null )
-                {
-                    XmlNode imported = source.ImportNode( node, true );
-                    source.DocumentElement.AppendChild( imported );
-                }
-            }
-
-            Stack<IEnumerable> lists = new Stack<IEnumerable>();
-            lists.Push( patch.ChildNodes );
-
-            while( lists.Count > 0 )
-            {
-                IEnumerable list = lists.Pop();
-                foreach( XmlNode node in list )
+                foreach( XmlNode node in patch.DocumentElement.ChildNodes )
                 {
                     string xpath = FindXPath( node );
                     XmlNode src = source.SelectSingleNode( xpath );
+                    if( src == null )
+                    {
+                        XmlNode imported = source.ImportNode( node, true );
+                        source.DocumentElement.AppendChild( imported );
+                    }
+                }
 
-                    if( src != null && src.Value != node.Value )
-                        if( src.NodeType == XmlNodeType.Element )
-                            src.InnerText = node.InnerText;
-                        else
-                            src.Value = node.Value;
+                //loop through all the nodes/attributes and sync the values
+                Stack<IEnumerable> lists = new Stack<IEnumerable>();
+                lists.Push( patch.ChildNodes );
 
-                    if( node.Attributes != null )
-                        lists.Push( node.Attributes );
+                while( lists.Count > 0 )
+                {
+                    IEnumerable list = lists.Pop();
+                    foreach( XmlNode node in list )
+                    {
+                        string xpath = FindXPath( node );
+                        XmlNode src = source.SelectSingleNode( xpath );
 
-                    if( node.ChildNodes.Count > 0 )
-                        lists.Push( node.ChildNodes );
+                        if( src != null && src.Value != node.Value )
+                            if( src.NodeType == XmlNodeType.Element )
+                                if( src.SelectNodes( "*" ).Count > 0 )
+                                    src.InnerXml = node.InnerXml;
+                                else
+                                    src.InnerText = node.InnerText;
+                            else
+                                src.Value = node.Value;
+
+                        if( node.Attributes != null )
+                            lists.Push( node.Attributes );
+
+                        if( node.ChildNodes.Count > 0 )
+                            lists.Push( node.ChildNodes );
+                    }
                 }
             }
         }
@@ -183,27 +192,100 @@ namespace Synapse.Core.Utilities
                     XmlNode src = source.SelectSingleNode( dv.Path );
                     if( src != null )
                         if( src.NodeType == XmlNodeType.Element )
-                            src.InnerText = RegexReplaceOrValue( src.InnerText, values[dv.Name], dv );
+                            if( src.SelectNodes( "*" ).Count > 0 )
+                                src.InnerXml = RegexReplaceOrValue( src.InnerXml, values[dv.Name], dv );
+                            else
+                                src.InnerText = RegexReplaceOrValue( src.InnerText, values[dv.Name], dv );
                         else
                             src.Value = RegexReplaceOrValue( src.Value, values[dv.Name], dv );
                 }
             }
         }
 
-        internal static string RegexReplaceOrValue(string input, string replacement, DynamicValue dv)
+        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, XmlDocument values)
+        {
+            foreach( ParentExitDataValue ped in parentExitData )
+            {
+                string value = null;
+                XmlNode src = values.SelectSingleNode( ped.Source );
+                if( src != null )
+                {
+                    if( src.NodeType == XmlNodeType.Element )
+                        if( src.SelectNodes( "*" ).Count > 0 )
+                            value = src.InnerXml;
+                        else
+                            value = src.InnerText;
+                    else
+                        value = src.Value;
+                    XmlNode dst = destination.SelectSingleNode( ped.Destination );
+                    if( dst != null )
+                        if( dst.NodeType == XmlNodeType.Element )
+                            if( src.SelectNodes( "*" ).Count > 0 )
+                                dst.InnerXml = RegexReplaceOrValue( dst.InnerXml, value, ped );
+                            else
+                                dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
+                        else
+                            dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
+                    else
+                    {
+                        XmlDocument patch = XPathToXmlDocument( ped.Destination, value );
+
+                        if( destination.DocumentElement == null )
+                            destination.LoadXml( patch.OuterXml );
+                        else
+                            Merge( ref destination, patch );
+                    }
+                }
+            }
+        }
+
+        internal static string RegexReplaceOrValue(string input, string replacement, IReplacementValueOptions rv)
         {
             string value = replacement;
 
-            if( dv != null )
+            if( rv != null )
             {
-                if( !string.IsNullOrWhiteSpace( dv.Replace ) )
-                    value = Regex.Replace( input, dv.Replace, replacement, RegexOptions.IgnoreCase );
+                if( !string.IsNullOrWhiteSpace( rv.Replace ) )
+                    value = Regex.Replace( input, rv.Replace, replacement, RegexOptions.IgnoreCase );
 
-                if( !string.IsNullOrWhiteSpace( dv.Encode ) && dv.Encode.ToLower() == "base64" )
+                if( !string.IsNullOrWhiteSpace( rv.Encode ) && rv.Encode.ToLower() == "base64" )
                     value = CryptoHelpers.Encode( value );
             }
 
             return value;
+        }
+
+        //todo: this feels insufficient: it only handles simple element/attribute syntax
+        static XmlDocument XPathToXmlDocument(string xpath, string value)
+        {
+            StringBuilder xml = new StringBuilder();
+
+            //remove indexes, get path parts
+            xpath = Regex.Replace( xpath, @"\[\d\]", string.Empty );
+            string[] branches = xpath.Split( new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries );
+
+            //create the opening tags
+            for( int i = 0; i < branches.Length; i++ )
+            {
+                string cur = branches[i];
+                bool nextIsAttr = i + 1 < branches.Length && branches[i + 1].StartsWith( "@" );
+                string tag = nextIsAttr ? " " : ">";
+                xml.Append( cur.StartsWith( "@" ) ? $" {cur.Replace( "@", string.Empty )}=\"{value}\">" : $"<{cur}{tag}" );
+            }
+
+            //include the 'value'
+            if( !branches[branches.Length - 1].StartsWith( "@" ) )
+                xml.Append( value );
+
+            //create the closing tags
+            for( int i = branches.Length - 1; i >= 0; i-- )
+                xml.Append( branches[i].StartsWith( "@" ) ? string.Empty : $"</{branches[i]}>" );
+
+            //create the return doc
+            XmlDocument merge = new XmlDocument();
+            merge.LoadXml( xml.ToString() );
+
+            return merge;
         }
         #endregion
 
@@ -231,7 +313,10 @@ namespace Synapse.Core.Utilities
                 XmlNode src = source.SelectSingleNode( fe.Path );
                 if( src != null )
                     if( src.NodeType == XmlNodeType.Element )
-                        src.InnerText = v;
+                        if( src.SelectNodes( "*" ).Count > 0 )
+                            src.InnerXml = v;
+                        else
+                            src.InnerText = v;
                     else
                         src.Value = v;
 
@@ -264,7 +349,10 @@ namespace Synapse.Core.Utilities
                         if( src != null )
                         {
                             if( src.NodeType == XmlNodeType.Element )
-                                src.InnerText = c.Crypto.SafeHandleCrypto( src.InnerText );
+                                if( src.SelectNodes( "*" ).Count > 0 )
+                                    src.InnerXml = c.Crypto.SafeHandleCrypto( src.InnerXml );
+                                else
+                                    src.InnerText = c.Crypto.SafeHandleCrypto( src.InnerText );
                             else
                                 src.Value = c.Crypto.SafeHandleCrypto( src.Value );
                         }

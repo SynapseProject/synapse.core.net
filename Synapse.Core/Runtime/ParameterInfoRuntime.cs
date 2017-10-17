@@ -14,7 +14,7 @@ namespace Synapse.Core
     {
         private Dictionary<string, string> _dynamicData = null;
 
-        public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null)
+        public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null)
         {
             _dynamicData = dynamicData ?? new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
             forEachParms = new List<object>();
@@ -24,18 +24,18 @@ namespace Synapse.Core
             {
                 case SerializationType.Xml:
                 {
-                    parms = ResolveXml( ref forEachParms );
+                    parms = ResolveXml( ref forEachParms, parentExitData );
                     break;
                 }
                 case SerializationType.Yaml:
                 case SerializationType.Json:
                 {
-                    parms = ResolveYamlJson( ref forEachParms );
+                    parms = ResolveYamlJson( ref forEachParms, parentExitData );
                     break;
                 }
                 case SerializationType.Unspecified:
                 {
-                    parms = ResolveUnspecified();
+                    parms = ResolveUnspecified( parentExitData );
                     break;
                 }
             }
@@ -48,7 +48,7 @@ namespace Synapse.Core
             return parms;
         }
 
-        XmlDocument ResolveXml(ref List<object> forEachParms)
+        XmlDocument ResolveXml(ref List<object> forEachParms, object parentExitData)
         {
             XmlDocument parms = null;
 
@@ -83,6 +83,21 @@ namespace Synapse.Core
             if( HasDynamic && parms != null )
                 XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
 
+            if( HasParentExitData && parentExitData != null )
+            {
+                if( parms == null )
+                    parms = new XmlDocument();
+                XmlDocument pea = new XmlDocument();
+                if( parentExitData is XmlNode )
+                    pea.InnerXml = ((XmlNode)parentExitData).OuterXml;
+                else if( parentExitData is XmlNode[] )
+                    pea.InnerXml = ((XmlNode[])parentExitData)[0].OuterXml;
+                else
+                    pea = (XmlDocument)parentExitData;
+
+                XmlHelpers.Merge( ref parms, ParentExitData, pea );
+            }
+
             //expand ForEach variables
             if( HasForEach && parms != null )
                 forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
@@ -91,7 +106,7 @@ namespace Synapse.Core
             return parms;
         }
 
-        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms)
+        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms, object parentExitData)
         {
             object parms = null;
 
@@ -132,6 +147,17 @@ namespace Synapse.Core
             if( HasDynamic && p != null )
                 YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
 
+            if( HasParentExitData && p != null && parentExitData != null )
+            {
+                string tmp = YamlHelpers.Serialize( parentExitData );
+                object values = YamlHelpers.Deserialize( tmp );
+                //select the exact values
+
+                Dictionary<object, object> ip = (Dictionary<object, object>)parms;
+                Dictionary<object, object> pv = (Dictionary<object, object>)values;
+                YamlHelpers.Merge( ref ip, ParentExitData, pv ); //add merge to destination
+            }
+
             //expand ForEach variables
             if( HasForEach && p != null )
                 forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
@@ -140,7 +166,7 @@ namespace Synapse.Core
             return p;
         }
 
-        string ResolveUnspecified()
+        string ResolveUnspecified(object parentExitData)
         {
             StringBuilder sb = new StringBuilder();
 
@@ -161,6 +187,8 @@ namespace Synapse.Core
                     sb.Append( $"{key}:{_dynamicData[key]}," );
                 }
 
+            if( HasParentExitData )
+                sb.Append( parentExitData.ToString() );
 
             return sb.ToString().TrimEnd( ',' );
         }
