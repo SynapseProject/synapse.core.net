@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Synapse.Core
 {
-    public class DynamicValue
+    public class DynamicValue : IReplacementValueOptions
     {
         public string Name { get; set; }
         public string Path { get; set; }

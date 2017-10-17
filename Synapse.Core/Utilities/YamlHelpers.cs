@@ -110,9 +110,6 @@ namespace Synapse.Core.Utilities
             if( values == null || (values != null && values.Count == 0) )
                 return;
 
-            //Dictionary<object, object> p = ConvertDynamicValuesToDictionary_xx( patch, values );
-            //ApplyPatchValues_xx( source, p );
-
             foreach( DynamicValue dv in dynamicValues )
             {
                 if( values.ContainsKey( dv.Name ) )
@@ -120,6 +117,25 @@ namespace Synapse.Core.Utilities
                     Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, values[dv.Name] );
                     ApplyPatchValues( source, patch, dv );
                 }
+            }
+        }
+
+        public static void Merge(ref Dictionary<object, object> source, List<ParentExitDataValue> parentExitData, Dictionary<object, object> values)
+        {
+            //if there's nothing to do, get out!
+            if( values == null || (values != null && values.Count == 0) )
+                return;
+
+            foreach( ParentExitDataValue ped in parentExitData )
+            {
+                string[] path = ped.Source?.Split( ':' );
+                if( path.Length > 0 )
+                    if( values.ContainsKey( path[0] ) )
+                    {
+                        object element = SelectElements( values, new List<string>() { ped.Source } );
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element?.ToString() );
+                        ApplyPatchValues( source, patch, null );
+                    }
             }
         }
 
@@ -320,7 +336,7 @@ namespace Synapse.Core.Utilities
                     if( a.HasRunAs && a.RunAs.HasCrypto )
                         a.RunAs = a.RunAs.GetCryptoValues( p.Crypto, isEncryptMode );
                     if( a.Handler != null && a.Handler.HasConfig && a.Handler.Config.HasCrypto )
-                        a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode  );
+                        a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode );
                     if( a.HasParameters && a.Parameters.HasCrypto )
                         a.Parameters = a.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
 

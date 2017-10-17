@@ -9,14 +9,14 @@ Actions:
   Result:
     Status: Complete
     ExitData: &o0
-      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-      InstanceId: 99
+      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+      InstanceId: 97
       RunAs: &o2
         Domain: LAPTOP-TK2D9TB6
-        UserName: synapse2
-        Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+        UserName: synapse0
+        Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
         IsInheritable: true
-        IsInherited: true
+        BlockInheritance: true
         Crypto:
           Key:
             Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -25,7 +25,7 @@ Actions:
           - Password
           Errors: []
     BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse2
+    SecurityContext: LAPTOP-TK2D9TB6\synapse0
   Parameters: {}
   Actions:
   - Name: 0.1
@@ -38,7 +38,7 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 102
+        InstanceId: 100
         ParentExitData: *o0
         RunAs: &o1
           Domain: LAPTOP-TK2D9TB6
@@ -58,7 +58,7 @@ Actions:
     Parameters: {}
     Actions: []
     RunAs: *o1
-    InstanceId: 102
+    InstanceId: 100
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -68,17 +68,17 @@ Actions:
     Result:
       Status: Complete
       ExitData:
-        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 103
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+        InstanceId: 101
         ParentExitData: *o0
         RunAs: *o2
       BranchStatus: Complete
-      SecurityContext: LAPTOP-TK2D9TB6\synapse2
+      SecurityContext: LAPTOP-TK2D9TB6\synapse0
     Parameters: {}
     Actions: []
-    InstanceId: 103
+    InstanceId: 101
   RunAs: *o2
-  InstanceId: 99
+  InstanceId: 97
 - Name: 1
   Handler:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -88,7 +88,7 @@ Actions:
     Status: Complete
     ExitData: &o3
       CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-      InstanceId: 100
+      InstanceId: 98
       RunAs: &o5
         Domain: LAPTOP-TK2D9TB6
         UserName: synapse2
@@ -96,7 +96,7 @@ Actions:
         IsInheritable: true
         BlockInheritance: true
         Crypto:
-          Key: &o6
+          Key:
             Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
             ContainerName: foo
           Elements:
@@ -116,13 +116,14 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 101
+        InstanceId: 99
         ParentExitData: *o3
         RunAs: &o4
           Domain: LAPTOP-TK2D9TB6
           UserName: synapse2
           Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
           IsInheritable: true
+          BlockInheritance: true
           IsInherited: true
           Crypto:
             Key:
@@ -136,15 +137,17 @@ Actions:
     Parameters: {}
     Actions: []
     RunAs: *o4
-    InstanceId: 101
-  InstanceId: 100
+    InstanceId: 99
+  InstanceId: 98
 RunAs: *o5
 Crypto:
-  Key: *o6
+  Key:
+    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+    ContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 9/28/2017 3:40:41 PM
+LastModified: 10/16/2017 5:24:53 PM
