@@ -7,6 +7,7 @@ namespace Synapse.Core
     {
         public string Name { get; set; }
         public string Path { get; set; }
+        public bool Parse { get; set; }
         public string Replace { get; set; }
         public string Encode { get; set; }
         public List<Option> Options { get; set; } = new List<Option>();
@@ -23,6 +24,7 @@ namespace Synapse.Core
             {
                 Name = "URI parameter name",
                 Path = "Element:IndexedElement[0]:Element",
+                Parse = true,
                 Replace = "Regex expression",
                 Encode = "Base64"
             };

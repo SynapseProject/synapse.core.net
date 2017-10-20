@@ -26,7 +26,7 @@ namespace Synapse.Common.WebApi
             foreach( string key in dynamicData.Keys )
             {
                 string value = dynamicData[key];
-                if( value.Contains( ":" ) ) value = value.EncapsulateWith( "'" );
+                //if( value.Contains( ":" ) ) value = value.EncapsulateWith( "'" );
                 qs.Append( $"{delim}{HttpUtility.UrlEncode( key )}={HttpUtility.UrlEncode( value )}" );
                 delim = "&";
             }

@@ -8,13 +8,14 @@ namespace Synapse.Core
         public string Source { get; set; }
         //public SerializationType SourceType { get; set; }
         public string Destination { get; set; }
+        public bool Parse { get; set; }
         public string Replace { get; set; }
         public string Encode { get; set; }
-        public bool CastToForEachValues { get; set; }
+        //public bool CastToForEachValues { get; set; }
 
         public override string ToString()
         {
-            return $"[[{Source}]::[{Destination}]::[{Replace}]::[{Encode}]::[{CastToForEachValues}]";
+            return $"[[{Source}]::[{Destination}]::[{Replace}]::[{Encode}]::[{Parse}]";
         }
 
 
@@ -25,6 +26,7 @@ namespace Synapse.Core
                 Source = "Element:IndexedElement[0]:Element",
                 //SourceType = SerializationType.Yaml,
                 Destination = "Element:IndexedElement[0]:Element",
+                Parse = true,
                 Replace = "Regex expression",
                 Encode = "Base64"
             };

@@ -239,6 +239,20 @@ namespace Synapse.Core.Utilities
             }
         }
 
+        internal static object TryParseValue(object value)
+        {
+            if( value is string )
+                try
+                {
+                    string s = value as string;
+                    if( !string.IsNullOrWhiteSpace( s ) )
+                        value = Deserialize<object>( s );
+                }
+                catch( Exception ex ) { string e = ex.Message; }//eat the error
+
+            return value;
+        }
+
         internal static string RegexReplaceOrValue(string input, string replacement, IReplacementValueOptions rv)
         {
             string value = replacement;

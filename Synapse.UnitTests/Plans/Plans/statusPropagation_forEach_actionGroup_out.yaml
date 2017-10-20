@@ -50,62 +50,6 @@ Actions:
         ExecuteCase: Any
         Handler:
           Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config:
-            Values: {}
-          StartInfo:
-            Parameters: >+
-              ReturnStatus: Failed
-
-            ParentExitData: EmptyHandler ExitData default value.
-        Result:
-          Status: Failed
-          ExitData: EmptyHandler ExitData default value.
-          BranchStatus: Failed
-          SecurityContext: LAPTOP-TK2D9TB6\Steve
-        Parameters:
-          Values:
-            ReturnStatus: Failed
-        Actions: []
-        InstanceId: 138
-      - Name: ac0.g.1
-        ExecuteCase: Any
-        Handler:
-          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config:
-            Values: {}
-          StartInfo:
-            Parameters: >+
-              ReturnStatus: Waiting
-
-            ParentExitData: EmptyHandler ExitData default value.
-        Result:
-          Status: Waiting
-          ExitData: EmptyHandler ExitData default value.
-          BranchStatus: Waiting
-          SecurityContext: LAPTOP-TK2D9TB6\Steve
-        Parameters:
-          Values:
-            ReturnStatus: Waiting
-        Actions: []
-        InstanceId: 139
-      InstanceId: 134
-    - Name: ac0.g
-      ExecuteCase: Any
-      Handler:
-        Config: {}
-      Result:
-        Status: Cancelled
-        ExitData: EmptyHandler ExitData default value.
-        BranchStatus: Cancelled
-        SecurityContext: LAPTOP-TK2D9TB6\Steve
-      Parameters:
-        Values:
-          ReturnStatus: Cancelled
-      Actions:
-      - Name: ac0.g.0
-        ExecuteCase: Any
-        Handler:
-          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
           StartInfo:
             Parameters: >+
@@ -142,6 +86,41 @@ Actions:
             ReturnStatus: Waiting
         Actions: []
         InstanceId: 137
+      InstanceId: 134
+    - Name: ac0.g
+      ExecuteCase: Any
+      Handler:
+        Config: {}
+      Result:
+        Status: Cancelled
+        ExitData: EmptyHandler ExitData default value.
+        BranchStatus: Cancelled
+        SecurityContext: LAPTOP-TK2D9TB6\Steve
+      Parameters:
+        Values:
+          ReturnStatus: Cancelled
+      Actions:
+      - Name: ac0.g.0
+        ExecuteCase: Any
+        Handler:
+          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config:
+            Values: {}
+          StartInfo:
+            Parameters: >+
+              ReturnStatus: Failed
+
+            ParentExitData: EmptyHandler ExitData default value.
+        Result:
+          Status: Failed
+          ExitData: EmptyHandler ExitData default value.
+          BranchStatus: Failed
+          SecurityContext: LAPTOP-TK2D9TB6\Steve
+        Parameters:
+          Values:
+            ReturnStatus: Failed
+        Actions: []
+        InstanceId: 138
       InstanceId: 135
     InstanceId: 133
   Actions:
@@ -214,9 +193,9 @@ Actions:
             Values:
               ReturnStatus: Waiting
           Actions: []
-          InstanceId: 145
-        InstanceId: 144
-      InstanceId: 141
+          InstanceId: 144
+        InstanceId: 143
+      InstanceId: 140
     - Name: ac0.1.2
       ExecuteCase: Any
       Handler:
@@ -236,7 +215,7 @@ Actions:
         Values:
           ReturnStatus: Initializing
       Actions: []
-      InstanceId: 142
+      InstanceId: 141
     - Name: ac0.1.3
       ExecuteCase: Any
       Handler:
@@ -256,8 +235,8 @@ Actions:
         Values:
           ReturnStatus: Complete
       Actions: []
-      InstanceId: 143
-    InstanceId: 140
+      InstanceId: 142
+    InstanceId: 139
   InstanceId: 130
 - Name: ac1
   ExecuteCase: Any
@@ -300,4 +279,4 @@ StartInfo: {}
 Result:
   Status: Cancelled
   BranchStatus: Cancelled
-LastModified: 10/19/2017 11:31:35 PM
+LastModified: 10/20/2017 3:50:06 PM

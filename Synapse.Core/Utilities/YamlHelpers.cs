@@ -10,6 +10,7 @@ namespace Synapse.Core.Utilities
     public class YamlHelpers
     {
         static readonly string __sli = "SynapseListIndex";
+        static readonly string __token = "__synapse__token__";
 
         #region Serialize/Deserialize
         public static void Serialize(TextWriter tw, object data, bool serializeAsJson = false, bool emitDefaultValues = false)
@@ -114,7 +115,8 @@ namespace Synapse.Core.Utilities
             {
                 if( values.ContainsKey( dv.Name ) )
                 {
-                    Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, values[dv.Name] );
+                    object value = dv.Parse ? TryParseValue( values[dv.Name] ) : values[dv.Name];
+                    Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, value );
                     ApplyPatchValues( source, patch, dv );
                 }
             }
@@ -133,10 +135,31 @@ namespace Synapse.Core.Utilities
                     if( values.ContainsKey( path[0] ) )
                     {
                         object element = SelectElements( values, new List<string>() { ped.Source } );
+                        if( ped.Parse )
+                            element = TryParseValue( element );
                         Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
                         ApplyPatchValues( source, patch, null );
                     }
             }
+        }
+
+        internal static object TryParseValue(object value)
+        {
+            if( value is string )
+                try
+                {
+                    string s = value as string;
+                    if( !string.IsNullOrWhiteSpace( s ) )
+                        if( s.StartsWith( "[" ) ) //it's a json array, which doesn't parse, so make it yaml
+                            value = Deserialize( $"{__token}: {s}" )[__token]; //then de-yaml it
+                        else if( s.StartsWith( "'" ) && s.EndsWith( "'" ) )
+                            value = Deserialize( s.Substring( 1, s.Length - 2 )); //it's '-quote encapsulated
+                        else
+                            value = Deserialize( s );
+                }
+                catch( Exception ex ) { string e = ex.Message; }//eat the error
+
+            return value;
         }
 
         internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch, DynamicValue dv = null)
@@ -504,7 +527,6 @@ namespace Synapse.Core.Utilities
         #region util
         internal static Dictionary<object, object> ConvertPathElementToDict(string path, object value = null)
         {
-            const string token = "__synapse__token__";
             StringBuilder yaml = new StringBuilder();
 
             string[] lines = path.Split( ':' );
@@ -523,27 +545,27 @@ namespace Synapse.Core.Utilities
 
             string buf = yaml.ToString().Trim();
             if( value != null )
-                buf = $"{buf} {token}";
+                buf = $"{buf} {__token}";
 
             Dictionary<object, object> yamldoc = Deserialize( buf );
 
             if( value != null )
-                ReplaceToken( yamldoc, token, value );
+                ReplaceToken( yamldoc, value );
 
             return yamldoc;
         }
 
-        internal static bool ReplaceToken(Dictionary<object, object> source, string token, object value)
+        internal static bool ReplaceToken(Dictionary<object, object> source, object value)
         {
             bool found = false;
 
             foreach( object key in source.Keys )
             {
                 if( source[key] is Dictionary<object, object> )
-                    found = ReplaceToken( (Dictionary<object, object>)source[key], token, value );
+                    found = ReplaceToken( (Dictionary<object, object>)source[key], value );
                 else if( source[key] is List<object> )
-                    found = ReplaceToken( (List<object>)source[key], token, value );
-                else if( source[key] is string && ((string)source[key]) == token )
+                    found = ReplaceToken( (List<object>)source[key], value );
+                else if( source[key] is string && ((string)source[key]) == __token )
                 {
                     source[key] = value;
                     found = true;
@@ -556,17 +578,17 @@ namespace Synapse.Core.Utilities
             return found;
         }
 
-        internal static bool ReplaceToken(List<object> source, string token, object value)
+        internal static bool ReplaceToken(List<object> source, object value)
         {
             bool found = false;
 
             for( int i = 0; i < source.Count; i++ )
             {
                 if( source[i] is Dictionary<object, object> )
-                    found = ReplaceToken( (Dictionary<object, object>)source[i], token, value );
+                    found = ReplaceToken( (Dictionary<object, object>)source[i], value );
                 else if( source[i] is List<object> )
-                    found = ReplaceToken( (List<object>)source[i], token, value );
-                else if( source[i] is string && ((string)source[i]) == token )
+                    found = ReplaceToken( (List<object>)source[i], value );
+                else if( source[i] is string && ((string)source[i]) == __token )
                 {
                     source[i] = value;
                     found = true;
