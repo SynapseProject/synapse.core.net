@@ -133,7 +133,7 @@ namespace Synapse.Core.Utilities
                     if( values.ContainsKey( path[0] ) )
                     {
                         object element = SelectElements( values, new List<string>() { ped.Source } );
-                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element?.ToString() );
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
                         ApplyPatchValues( source, patch, null );
                     }
             }
@@ -432,7 +432,8 @@ namespace Synapse.Core.Utilities
         internal static object FindElement(Dictionary<object, object> source, Dictionary<object, object> searchPath)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( searchPath == null ) { throw new ArgumentException( "SearchPath cannot be null.", "searchPath" ); }
+            if( searchPath == null ) //{ throw new ArgumentException( "SearchPath cannot be null.", "searchPath" ); }
+                return source;
 
             object result = null;
 
@@ -458,7 +459,8 @@ namespace Synapse.Core.Utilities
         internal static object FindElement(List<object> source, List<object> searchPath)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( searchPath == null ) { throw new ArgumentException( "SearchPath cannot be null.", "searchPath" ); }
+            if( searchPath == null ) //{ throw new ArgumentException( "SearchPath cannot be null.", "searchPath" ); }
+                return source;
 
             object result = null;
 
@@ -500,8 +502,9 @@ namespace Synapse.Core.Utilities
 
 
         #region util
-        internal static Dictionary<object, object> ConvertPathElementToDict(string path, string value = null)
+        internal static Dictionary<object, object> ConvertPathElementToDict(string path, object value = null)
         {
+            const string token = "__synapse__token__";
             StringBuilder yaml = new StringBuilder();
 
             string[] lines = path.Split( ':' );
@@ -519,14 +522,91 @@ namespace Synapse.Core.Utilities
             }
 
             string buf = yaml.ToString().Trim();
-            if( !string.IsNullOrWhiteSpace( value ) )
+            if( value != null )
+                buf = $"{buf} {token}";
+
+            Dictionary<object, object> yamldoc = Deserialize( buf );
+
+            if( value != null )
+                ReplaceToken( yamldoc, token, value );
+
+            return yamldoc;
+        }
+
+        internal static bool ReplaceToken(Dictionary<object, object> source, string token, object value)
+        {
+            bool found = false;
+
+            foreach( object key in source.Keys )
             {
-                if( value.Contains( ":" ) ) value = EncapsulateWith( value, "'" );
-                buf = $"{buf} {value}";
+                if( source[key] is Dictionary<object, object> )
+                    found = ReplaceToken( (Dictionary<object, object>)source[key], token, value );
+                else if( source[key] is List<object> )
+                    found = ReplaceToken( (List<object>)source[key], token, value );
+                else if( source[key] is string && ((string)source[key]) == token )
+                {
+                    source[key] = value;
+                    found = true;
+                }
+
+                if( found )
+                    break;
             }
 
-            return Deserialize( buf );
+            return found;
         }
+
+        internal static bool ReplaceToken(List<object> source, string token, object value)
+        {
+            bool found = false;
+
+            for( int i = 0; i < source.Count; i++ )
+            {
+                if( source[i] is Dictionary<object, object> )
+                    found = ReplaceToken( (Dictionary<object, object>)source[i], token, value );
+                else if( source[i] is List<object> )
+                    found = ReplaceToken( (List<object>)source[i], token, value );
+                else if( source[i] is string && ((string)source[i]) == token )
+                {
+                    source[i] = value;
+                    found = true;
+                }
+
+                if( found )
+                    break;
+            }
+
+            return found;
+        }
+
+
+        //internal static Dictionary<object, object> ConvertPathElementToDict(string path, string value = null)
+        //{
+        //    StringBuilder yaml = new StringBuilder();
+
+        //    string[] lines = path.Split( ':' );
+        //    for( int i = 0; i < lines.Length; i++ )
+        //    {
+        //        int index = -1;
+        //        string newLine = CheckPathElementIsIndexed( lines[i], out index );
+        //        yaml.AppendLine( newLine.PadLeft( (2 * i) + newLine.Length ) + ":" );
+
+        //        if( index > -1 )
+        //        {
+        //            string sli = $"- {__sli}: {index}";
+        //            yaml.AppendLine( sli.PadLeft( (2 * i) + sli.Length ) );
+        //        }
+        //    }
+
+        //    string buf = yaml.ToString().Trim();
+        //    if( !string.IsNullOrWhiteSpace( value ) )
+        //    {
+        //        if( value.Contains( ":" ) ) value = EncapsulateWith( value, "'" );
+        //        buf = $"{buf} {value}";
+        //    }
+
+        //    return Deserialize( buf );
+        //}
 
         internal static string CheckPathElementIsIndexed(string element, out int index)
         {
@@ -543,12 +623,12 @@ namespace Synapse.Core.Utilities
         }
 
 
-        internal static string EncapsulateWith(string s, string c)
-        {
-            if( !s.StartsWith( c ) ) { s = $"{c}{s}"; }
-            if( !s.EndsWith( c ) ) { s = $"{s}{c}"; }
-            return s;
-        }
+        //internal static string EncapsulateWith(string s, string c)
+        //{
+        //    if( !s.StartsWith( c ) ) { s = $"{c}{s}"; }
+        //    if( !s.EndsWith( c ) ) { s = $"{s}{c}"; }
+        //    return s;
+        //}
         #endregion
     }
 }

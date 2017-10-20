@@ -10,7 +10,7 @@ Actions:
     Status: Complete
     ExitData: &o0
       CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-      InstanceId: 111
+      InstanceId: 113
       RunAs: &o4
         Domain: LAPTOP-TK2D9TB6
         UserName: synapse2
@@ -31,7 +31,7 @@ Actions:
       Status: Complete
       ExitData: &o1
         CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 112
+        InstanceId: 114
         ParentExitData: *o0
         RunAs: &o3
           BlockInheritance: true
@@ -49,7 +49,7 @@ Actions:
         Status: Complete
         ExitData:
           CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-          InstanceId: 113
+          InstanceId: 115
           ParentExitData: *o1
           RunAs: &o2
             IsInheritable: true
@@ -58,11 +58,11 @@ Actions:
       Parameters: {}
       Actions: []
       RunAs: *o2
-      InstanceId: 113
+      InstanceId: 115
     RunAs: *o3
-    InstanceId: 112
+    InstanceId: 114
   RunAs: *o4
-  InstanceId: 111
+  InstanceId: 113
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse1
@@ -72,4 +72,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 10/16/2017 5:24:54 PM
+LastModified: 10/19/2017 11:31:35 PM
