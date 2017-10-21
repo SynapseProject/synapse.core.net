@@ -5,10 +5,6 @@ Actions:
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandlerFoo
     Config: {}
-  Result:
-    Status: Failed
-    ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
-    BranchStatus: Failed
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
@@ -16,10 +12,6 @@ Actions:
     Handler:
       Type: Synapse.Core.Runtime.EmptyHandlerFoo
       Config: {}
-    Result:
-      Status: Failed
-      ExitData: Could not load Synapse.Core.Runtime.EmptyHandlerFoo.
-      BranchStatus: Failed
     Parameters: {}
     Actions:
     - Name: SimpleClassName
@@ -27,10 +19,6 @@ Actions:
       Handler:
         Type: EmptyHandlerFoo
         Config: {}
-      Result:
-        Status: Failed
-        ExitData: Could not load EmptyHandlerFoo.
-        BranchStatus: Failed
       Parameters: {}
       Actions:
       - Name: AbbreviatedClassName
@@ -38,28 +26,40 @@ Actions:
         Handler:
           Type: EmptyFoo
           Config: {}
-        Result:
-          Status: Failed
-          ExitData: Could not load EmptyFoo.
-          BranchStatus: Failed
         Parameters: {}
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
           ExecuteCase: Failed
           Handler:
             Config: {}
+          Parameters: {}
+          Actions: []
           Result:
             Status: Failed
             ExitData: Could not load file or assembly 'Synapse.CoreFoo' or one of its dependencies. The system cannot find the file specified.
-          Parameters: {}
-          Actions: []
           InstanceId: 19
+        Result:
+          Status: Failed
+          ExitData: Could not load EmptyFoo.
+          BranchStatus: Failed
         InstanceId: 18
+      Result:
+        Status: Failed
+        ExitData: Could not load EmptyHandlerFoo.
+        BranchStatus: Failed
       InstanceId: 17
+    Result:
+      Status: Failed
+      ExitData: Could not load Synapse.Core.Runtime.EmptyHandlerFoo.
+      BranchStatus: Failed
     InstanceId: 16
+  Result:
+    Status: Failed
+    ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
+    BranchStatus: Failed
   InstanceId: 15
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 10/20/2017 3:50:05 PM
+LastModified: 10/21/2017 12:56:14 PM

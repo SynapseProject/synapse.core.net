@@ -6,19 +6,12 @@ Actions:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  Result:
-    Status: Complete
-    ExitData: &o0
-      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-      InstanceId: 104
-      RunAs: &o2
-        Domain: LAPTOP-TK2D9TB6
-        UserName: synapse0
-        Password: ',^e-2:3mtk3!j-Py'
-        IsInheritable: true
-        BlockInheritance: true
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse0
+  RunAs: &o0
+    Domain: LAPTOP-TK2D9TB6
+    UserName: synapse0
+    Password: ',^e-2:3mtk3!j-Py'
+    IsInheritable: true
+    BlockInheritance: true
   Parameters: {}
   Actions:
   - Name: 0.1
@@ -26,24 +19,31 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: *o0
+        ParentExitData: &o1
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+          InstanceId: 108
+          RunAs: *o0
+    RunAs: &o2
+      IsInheritable: true
+      BlockInheritance: true
+    Parameters: {}
+    Actions: []
     Result:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 105
-        ParentExitData: *o0
-        RunAs: &o1
-          IsInheritable: true
-          BlockInheritance: true
+        InstanceId: 109
+        ParentExitData: *o1
+        RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    Parameters: {}
-    Actions: []
-    RunAs: *o1
-    InstanceId: 105
-  RunAs: *o2
-  InstanceId: 104
+    InstanceId: 109
+  Result:
+    Status: Complete
+    ExitData: *o1
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse0
+  InstanceId: 108
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse2
@@ -54,4 +54,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 10/20/2017 3:50:05 PM
+LastModified: 10/21/2017 12:56:24 PM

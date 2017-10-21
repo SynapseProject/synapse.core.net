@@ -1,0 +1,60 @@
+Name: Child
+Handler:
+  Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+  Config: {}
+  StartInfo:
+    Parameters: >-
+      <EmptyHandlerParameters>
+
+        <ExitData>
+
+          <Servers>
+
+            <Server>kitten</Server>
+
+            <Server>fuzzy</Server>
+
+            <Server>giggle</Server>
+
+          </Servers>
+
+        </ExitData>
+
+        <SleepMilliseconds>2001</SleepMilliseconds>
+
+        <ReturnStatus>Tombstoned</ReturnStatus>
+
+      </EmptyHandlerParameters>
+    ParentExitData:
+    - - - - []
+      - - - []
+      - - - - []
+          - - []
+          - - []
+Parameters:
+  Type: Xml
+  Values:
+  - - - - - []
+        - - []
+        - - []
+    - - []
+    - - []
+  Dynamic:
+  - Name: ed
+    Path: /EmptyHandlerParameters/ExitData
+    Options: []
+  ParentExitData:
+  - Source: /Something/Wonderful/Stars
+    Destination: /EmptyHandlerParameters/SleepMilliseconds[1]
+  - Source: /Something/Foo/Bar
+    Destination: /EmptyHandlerParameters/ReturnStatus
+Actions: []
+Result:
+  Status: Tombstoned
+  ExitData:
+  - - - []
+    - - []
+    - - []
+  BranchStatus: Tombstoned
+  SecurityContext: LAPTOP-TK2D9TB6\Steve
+InstanceId: 1

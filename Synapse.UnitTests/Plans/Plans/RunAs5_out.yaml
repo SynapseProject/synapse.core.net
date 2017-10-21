@@ -6,19 +6,12 @@ Actions:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  Result:
-    Status: Complete
-    ExitData: &o0
-      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-      InstanceId: 113
-      RunAs: &o4
-        Domain: LAPTOP-TK2D9TB6
-        UserName: synapse2
-        Password: ',^e-2:3mtk3!j-Py'
-        IsInheritable: true
-        BlockInheritance: true
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse2
+  RunAs: &o0
+    Domain: LAPTOP-TK2D9TB6
+    UserName: synapse2
+    Password: ',^e-2:3mtk3!j-Py'
+    IsInheritable: true
+    BlockInheritance: true
   Parameters: {}
   Actions:
   - Name: Action002
@@ -26,17 +19,12 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: *o0
-    Result:
-      Status: Complete
-      ExitData: &o1
-        CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 114
-        ParentExitData: *o0
-        RunAs: &o3
-          BlockInheritance: true
-      BranchStatus: Complete
-      SecurityContext: LAPTOP-TK2D9TB6\Steve
+        ParentExitData: &o1
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+          InstanceId: 117
+          RunAs: *o0
+    RunAs: &o2
+      BlockInheritance: true
     Parameters: {}
     Actions:
     - Name: Action003
@@ -44,25 +32,37 @@ Actions:
         Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
         StartInfo:
-          ParentExitData: *o1
+          ParentExitData: &o3
+            CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+            InstanceId: 118
+            ParentExitData: *o1
+            RunAs: *o2
+      RunAs: &o4
+        IsInheritable: true
+      Parameters: {}
+      Actions: []
       Result:
         Status: Complete
         ExitData:
           CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-          InstanceId: 115
-          ParentExitData: *o1
-          RunAs: &o2
-            IsInheritable: true
+          InstanceId: 119
+          ParentExitData: *o3
+          RunAs: *o4
         BranchStatus: Complete
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      Parameters: {}
-      Actions: []
-      RunAs: *o2
-      InstanceId: 115
-    RunAs: *o3
-    InstanceId: 114
-  RunAs: *o4
-  InstanceId: 113
+      InstanceId: 119
+    Result:
+      Status: Complete
+      ExitData: *o3
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\Steve
+    InstanceId: 118
+  Result:
+    Status: Complete
+    ExitData: *o1
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse2
+  InstanceId: 117
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse1
@@ -72,4 +72,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 10/20/2017 3:50:05 PM
+LastModified: 10/21/2017 12:56:24 PM

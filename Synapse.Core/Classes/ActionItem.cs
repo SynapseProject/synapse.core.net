@@ -30,9 +30,11 @@ namespace Synapse.Core
 
         public HandlerInfo Handler { get; set; }
 
-        public ExecuteResult Result { get; set; }
+        public SecurityContext RunAs { get; set; }
         [YamlIgnore]
-        public bool HasResult { get { return Result != null; } }
+        public bool HasRunAs { get { return RunAs != null; } }
+        [YamlIgnore]
+        public bool HasValidRunAs { get { return RunAs != null && RunAs.IsValid; } }
 
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
@@ -46,11 +48,10 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasActions { get { return ActionGroup != null || (Actions != null && Actions.Count > 0); } }
 
-        public SecurityContext RunAs { get; set; }
+        public ExecuteResult Result { get; set; }
         [YamlIgnore]
-        public bool HasRunAs { get { return RunAs != null; } }
-        [YamlIgnore]
-        public bool HasValidRunAs { get { return RunAs != null && RunAs.IsValid; } }
+        public bool HasResult { get { return Result != null; } }
+
 
         object ICloneable.Clone()
         {

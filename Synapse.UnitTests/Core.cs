@@ -219,6 +219,37 @@ namespace Synapse.UnitTests
         }
 
         [Test]
+        [Category( "Parameters" )]
+        [Category( "Parameters_Dynamic" )]
+        [Category( "Parameters_ParentExitData" )]
+        [TestCase( "parameters_json_parentexitdata.yaml", "[1,2,3,4]", "ped_out_json_0.yaml" )]
+        [TestCase( "parameters_json_parentexitdata.yaml", "{\"name\":\"Steve\",\"age\":130,\"cars\":[ \"None\", \"Bicycle\", \"Tube\" ]}", "ped_out_json_1.yaml" )]
+        [TestCase( "parameters_xml_parentexitdata.yaml", "<Servers><Server>kitten</Server><Server>fuzzy</Server><Server>giggle</Server></Servers>", "ped_out_xml_0.yaml" )]
+        public void MergeParameters_ParentExitData(string planFile, string dynamicValue, string outFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            Dictionary<string, string> dynamicData = new Dictionary<string, string>
+            {
+                { "ed", dynamicValue }
+            };
+
+            // Act
+            plan.Start( dynamicData, true, true );
+
+            // Assert
+            string actual = YamlHelpers.Serialize( plan.ResultPlan.Actions[0].Actions[0] );
+            actual = System.Text.RegularExpressions.Regex.Replace( actual, @"InstanceId: [\d]+", "InstanceId: 1" );
+            string expected = File.ReadAllText( $"{__parms}\\{outFile}" );
+
+            Assert.AreEqual( expected, actual );
+
+            if( outFile.Contains( "xml" ) )
+                Assert.AreEqual( dynamicValue, ((System.Xml.XmlNode[])plan.ResultPlan.Actions[0].Actions[0].Result.ExitData)[0].OuterXml );
+        }
+
+        [Test]
         [Category( "Handlers" )]
         [TestCase( "handlerLoad.yaml" )]
         [TestCase( "handlerLoadFail.yaml" )]

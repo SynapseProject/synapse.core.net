@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -63,22 +64,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Plans\Config\yaml_in.yaml" />
-    <None Include="Plans\Config\yaml_out.yaml" />
-    <None Include="Plans\Config\yaml_out_dynamic.yaml" />
-    <None Include="Plans\Config\yaml_out_dynamic_foreach.yaml" />
-    <None Include="Plans\Config\yaml_out_dynamic_foreach_plan.yaml" />
-    <None Include="Plans\Config\yaml_out_inherit.yaml" />
-    <None Include="Plans\parameters_json_single.yaml" />
-    <None Include="Plans\parameters_yaml_foreach.yaml" />
-    <None Include="Plans\parameters_yaml_single.yaml" />
-    <None Include="Plans\Parms\yaml_in.yaml" />
-    <None Include="Plans\Parms\yaml_out.yaml" />
-    <None Include="Plans\Parms\yaml_out_dynamic.yaml" />
-    <None Include="Plans\Parms\yaml_out_dynamic_foreach.yaml" />
-    <None Include="Plans\Parms\yaml_out_dynamic_foreach_plan.yaml" />
-    <None Include="Plans\Parms\yaml_out_inherit.yaml" />
-    <None Include="Plans\Plans\parameters_yaml_foreach_out.yaml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj">
