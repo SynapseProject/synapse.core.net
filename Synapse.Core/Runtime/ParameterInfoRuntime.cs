@@ -80,8 +80,12 @@ namespace Synapse.Core
             }
 
             //kv_replace
-            if( HasDynamic && parms != null )
+            if( HasDynamic )
+            {
+                if( parms == null )
+                    parms = new XmlDocument();
                 XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
+            }
 
             if( HasParentExitData && parentExitData != null )
             {
@@ -92,6 +96,8 @@ namespace Synapse.Core
                     pea.InnerXml = ((XmlNode)parentExitData).OuterXml;
                 else if( parentExitData is XmlNode[] )
                     pea.InnerXml = ((XmlNode[])parentExitData)[0].OuterXml;
+                else if( parentExitData is string )
+                    pea.InnerXml = (string)parentExitData;
                 else
                     pea = (XmlDocument)parentExitData;
 

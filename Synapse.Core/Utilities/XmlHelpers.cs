@@ -189,15 +189,26 @@ namespace Synapse.Core.Utilities
             {
                 if( values.ContainsKey( dv.Name ) )
                 {
+                    string value = values[dv.Name];
+
                     XmlNode src = source.SelectSingleNode( dv.Path );
                     if( src != null )
                         if( src.NodeType == XmlNodeType.Element )
                             if( src.SelectNodes( "*" ).Count > 0 )
-                                src.InnerXml = RegexReplaceOrValue( src.InnerXml, values[dv.Name], dv );
+                                src.InnerXml = RegexReplaceOrValue( src.InnerXml, value, dv );
                             else
-                                src.InnerText = RegexReplaceOrValue( src.InnerText, values[dv.Name], dv );
+                                src.InnerText = RegexReplaceOrValue( src.InnerText, value, dv );
                         else
-                            src.Value = RegexReplaceOrValue( src.Value, values[dv.Name], dv );
+                            src.Value = RegexReplaceOrValue( src.Value, value, dv );
+                    else
+                    {
+                        XmlDocument doc = XPathToXmlDocument( dv.Path, value );
+
+                        if( source.DocumentElement == null )
+                            source.LoadXml( doc.OuterXml );
+                        else
+                            Merge( ref source, doc );
+                    }
                 }
             }
         }
