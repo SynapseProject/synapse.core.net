@@ -6,9 +6,6 @@ Actions:
     Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  Result:
-    ExitData: EmptyHandler ExitData default value.
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
@@ -17,9 +14,6 @@ Actions:
       Config: {}
       StartInfo:
         ParentExitData: EmptyHandler ExitData default value.
-    Result:
-      ExitData: EmptyHandler ExitData default value.
-      SecurityContext: LAPTOP-TK2D9TB6\Steve
     Parameters: {}
     Actions:
     - Name: SimpleClassName
@@ -28,9 +22,6 @@ Actions:
         Config: {}
         StartInfo:
           ParentExitData: EmptyHandler ExitData default value.
-      Result:
-        ExitData: EmptyHandler ExitData default value.
-        SecurityContext: LAPTOP-TK2D9TB6\Steve
       Parameters: {}
       Actions:
       - Name: AbbreviatedClassName
@@ -39,9 +30,6 @@ Actions:
           Config: {}
           StartInfo:
             ParentExitData: EmptyHandler ExitData default value.
-        Result:
-          ExitData: EmptyHandler ExitData default value.
-          SecurityContext: LAPTOP-TK2D9TB6\Steve
         Parameters: {}
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
@@ -50,16 +38,28 @@ Actions:
             Config: {}
             StartInfo:
               ParentExitData: EmptyHandler ExitData default value.
+          Parameters: {}
+          Actions: []
           Result:
             ExitData: EmptyHandler ExitData default value.
             SecurityContext: LAPTOP-TK2D9TB6\Steve
-          Parameters: {}
-          Actions: []
           InstanceId: 14
+        Result:
+          ExitData: EmptyHandler ExitData default value.
+          SecurityContext: LAPTOP-TK2D9TB6\Steve
         InstanceId: 13
+      Result:
+        ExitData: EmptyHandler ExitData default value.
+        SecurityContext: LAPTOP-TK2D9TB6\Steve
       InstanceId: 12
+    Result:
+      ExitData: EmptyHandler ExitData default value.
+      SecurityContext: LAPTOP-TK2D9TB6\Steve
     InstanceId: 11
+  Result:
+    ExitData: EmptyHandler ExitData default value.
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
   InstanceId: 10
 StartInfo: {}
 Result: {}
-LastModified: 10/20/2017 3:50:05 PM
+LastModified: 10/21/2017 12:56:14 PM

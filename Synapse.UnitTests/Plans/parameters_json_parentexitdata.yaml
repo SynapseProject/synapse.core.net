@@ -1,0 +1,29 @@
+Name: ParentExitDataTest
+DefaultHandlerType: Synapse.Core:EmptyHandler
+Actions:
+- Name: Parent
+  Parameters:
+    Values:
+      SleepMilliseconds: 1000
+      ReturnStatus: Complete
+      ExitData:
+        Something:
+          Wonderful:
+            Stars: 2001
+        Foo:
+          Bar: Tombstoned
+        ListMember: [1,2,3]
+  Actions:
+  - Name: Child
+    Parameters:
+      Dynamic:
+      - Name: ed
+        Path: ExitData
+        Parse: True
+      ParentExitData:
+      - Source: Something:Wonderful:Stars
+        Destination: SleepMilliseconds
+      - Source: Foo:Bar
+        Destination: ReturnStatus
+#      - Source: ListMember
+#        Destination: ExitData

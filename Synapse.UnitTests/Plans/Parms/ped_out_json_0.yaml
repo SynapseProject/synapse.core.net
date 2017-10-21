@@ -1,0 +1,60 @@
+Name: Child
+Handler:
+  Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+  Config: {}
+  StartInfo:
+    Parameters: >+
+      ExitData:
+
+      - 1
+
+      - 2
+
+      - 3
+
+      - 4
+
+      SleepMilliseconds: 2001
+
+      ReturnStatus: Tombstoned
+
+    ParentExitData:
+      Something:
+        Wonderful:
+          Stars: 2001
+      Foo:
+        Bar: Tombstoned
+      ListMember:
+      - 1
+      - 2
+      - 3
+Parameters:
+  Values:
+    ExitData:
+    - 1
+    - 2
+    - 3
+    - 4
+    SleepMilliseconds: 2001
+    ReturnStatus: Tombstoned
+  Dynamic:
+  - Name: ed
+    Path: ExitData
+    Parse: true
+    Options: []
+  ParentExitData:
+  - Source: Something:Wonderful:Stars
+    Destination: SleepMilliseconds
+  - Source: Foo:Bar
+    Destination: ReturnStatus
+Actions: []
+Result:
+  Status: Tombstoned
+  ExitData:
+  - 1
+  - 2
+  - 3
+  - 4
+  BranchStatus: Tombstoned
+  SecurityContext: LAPTOP-TK2D9TB6\Steve
+InstanceId: 1

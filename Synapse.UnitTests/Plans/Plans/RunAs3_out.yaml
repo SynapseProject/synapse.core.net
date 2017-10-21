@@ -6,22 +6,15 @@ Actions:
     Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  Result:
-    Status: Complete
-    ExitData: &o0
-      CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-      InstanceId: 108
-      RunAs: &o2
-        Domain: LAPTOP-TK2D9TB6
-        UserName: synapse1
-        Password: ',^e-2:3mtk3!j-Py'
-        IsInheritable: true
-        IsInherited: true
-        Crypto:
-          Elements: []
-          Errors: []
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse1
+  RunAs: &o0
+    Domain: LAPTOP-TK2D9TB6
+    UserName: synapse1
+    Password: ',^e-2:3mtk3!j-Py'
+    IsInheritable: true
+    IsInherited: true
+    Crypto:
+      Elements: []
+      Errors: []
   Parameters: {}
   Actions:
   - Name: Action002
@@ -29,30 +22,37 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: *o0
+        ParentExitData: &o1
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
+          InstanceId: 112
+          RunAs: *o0
+    RunAs: &o2
+      Domain: LAPTOP-TK2D9TB6
+      UserName: synapse1
+      Password: ',^e-2:3mtk3!j-Py'
+      IsInheritable: true
+      IsInherited: true
+      Crypto:
+        Elements: []
+        Errors: []
+    Parameters: {}
+    Actions: []
     Result:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 109
-        ParentExitData: *o0
-        RunAs: &o1
-          Domain: LAPTOP-TK2D9TB6
-          UserName: synapse1
-          Password: ',^e-2:3mtk3!j-Py'
-          IsInheritable: true
-          IsInherited: true
-          Crypto:
-            Elements: []
-            Errors: []
+        InstanceId: 113
+        ParentExitData: *o1
+        RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    Parameters: {}
-    Actions: []
-    RunAs: *o1
-    InstanceId: 109
-  RunAs: *o2
-  InstanceId: 108
+    InstanceId: 113
+  Result:
+    Status: Complete
+    ExitData: *o1
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse1
+  InstanceId: 112
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse1
@@ -62,4 +62,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 10/20/2017 3:50:05 PM
+LastModified: 10/21/2017 12:56:24 PM
