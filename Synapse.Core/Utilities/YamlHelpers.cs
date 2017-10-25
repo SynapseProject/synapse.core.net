@@ -122,24 +122,26 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref Dictionary<object, object> source, List<ParentExitDataValue> parentExitData, Dictionary<object, object> values)
+        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, Dictionary<object, object> sourceValues)
         {
             //if there's nothing to do, get out!
-            if( values == null || (values != null && values.Count == 0) )
+            if( sourceValues == null || (sourceValues != null && sourceValues.Count == 0) )
                 return;
 
             foreach( ParentExitDataValue ped in parentExitData )
             {
                 string[] path = ped.Source?.Split( ':' );
-                if( path.Length > 0 )
-                    if( values.ContainsKey( path[0] ) )
+                if ( path.Length > 0 )
+                {
+                    object element = SelectElements( sourceValues, new List<string>() { ped.Source } );
+                    if ( element != null )
                     {
-                        object element = SelectElements( values, new List<string>() { ped.Source } );
-                        if( ped.Parse )
+                        if ( ped.Parse )
                             element = TryParseValue( element );
                         Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
-                        ApplyPatchValues( source, patch, null );
+                        ApplyPatchValues( destination, patch, null );
                     }
+                }
             }
         }
 
