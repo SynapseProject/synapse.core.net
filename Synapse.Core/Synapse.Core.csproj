@@ -94,6 +94,7 @@
     <Compile Include="Classes\Enums\SerializationType.cs" />
     <Compile Include="Classes\HandlerInfo.cs" />
     <Compile Include="Classes\Plan.cs" />
+    <Compile Include="Handlers\MockHandler.cs" />
     <Compile Include="Handlers\UriHandler.cs" />
     <Compile Include="Handlers\FooBarHandler.cs" />
     <Compile Include="Handlers\EchoHandler.cs" />

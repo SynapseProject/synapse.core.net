@@ -190,36 +190,43 @@ namespace Synapse.Core.Utilities
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
-            Dictionary<object, object> patchItem = (Dictionary<object, object>)patch[0];
-
-            int i = int.Parse( patchItem[__sli].ToString() );
-            patchItem.Remove( __sli );
-
             object patchKey = null;
             object patchValue = null;
 
-            foreach( object key in patchItem.Keys )
-                patchKey = key;
-
-            if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
-                patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
-
-
-            if( source[i] is Dictionary<object, object> )
+            Dictionary<object, object> patchItem = patch[0] as Dictionary<object, object>;
+            if( patchItem != null )
             {
-                Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
+                int i = int.Parse( patchItem[__sli].ToString() );
+                patchItem.Remove( __sli );
 
-                if( patchValue is Dictionary<object, object> )
-                    ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
-                else if( patchValue is List<object> )
-                    ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
-                else //if( patchValue is 'the value' )
-                    listItemValue[patchKey] = patchValue;
+                foreach( object key in patchItem.Keys )
+                    patchKey = key;
+
+                if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
+                    patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+
+
+                if( source[i] is Dictionary<object, object> )
+                {
+                    Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
+
+                    if( patchValue is Dictionary<object, object> )
+                        ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
+                    else if( patchValue is List<object> && listItemValue[patchKey] is List<object> )
+                        ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
+                    else //if( patchValue is 'the value' )
+                        listItemValue[patchKey] = patchValue;
+                }
+                else if( source[i] is List<object> )
+                    ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey, dv );
+                else
+                    source[i] = RegexReplaceOrValue( source[i], patchValue, dv );
             }
-            else if( source[i] is List<object> )
-                ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey, dv );
             else
-                source[i] = RegexReplaceOrValue( source[i], patchValue, dv );
+            {
+                source.Clear();
+                source.AddRange( patch );
+            }
         }
 
         internal static object RegexReplaceOrValue(object input, object replacement, DynamicValue dv)
