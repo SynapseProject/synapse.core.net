@@ -562,7 +562,15 @@ namespace Synapse.Core
                 return;
             }
 
-            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
+            try
+            {
+                a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
+            }
+            catch( Exception ex )
+            {
+                OnProgress( a.Name, "ResolveConfigAndParameters", ex.Message, StatusType.Failed, a.InstanceId, -2 );
+                throw;
+            }
         }
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)
