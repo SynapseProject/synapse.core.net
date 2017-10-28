@@ -190,12 +190,12 @@ namespace Synapse.Core.Utilities
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
-            object patchKey = null;
-            object patchValue = null;
-
             Dictionary<object, object> patchItem = patch[0] as Dictionary<object, object>;
             if( patchItem != null )
             {
+                object patchKey = null;
+                object patchValue = null;
+
                 int i = int.Parse( patchItem[__sli].ToString() );
                 patchItem.Remove( __sli );
 
