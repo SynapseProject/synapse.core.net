@@ -122,10 +122,10 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, Dictionary<object, object> sourceValues)
+        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, Dictionary<object, object> parentExitDataValues)
         {
             //if there's nothing to do, get out!
-            if( sourceValues == null || (sourceValues != null && sourceValues.Count == 0) )
+            if( parentExitDataValues == null || (parentExitDataValues != null && parentExitDataValues.Count == 0) )
                 return;
 
             foreach( ParentExitDataValue ped in parentExitData )
@@ -133,7 +133,7 @@ namespace Synapse.Core.Utilities
                 string[] path = ped.Source?.Split( ':' );
                 if ( path.Length > 0 )
                 {
-                    object element = SelectElements( sourceValues, new List<string>() { ped.Source } );
+                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
                     if ( element != null )
                     {
                         if ( ped.Parse )
@@ -152,8 +152,8 @@ namespace Synapse.Core.Utilities
                 {
                     string s = value as string;
                     if( !string.IsNullOrWhiteSpace( s ) )
-                        if( s.StartsWith( "[" ) ) //it's a json array, which doesn't parse, so make it yaml
-                            value = Deserialize( $"{__token}: {s}" )[__token]; //then de-yaml it
+                        if( s.StartsWith( "[" ) ) //it's a json array, which doesn't parse,
+                            value = Deserialize( $"{__token}: {s}" )[__token]; //so make it yaml, then de-yaml it
                         else if( s.StartsWith( "'" ) && s.EndsWith( "'" ) )
                             value = Deserialize( s.Substring( 1, s.Length - 2 )); //it's '-quote encapsulated
                         else
@@ -164,6 +164,13 @@ namespace Synapse.Core.Utilities
             return value;
         }
 
+        /// <summary>
+        /// Downward recurse *patch* Dicts/Lists to the bottom**, then set value in source.
+        /// **Bottom: Each patch[key] must exist as source[key], or all of patch[key] will be added at source[key]
+        /// </summary>
+        /// <param name="source">The destination dict into which patch will be merged.</param>
+        /// <param name="patch">The dict to merge in.</param>
+        /// <param name="dv">Optional DynamicValue for specifying Regex/Crypto options of destinatio value.</param>
         internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch, DynamicValue dv = null)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
@@ -185,13 +192,21 @@ namespace Synapse.Core.Utilities
             }
         }
 
+        /// <summary>
+        /// Examines (patch[0] is Dictionary<object, object>):
+        ///     true:  continue recursion of objects
+        ///     false: Clear source list, put patch values in: [source.Clear(); source.AddRange( patch );]
+        /// </summary>
+        /// <param name="source">The destination dict into which patch will be merged.</param>
+        /// <param name="patch">The dict to merge in.</param>
+        /// <param name="dv">Optional DynamicValue for specifying Regex/Crypto options of destinatio value.</param>
         internal static void ApplyPatchValues(List<object> source, List<object> patch, DynamicValue dv = null)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
-            Dictionary<object, object> patchItem = patch[0] as Dictionary<object, object>;
-            if( patchItem != null )
+            //updated syntax to Pattern Matching: if patch[0] is Dict => patchItem
+            if( patch[0] is Dictionary<object, object> patchItem )
             {
                 object patchKey = null;
                 object patchValue = null;
@@ -202,14 +217,12 @@ namespace Synapse.Core.Utilities
                 foreach( object key in patchItem.Keys )
                     patchKey = key;
 
-                if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
-                    patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+                if( patchItem.ContainsKey( patchKey ) )
+                    patchValue = patchItem[patchKey];
 
-
-                if( source[i] is Dictionary<object, object> )
+                //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
+                if( source[i] is Dictionary<object, object> listItemValue )
                 {
-                    Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
-
                     if( patchValue is Dictionary<object, object> )
                         ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
                     else if( patchValue is List<object> && listItemValue[patchKey] is List<object> )
@@ -534,6 +547,21 @@ namespace Synapse.Core.Utilities
 
 
         #region util
+        /// <summary>
+        /// Description: keeps looping until the bottom of the path, then appends the value (if value != null)
+        /// Returns: a Yaml Dictionary<object, object>, where:
+        /// Dict objects are:
+        ///   Item:
+        ///     Item:
+        ///       Item: value
+        /// Lists items are:
+        ///   Item:
+        ///   - SynapseListIndex: indexValue  - this represents metadata about where to put the value in the destination
+        ///     value
+        /// </summary>
+        /// <param name="path">The path to convert to a YAML Dictionary<object, object></param>
+        /// <param name="value">The terminus value of the path.</param>
+        /// <returns>Path as a deserialized YAML Dictionary<object, object>.</returns>
         internal static Dictionary<object, object> ConvertPathElementToDict(string path, object value = null)
         {
             StringBuilder yaml = new StringBuilder();
@@ -545,6 +573,7 @@ namespace Synapse.Core.Utilities
                 string newLine = CheckPathElementIsIndexed( lines[i], out index );
                 yaml.AppendLine( newLine.PadLeft( (2 * i) + newLine.Length ) + ":" );
 
+                //appends [- SynapseListIndex: indexValue] and a following indented blank line
                 if( index > -1 )
                 {
                     string sli = $"- {__sli}: {index}";
