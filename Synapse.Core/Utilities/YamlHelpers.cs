@@ -441,28 +441,33 @@ namespace Synapse.Core.Utilities
             object patchKey = null;
             object patchValue = null;
 
+            //todo: [ss]: from here, to..
             foreach( object key in patchItem.Keys )
                 patchKey = key;
 
-            if( ((Dictionary<object, object>)patch[0]).ContainsKey( patchKey ) )
-                patchValue = ((Dictionary<object, object>)patch[0])[patchKey];
+            if( patchItem.ContainsKey( patchKey ) )
+                patchValue = patchItem[patchKey];
+            //..here needs a little examination.  seems redundant to check for a key in the collection
+            //that was just iterated above.  further, what is the use-case for iterating down after
+            //removing [__sli]?  When is there a third item in the collection?
 
-
-            if( source[i] is Dictionary<object, object> )
+            if( i >= 0 && i < source.Count )
             {
-                Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
-
-                if( patchValue is Dictionary<object, object> )
-                    HandleElementCrypto( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, crypto );
-                else if( patchValue is List<object> )
-                    HandleElementCrypto( (List<object>)listItemValue[patchKey], (List<object>)patchValue, crypto );
-                else //if( patchValue == null )
-                    listItemValue[patchKey] = crypto.SafeHandleCrypto( ((listItemValue)[patchKey]).ToString() );
+                //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
+                if( source[i] is Dictionary<object, object> listItemValue )
+                {
+                    if( patchValue is Dictionary<object, object> )
+                        HandleElementCrypto( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, crypto );
+                    else if( patchValue is List<object> )
+                        HandleElementCrypto( (List<object>)listItemValue[patchKey], (List<object>)patchValue, crypto );
+                    else //if( patchValue == null )
+                        listItemValue[patchKey] = crypto.SafeHandleCrypto( ((listItemValue)[patchKey]).ToString() );
+                }
+                else if( source[i] is List<object> )
+                    HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
+                else
+                    source[i] = crypto.SafeHandleCrypto( source[i].ToString() );
             }
-            else if( source[i] is List<object> )
-                HandleElementCrypto( (List<object>)source[i], (List<object>)patchKey, crypto );
-            else
-                source[i] = crypto.SafeHandleCrypto( source[i].ToString() );
         }
         #endregion
 
