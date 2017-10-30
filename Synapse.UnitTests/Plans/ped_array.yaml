@@ -1,0 +1,41 @@
+Name: SamplePlan
+Description: Example Config/Parameters
+DefaultHandlerType: Synapse.Core:EmptyHandler
+Actions:
+- Name: Synapse.Core:EmptyHandler
+  Description: Resolved Handler from [EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982].
+  Parameters:
+    Values:
+      SleepMilliseconds: 1000
+      ReturnStatus: Complete
+      ExitData:
+        MyArray:
+        - q
+        - w
+        - e
+  Actions:
+  - Name: child
+    Parameters:
+      Type: Yaml
+      Values: 
+        SleepMilliseconds: 100
+        ReturnStatus: Complete
+        ExitData:
+          Name: Action002-Data
+          MyNextArray: Howdy
+          MyNextValue: Howdy
+          MyNewArray:
+          - Fail
+          - "222"
+          - "333"
+          - "444"
+          ReplaceMe: Value
+      ParentExitData:
+      # Works When Destination Is A Value
+      - Source: MyArray
+        Destination: ExitData:ReplaceMe
+        Parse: true
+      # Fails When Destination Is An Array
+      - Source: MyArray
+        Destination: ExitData:ReplaceMeArray
+        Parse: true

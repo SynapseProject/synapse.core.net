@@ -1,0 +1,17 @@
+Name: MockAdHandler
+Actions:
+- Name: MockAdHandlerTest
+  Handler:
+    Type: Synapse.Core:MockAdHandler
+  Parameters:
+    Values:
+      SearchRequests:
+      - Filter: 
+        ReturnAttributes:
+        - xse
+    Dynamic:
+    - Name: filter
+      Path: SearchRequests[0]:Filter
+    - Name: attributes
+      Path: SearchRequests[0]:ReturnAttributes
+      Parse: true
