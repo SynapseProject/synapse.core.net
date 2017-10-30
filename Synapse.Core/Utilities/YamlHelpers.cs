@@ -194,7 +194,7 @@ namespace Synapse.Core.Utilities
 
         /// <summary>
         /// Examines (patch[0] is Dictionary<object, object>):
-        ///     true:  continue recursion of objects
+        ///     true:  remove metadata of indexValue (__sli) and continue recursion of objects
         ///     false: Clear source list, put patch values in: [source.Clear(); source.AddRange( patch );]
         /// </summary>
         /// <param name="source">The destination dict into which patch will be merged.</param>
@@ -211,32 +211,47 @@ namespace Synapse.Core.Utilities
                 object patchKey = null;
                 object patchValue = null;
 
+                //remove the metadata of index
                 int i = int.Parse( patchItem[__sli].ToString() );
                 patchItem.Remove( __sli );
 
+                //todo: [ss]: from here, to..
                 foreach( object key in patchItem.Keys )
                     patchKey = key;
 
                 if( patchItem.ContainsKey( patchKey ) )
                     patchValue = patchItem[patchKey];
+                //..here needs a little examination.  seems redundant to check for a key in the collection
+                //that was just iterated above.  further, what is the use-case for iterating down after
+                //removing [__sli]?  When is there a third item in the collection?
 
-                //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
-                if( source[i] is Dictionary<object, object> listItemValue )
+                if( i >= 0 && i < source.Count )
                 {
-                    if( patchValue is Dictionary<object, object> )
-                        ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
-                    else if( patchValue is List<object> && listItemValue[patchKey] is List<object> )
-                        ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
-                    else //if( patchValue is 'the value' )
-                        listItemValue[patchKey] = patchValue;
+                    //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
+                    if( source[i] is Dictionary<object, object> listItemValue )
+                    {
+                        if( patchValue is Dictionary<object, object> )
+                            ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
+                        else if( patchValue is List<object> && listItemValue[patchKey] is List<object> )
+                            ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
+                        else //if( patchValue is 'the value' )
+                            listItemValue[patchKey] = patchValue;
+                    }
+                    else if( source[i] is List<object> )
+                        //recurse back in
+                        ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey, dv );
+                    else
+                        //update the value at index i
+                        source[i] = RegexReplaceOrValue( source[i], patchValue, dv );
                 }
-                else if( source[i] is List<object> )
-                    ApplyPatchValues( (List<object>)source[i], (List<object>)patchKey, dv );
                 else
-                    source[i] = RegexReplaceOrValue( source[i], patchValue, dv );
+                    //i is outside source lbound/ubound
+                    //add the value to the collection, where [string.empty] is a placeholder for the non-existent value at index i
+                    source.Add( RegexReplaceOrValue( string.Empty, patchValue, dv ) );
             }
             else
             {
+                //the patch value is a List (not a Dict), so replace the whole List at the destination
                 source.Clear();
                 source.AddRange( patch );
             }
@@ -517,28 +532,36 @@ namespace Synapse.Core.Utilities
             object patchKey = null;
             object patchValue = null;
 
+            //todo: [ss]: from here, to..
             foreach( object key in patchItem.Keys )
                 patchKey = key;
 
-            if( ((Dictionary<object, object>)searchPath[0]).ContainsKey( patchKey ) )
-                patchValue = ((Dictionary<object, object>)searchPath[0])[patchKey];
+            if( patchItem.ContainsKey( patchKey ) )
+                patchValue = patchItem[patchKey];
+            //..here needs a little examination.  seems redundant to check for a key in the collection
+            //that was just iterated above.  further, what is the use-case for iterating down after
+            //removing [__sli]?  When is there a third item in the collection?
 
-
-            if( source[i] is Dictionary<object, object> )
+            if( i >= 0 && i < source.Count )
             {
-                Dictionary<object, object> listItemValue = (Dictionary<object, object>)source[i];
-
-                if( patchValue is Dictionary<object, object> )
-                    result = FindElement( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
-                else if( patchValue is List<object> )
-                    result = FindElement( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
-                else //if( patchValue is 'the value' )
-                    result = listItemValue[patchKey];
+                //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
+                if( source[i] is Dictionary<object, object> listItemValue )
+                {
+                    if( patchValue is Dictionary<object, object> )
+                        result = FindElement( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
+                    else if( patchValue is List<object> )
+                        result = FindElement( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
+                    else //if( patchValue is 'the value' )
+                        result = listItemValue[patchKey];
+                }
+                else if( source[i] is List<object> )
+                    result = FindElement( (List<object>)source[i], (List<object>)patchKey );
+                else
+                    result = source[i];
             }
-            else if( source[i] is List<object> )
-                result = FindElement( (List<object>)source[i], (List<object>)patchKey );
-            else
-                result = source[i];
+            //else  //todo: return source?
+            //    //i is outside source lbound/ubound
+            //    result = source;
 
 
             return result;
@@ -557,7 +580,7 @@ namespace Synapse.Core.Utilities
         /// Lists items are:
         ///   Item:
         ///   - SynapseListIndex: indexValue  - this represents metadata about where to put the value in the destination
-        ///     value
+        ///   where the following Item will be placed at [indexValue] in the destination list
         /// </summary>
         /// <param name="path">The path to convert to a YAML Dictionary<object, object></param>
         /// <param name="value">The terminus value of the path.</param>
@@ -573,7 +596,7 @@ namespace Synapse.Core.Utilities
                 string newLine = CheckPathElementIsIndexed( lines[i], out index );
                 yaml.AppendLine( newLine.PadLeft( (2 * i) + newLine.Length ) + ":" );
 
-                //appends [- SynapseListIndex: indexValue] and a following indented blank line
+                //appends [- SynapseListIndex: indexValue]
                 if( index > -1 )
                 {
                     string sli = $"- {__sli}: {index}";
