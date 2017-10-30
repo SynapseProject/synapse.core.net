@@ -1,0 +1,40 @@
+Name: ParentExitDataTest
+DefaultHandlerType: Synapse.Core:EmptyHandler
+Actions:
+- Name: Parent
+  Parameters:
+    Type: Xml
+    Values:
+      <EmptyHandlerParameters>
+        <SleepMilliseconds>1000</SleepMilliseconds>
+        <ReturnStatus>Complete</ReturnStatus>
+        <ExitData>
+          <Something>
+            <Wonderful>
+              <Stars>2001</Stars>
+            </Wonderful>
+            <Foo>
+              <Bar>Tombstoned</Bar>
+            </Foo>
+            <ListMember>
+              <Servers>
+                <Server>localhost0</Server>
+                <Server>localhost1</Server>
+                <Server>localhost2</Server>
+              </Servers>
+            </ListMember>
+          </Something>
+        </ExitData>
+      </EmptyHandlerParameters>
+  Actions:
+  - Name: Child
+    Parameters:
+      Type: Xml
+      ParentExitData:
+      - Source: /Something/Wonderful/Stars
+        Destination: /EmptyHandlerParameters/SleepMilliseconds[1]
+      - Source: /Something/Foo/Bar
+        Destination: /EmptyHandlerParameters/ReturnStatus
+      Dynamic:
+      - Name: ListMemberx
+        Path: /EmptyHandlerParameters/ExitData
