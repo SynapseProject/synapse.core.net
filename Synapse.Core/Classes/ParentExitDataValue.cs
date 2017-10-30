@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
@@ -7,6 +8,9 @@ namespace Synapse.Core
     {
         public string Source { get; set; }
         //public SerializationType SourceType { get; set; }
+        public string Transform { get; set; }
+        [YamlIgnore]
+        public bool HasTransform { get { return !string.IsNullOrWhiteSpace( Transform ); } }
         public string Destination { get; set; }
         public bool Parse { get; set; }
         public string Replace { get; set; }

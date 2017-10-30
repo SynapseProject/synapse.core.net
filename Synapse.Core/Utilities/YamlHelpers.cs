@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
@@ -122,11 +123,29 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, Dictionary<object, object> parentExitDataValues)
+        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues)
         {
             //if there's nothing to do, get out!
             if( parentExitDataValues == null || (parentExitDataValues != null && parentExitDataValues.Count == 0) )
                 return;
+
+            IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
+            foreach( ParentExitDataValue ped in transforms )
+            {
+                string[] path = ped.Source?.Split( ':' );
+                if( path.Length > 0 )
+                {
+                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
+                    if( element != null )
+                    {
+                        if( ped.Parse )
+                            element = TryParseValue( element );
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Transform, element ); //?.ToString()
+                        ApplyPatchValues( parentExitDataValues, patch, null );
+                    }
+                    ped.Source = ped.Transform;
+                }
+            }
 
             foreach( ParentExitDataValue ped in parentExitData )
             {
