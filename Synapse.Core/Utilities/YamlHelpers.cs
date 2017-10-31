@@ -135,27 +135,26 @@ namespace Synapse.Core.Utilities
                 string[] path = ped.Source?.Split( ':' );
                 if( path.Length > 0 )
                 {
-                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
+                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.TransformSource } );
                     if( element != null )
                     {
                         if( ped.Parse )
                             element = TryParseValue( element );
-                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Transform, element ); //?.ToString()
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.TransformDestination, element ); //?.ToString()
                         ApplyPatchValues( parentExitDataValues, patch, null );
                     }
-                    ped.Source = ped.Transform;
                 }
             }
 
             foreach( ParentExitDataValue ped in parentExitData )
             {
                 string[] path = ped.Source?.Split( ':' );
-                if ( path.Length > 0 )
+                if( path.Length > 0 )
                 {
                     object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
-                    if ( element != null )
+                    if( element != null )
                     {
-                        if ( ped.Parse )
+                        if( ped.Parse )
                             element = TryParseValue( element );
                         Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
                         ApplyPatchValues( destination, patch, null );
@@ -174,7 +173,7 @@ namespace Synapse.Core.Utilities
                         if( s.StartsWith( "[" ) ) //it's a json array, which doesn't parse,
                             value = Deserialize( $"{__token}: {s}" )[__token]; //so make it yaml, then de-yaml it
                         else if( s.StartsWith( "'" ) && s.EndsWith( "'" ) )
-                            value = Deserialize( s.Substring( 1, s.Length - 2 )); //it's '-quote encapsulated
+                            value = Deserialize( s.Substring( 1, s.Length - 2 ) ); //it's '-quote encapsulated
                         else
                             value = Deserialize( s );
                 }
