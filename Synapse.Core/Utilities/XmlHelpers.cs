@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace Synapse.Core.Utilities
 {
@@ -215,6 +218,18 @@ namespace Synapse.Core.Utilities
 
         public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, XmlDocument values)
         {
+            IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
+            foreach( ParentExitDataValue ped in transforms )
+            {
+                XmlDocument xf = TransformXml( values, ped.TransformSource );
+                string xml = Serialize<XmlDocument>( xf );
+                xf = new XmlDocument();
+                xf.LoadXml( xml );
+                XmlDocument patch = XPathToXmlDocument( ped.TransformDestination, null );
+                Merge( ref patch, xf );
+                Merge( ref values, patch );
+            }
+
             foreach( ParentExitDataValue ped in parentExitData )
             {
                 string value = null;
@@ -311,6 +326,32 @@ namespace Synapse.Core.Utilities
             merge.LoadXml( xml.ToString() );
 
             return merge;
+        }
+
+        internal static XmlDocument TransformXml(XmlDocument xml, string xslt)
+        {
+            if( string.IsNullOrWhiteSpace( xslt ) || xml == null )
+                return xml;
+
+            // Process the XML
+            XPathDocument xpathDocument = new XPathDocument( new XmlNodeReader( xml ) );
+
+            // Process the XSLT
+            XmlTextReader xmlTextReaderXslt = new XmlTextReader( new StringReader( xslt ) );
+            XslCompiledTransform xslCompiledTransform = new XslCompiledTransform();
+            xslCompiledTransform.Load( xmlTextReaderXslt );
+
+            // Handle the output stream
+            StringBuilder stringBuilder = new StringBuilder();
+            TextWriter textWriter = new StringWriter( stringBuilder );
+
+            // Do the transform
+            xslCompiledTransform.Transform( xpathDocument, null, textWriter );
+
+            // Return unformatted string
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml( stringBuilder.ToString() );
+            return doc;
         }
         #endregion
 
