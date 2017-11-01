@@ -101,7 +101,7 @@ namespace Synapse.Core
                 else
                     pea = (XmlDocument)parentExitData;
 
-                XmlHelpers.Merge( ref parms, ParentExitData, pea );
+                XmlHelpers.Merge( ref parms, ParentExitData, ref pea );
             }
 
             //expand ForEach variables

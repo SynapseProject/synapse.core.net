@@ -73,22 +73,23 @@ namespace Synapse.Core.Utilities
         #region merge
         //works, but is horrifically inefficient.
         //todo: rewrite to calc all xpaths upfront, then select/update from source
-        public static void Merge(ref XmlDocument source, XmlDocument patch)
+        public static void Merge(ref XmlDocument source, XmlDocument patch, bool hackSkipImport = false)
         {
             if( source.DocumentElement == null )
                 source.LoadXml( patch.OuterXml );
             else
             {
-                foreach( XmlNode node in patch.DocumentElement.ChildNodes )
-                {
-                    string xpath = FindXPath( node );
-                    XmlNode src = source.SelectSingleNode( xpath );
-                    if( src == null )
+                if( !hackSkipImport )
+                    foreach( XmlNode node in patch.DocumentElement.ChildNodes )
                     {
-                        XmlNode imported = source.ImportNode( node, true );
-                        source.DocumentElement.AppendChild( imported );
+                        string xpath = FindXPath( node );
+                        XmlNode src = source.SelectSingleNode( xpath );
+                        if( src == null )
+                        {
+                            XmlNode imported = source.ImportNode( node, true );
+                            source.DocumentElement.AppendChild( imported );
+                        }
                     }
-                }
 
                 //loop through all the nodes/attributes and sync the values
                 Stack<IEnumerable> lists = new Stack<IEnumerable>();
@@ -102,16 +103,21 @@ namespace Synapse.Core.Utilities
                         string xpath = FindXPath( node );
                         XmlNode src = source.SelectSingleNode( xpath );
 
-                        if( src != null && src.Value != node.Value )
-                            if( src.NodeType == XmlNodeType.Element )
-                                if( src.SelectNodes( "*" ).Count > 0 )
-                                    src.InnerXml = node.InnerXml;
+                        if( src != null )
+                        {
+                            if( src.Value != node.Value )
+                                if( src.NodeType == XmlNodeType.Element )
+                                    if( src.SelectNodes( "*" ).Count > 0 )
+                                        src.InnerXml = node.InnerXml;
+                                    else
+                                        src.InnerText = node.InnerText;
                                 else
-                                    src.InnerText = node.InnerText;
-                            else
-                                src.Value = node.Value;
+                                    src.Value = node.Value;
+                        }
+                        else
+                            AddNodeToDocument( ref source, xpath, node );
 
-                        if( node.Attributes != null )
+                        if( node.Attributes != null && node.Attributes.Count > 0 )
                             lists.Push( node.Attributes );
 
                         if( node.ChildNodes.Count > 0 )
@@ -121,6 +127,16 @@ namespace Synapse.Core.Utilities
             }
         }
 
+        static void AddNodeToDocument(ref XmlDocument source, string xpath, XmlNode node)
+        {
+            xpath = xpath.Substring( 0, xpath.LastIndexOf( '/' ) );
+            if( !string.IsNullOrWhiteSpace( xpath ) )
+            {
+                XmlNode src = source.SelectSingleNode( xpath );
+                if( src != null )
+                    src.AppendChild( source.ImportNode( node, true ) );
+            }
+        }
 
         static string FindXPath(XmlNode node)
         {
@@ -216,17 +232,14 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, XmlDocument values)
+        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values)
         {
             IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
             foreach( ParentExitDataValue ped in transforms )
             {
                 XmlDocument xf = TransformXml( values, ped.TransformSource );
-                string xml = Serialize<XmlDocument>( xf );
-                xf = new XmlDocument();
-                xf.LoadXml( xml );
                 XmlDocument patch = XPathToXmlDocument( ped.TransformDestination, null );
-                Merge( ref patch, xf );
+                Merge( ref patch, xf, hackSkipImport: true );
                 Merge( ref values, patch );
             }
 
@@ -342,15 +355,25 @@ namespace Synapse.Core.Utilities
             xslCompiledTransform.Load( xmlTextReaderXslt );
 
             // Handle the output stream
-            StringBuilder stringBuilder = new StringBuilder();
-            TextWriter textWriter = new StringWriter( stringBuilder );
+            XmlWriterSettings settings = new XmlWriterSettings()
+            {
+                OmitXmlDeclaration = true,
+                ConformanceLevel = ConformanceLevel.Auto,
+                Encoding = Encoding.UTF8,
+                CloseOutput = true,
+                Indent = true
+            };
+
+            StringBuilder buf = new StringBuilder();
+            XmlWriter writer = XmlWriter.Create( buf, settings );
 
             // Do the transform
-            xslCompiledTransform.Transform( xpathDocument, null, textWriter );
+            xslCompiledTransform.Transform( xpathDocument, null, writer );
 
             // Return unformatted string
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml( stringBuilder.ToString() );
+            doc.LoadXml( buf.ToString() );
+
             return doc;
         }
         #endregion
