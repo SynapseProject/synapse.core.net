@@ -49,12 +49,12 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 107
+        InstanceId: 106
         ParentExitData: *o1
         RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    InstanceId: 107
+    InstanceId: 106
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -67,12 +67,12 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-        InstanceId: 108
+        InstanceId: 107
         ParentExitData: *o1
         RunAs: *o0
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse0
-    InstanceId: 108
+    InstanceId: 107
   Result:
     Status: Complete
     ExitData: *o1
@@ -127,12 +127,12 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 106
+        InstanceId: 108
         ParentExitData: *o3
         RunAs: *o4
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse2
-    InstanceId: 106
+    InstanceId: 108
   Result:
     Status: Complete
     ExitData: *o3
@@ -150,4 +150,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 10/30/2017 12:28:04 AM
+LastModified: 11/1/2017 9:55:17 PM
