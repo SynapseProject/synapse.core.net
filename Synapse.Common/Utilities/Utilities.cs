@@ -34,17 +34,17 @@ namespace Synapse.Common.WebApi
             return qs.ToString();
         }
 
-        public static void PrepareValuesForPost(this IDictionary<string, string> dynamicData)
-        {
-            if( dynamicData == null || dynamicData.Count <= 0 )
-                return;
+        //public static void PrepareValuesForPost(this IDictionary<string, string> dynamicData)
+        //{
+        //    if( dynamicData == null || dynamicData.Count <= 0 )
+        //        return;
 
-            foreach( string key in dynamicData.Keys.ToArray() )
-            {
-                string value = dynamicData[key];
-                if( value.Contains( ":" ) ) dynamicData[key] = value.EncapsulateWith( "'" );
-            }
-        }
+        //    foreach( string key in dynamicData.Keys.ToArray() )
+        //    {
+        //        string value = dynamicData[key];
+        //        if( value.Contains( ":" ) ) dynamicData[key] = value.EncapsulateWith( "'" );
+        //    }
+        //}
 
         /// <summary>
         /// Converts the Uri.Query into a Dictionary
@@ -61,11 +61,11 @@ namespace Synapse.Common.WebApi
         }
 
 
-        public static string EncapsulateWith(this string s, string c)
-        {
-            if( !s.StartsWith( c ) ) { s = $"{c}{s}"; }
-            if( !s.EndsWith( c ) ) { s = $"{s}{c}"; }
-            return s;
-        }
+        //public static string EncapsulateWith(this string s, string c)
+        //{
+        //    if( !s.StartsWith( c ) ) { s = $"{c}{s}"; }
+        //    if( !s.EndsWith( c ) ) { s = $"{s}{c}"; }
+        //    return s;
+        //}
     }
 }
