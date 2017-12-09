@@ -156,6 +156,7 @@ namespace Synapse.Core.Utilities
                     {
                         if( ped.Parse )
                             element = TryParseValue( element );
+
                         if( ped.CastToForEachValues )
                         {
                             if( forEach == null )
@@ -164,17 +165,13 @@ namespace Synapse.Core.Utilities
                             ForEach fe = new ForEach() { Path = ped.Destination };
                             forEach.Add( fe );
 
-                            if( element is IEnumerable<object> )
-                                foreach( object item in element as IEnumerable<object> )
-                                    fe.Values.Add( item.ToString() );
+                            if( element is List<object> )
+                                fe.Values = (List<object>)element;
                             else
                             {
                                 string elementAsYaml = Serialize( element );
                                 Dictionary<object, object> elementAsDict = Deserialize( elementAsYaml );
-                                List<object> items = FindFirstListInDict( elementAsDict );
-                                if( items != null )
-                                    foreach( object item in items )
-                                        fe.Values.Add( item.ToString() );
+                                fe.Values = FindFirstListInDict( elementAsDict );
                             }
                         }
                         else

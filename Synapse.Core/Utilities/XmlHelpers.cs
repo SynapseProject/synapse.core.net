@@ -232,7 +232,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values)
+        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values, ref List<ForEach> forEach)
         {
             IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
             foreach( ParentExitDataValue ped in transforms )
@@ -249,30 +249,53 @@ namespace Synapse.Core.Utilities
                 XmlNode src = values.SelectSingleNode( ped.Source );
                 if( src != null )
                 {
-                    if( src.NodeType == XmlNodeType.Element )
-                        if( src.SelectNodes( "*" ).Count > 0 )
-                            value = src.InnerXml;
-                        else
-                            value = src.InnerText;
-                    else
-                        value = src.Value;
-                    XmlNode dst = destination.SelectSingleNode( ped.Destination );
-                    if( dst != null )
-                        if( dst.NodeType == XmlNodeType.Element )
-                            if( src.SelectNodes( "*" ).Count > 0 )
-                                dst.InnerXml = RegexReplaceOrValue( dst.InnerXml, value, ped );
+                    if( ped.CastToForEachValues )
+                    {
+                        if( forEach == null )
+                            forEach = new List<ForEach>();
+
+                        ForEach fe = new ForEach() { Path = ped.Destination };
+                        forEach.Add( fe );
+
+                        if( src.NodeType == XmlNodeType.Element )
+                        {
+                            XmlNodeList nodes = src.SelectNodes( "*" );
+                            if( nodes.Count > 0 )
+                                foreach( XmlNode node in nodes )
+                                    fe.Values.Add( node.InnerXml ); //InnerText or just the node?
                             else
-                                dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
+                                fe.Values.Add( src.InnerText );
+                        }
                         else
-                            dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
+                            fe.Values.Add( src.Value );
+                    }
                     else
                     {
-                        XmlDocument patch = XPathToXmlDocument( ped.Destination, value );
-
-                        if( destination.DocumentElement == null )
-                            destination.LoadXml( patch.OuterXml );
+                        if( src.NodeType == XmlNodeType.Element )
+                            if( src.SelectNodes( "*" ).Count > 0 )
+                                value = src.InnerXml;
+                            else
+                                value = src.InnerText;
                         else
-                            Merge( ref destination, patch );
+                            value = src.Value;
+                        XmlNode dst = destination.SelectSingleNode( ped.Destination );
+                        if( dst != null )
+                            if( dst.NodeType == XmlNodeType.Element )
+                                if( src.SelectNodes( "*" ).Count > 0 )
+                                    dst.InnerXml = RegexReplaceOrValue( dst.InnerXml, value, ped );
+                                else
+                                    dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
+                            else
+                                dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
+                        else
+                        {
+                            XmlDocument patch = XPathToXmlDocument( ped.Destination, value );
+
+                            if( destination.DocumentElement == null )
+                                destination.LoadXml( patch.OuterXml );
+                            else
+                                Merge( ref destination, patch );
+                        }
                     }
                 }
             }

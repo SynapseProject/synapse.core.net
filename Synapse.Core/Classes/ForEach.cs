@@ -8,7 +8,7 @@ namespace Synapse.Core
     public class ForEach
     {
         public string Path { get; set; }
-        public List<string> Values { get; set; } = new List<string>();
+        public List<object> Values { get; set; } = new List<object>();
 
         [YamlIgnore]
         public ForEach Child { get; set; }
