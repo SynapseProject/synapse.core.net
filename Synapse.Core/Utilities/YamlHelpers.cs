@@ -158,20 +158,22 @@ namespace Synapse.Core.Utilities
                             element = TryParseValue( element );
                         if( ped.CastToForEachValues )
                         {
-                            ForEach fe = new ForEach() { Path = ped.Destination };
                             if( forEach == null )
                                 forEach = new List<ForEach>();
+
+                            ForEach fe = new ForEach() { Path = ped.Destination };
                             forEach.Add( fe );
+
                             if( element is IEnumerable<object> )
                                 foreach( object item in element as IEnumerable<object> )
                                     fe.Values.Add( item.ToString() );
                             else
                             {
-                                string iHopeItsAListBuf = Serialize( element );
-                                Dictionary<object, object> iHopeItsAList = Deserialize( iHopeItsAListBuf );
-                                List<object> keys = new List<object>( iHopeItsAList.Keys );
-                                if( iHopeItsAList[keys[0]] is IEnumerable<object> )
-                                    foreach( object item in iHopeItsAList[keys[0]] as IEnumerable<object> )
+                                string elementAsYaml = Serialize( element );
+                                Dictionary<object, object> elementAsDict = Deserialize( elementAsYaml );
+                                List<object> items = FindFirstListInDict( elementAsDict );
+                                if( items != null )
+                                    foreach( object item in items )
                                         fe.Values.Add( item.ToString() );
                             }
                         }
@@ -183,6 +185,26 @@ namespace Synapse.Core.Utilities
                     }
                 }
             }
+        }
+
+        static List<object> FindFirstListInDict(Dictionary<object, object> dict)
+        {
+            List<object> list = null;
+
+            foreach( object key in dict.Keys )
+            {
+                object item = dict[key];
+
+                if( item is Dictionary<object, object> )
+                    list = FindFirstListInDict( (Dictionary<object, object>)item );
+                else if( item is List<object> )
+                    list = (List<object>)item;
+
+                if( list != null )
+                    break;
+            }
+
+            return list;
         }
 
         internal static object TryParseValue(object value)
