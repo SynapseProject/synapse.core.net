@@ -26,11 +26,11 @@ namespace Synapse.Core
         }
 
         public string Destination { get; set; }
+        public bool CastToForEachValues { get; set; }
 
         public bool Parse { get; set; }
         public string Replace { get; set; }
         public string Encode { get; set; }
-        //public bool CastToForEachValues { get; set; }
 
         public override string ToString()
         {

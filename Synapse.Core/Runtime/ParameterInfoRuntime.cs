@@ -161,7 +161,9 @@ namespace Synapse.Core
 
                 Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                 Dictionary<object, object> pv = (Dictionary<object, object>)values;
-                YamlHelpers.Merge( ref ip, ParentExitData, ref pv ); //add merge to destination
+                List<ForEach> forEach = ForEach;
+                YamlHelpers.Merge( ref ip, ParentExitData, ref pv, ref forEach ); //add merge to destination
+                ForEach = forEach;
             }
 
             //expand ForEach variables
