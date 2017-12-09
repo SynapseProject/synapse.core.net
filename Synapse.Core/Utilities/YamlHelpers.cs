@@ -123,7 +123,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues)
+        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues, ref List<ForEach> forEach)
         {
             //if there's nothing to do, get out!
             if( parentExitDataValues == null || (parentExitDataValues != null && parentExitDataValues.Count == 0) )
@@ -156,8 +156,30 @@ namespace Synapse.Core.Utilities
                     {
                         if( ped.Parse )
                             element = TryParseValue( element );
-                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
-                        ApplyPatchValues( destination, patch, null );
+                        if( ped.CastToForEachValues )
+                        {
+                            ForEach fe = new ForEach() { Path = ped.Destination };
+                            if( forEach == null )
+                                forEach = new List<ForEach>();
+                            forEach.Add( fe );
+                            if( element is IEnumerable<object> )
+                                foreach( object item in element as IEnumerable<object> )
+                                    fe.Values.Add( item.ToString() );
+                            else
+                            {
+                                string iHopeItsAListBuf = Serialize( element );
+                                Dictionary<object, object> iHopeItsAList = Deserialize( iHopeItsAListBuf );
+                                List<object> keys = new List<object>( iHopeItsAList.Keys );
+                                if( iHopeItsAList[keys[0]] is IEnumerable<object> )
+                                    foreach( object item in iHopeItsAList[keys[0]] as IEnumerable<object> )
+                                        fe.Values.Add( item.ToString() );
+                            }
+                        }
+                        else
+                        {
+                            Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
+                            ApplyPatchValues( destination, patch, null );
+                        }
                     }
                 }
             }
