@@ -115,7 +115,18 @@ namespace Synapse.Core
                 Proxy = "Future-use: http://host:port/synapse/node",
                 Handler = HandlerInfo.CreateSample(),
                 Parameters = ParameterInfo.CreateSample(),
-                RunAs = SecurityContext.CreateSample()
+                RunAs = SecurityContext.CreateSample(),
+
+                ActionGroup = new ActionItem()
+                {
+                    Name = string.IsNullOrWhiteSpace( name ) ? "Sample ActionGroup" : name,
+                    Description = "Sample Action friendly description.",
+                    ExecuteCase = StatusType.Success | StatusType.Failed | StatusType.Tombstoned,
+                    Proxy = "Future-use: http://host:port/synapse/node",
+                    Handler = HandlerInfo.CreateSample(),
+                    Parameters = ParameterInfo.CreateSample(),
+                    RunAs = SecurityContext.CreateSample()
+                }
             };
         }
     }

@@ -352,49 +352,20 @@ namespace Synapse.Core.Utilities
 
         static void ExpandMatrixApplyPatchValues(ForEach fe, Dictionary<object, object> source, List<Dictionary<object, object>> matrix)
         {
-            foreach( string v in fe.Values )
+            foreach( object v in fe.Values )
             {
-                ConvertForEachValuesToDict( ref fe, v );
+                fe.PathAsPatchValues = ConvertPathElementToDict( fe.Path, v );
                 ApplyPatchValues( source, fe.PathAsPatchValues );
                 if( fe.HasChild )
                     ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
                 else
-                    matrix.Add( CopyDictionary( source ) );
+                {
+                    //make a copy of the Dictionary to avoid object refs
+                    string yaml = Serialize( source );
+                    Dictionary<object, object> copy = Deserialize( yaml );
+                    matrix.Add( copy );
+                }
             }
-        }
-
-        static void ConvertForEachValuesToDict(ref ForEach fe, string value)
-        {
-            Dictionary<object, object> dict = new Dictionary<object, object>();
-
-            Dictionary<object, object> d = dict;
-
-            string[] keys = fe.Path.ToString().Split( ':' );
-            int lastIndex = keys.Length - 1;
-            for( int i = 0; i < lastIndex; i++ )
-            {
-                string key = keys[i];
-                if( !d.ContainsKey( key ) )
-                    d[key] = new Dictionary<object, object>();
-
-                d = (Dictionary<object, object>)d[key];
-            }
-            d[keys[lastIndex]] = value;
-
-            fe.PathAsPatchValues = dict;
-        }
-
-        static Dictionary<object, object> CopyDictionary(Dictionary<object, object> source)
-        {
-            Dictionary<object, object> copy = new Dictionary<object, object>();
-            foreach( object key in source.Keys )
-            {
-                copy.Add( key, source[key] );
-                if( copy[key] is Dictionary<object, object> )
-                    copy[key] = CopyDictionary( (Dictionary<object, object>)copy[key] );
-            }
-
-            return copy;
         }
         #endregion
 
