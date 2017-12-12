@@ -201,6 +201,8 @@ namespace Synapse.Core
 #if sqlite
                     actionGroup.CreateInstance( parentContext, InstanceId );
 #endif
+                    ResolveConfigAndParameters( actionGroup, dynamicData, parentResult.ExitData );
+
                     actionGroup.InstanceId = ActionInstanceIdCounter++;
                     ActionItem clone = actionGroup.Clone();
                     parentContext.ActionGroup = clone;

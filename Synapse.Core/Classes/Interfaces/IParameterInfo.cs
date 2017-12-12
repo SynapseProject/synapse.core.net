@@ -36,6 +36,7 @@ namespace Synapse.Core
 
         string GetSerializedValues(CryptoProvider crypto = null);
 
-        object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null);
+        object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null,
+            object parentExitData = null, Dictionary<string, ParameterInfo> globalParamSets = null);
     }
 }

@@ -14,6 +14,10 @@ namespace Synapse.Core
 
         public SerializationType Type { get; set; }
 
+        public List<ForEachValuesSource> ForEachFromValues { get; set; }
+        [YamlIgnore]
+        public bool HasForEachFromValues { get { return ForEachFromValues != null && ForEachFromValues.Count > 0; } }
+
         public List<ForEach> ForEach { get; set; }
         [YamlIgnore]
         public bool HasForEach { get { return ForEach != null && ForEach.Count > 0; } }
@@ -110,7 +114,11 @@ namespace Synapse.Core
             {
                 ParentExitDataValue.CreateSample()
             };
-            p.ForEach = new List<ForEach>
+            p.ForEachFromValues = new List<ForEachValuesSource>()
+            {
+                ForEachValuesSource.CreateSample()
+            };
+            p.ForEach = new List<ForEach>()
             {
                 Core.ForEach.CreateSample()
             };
