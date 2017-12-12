@@ -26,7 +26,7 @@ namespace Synapse.Core
                 if( globalConfigSets != null && c.HasInheritFrom && globalConfigSets.Keys.Contains( c.InheritFrom ) )
                     c.InheritedValues = globalConfigSets[c.InheritFrom];
 
-                c.Resolve( out forEachConfigs, dynamicData, parentExitData );
+                c.Resolve( out forEachConfigs, dynamicData, parentExitData, globalConfigSets );
 
                 if( globalConfigSets != null && c.HasName )
                     globalConfigSets[c.Name] = c;
@@ -44,7 +44,7 @@ namespace Synapse.Core
                 if( globalParamSets != null && p.HasInheritFrom && globalParamSets.Keys.Contains( p.InheritFrom ) )
                     p.InheritedValues = globalParamSets[p.InheritFrom];
 
-                p.Resolve( out forEachParms, dynamicData, parentExitData );
+                p.Resolve( out forEachParms, dynamicData, parentExitData, globalParamSets );
 
                 if( globalParamSets != null && p.HasName )
                     globalParamSets[p.Name] = p;

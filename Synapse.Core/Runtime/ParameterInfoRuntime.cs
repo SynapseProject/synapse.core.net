@@ -14,7 +14,8 @@ namespace Synapse.Core
     {
         private Dictionary<string, string> _dynamicData = null;
 
-        public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null)
+        public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null,
+            Dictionary<string, ParameterInfo> globalParamSets = null)
         {
             _dynamicData = dynamicData ?? new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
             forEachParms = new List<object>();
@@ -30,7 +31,7 @@ namespace Synapse.Core
                 case SerializationType.Yaml:
                 case SerializationType.Json:
                 {
-                    parms = ResolveYamlJson( ref forEachParms, parentExitData );
+                    parms = ResolveYamlJson( ref forEachParms, parentExitData, globalParamSets );
                     break;
                 }
                 case SerializationType.Unspecified:
@@ -114,7 +115,7 @@ namespace Synapse.Core
             return parms;
         }
 
-        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms, object parentExitData)
+        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms, object parentExitData, Dictionary<string, ParameterInfo> globalParamSets)
         {
             object parms = null;
 
@@ -155,6 +156,8 @@ namespace Synapse.Core
             if( HasDynamic && p != null )
                 YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
 
+            List<ForEach> forEach = ForEach;
+
             if( HasParentExitData && p != null && parentExitData != null )
             {
                 string tmp = YamlHelpers.Serialize( parentExitData );
@@ -163,10 +166,14 @@ namespace Synapse.Core
 
                 Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                 Dictionary<object, object> pv = (Dictionary<object, object>)values;
-                List<ForEach> forEach = ForEach;
                 YamlHelpers.Merge( ref ip, ParentExitData, ref pv, ref forEach ); //add merge to destination
-                ForEach = forEach;
             }
+
+            //expand ForEach variables
+            if( HasForEachFromValues && p != null )
+                YamlHelpers.SelectForEachFromValues( ForEachFromValues, ref p, ref forEach, globalParamSets );
+
+            ForEach = forEach;
 
             //expand ForEach variables
             if( HasForEach && p != null )

@@ -184,6 +184,53 @@ namespace Synapse.Core.Utilities
             }
         }
 
+        internal static void SelectForEachFromValues(List<ForEachValuesSource> forEachFromValues, ref Dictionary<object, object> p, ref List<ForEach> forEach,
+            Dictionary<string, ParameterInfo> globalParamSets)
+        {
+            if( forEach == null )
+                forEach = new List<ForEach>();
+
+            foreach( ForEachValuesSource fevs in forEachFromValues )
+            {
+                string[] path = fevs.Source?.Split( ':' );
+                if( path.Length > 0 )
+                {
+                    Dictionary<object, object> parms = string.IsNullOrEmpty( fevs.From ) ? p : GetParamSet( fevs.From, globalParamSets );
+                    object element = SelectElements( parms, new List<string>() { fevs.Source } );
+                    if( element != null )
+                    {
+                        if( fevs.Parse )
+                            element = TryParseValue( element );
+
+                        ForEach fe = new ForEach() { Path = fevs.Destination };
+                        forEach.Add( fe );
+
+                        if( element is List<object> )
+                            fe.Values = (List<object>)element;
+                        else
+                        {
+                            string elementAsYaml = Serialize( element );
+                            Dictionary<object, object> elementAsDict = Deserialize( elementAsYaml );
+                            fe.Values = FindFirstListInDict( elementAsDict );
+                        }
+                    }
+                }
+            }
+        }
+
+        static Dictionary<object, object> GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets)
+        {
+            Dictionary<object, object> p = new Dictionary<object, object>();
+
+            if( globalParamSets.ContainsKey( key ) )
+            {
+                string values = Serialize( globalParamSets[key].Values );
+                p = Deserialize( values );
+            }
+
+            return p;
+        }
+
         static List<object> FindFirstListInDict(Dictionary<object, object> dict)
         {
             List<object> list = null;
