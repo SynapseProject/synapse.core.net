@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\ForEachValuesSource.cs" />
     <Compile Include="Classes\Interfaces\IReplacementValue.cs" />
     <Compile Include="Classes\ParentExitDataValue.cs" />
     <Compile Include="Classes\Enums\StatusUpdateStrategy.cs" />

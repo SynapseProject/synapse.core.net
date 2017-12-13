@@ -25,7 +25,7 @@ namespace Synapse.Core
             {
                 case SerializationType.Xml:
                 {
-                    parms = ResolveXml( ref forEachParms, parentExitData );
+                    parms = ResolveXml( ref forEachParms, parentExitData, globalParamSets );
                     break;
                 }
                 case SerializationType.Yaml:
@@ -49,7 +49,7 @@ namespace Synapse.Core
             return parms;
         }
 
-        XmlDocument ResolveXml(ref List<object> forEachParms, object parentExitData)
+        XmlDocument ResolveXml(ref List<object> forEachParms, object parentExitData, Dictionary<string, ParameterInfo> globalParamSets)
         {
             XmlDocument parms = null;
 
@@ -88,6 +88,11 @@ namespace Synapse.Core
                 XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
             }
 
+            if( !HasForEach )
+                ForEach = new ForEachInfo();
+
+            List<ForEachItem> forEach = ForEach.Items;
+
             if( HasParentExitData && parentExitData != null )
             {
                 if( parms == null )
@@ -102,14 +107,21 @@ namespace Synapse.Core
                 else
                     pea = (XmlDocument)parentExitData;
 
-                List<ForEach> forEach = ForEach;
+                if( !HasForEach )
+                    ForEach = new ForEachInfo();
+
                 XmlHelpers.Merge( ref parms, ParentExitData, ref pea, ref forEach );
-                ForEach = forEach;
             }
 
             //expand ForEach variables
+            if( ForEach.HasParameterSetSources && parms != null )
+                XmlHelpers.SelectForEachFromValues( ForEach.ParameterSetSources, ref parms, ref forEach, globalParamSets );
+
+            ForEach.Items = forEach;
+
+            //expand ForEach variables
             if( HasForEach && parms != null )
-                forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
+                forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach.Items );
 
 
             return parms;
@@ -156,7 +168,11 @@ namespace Synapse.Core
             if( HasDynamic && p != null )
                 YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
 
-            List<ForEach> forEach = ForEach;
+
+            if( !HasForEach )
+                ForEach = new ForEachInfo();
+
+            List<ForEachItem> forEach = ForEach.Items;
 
             if( HasParentExitData && p != null && parentExitData != null )
             {
@@ -170,14 +186,14 @@ namespace Synapse.Core
             }
 
             //expand ForEach variables
-            if( HasForEachFromValues && p != null )
-                YamlHelpers.SelectForEachFromValues( ForEachFromValues, ref p, ref forEach, globalParamSets );
+            if( ForEach.HasParameterSetSources && p != null )
+                YamlHelpers.SelectForEachFromValues( ForEach.ParameterSetSources, ref p, ref forEach, globalParamSets );
 
-            ForEach = forEach;
+            ForEach.Items = forEach;
 
             //expand ForEach variables
             if( HasForEach && p != null )
-                forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
+                forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach.Items );
 
 
             return p;

@@ -19,10 +19,11 @@ Actions:
       BranchStatus: Cancelled
     Parameters:
       ForEach:
-      - Path: ReturnStatus
-        Values:
-        - Initializing
-        - Cancelled
+        Items:
+        - Path: ReturnStatus
+          Values:
+          - Initializing
+          - Cancelled
       Values:
         ReturnStatus: Cancelled
     Actions:

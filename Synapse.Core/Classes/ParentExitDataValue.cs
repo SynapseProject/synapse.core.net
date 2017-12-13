@@ -26,7 +26,7 @@ namespace Synapse.Core
         }
 
         public string Destination { get; set; }
-        public bool CastToForEachValues { get; set; }
+        public bool CastToForEachItems { get; set; }
 
         public bool Parse { get; set; }
         public string Replace { get; set; }

@@ -12,6 +12,7 @@ Actions:
         CNode3:
           CNode3_1: CValue3_1_inline
           CNode3_2: CValue3_2_inline
+      ForEach: {}
     StartInfo:
       Parameters: >+
         PNode0: PValue0_inline
@@ -42,51 +43,7 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
       Options: []
-  Actions: []
-  Result:
-    Status: Complete
-    ExitData:
-      Config: >+
-        CNode0: CValue0_inline
-
-        CNode1: CValue1_inline
-
-        CNode3:
-
-          CNode3_1: CValue3_1_inline
-
-          CNode3_2: CValue3_2_inline
-
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 97
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 97
-- Name: ac1
-  Description: No Parameters declaration
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config:
-      Values:
-        CNode0: CValue0_inline
-        CNode1: CValue1_inline
-        CNode3:
-          CNode3_1: CValue3_1_inline
-          CNode3_2: CValue3_2_inline
-    StartInfo: {}
-  Parameters: {}
+    ForEach: {}
   Actions: []
   Result:
     Status: Complete
@@ -105,9 +62,55 @@ Actions:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
       InstanceId: 98
       IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
   InstanceId: 98
+- Name: ac1
+  Description: No Parameters declaration
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config:
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+      ForEach: {}
+    StartInfo: {}
+  Parameters: {}
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      Config: >+
+        CNode0: CValue0_inline
+
+        CNode1: CValue1_inline
+
+        CNode3:
+
+          CNode3_1: CValue3_1_inline
+
+          CNode3_2: CValue3_2_inline
+
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 99
+      IsDryRun: true
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 99
 - Name: ac2
   Description: No Handler declaration
   Handler:
@@ -143,12 +146,13 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
       Options: []
+    ForEach: {}
   Actions: []
   Result:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 99
+      InstanceId: 100
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -163,7 +167,7 @@ Actions:
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 99
+  InstanceId: 100
 - Name: ac3
   Description: Has Handler, but no Handler.Config.  No Parameters
   Handler:
@@ -176,11 +180,11 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 100
+      InstanceId: 101
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 100
+  InstanceId: 101
 - Name: ac4
   Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
   Handler:
@@ -216,12 +220,13 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
       Options: []
+    ForEach: {}
   Actions: []
   Result:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 101
+      InstanceId: 102
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -236,7 +241,7 @@ Actions:
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 101
+  InstanceId: 102
 - Name: ac5
   Description: No Handler declaration, partially formed Parameters
   Handler:
@@ -259,19 +264,20 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: PNode3:PNode3_1
       Options: []
+    ForEach: {}
   Actions: []
   Result:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 102
+      InstanceId: 103
       IsDryRun: true
       Parameters: >+
         {}
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 102
+  InstanceId: 103
 - Name: ''
   Description: No Name, no declaration at all
   Handler:
@@ -284,13 +290,13 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 103
+      InstanceId: 104
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 103
+  InstanceId: 104
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 12/10/2017 2:21:25 PM
+LastModified: 12/12/2017 7:46:28 PM

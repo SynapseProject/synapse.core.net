@@ -232,7 +232,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values, ref List<ForEach> forEach)
+        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values, ref List<ForEachItem> forEach)
         {
             IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
             foreach( ParentExitDataValue ped in transforms )
@@ -249,12 +249,12 @@ namespace Synapse.Core.Utilities
                 XmlNode src = values.SelectSingleNode( ped.Source );
                 if( src != null )
                 {
-                    if( ped.CastToForEachValues )
+                    if( ped.CastToForEachItems )
                     {
                         if( forEach == null )
-                            forEach = new List<ForEach>();
+                            forEach = new List<ForEachItem>();
 
-                        ForEach fe = new ForEach() { Path = ped.Destination };
+                        ForEachItem fe = new ForEachItem() { Path = ped.Destination };
                         forEach.Add( fe );
 
                         if( src.NodeType == XmlNodeType.Element )
@@ -299,6 +299,46 @@ namespace Synapse.Core.Utilities
                     }
                 }
             }
+        }
+
+        internal static void SelectForEachFromValues(List<ForEachParameterSetSource> parameterSetSources, ref XmlDocument values,
+            ref List<ForEachItem> forEach, Dictionary<string, ParameterInfo> globalParamSets)
+        {
+            if( forEach == null )
+                forEach = new List<ForEachItem>();
+
+            foreach( ForEachParameterSetSource pss in parameterSetSources )
+            {
+                XmlDocument v = pss.HasParameterSet ? GetParamSet( pss.ParameterSet, globalParamSets ) : values;
+                XmlNode src = v?.SelectSingleNode( pss.Source );
+                if( src != null )
+                {
+                    ForEachItem fe = new ForEachItem() { Path = pss.Destination };
+                    forEach.Add( fe );
+
+                    if( src.NodeType == XmlNodeType.Element )
+                    {
+                        XmlNodeList nodes = src.SelectNodes( "*" );
+                        if( nodes.Count > 0 )
+                            foreach( XmlNode node in nodes )
+                                fe.Values.Add( node.InnerXml ); //InnerText or just the node?
+                        else
+                            fe.Values.Add( src.InnerText );
+                    }
+                    else
+                        fe.Values.Add( src.Value );
+                }
+            }
+        }
+
+        static XmlDocument GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets)
+        {
+            XmlDocument p = null;
+
+            if( globalParamSets.ContainsKey( key ) )
+                p = globalParamSets[key].Values as XmlDocument;
+
+            return p;
         }
 
         internal static object TryParseValue(object value)
@@ -403,9 +443,9 @@ namespace Synapse.Core.Utilities
 
 
         #region ForEach
-        internal static List<object> ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEach> forEach)
+        internal static List<object> ExpandForEachAndApplyPatchValues(ref XmlDocument source, List<ForEachItem> forEach)
         {
-            ForEach node = forEach[0];
+            ForEachItem node = forEach[0];
             for( int i = 1; i < forEach.Count; i++ )
             {
                 node.Child = forEach[i];
@@ -418,7 +458,7 @@ namespace Synapse.Core.Utilities
             return matrix;
         }
 
-        static void ExpandMatrixApplyPatchValues(ForEach fe, XmlDocument source, List<object> matrix)
+        static void ExpandMatrixApplyPatchValues(ForEachItem fe, XmlDocument source, List<object> matrix)
         {
             foreach( string v in fe.Values )
             {
