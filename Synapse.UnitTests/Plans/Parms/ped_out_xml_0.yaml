@@ -48,6 +48,7 @@ Parameters:
     Destination: /EmptyHandlerParameters/SleepMilliseconds[1]
   - Source: /Something/Foo/Bar
     Destination: /EmptyHandlerParameters/ReturnStatus
+  ForEach: {}
 Actions: []
 Result:
   Status: Tombstoned

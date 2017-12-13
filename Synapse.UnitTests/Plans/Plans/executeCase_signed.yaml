@@ -10,13 +10,14 @@ Actions:
     Name: ac0.g
     ExecuteCase: Any
     Parameters:
-      ForEach:
-      - Path: ReturnStatus
-        Values:
-        - Initializing
-        - Complete
       Values:
         ReturnStatus: Running
+      ForEach:
+        Items:
+        - Path: ReturnStatus
+          Values:
+          - Initializing
+          - Complete
     Actions:
     - Name: ac0.g.0
       ExecuteCase: Complete
@@ -75,5 +76,5 @@ Actions:
       ReturnStatus: CompletedWithErrors
   Actions: []
 StartInfo: {}
-LastModified: 12/10/2017 2:21:25 PM
-Signature: IUi4OgRsB3YokrXSKQW/60WspJXChQ14RM6N6S8sYBWFG81XU+3mVCzeEsBCtd4byhgYhMjFuOQCBel1ivTDoyTFRbuhouZf3x2irto88bc05WyKznZlbdA/t509cGxfCYufiybsODPfVfGAybShBP/Ba9XqeV91HHzFV6+IYNc=
+LastModified: 12/12/2017 7:46:28 PM
+Signature: zFQ/Jxpi7PGrIiUtjdLV/0celejhvNWbkIVILCTcR3Zmf3sCYKkJnbFOyeBHQghw0/WCXvYOnPm/hPxo40irXidsbwR7sW00UUXwojndmMmeFq2NQ434CQ/6GpSLZtmWSzVBacWGP4YWxTWy7eymPm2WKC5feFvfoSBheQLCU5s=

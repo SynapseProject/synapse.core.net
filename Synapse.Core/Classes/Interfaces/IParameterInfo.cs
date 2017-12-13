@@ -11,7 +11,7 @@ namespace Synapse.Core
 
         SerializationType Type { get; set; }
 
-        List<ForEach> ForEach { get; set; }
+        ForEachInfo ForEach { get; set; }
         bool HasForEach { get; }
 
         string InheritFrom { get; set; }

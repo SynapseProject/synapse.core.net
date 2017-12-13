@@ -123,7 +123,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues, ref List<ForEach> forEach)
+        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues, ref List<ForEachItem> forEach)
         {
             //if there's nothing to do, get out!
             if( parentExitDataValues == null || (parentExitDataValues != null && parentExitDataValues.Count == 0) )
@@ -157,12 +157,12 @@ namespace Synapse.Core.Utilities
                         if( ped.Parse )
                             element = TryParseValue( element );
 
-                        if( ped.CastToForEachValues )
+                        if( ped.CastToForEachItems )
                         {
                             if( forEach == null )
-                                forEach = new List<ForEach>();
+                                forEach = new List<ForEachItem>();
 
-                            ForEach fe = new ForEach() { Path = ped.Destination };
+                            ForEachItem fe = new ForEachItem() { Path = ped.Destination };
                             forEach.Add( fe );
 
                             if( element is List<object> )
@@ -184,25 +184,25 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static void SelectForEachFromValues(List<ForEachValuesSource> forEachFromValues, ref Dictionary<object, object> p, ref List<ForEach> forEach,
+        internal static void SelectForEachFromValues(List<ForEachParameterSetSource> forEachFromValues, ref Dictionary<object, object> values, ref List<ForEachItem> forEach,
             Dictionary<string, ParameterInfo> globalParamSets)
         {
             if( forEach == null )
-                forEach = new List<ForEach>();
+                forEach = new List<ForEachItem>();
 
-            foreach( ForEachValuesSource fevs in forEachFromValues )
+            foreach( ForEachParameterSetSource pss in forEachFromValues )
             {
-                string[] path = fevs.Source?.Split( ':' );
+                string[] path = pss.Source?.Split( ':' );
                 if( path.Length > 0 )
                 {
-                    Dictionary<object, object> parms = string.IsNullOrEmpty( fevs.From ) ? p : GetParamSet( fevs.From, globalParamSets );
-                    object element = SelectElements( parms, new List<string>() { fevs.Source } );
+                    Dictionary<object, object> parms = pss.HasParameterSet ? GetParamSet( pss.ParameterSet, globalParamSets ) : values;
+                    object element = SelectElements( parms, new List<string>() { pss.Source } );
                     if( element != null )
                     {
-                        if( fevs.Parse )
+                        if( pss.Parse )
                             element = TryParseValue( element );
 
-                        ForEach fe = new ForEach() { Path = fevs.Destination };
+                        ForEachItem fe = new ForEachItem() { Path = pss.Destination };
                         forEach.Add( fe );
 
                         if( element is List<object> )
@@ -382,9 +382,9 @@ namespace Synapse.Core.Utilities
 
 
         #region foreach
-        public static List<object> ExpandForEachAndApplyPatchValues(ref Dictionary<object, object> source, List<ForEach> forEach)
+        public static List<object> ExpandForEachAndApplyPatchValues(ref Dictionary<object, object> source, List<ForEachItem> forEach)
         {
-            ForEach node = forEach[0];
+            ForEachItem node = forEach[0];
             for( int i = 1; i < forEach.Count; i++ )
             {
                 node.Child = forEach[i];
@@ -397,7 +397,7 @@ namespace Synapse.Core.Utilities
             return new List<object>( matrix );
         }
 
-        static void ExpandMatrixApplyPatchValues(ForEach fe, Dictionary<object, object> source, List<Dictionary<object, object>> matrix)
+        static void ExpandMatrixApplyPatchValues(ForEachItem fe, Dictionary<object, object> source, List<Dictionary<object, object>> matrix)
         {
             foreach( object v in fe.Values )
             {

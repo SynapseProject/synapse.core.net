@@ -26,14 +26,15 @@ Actions:
       - Name: cnode3_1Dynamic
         Path: /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
       ForEach:
-      - Path: /CXmlDoc[1]/CNode1[1]
-        Values:
-        - CValue1_forach_0
-        - CValue1_forach_1
-      - Path: /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
-        Values:
-        - CValue2_2_forach_0
-        - CValue2_2_forach_1
+        Items:
+        - Path: /CXmlDoc[1]/CNode1[1]
+          Values:
+          - CValue1_forach_0
+          - CValue1_forach_1
+        - Path: /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
+          Values:
+          - CValue2_2_forach_0
+          - CValue2_2_forach_1
   Parameters:
     Name: ParamSet00
     Type: Xml
@@ -55,11 +56,12 @@ Actions:
     - Name: pnode3_1Dynamic
       Path: /PXmlDoc[1]/PNode3[1]/PNode3_1[1]/@PAttr0
     ForEach:
-    - Path: /PXmlDoc[1]/PNode1[1]
-      Values:
-      - PValue1_forach_0
-      - PValue1_forach_1
-    - Path: /PXmlDoc[1]/PNode2[1]/PNode2_1[1]
-      Values:
-      - PValue2_2_forach_0
-      - PValue2_2_forach_1
+      Items:
+      - Path: /PXmlDoc[1]/PNode1[1]
+        Values:
+        - PValue1_forach_0
+        - PValue1_forach_1
+      - Path: /PXmlDoc[1]/PNode2[1]/PNode2_1[1]
+        Values:
+        - PValue2_2_forach_0
+        - PValue2_2_forach_1

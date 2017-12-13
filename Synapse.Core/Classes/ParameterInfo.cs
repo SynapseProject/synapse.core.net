@@ -14,13 +14,6 @@ namespace Synapse.Core
 
         public SerializationType Type { get; set; }
 
-        public List<ForEachValuesSource> ForEachFromValues { get; set; }
-        [YamlIgnore]
-        public bool HasForEachFromValues { get { return ForEachFromValues != null && ForEachFromValues.Count > 0; } }
-
-        public List<ForEach> ForEach { get; set; }
-        [YamlIgnore]
-        public bool HasForEach { get { return ForEach != null && ForEach.Count > 0; } }
 
         public string InheritFrom { get; set; }
         [YamlIgnore]
@@ -45,6 +38,11 @@ namespace Synapse.Core
         public List<ParentExitDataValue> ParentExitData { get; set; }
         [YamlIgnore]
         public bool HasParentExitData { get { return ParentExitData != null && ParentExitData.Count > 0; } }
+
+        public ForEachInfo ForEach { get; set; }
+        [YamlIgnore]
+        public bool HasForEach { get { return ForEach != null && ForEach.HasContent; } }
+
 
         public CryptoProvider Crypto { get; set; }
         [YamlIgnore]
@@ -114,14 +112,7 @@ namespace Synapse.Core
             {
                 ParentExitDataValue.CreateSample()
             };
-            p.ForEachFromValues = new List<ForEachValuesSource>()
-            {
-                ForEachValuesSource.CreateSample()
-            };
-            p.ForEach = new List<ForEach>()
-            {
-                Core.ForEach.CreateSample()
-            };
+            p.ForEach = ForEachInfo.CreateSample();
 
             return p;
         }

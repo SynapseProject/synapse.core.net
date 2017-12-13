@@ -47,6 +47,7 @@ Parameters:
     Destination: SleepMilliseconds
   - Source: Foo:Bar
     Destination: ReturnStatus
+  ForEach: {}
 Actions: []
 Result:
   Status: Tombstoned
