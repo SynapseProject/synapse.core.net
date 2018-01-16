@@ -116,6 +116,7 @@ namespace Synapse.Core
                 Handler = HandlerInfo.CreateSample(),
                 Parameters = ParameterInfo.CreateSample(),
                 RunAs = SecurityContext.CreateSample(),
+                Result = ExecuteResult.CreateSample(),
 
                 ActionGroup = new ActionItem()
                 {
@@ -125,7 +126,8 @@ namespace Synapse.Core
                     Proxy = "Future-use: http://host:port/synapse/node",
                     Handler = HandlerInfo.CreateSample(),
                     Parameters = ParameterInfo.CreateSample(),
-                    RunAs = SecurityContext.CreateSample()
+                    RunAs = SecurityContext.CreateSample(),
+                    Result = ExecuteResult.CreateSample()
                 }
             };
         }

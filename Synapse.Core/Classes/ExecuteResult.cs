@@ -50,5 +50,22 @@ namespace Synapse.Core
         {
             return $"{Status}/{BranchStatus}";
         }
+
+        public static ExecuteResult CreateSample()
+        {
+            ExecuteResult er = new ExecuteResult()
+            {
+                BranchStatus = StatusType.CompletedWithErrors,
+                ExitCode = 1,
+                ExitData = "Custom data as returned from Handlers",
+                Message = "Custom exit message from Handlers",
+                PId = 12345,
+                SecurityContext = "runtime user",
+                Sequence = 1,
+                Status = StatusType.Complete
+            };
+
+            return er;
+        }
     }
 }
