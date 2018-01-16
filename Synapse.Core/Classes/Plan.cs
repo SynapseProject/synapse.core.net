@@ -122,7 +122,8 @@ namespace Synapse.Core
                 IsActive = true,
                 Signature = "RSA Cryptographic signature, applied at runtime.",
                 Crypto = CryptoProvider.CreateSample( addElements: false ),
-                RunAs = SecurityContext.CreateSample()
+                RunAs = SecurityContext.CreateSample(),
+                Result = ExecuteResult.CreateSample()
             };
             p.Actions.Add( ActionItem.CreateSample() );
 
