@@ -2,14 +2,14 @@
 
 namespace Synapse.Core
 {
-	public enum StatusType
-	{
-		None = 0,
+    public enum StatusType
+    {
+        None = 0,
 
         //'Active' states:
-		New = 1,
-		Initializing = 2,
-		Running = 4,
+        New = 1,
+        Initializing = 2,
+        Running = 4,
         Waiting = 8,
         Cancelling = 16,
 
@@ -20,8 +20,8 @@ namespace Synapse.Core
         Success = 128,
         CompletedWithErrors = 256,
         SuccessWithErrors = 256,
-		Failed = 512,
-		Cancelled = 1024,
+        Failed = 512,
+        Cancelled = 1024,
         Tombstoned = 2048,
 
         Any = 16383
