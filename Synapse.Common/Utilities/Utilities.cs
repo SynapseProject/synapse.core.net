@@ -56,7 +56,7 @@ namespace Synapse.Common.WebApi
             NameValueCollection nvc = HttpUtility.ParseQueryString( uri.Query );
             Dictionary<string, string> d = new Dictionary<string, string>( nvc.Count, StringComparer.OrdinalIgnoreCase );
             foreach( string key in nvc.AllKeys )
-                d[key] = nvc[key];
+                d[key] = HttpUtility.UrlDecode( nvc[key] );
             return d;
         }
 
