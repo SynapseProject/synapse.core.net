@@ -149,7 +149,7 @@ namespace Synapse.Core.Utilities
             foreach( ParentExitDataValue ped in parentExitData )
             {
                 string[] path = ped.Source?.Split( ':' );
-                if( path.Length > 0 )
+                if( path?.Length > 0 )
                 {
                     object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
                     if( element != null )

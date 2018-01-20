@@ -9,13 +9,13 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasConfig { get { return !string.IsNullOrWhiteSpace( Config ); } }
 
-        public string Paraamters { get; set; }
+        public string Parameters { get; set; }
         [YamlIgnore]
-        public bool HasParaamters { get { return !string.IsNullOrWhiteSpace( Paraamters ); } }
+        public bool HasParaamters { get { return !string.IsNullOrWhiteSpace( Parameters ); } }
 
         public override string ToString()
         {
-            return $"Source:[{Config}], Target:[{Paraamters}]";
+            return $"Config:[{Config}], Parameters:[{Parameters}]";
         }
 
         public static SaveExitDataInfo CreateSample()
@@ -23,7 +23,7 @@ namespace Synapse.Core
             return new SaveExitDataInfo()
             {
                 Config = "ConfigSet Name",
-                Paraamters = "ParameterSet Name"
+                Parameters = "ParameterSet Name"
             };
         }
 
