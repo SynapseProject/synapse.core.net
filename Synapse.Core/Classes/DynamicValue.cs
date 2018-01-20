@@ -6,7 +6,7 @@ namespace Synapse.Core
     public class DynamicValue : IReplacementValueOptions
     {
         public string Name { get; set; }
-        public string Path { get; set; }
+        public string Target { get; set; }
         public bool Parse { get; set; }
         public string Replace { get; set; }
         public string Encode { get; set; }
@@ -14,7 +14,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return $"[{Name}]::[{Path}]::[{Replace}]::[{Encode}]";
+            return $"[Name:{Name}], Target:[{Target}], Parse:[{Parse}], Replace:[{Replace}], Encode:[{Encode}]";
         }
 
 
@@ -23,10 +23,10 @@ namespace Synapse.Core
             DynamicValue dv = new DynamicValue()
             {
                 Name = "URI parameter name",
-                Path = "Element:IndexedElement[0]:Element",
+                Target = "Element:IndexedElement[0]:Element",
                 Parse = true,
-                Replace = "Regex expression",
-                Encode = "Base64"
+                Encode = "None | Base64",
+                Replace = "Regex Expression"
             };
             dv.Options.Add( Option.CreateSample() );
             dv.Options.Add( Option.CreateSample() );

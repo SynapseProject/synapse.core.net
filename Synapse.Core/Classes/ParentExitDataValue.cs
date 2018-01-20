@@ -4,37 +4,38 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class ParentExitDataValue : IReplacementValueOptions
+    public class ParentExitDataValue
     {
-        //public SerializationType SourceType { get; set; }
-        public string TransformSource { get; set; }
-        public string TransformDestination { get; set; }
+        public SourceTargetBase TransformInPlace { get; set; }
         [YamlIgnore]
-        public bool HasTransform { get { return !string.IsNullOrWhiteSpace( TransformSource ) && !string.IsNullOrWhiteSpace( TransformDestination ); } }
+        public bool HasTransformInPlace { get { return TransformInPlace != null; } }
 
-        string _source = null;
+        public SourceTargetBase CopyToValues { get; set; }
+        [YamlIgnore]
+        public bool HasCopyToValues { get { return CopyToValues != null; } }
+
+        [YamlIgnore]
         public string Source
         {
             get
             {
-                if( HasTransform && string.IsNullOrWhiteSpace( _source ) )
-                    return TransformDestination;
+                if( HasCopyToValues && !string.IsNullOrWhiteSpace( CopyToValues.Source ) )
+                    return CopyToValues.Source;
+                else if( HasTransformInPlace && !string.IsNullOrWhiteSpace( TransformInPlace.Source ) )
+                    return TransformInPlace.Target;
                 else
-                    return _source;
+                    return null;
             }
-            set { _source = value; }
         }
 
-        public string Destination { get; set; }
-        public bool CastToForEachItems { get; set; }
 
-        public bool Parse { get; set; }
-        public string Replace { get; set; }
-        public string Encode { get; set; }
+
+        //public bool CastToForEachItems { get; set; }
+
 
         public override string ToString()
         {
-            return $"[TransformSource:[{TransformSource}], TransformDestination:[{TransformDestination}], Source:[{Source}], Destination:[{Destination}], CastToForEachItems:[{CastToForEachItems}], Replace:[{Replace}], Encode:[{Encode}], Parse:[{Parse}]";
+            return $"[TransformInPlace:[{TransformInPlace}], CopyToValues:[{CopyToValues}]";
         }
 
 
@@ -42,17 +43,37 @@ namespace Synapse.Core
         {
             ParentExitDataValue dv = new ParentExitDataValue()
             {
-                TransformSource = "Element:IndexedElement[0]:Element",
-                TransformDestination = "Element:IndexedElement[0]:Element",
-                Source = "Element:IndexedElement[0]:Element",
-                Destination = "Element:IndexedElement[0]:Element",
-                CastToForEachItems = true,
-                Parse = true,
-                Replace = "Regex expression",
-                Encode = "Base64"
+                TransformInPlace = SourceTargetBase.CreateSample(),
+                CopyToValues = SourceTargetBase.CreateSample()
             };
 
             return dv;
+        }
+    }
+
+    public class SourceTargetBase : IReplacementValueOptions
+    {
+        public string Source { get; set; }
+        public string Target { get; set; }
+        public bool Parse { get; set; }
+        public string Replace { get; set; }
+        public string Encode { get; set; }
+
+        public override string ToString()
+        {
+            return $"Source:[{Source}], Target:[{Target}], Parse:[{Parse}], Replace:[{Replace}], Encode:[{Encode}]";
+        }
+
+        public static SourceTargetBase CreateSample()
+        {
+            return new SourceTargetBase()
+            {
+                Source = "Element:IndexedElement[0]:Element",
+                Target = "Element:IndexedElement[0]:Element",
+                Parse = true,
+                Encode = "None | Base64",
+                Replace = "Regex Expression"
+            };
         }
     }
 }

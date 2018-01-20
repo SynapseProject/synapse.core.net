@@ -117,7 +117,7 @@ namespace Synapse.Core.Utilities
                 if( values.ContainsKey( dv.Name ) )
                 {
                     object value = dv.Parse ? TryParseValue( values[dv.Name] ) : values[dv.Name];
-                    Dictionary<object, object> patch = ConvertPathElementToDict( dv.Path, value );
+                    Dictionary<object, object> patch = ConvertPathElementToDict( dv.Target, value );
                     ApplyPatchValues( source, patch, dv );
                 }
             }
@@ -129,19 +129,19 @@ namespace Synapse.Core.Utilities
             if( parentExitDataValues == null || (parentExitDataValues != null && parentExitDataValues.Count == 0) )
                 return;
 
-            IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
+            IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransformInPlace );
             foreach( ParentExitDataValue ped in transforms )
             {
                 string[] path = ped.Source?.Split( ':' );
                 if( path.Length > 0 )
                 {
-                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.TransformSource } );
+                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.TransformInPlace.Source } );
                     if( element != null )
                     {
-                        if( ped.Parse )
+                        if( ped.TransformInPlace.Parse )
                             element = TryParseValue( element );
-                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.TransformDestination, element ); //?.ToString()
-                        ApplyPatchValues( parentExitDataValues, patch, null );
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.TransformInPlace.Target, element ); //?.ToString()
+                        ApplyPatchValues( parentExitDataValues, patch, ped.TransformInPlace );
                     }
                 }
             }
@@ -154,55 +154,55 @@ namespace Synapse.Core.Utilities
                     object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
                     if( element != null )
                     {
-                        if( ped.Parse )
+                        if( ped.CopyToValues.Parse )
                             element = TryParseValue( element );
 
-                        if( ped.CastToForEachItems )
-                        {
-                            if( forEach == null )
-                                forEach = new List<ForEachItem>();
+                        //if( ped.CastToForEachItems )
+                        //{
+                        //    if( forEach == null )
+                        //        forEach = new List<ForEachItem>();
 
-                            ForEachItem fe = new ForEachItem() { Path = ped.Destination };
-                            forEach.Add( fe );
+                        //    ForEachItem fe = new ForEachItem() { Target = ped.CopyToValues.Target };
+                        //    forEach.Add( fe );
 
-                            if( element is List<object> )
-                                fe.Values = (List<object>)element;
-                            else
-                            {
-                                string elementAsYaml = Serialize( element );
-                                Dictionary<object, object> elementAsDict = Deserialize( elementAsYaml );
-                                fe.Values = FindFirstListInDict( elementAsDict );
-                            }
-                        }
-                        else
-                        {
-                            Dictionary<object, object> patch = ConvertPathElementToDict( ped.Destination, element ); //?.ToString()
-                            ApplyPatchValues( destination, patch, null );
-                        }
+                        //    if( element is List<object> )
+                        //        fe.Values = (List<object>)element;
+                        //    else
+                        //    {
+                        //        string elementAsYaml = Serialize( element );
+                        //        Dictionary<object, object> elementAsDict = Deserialize( elementAsYaml );
+                        //        fe.Values = FindFirstListInDict( elementAsDict );
+                        //    }
+                        //}
+                        //else
+                        //{
+                        Dictionary<object, object> patch = ConvertPathElementToDict( ped.CopyToValues.Target, element ); //?.ToString()
+                        ApplyPatchValues( destination, patch, ped.CopyToValues );
+                        //}
                     }
                 }
             }
         }
 
-        internal static void SelectForEachFromValues(List<ForEachParameterSetSource> forEachFromValues, ref Dictionary<object, object> values, ref List<ForEachItem> forEach,
-            Dictionary<string, ParameterInfo> globalParamSets)
+        internal static void SelectForEachFromValues(List<ForEachParameterSource> forEachFromValues, ref Dictionary<object, object> values, ref List<ForEachItem> forEach,
+            Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
             if( forEach == null )
                 forEach = new List<ForEachItem>();
 
-            foreach( ForEachParameterSetSource pss in forEachFromValues )
+            foreach( ForEachParameterSource pss in forEachFromValues )
             {
                 string[] path = pss.Source?.Split( ':' );
                 if( path.Length > 0 )
                 {
-                    Dictionary<object, object> parms = pss.HasParameterSet ? GetParamSet( pss.ParameterSet, globalParamSets ) : values;
+                    Dictionary<object, object> parms = pss.HasName ? GetParamSet( pss.Name, globalParamSets, pss.IsNameParentExitData, parentExitData ) : values;
                     object element = SelectElements( parms, new List<string>() { pss.Source } );
                     if( element != null )
                     {
                         if( pss.Parse )
                             element = TryParseValue( element );
 
-                        ForEachItem fe = new ForEachItem() { Path = pss.Destination };
+                        ForEachItem fe = pss.ToForEachItem();
                         forEach.Add( fe );
 
                         if( element is List<object> )
@@ -218,11 +218,16 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static Dictionary<object, object> GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets)
+        static Dictionary<object, object> GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets, bool isNameParentExitData, object parentExitData)
         {
             Dictionary<object, object> p = new Dictionary<object, object>();
 
-            if( globalParamSets.ContainsKey( key ) )
+            if( isNameParentExitData )
+            {
+                string values = Serialize( parentExitData );
+                p = Deserialize( values );
+            }
+            else if( globalParamSets.ContainsKey( key ) )
             {
                 string values = Serialize( globalParamSets[key].Values );
                 p = Deserialize( values );
@@ -277,7 +282,7 @@ namespace Synapse.Core.Utilities
         /// <param name="source">The destination dict into which patch will be merged.</param>
         /// <param name="patch">The dict to merge in.</param>
         /// <param name="dv">Optional DynamicValue for specifying Regex/Crypto options of destinatio value.</param>
-        internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch, DynamicValue dv = null)
+        internal static void ApplyPatchValues(Dictionary<object, object> source, Dictionary<object, object> patch, IReplacementValueOptions dv = null)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -306,7 +311,7 @@ namespace Synapse.Core.Utilities
         /// <param name="source">The destination dict into which patch will be merged.</param>
         /// <param name="patch">The dict to merge in.</param>
         /// <param name="dv">Optional DynamicValue for specifying Regex/Crypto options of destinatio value.</param>
-        internal static void ApplyPatchValues(List<object> source, List<object> patch, DynamicValue dv = null)
+        internal static void ApplyPatchValues(List<object> source, List<object> patch, IReplacementValueOptions dv = null)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
@@ -363,7 +368,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static object RegexReplaceOrValue(object input, object replacement, DynamicValue dv)
+        internal static object RegexReplaceOrValue(object input, object replacement, IReplacementValueOptions dv)
         {
             object value = replacement;
 
@@ -401,8 +406,8 @@ namespace Synapse.Core.Utilities
         {
             foreach( object v in fe.Values )
             {
-                fe.PathAsPatchValues = ConvertPathElementToDict( fe.Path, v );
-                ApplyPatchValues( source, fe.PathAsPatchValues );
+                fe.PathAsPatchValues = ConvertPathElementToDict( fe.Target, v );
+                ApplyPatchValues( source, fe.PathAsPatchValues, fe );
                 if( fe.HasChild )
                     ExpandMatrixApplyPatchValues( fe.Child, source, matrix );
                 else

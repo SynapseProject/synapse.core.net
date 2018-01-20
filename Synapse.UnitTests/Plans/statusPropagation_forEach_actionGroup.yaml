@@ -14,7 +14,7 @@ Actions:
         ReturnStatus: Running
       ForEach:
         Items:
-        - Path: ReturnStatus
+        - Target: ReturnStatus
           Values:
           - Initializing
           - Cancelled

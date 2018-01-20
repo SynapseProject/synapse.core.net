@@ -210,7 +210,7 @@ namespace Synapse.Core.Utilities
                 {
                     string value = values[dv.Name];
 
-                    XmlNode src = source.SelectSingleNode( dv.Path );
+                    XmlNode src = source.SelectSingleNode( dv.Target );
                     if( src != null )
                         if( src.NodeType == XmlNodeType.Element )
                             if( src.SelectNodes( "*" ).Count > 0 )
@@ -221,7 +221,7 @@ namespace Synapse.Core.Utilities
                             src.Value = RegexReplaceOrValue( src.Value, value, dv );
                     else
                     {
-                        XmlDocument doc = XPathToXmlDocument( dv.Path, value );
+                        XmlDocument doc = XPathToXmlDocument( dv.Target, value );
 
                         if( source.DocumentElement == null )
                             source.LoadXml( doc.OuterXml );
@@ -234,11 +234,11 @@ namespace Synapse.Core.Utilities
 
         public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values, ref List<ForEachItem> forEach)
         {
-            IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransform );
+            IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransformInPlace );
             foreach( ParentExitDataValue ped in transforms )
             {
-                XmlDocument xf = TransformXml( values, ped.TransformSource );
-                XmlDocument patch = XPathToXmlDocument( ped.TransformDestination, null );
+                XmlDocument xf = TransformXml( values, ped.TransformInPlace.Source );
+                XmlDocument patch = XPathToXmlDocument( ped.TransformInPlace.Target, null );
                 Merge( ref patch, xf, hackSkipImport: true );
                 Merge( ref values, patch );
             }
@@ -249,28 +249,28 @@ namespace Synapse.Core.Utilities
                 XmlNode src = values.SelectSingleNode( ped.Source );
                 if( src != null )
                 {
-                    if( ped.CastToForEachItems )
-                    {
-                        if( forEach == null )
-                            forEach = new List<ForEachItem>();
+                    //if( ped.CastToForEachItems )
+                    //{
+                    //    if( forEach == null )
+                    //        forEach = new List<ForEachItem>();
 
-                        ForEachItem fe = new ForEachItem() { Path = ped.Destination };
-                        forEach.Add( fe );
+                    //    ForEachItem fe = new ForEachItem() { Target = ped.CopyToValues.Target };
+                    //    forEach.Add( fe );
 
-                        if( src.NodeType == XmlNodeType.Element )
-                        {
-                            XmlNodeList nodes = src.SelectNodes( "*" );
-                            if( nodes.Count > 0 )
-                                foreach( XmlNode node in nodes )
-                                    fe.Values.Add( node.InnerXml ); //InnerText or just the node?
-                            else
-                                fe.Values.Add( src.InnerText );
-                        }
-                        else
-                            fe.Values.Add( src.Value );
-                    }
-                    else
-                    {
+                    //    if( src.NodeType == XmlNodeType.Element )
+                    //    {
+                    //        XmlNodeList nodes = src.SelectNodes( "*" );
+                    //        if( nodes.Count > 0 )
+                    //            foreach( XmlNode node in nodes )
+                    //                fe.Values.Add( node.InnerXml ); //InnerText or just the node?
+                    //        else
+                    //            fe.Values.Add( src.InnerText );
+                    //    }
+                    //    else
+                    //        fe.Values.Add( src.Value );
+                    //}
+                    //else
+                    //{
                         if( src.NodeType == XmlNodeType.Element )
                             if( src.SelectNodes( "*" ).Count > 0 )
                                 value = src.InnerXml;
@@ -278,42 +278,42 @@ namespace Synapse.Core.Utilities
                                 value = src.InnerText;
                         else
                             value = src.Value;
-                        XmlNode dst = destination.SelectSingleNode( ped.Destination );
+                        XmlNode dst = destination.SelectSingleNode( ped.CopyToValues.Target );
                         if( dst != null )
                             if( dst.NodeType == XmlNodeType.Element )
                                 if( src.SelectNodes( "*" ).Count > 0 )
-                                    dst.InnerXml = RegexReplaceOrValue( dst.InnerXml, value, ped );
+                                    dst.InnerXml = RegexReplaceOrValue( dst.InnerXml, value, ped.CopyToValues );
                                 else
-                                    dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped );
+                                    dst.InnerText = RegexReplaceOrValue( dst.InnerText, value, ped.CopyToValues );
                             else
-                                dst.Value = RegexReplaceOrValue( dst.Value, value, ped );
+                                dst.Value = RegexReplaceOrValue( dst.Value, value, ped.CopyToValues );
                         else
                         {
-                            XmlDocument patch = XPathToXmlDocument( ped.Destination, value );
+                            XmlDocument patch = XPathToXmlDocument( ped.CopyToValues.Target, value );
 
                             if( destination.DocumentElement == null )
                                 destination.LoadXml( patch.OuterXml );
                             else
                                 Merge( ref destination, patch );
                         }
-                    }
+                    //}
                 }
             }
         }
 
-        internal static void SelectForEachFromValues(List<ForEachParameterSetSource> parameterSetSources, ref XmlDocument values,
-            ref List<ForEachItem> forEach, Dictionary<string, ParameterInfo> globalParamSets)
+        internal static void SelectForEachFromValues(List<ForEachParameterSource> parameterSetSources, ref XmlDocument values,
+            ref List<ForEachItem> forEach, Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
             if( forEach == null )
                 forEach = new List<ForEachItem>();
 
-            foreach( ForEachParameterSetSource pss in parameterSetSources )
+            foreach( ForEachParameterSource pss in parameterSetSources )
             {
-                XmlDocument v = pss.HasParameterSet ? GetParamSet( pss.ParameterSet, globalParamSets ) : values;
+                XmlDocument v = pss.HasName ? GetParamSet( pss.Name, globalParamSets, pss.IsNameParentExitData, parentExitData ) : values;
                 XmlNode src = v?.SelectSingleNode( pss.Source );
                 if( src != null )
                 {
-                    ForEachItem fe = new ForEachItem() { Path = pss.Destination };
+                    ForEachItem fe = pss.ToForEachItem();
                     forEach.Add( fe );
 
                     if( src.NodeType == XmlNodeType.Element )
@@ -331,11 +331,13 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static XmlDocument GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets)
+        static XmlDocument GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets, bool isNameParentExitData, object parentExitData)
         {
             XmlDocument p = null;
 
-            if( globalParamSets.ContainsKey( key ) )
+            if( isNameParentExitData )
+                p = parentExitData as XmlDocument;
+            else if( globalParamSets.ContainsKey( key ) )
                 p = globalParamSets[key].Values as XmlDocument;
 
             return p;
@@ -460,17 +462,17 @@ namespace Synapse.Core.Utilities
 
         static void ExpandMatrixApplyPatchValues(ForEachItem fe, XmlDocument source, List<object> matrix)
         {
-            foreach( string v in fe.Values )
+            foreach( string value in fe.Values )
             {
-                XmlNode src = source.SelectSingleNode( fe.Path );
+                XmlNode src = source.SelectSingleNode( fe.Target );
                 if( src != null )
                     if( src.NodeType == XmlNodeType.Element )
                         if( src.SelectNodes( "*" ).Count > 0 )
-                            src.InnerXml = v;
+                            src.InnerXml = RegexReplaceOrValue( src.InnerXml, value, fe );
                         else
-                            src.InnerText = v;
+                            src.InnerText = RegexReplaceOrValue( src.InnerText, value, fe );
                     else
-                        src.Value = v;
+                        src.Value = RegexReplaceOrValue( src.Value, value, fe );
 
                 if( fe.HasChild )
                     ExpandMatrixApplyPatchValues( fe.Child, source, matrix );

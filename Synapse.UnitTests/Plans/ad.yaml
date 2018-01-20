@@ -11,7 +11,7 @@ Actions:
         - xse
     Dynamic:
     - Name: filter
-      Path: SearchRequests[0]:Filter
+      Target: SearchRequests[0]:Filter
     - Name: attributes
-      Path: SearchRequests[0]:ReturnAttributes
+      Target: SearchRequests[0]:ReturnAttributes
       Parse: true

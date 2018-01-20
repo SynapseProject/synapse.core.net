@@ -7,59 +7,73 @@ namespace Synapse.Core
 {
     public class ForEachInfo
     {
-        public List<ForEachParameterSetSource> ParameterSetSources { get; set; }
+        public List<ForEachParameterSource> ParameterSources { get; set; }
         [YamlIgnore]
-        public bool HasParameterSetSources { get { return ParameterSetSources != null && ParameterSetSources.Count > 0; } }
+        public bool HasParameterSources { get { return ParameterSources != null && ParameterSources.Count > 0; } }
 
         public List<ForEachItem> Items { get; set; }
         [YamlIgnore]
         public bool HasItems { get { return Items != null && Items.Count > 0; } }
 
         [YamlIgnore]
-        public bool HasContent { get { return HasParameterSetSources || HasItems; } }
+        public bool HasContent { get { return HasParameterSources || HasItems; } }
 
         public static ForEachInfo CreateSample()
         {
             return new ForEachInfo()
             {
-                ParameterSetSources = new List<ForEachParameterSetSource>() { ForEachParameterSetSource.CreateSample() },
+                ParameterSources = new List<ForEachParameterSource>() { ForEachParameterSource.CreateSample() },
                 Items = new List<ForEachItem>() { ForEachItem.CreateSample() }
             };
         }
     }
 
-    public class ForEachParameterSetSource
+    public class ForEachParameterSource : SourceTargetBase
     {
-        public string ParameterSet { get; set; }
+        public string Name { get; set; }
         [YamlIgnore]
-        public bool HasParameterSet { get { return !string.IsNullOrWhiteSpace( ParameterSet ); } }
-        public string Source { get; set; }
-        public bool Parse { get; set; }
-        public string Destination { get; set; }
+        public bool HasName { get { return !string.IsNullOrWhiteSpace( Name ); } }
+        [YamlIgnore]
+        public bool IsNameParentExitData { get { return HasName && Name.Equals( "ParentExitData", StringComparison.OrdinalIgnoreCase ); } }
+
+
+        public ForEachItem ToForEachItem()
+        {
+            return new ForEachItem()
+            {
+                Target = Target,
+                Replace = Replace,
+                Encode = Encode
+            };
+        }
 
 
         public override string ToString()
         {
-            return $"{ParameterSet}::{Source}::{Parse}::{Destination}";
+            return $"Name:[{Name}], Source:[{Source}], Target:[{Target}], Parse:[{Parse}]";
         }
 
-        public static ForEachParameterSetSource CreateSample()
+        new public static ForEachParameterSource CreateSample()
         {
-            ForEachParameterSetSource fe = new ForEachParameterSetSource()
+            ForEachParameterSource fe = new ForEachParameterSource()
             {
-                ParameterSet = "Named ParameterInfo Block",
+                Name = "Named ParameterInfo Block",
                 Source = "Element:IndexedElement[0]:Element",
                 Parse = true,
-                Destination = "Element:IndexedElement[0]:Element"
+                Target = "Element:IndexedElement[0]:Element",
+                Encode = "None | Base64",
+                Replace = "Regex Expression"
             };
 
             return fe;
         }
     }
 
-    public class ForEachItem
+    public class ForEachItem : IReplacementValueOptions
     {
-        public string Path { get; set; }
+        public string Target { get; set; }
+        public string Replace { get; set; }
+        public string Encode { get; set; }
         public List<object> Values { get; set; } = new List<object>();
 
         [YamlIgnore]
@@ -72,14 +86,16 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return Path;
+            return $"Target:[{Target}], Replace:[{Replace}], Replace:[{Replace}]";
         }
 
         public static ForEachItem CreateSample()
         {
             ForEachItem fe = new ForEachItem()
             {
-                Path = "Element:IndexedElement[0]:Element"
+                Target = "Element:IndexedElement[0]:Element",
+                Encode = "None | Base64",
+                Replace = "Regex Expression"
             };
             fe.Values.AddRange( new string[] { "value0", "value1" } );
 

@@ -32,11 +32,14 @@ Actions:
       Type: Xml
       Dynamic:
       - Name: ed
-        Path: /EmptyHandlerParameters/ExitData
+        Target: /EmptyHandlerParameters/ExitData
       ParentExitData:
-      - Source: /Something/Wonderful/Stars
-        Destination: /EmptyHandlerParameters/SleepMilliseconds[1]
-      - Source: /Something/Foo/Bar
-        Destination: /EmptyHandlerParameters/ReturnStatus
-#      - Source: /Something/ListMember
-#        Destination: /EmptyHandlerParameters/ExitData
+      - CopyToValues:
+          Source: /Something/Wonderful/Stars
+          Target: /EmptyHandlerParameters/SleepMilliseconds[1]
+      - CopyToValues:
+          Source: /Something/Foo/Bar
+          Target: /EmptyHandlerParameters/ReturnStatus
+#  - CopyToValues:
+#        Source: /Something/ListMember
+#        Target: /EmptyHandlerParameters/ExitData

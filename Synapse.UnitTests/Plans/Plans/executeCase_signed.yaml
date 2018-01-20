@@ -14,7 +14,7 @@ Actions:
         ReturnStatus: Running
       ForEach:
         Items:
-        - Path: ReturnStatus
+        - Target: ReturnStatus
           Values:
           - Initializing
           - Complete
@@ -76,5 +76,5 @@ Actions:
       ReturnStatus: CompletedWithErrors
   Actions: []
 StartInfo: {}
-LastModified: 12/12/2017 7:46:28 PM
-Signature: zFQ/Jxpi7PGrIiUtjdLV/0celejhvNWbkIVILCTcR3Zmf3sCYKkJnbFOyeBHQghw0/WCXvYOnPm/hPxo40irXidsbwR7sW00UUXwojndmMmeFq2NQ434CQ/6GpSLZtmWSzVBacWGP4YWxTWy7eymPm2WKC5feFvfoSBheQLCU5s=
+LastModified: 1/19/2018 11:02:57 PM
+Signature: RYTqgRZJdCSEjh8Lvi5keuwU+Hzcr6oc/q7BbvQesaCe2D2naWlYs7xtcJQYkcMofVUTstCIummTSR8Z0pF6tdmuXdLhcHbe8QjhIiethfbPvgmTUxYXYdXdtvzQ+a7LdtUEFvlIt1+ygRg28LTooKa/RJq+eEVIfCBVM2dh19M=

@@ -17,18 +17,18 @@ Actions:
           CNode3_2: CValue3_2_inline
       Dynamic:
       - Name: cnode0Dynamic
-        Path: CNode0
+        Target: CNode0
       - Name: cnode2_1Dynamic
-        Path: CNode2:CNode2_1
+        Target: CNode2:CNode2_1
       - Name: cnode3_1Dynamic
-        Path: CNode3:CNode3_1
+        Target: CNode3:CNode3_1
       ForEach:
         Items:
-        - Path: CNode1
+        - Target: CNode1
           Values:
           - CValue1_forach_0
           - CValue1_forach_1
-        - Path: CNode2:CNode2_1
+        - Target: CNode2:CNode2_1
           Values:
           - CValue2_2_forach_0
           - CValue2_2_forach_1
@@ -44,18 +44,18 @@ Actions:
         PNode3_2: PValue3_2_inline
     Dynamic:
     - Name: pnode0Dynamic
-      Path: PNode0
+      Target: PNode0
     - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
+      Target: PNode2:PNode2_1
     - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
+      Target: PNode3:PNode3_1
     ForEach:
       Items:
-      - Path: PNode1
+      - Target: PNode1
         Values:
         - PValue1_forach_0
         - PValue1_forach_1
-      - Path: PNode2:PNode2_1
+      - Target: PNode2:PNode2_1
         Values:
         - PValue2_2_forach_0
         - PValue2_2_forach_1
