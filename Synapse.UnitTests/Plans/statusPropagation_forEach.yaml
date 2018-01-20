@@ -13,11 +13,10 @@ Actions:
       Values:
         ReturnStatus: Running
       ForEach:
-        Items:
-        - Target: ReturnStatus
-          Values:
-          - Initializing
-          - Complete
+      - Target: ReturnStatus
+        Values:
+        - Initializing
+        - Complete
     Actions:
     - Name: ac0.g.0
       ExecuteCase: Any

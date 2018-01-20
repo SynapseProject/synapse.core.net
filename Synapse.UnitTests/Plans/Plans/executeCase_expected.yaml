@@ -32,11 +32,10 @@ Actions:
       BranchStatus: Failed
     Parameters:
       ForEach:
-        Items:
-        - Target: ReturnStatus
-          Values:
-          - Initializing
-          - Complete
+      - Target: ReturnStatus
+        Values:
+        - Initializing
+        - Complete
       Values:
         ReturnStatus: Complete
     Actions:
