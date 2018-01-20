@@ -619,7 +619,7 @@ namespace Synapse.Core
                 if( a.SaveExitDataAs.HasConfig )
                     _configSets[a.SaveExitDataAs.Config] = new ParameterInfo() { Values = a.Result.ExitData };
                 if( a.SaveExitDataAs.HasParaamters )
-                    _configSets[a.SaveExitDataAs.Paraamters] = new ParameterInfo() { Values = a.Result.ExitData };
+                    _paramSets[a.SaveExitDataAs.Parameters] = new ParameterInfo() { Values = a.Result.ExitData };
             }
         }
         #endregion
