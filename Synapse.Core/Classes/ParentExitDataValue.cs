@@ -34,7 +34,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return $"[[{TransformSource}]::[{TransformDestination}]::[{Source}]::[{Destination}]::[{Replace}]::[{Encode}]::[{Parse}]";
+            return $"[TransformSource:[{TransformSource}], TransformDestination:[{TransformDestination}], Source:[{Source}], Destination:[{Destination}], CastToForEachItems:[{CastToForEachItems}], Replace:[{Replace}], Encode:[{Encode}], Parse:[{Parse}]";
         }
 
 
@@ -46,6 +46,7 @@ namespace Synapse.Core
                 TransformDestination = "Element:IndexedElement[0]:Element",
                 Source = "Element:IndexedElement[0]:Element",
                 Destination = "Element:IndexedElement[0]:Element",
+                CastToForEachItems = true,
                 Parse = true,
                 Replace = "Regex expression",
                 Encode = "Base64"
