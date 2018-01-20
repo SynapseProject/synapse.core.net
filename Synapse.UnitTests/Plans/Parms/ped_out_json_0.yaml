@@ -49,7 +49,7 @@ Parameters:
   - CopyToValues:
       Source: Foo:Bar
       Target: ReturnStatus
-  ForEach: {}
+  ForEach: []
 Actions: []
 Result:
   Status: Tombstoned

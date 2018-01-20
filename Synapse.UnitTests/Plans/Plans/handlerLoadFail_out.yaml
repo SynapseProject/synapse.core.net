@@ -37,29 +37,29 @@ Actions:
           Result:
             Status: Failed
             ExitData: Could not load file or assembly 'Synapse.CoreFoo' or one of its dependencies. The system cannot find the file specified.
-          InstanceId: 9
+          InstanceId: 19
         Result:
           Status: Failed
           ExitData: Could not load EmptyFoo.
           BranchStatus: Failed
-        InstanceId: 8
+        InstanceId: 18
       Result:
         Status: Failed
         ExitData: Could not load EmptyHandlerFoo.
         BranchStatus: Failed
-      InstanceId: 7
+      InstanceId: 17
     Result:
       Status: Failed
       ExitData: Could not load Synapse.Core.Runtime.EmptyHandlerFoo.
       BranchStatus: Failed
-    InstanceId: 6
+    InstanceId: 16
   Result:
     Status: Failed
     ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
     BranchStatus: Failed
-  InstanceId: 5
+  InstanceId: 15
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 1/20/2018 1:36:00 AM
+LastModified: 1/20/2018 12:15:53 PM
