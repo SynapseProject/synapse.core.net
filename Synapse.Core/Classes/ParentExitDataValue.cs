@@ -6,11 +6,11 @@ namespace Synapse.Core
 {
     public class ParentExitDataValue
     {
-        public SourceTargetBase TransformInPlace { get; set; }
+        public SourceTarget TransformInPlace { get; set; }
         [YamlIgnore]
         public bool HasTransformInPlace { get { return TransformInPlace != null; } }
 
-        public SourceTargetBase CopyToValues { get; set; }
+        public SourceTarget CopyToValues { get; set; }
         [YamlIgnore]
         public bool HasCopyToValues { get { return CopyToValues != null; } }
 
@@ -29,10 +29,6 @@ namespace Synapse.Core
         }
 
 
-
-        //public bool CastToForEachItems { get; set; }
-
-
         public override string ToString()
         {
             return $"[TransformInPlace:[{TransformInPlace}], CopyToValues:[{CopyToValues}]";
@@ -43,37 +39,11 @@ namespace Synapse.Core
         {
             ParentExitDataValue dv = new ParentExitDataValue()
             {
-                TransformInPlace = SourceTargetBase.CreateSample(),
-                CopyToValues = SourceTargetBase.CreateSample()
+                TransformInPlace = SourceTarget.CreateSample(),
+                CopyToValues = SourceTarget.CreateSample()
             };
 
             return dv;
-        }
-    }
-
-    public class SourceTargetBase : IReplacementValueOptions
-    {
-        public string Source { get; set; }
-        public string Target { get; set; }
-        public bool Parse { get; set; }
-        public string Replace { get; set; }
-        public string Encode { get; set; }
-
-        public override string ToString()
-        {
-            return $"Source:[{Source}], Target:[{Target}], Parse:[{Parse}], Replace:[{Replace}], Encode:[{Encode}]";
-        }
-
-        public static SourceTargetBase CreateSample()
-        {
-            return new SourceTargetBase()
-            {
-                Source = "Element:IndexedElement[0]:Element",
-                Target = "Element:IndexedElement[0]:Element",
-                Parse = true,
-                Encode = "None | Base64",
-                Replace = "Regex Expression"
-            };
         }
     }
 }

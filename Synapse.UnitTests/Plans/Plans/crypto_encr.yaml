@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: C74BE1IQmm8VHw3j6ZWKnyfIJu/9iSeuCl+vXdknkFVpZ2sqMHWgTOl5m7KYDTMbqgnrFWak8zcrLLnhOcR1M5BlMF77DEluxhRj5rTJIQoeX3aN7UEzUzPKS1RwRZ6KJYIYDhV52DS5crfkjYS/7WbcZB0GD4UrrxN23KN0L7A=
+        ArgString: hCsnesCyWPevav3WVQMZy/IhX3z+rpLKlHku6occeYVmHVZTX49U+GziLD4ge8zsE7W1NUGr5BfuEhK8RWtEy9qCvg0rb8KJDpBe6H5knEXHAd2IFVZo5TZz2kjYM2H83JnYyAmANp5R2kTkQ3g1vVk1yU+63kcakO2QhifV3VY=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: EOoXwAfStI4zQyrA7LgBmA39JbUjA1fM9puF9D+DWtWmKA+6i7j/15NBHRHHO3YcTuG1KkaDEOLuXjWX7I3VNXViUIQmE8agbwIqqSfsQf3cJtx6PFbpDKV8cSE6O9whPKSCmKT5YtcuaNgHBoNKoNBHy5UmGIF5dYB6rzQWJjI=
+          Encoding: ly9LZZRdMBgI0GSiTHC6uyr4msWvaKDXp6sOgbdmAW+Iq2LVzuZBa6D7jUdLI2XBG5RYsCOcj2mBirRoIr2rfQfP9DGHyxJiLJbvClA+V9D4DrD+FRyNs7Ve0JpwR9Dr3HJdSbHYKotNCL/GmHm27yJSGHyGOtN4ujZQ/mlVIMc=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: TIgznCSX1rlmWoWuKnbIu69b9jB67EEepSp4w50reOzOtE04F5ypcGq2ORbTp2/Qd0qQnrGCeEoooA5yfD8/NMeMxAhIsH8OB2GEhgzSc/0edSesTeMy0AquuPqbKJzYDWAVZ8hMpJJDrPG03Ho9wDBDpzPQ+N7OrpGkmLiY+co=
+              - v1: ZevQzYyEZgbmCI0LzJrKWsHlx1cPPkxoivnL05h1mPVjURGjFh750BBnxg7j+aS2FggsF8ABIYKG77WFwd+t66WWnHXjatzCv8xl/XhiX38WdgqhGwYrORDEHjL9lExERpqh+5ervA7w06CRcRIQwu6SWYYUASs1nJbl467g7rg=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,12 +35,12 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: ueSWFxk90LyiwmsBwPAveaD5HAIFcSsSYrifK392jAvDATWvw0ZN5lKkYgrtRCHO5PclOdYARu0JB68Dapwy7K+vFYJ2gHv3DGCQyRuD3bDdeJJYCX3RHyESc+cmJMQRvbRqbLdI8jJ0GwNieJuZtmtB5VQwb0+s5U6ACoXVFHE=
+              - v3: 0ZWKKCsHZf8DWgRGRVh57z0zFsElUbY7kdC8HTG+1IaGYxdF2FOyGLBgprLcvA1a6qWh9h9Eda7stNqAX9faLqeuVtDfB3+lMeJhIJpsz4AOIoIRDlgtKKSdzlMUWq98WpGsBESA/c0uCMtT/zkQKk9WUcCjziA/TaaahkI2dNo=
           Encoding: Base64
     Dynamic:
     - Name: jsonPayload
-      Target: Arguments:Expressions[0]:ReplaceWith
       Options: []
+      Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
       Key:
         Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -63,15 +63,15 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>hKdHeEdmfqJHOi0m32AKGD1ZoKdNcXlad7/gAq0HooWrEOTU5bc79BgjUhS+0g5kMEHYmW2h4bTVjDmxuVsX2/XjgjqAcvqEnQ1vfr1UWxL+5a/1hDHGDsRUxRrk8CPvk34O1L7vI3HFLy8GYFONxaPcgjBbUSQeMrR8kcnj1MA=</CNode0>
+          <CNode0>Gt0NTvR65eOfAVzFKTDIJuXnbW84ukg7pOzvZ7FmQM1YH/Z40iF9GrkbWJam0srgLjmsMSBfSB1SkCADPB7tausmBqp1rKhxbumTHB0OITw3wr7mJbMVthe0k7JHvUNN3XFomWhXSZD4SjywdI+EqDeAjhfNdiFxHuLuS6+SZRk=</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="QwHr4ffKbSvMCMXtZrjc54hEMlb4LqXf40QXUdXT5qI7OyXlbRmcBUTBfPE1LwLHzzegmKf8JHSnz/nI0D56MTuK9SRNq3zYdGc2H/BsQwbhLFSv0Kk7sJOpVXx/8Foi79AvxQdgjBPCe8icRReKh2TKxH1QcLrXWF8WCc4SZKU=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="Sml1Hxi/C3RsVL9/he+MBbvYIQv3eZqx2p411M0u6O2m6Udh4RNBvKZUXhl+jep0DvE9tnurefCLZ5++1fmVlP5TzChQXg7W7UuErpNKOgyJTWwtnp+idzLSYv0kzg3Cp/Syp/5h71bH0kvYuqIzjLlbxt0yjiK4PO42bO0MmTQ=">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>o4eeqW354LMyYi6y15Ya+IpiSW8Pg0cV/roXEI5pn5QtRPWSjwtXBU/oRi8VCpITZBNxmebLu23yH3ASvYr8eusoX2+/vFff73BcxMbpGYBFeSynv4oZid96npTTYnx02LojD/h04Qv4idk4CkkV8Kw8bZLSXvRoFUwqqTw3D1w=</CNode3_2>
+            <CNode3_2>YEXhCGo/ttJYTVrXm6Mrb+/ib9Z81DhzprUOesRyxgUABygldpzA47VrscBl1fnHw+/dmhD1CNM6kwvfzKQbLv/DtWtj+H6nArGBRXE3w0HWHUcavwnX1nmBJdH6auVZeMDGPpfCGCZauumAC6YuMmhg+erihl/KA0qCXuc1ZOU=</CNode3_2>
 
           </CNode3>
 
@@ -92,4 +92,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 1/20/2018 12:15:52 PM
+LastModified: 1/20/2018 1:17:07 PM

@@ -3,13 +3,9 @@ using System.Collections.Generic;
 
 namespace Synapse.Core
 {
-    public class DynamicValue : IReplacementValueOptions
+    public class DynamicValue : SourceTarget
     {
         public string Name { get; set; }
-        public string Target { get; set; }
-        public bool Parse { get; set; }
-        public string Replace { get; set; }
-        public string Encode { get; set; }
         public List<Option> Options { get; set; } = new List<Option>();
 
         public override string ToString()
@@ -18,7 +14,7 @@ namespace Synapse.Core
         }
 
 
-        public static DynamicValue CreateSample()
+        new public static DynamicValue CreateSample()
         {
             DynamicValue dv = new DynamicValue()
             {
@@ -34,6 +30,7 @@ namespace Synapse.Core
             return dv;
         }
     }
+
     public class Option
     {
         public string Key { get; set; }
