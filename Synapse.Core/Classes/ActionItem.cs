@@ -28,6 +28,10 @@ namespace Synapse.Core
         public string Proxy { get; set; }
         public StatusType ExecuteCase { get; set; }
 
+        public SaveExitDataInfo SaveExitDataAs { get; set; }
+        [YamlIgnore]
+        public bool HasSaveExitDataAs { get { return SaveExitDataAs != null; } }
+
         public HandlerInfo Handler { get; set; }
 
         public SecurityContext RunAs { get; set; }
@@ -68,6 +72,7 @@ namespace Synapse.Core
                 Description = Description,
                 Proxy = Proxy,
                 ExecuteCase = ExecuteCase,
+                SaveExitDataAs = HasSaveExitDataAs ? SaveExitDataAs.Clone() : null,
                 Handler = Handler.Clone(),
                 Parameters = HasParameters ? Parameters.Clone() : null,
                 RunAs = RunAs,
@@ -113,6 +118,7 @@ namespace Synapse.Core
                 Description = "Sample Action friendly description.",
                 ExecuteCase = StatusType.Success | StatusType.Failed | StatusType.Tombstoned,
                 Proxy = "Future-use: http://host:port/synapse/node",
+                SaveExitDataAs = SaveExitDataInfo.CreateSample(),
                 Handler = HandlerInfo.CreateSample(),
                 Parameters = ParameterInfo.CreateSample(),
                 RunAs = SecurityContext.CreateSample(),
@@ -124,6 +130,7 @@ namespace Synapse.Core
                     Description = "Sample Action friendly description.",
                     ExecuteCase = StatusType.Success | StatusType.Failed | StatusType.Tombstoned,
                     Proxy = "Future-use: http://host:port/synapse/node",
+                    SaveExitDataAs = SaveExitDataInfo.CreateSample(),
                     Handler = HandlerInfo.CreateSample(),
                     Parameters = ParameterInfo.CreateSample(),
                     RunAs = SecurityContext.CreateSample(),

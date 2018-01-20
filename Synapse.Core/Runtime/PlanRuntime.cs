@@ -294,9 +294,13 @@ namespace Synapse.Core
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
 
                     sc?.Impersonate( Crypto );
+
                     a.Result = rt.Execute( startInfo );
                     a.Result.BranchStatus = a.Result.Status;
                     a.Result.SecurityContext = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+
+                    SaveExitDataAs( a );
+
                     sc?.Undo();
                 }
 
@@ -336,6 +340,7 @@ namespace Synapse.Core
             }
         }
 
+        //note: this doesn't implement SaveExitDataAs( action );
         private ExecuteResult SpawnExternal(ActionItem a, Dictionary<string, string> dynamicData, object parentExitData, bool dryRun)
         {
             ExecuteResult result = new ExecuteResult();
@@ -481,6 +486,9 @@ namespace Synapse.Core
                     };
                     a.RunAs?.Impersonate( Crypto );
                     ExecuteResult r = rt.Execute( startInfo );
+
+                    SaveExitDataAs( a );
+
                     a.RunAs?.Undo();
 
                     if( r.Status > returnResult.Status )
@@ -602,6 +610,17 @@ namespace Synapse.Core
             }
 
             return hr;
+        }
+
+        void SaveExitDataAs(ActionItem a)
+        {
+            if( a.HasSaveExitDataAs )
+            {
+                if( a.SaveExitDataAs.HasConfig )
+                    _configSets[a.SaveExitDataAs.Config] = new ParameterInfo() { Values = a.Result.ExitData };
+                if( a.SaveExitDataAs.HasParaamters )
+                    _configSets[a.SaveExitDataAs.Paraamters] = new ParameterInfo() { Values = a.Result.ExitData };
+            }
         }
         #endregion
     }
