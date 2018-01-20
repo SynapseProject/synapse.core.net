@@ -1,34 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class ForEachInfo
+    public class ForEachInfo : List<ForEachItem>
     {
-        public List<ForEachParameterSource> ParameterSources { get; set; }
+        public List<ForEachItem> ParameterSourceItems { get; set; }
         [YamlIgnore]
-        public bool HasParameterSources { get { return ParameterSources != null && ParameterSources.Count > 0; } }
+        public bool HasParameterSourceItems
+        {
+            get
+            {
+                if( HasItems )
+                    ParameterSourceItems = this.Where( fe => fe.HasParameterSource ).ToList();
+                return ParameterSourceItems != null && ParameterSourceItems.Count > 0;
+            }
+        }
 
-        public List<ForEachItem> Items { get; set; }
+        //public List<ForEachItem> Items { get; set; }
         [YamlIgnore]
-        public bool HasItems { get { return Items != null && Items.Count > 0; } }
+        public bool HasItems { get { return Count > 0; } }
 
-        [YamlIgnore]
-        public bool HasContent { get { return HasParameterSources || HasItems; } }
+        //[YamlIgnore]
+        //public bool HasContent { get { return HasParameterSourceItems || HasItems; } }
 
         public static ForEachInfo CreateSample()
         {
             return new ForEachInfo()
             {
-                ParameterSources = new List<ForEachParameterSource>() { ForEachParameterSource.CreateSample() },
-                Items = new List<ForEachItem>() { ForEachItem.CreateSample() }
+                //ParameterSources = new List<ForEachParameterSource>() { ForEachParameterSource.CreateSample() },
+                {  ForEachItem.CreateSample() }
             };
         }
     }
 
-    public class ForEachParameterSource : SourceTargetBase
+    //public class ForEachParameterSource : SourceTargetBase
+    //{
+    //    public string Name { get; set; }
+    //    [YamlIgnore]
+    //    public bool HasName { get { return !string.IsNullOrWhiteSpace( Name ); } }
+    //    [YamlIgnore]
+    //    public bool IsNameParentExitData { get { return HasName && Name.Equals( "ParentExitData", StringComparison.OrdinalIgnoreCase ); } }
+
+
+    //    public ForEachItem ToForEachItem()
+    //    {
+    //        return new ForEachItem()
+    //        {
+    //            Target = Target,
+    //            Replace = Replace,
+    //            Encode = Encode
+    //        };
+    //    }
+
+
+    //    public override string ToString()
+    //    {
+    //        return $"Name:[{Name}], Source:[{Source}], Target:[{Target}], Parse:[{Parse}]";
+    //    }
+
+    //    new public static ForEachParameterSource CreateSample()
+    //    {
+    //        ForEachParameterSource fe = new ForEachParameterSource()
+    //        {
+    //            Name = "Named ParameterInfo Block",
+    //            Source = "Element:IndexedElement[0]:Element",
+    //            Parse = true,
+    //            Target = "Element:IndexedElement[0]:Element",
+    //            Encode = "None | Base64",
+    //            Replace = "Regex Expression"
+    //        };
+
+    //        return fe;
+    //    }
+    //}
+
+    public class ParameterSourceInfo
     {
         public string Name { get; set; }
         [YamlIgnore]
@@ -36,33 +85,21 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool IsNameParentExitData { get { return HasName && Name.Equals( "ParentExitData", StringComparison.OrdinalIgnoreCase ); } }
 
-
-        public ForEachItem ToForEachItem()
-        {
-            return new ForEachItem()
-            {
-                Target = Target,
-                Replace = Replace,
-                Encode = Encode
-            };
-        }
+        public string Source { get; set; }
+        public bool Parse { get; set; }
 
 
         public override string ToString()
         {
-            return $"Name:[{Name}], Source:[{Source}], Target:[{Target}], Parse:[{Parse}]";
+            return $"Name:[{Name}], Source:[{Source}], Parse:[{Parse}]";
         }
 
-        new public static ForEachParameterSource CreateSample()
+        public static ParameterSourceInfo CreateSample()
         {
-            ForEachParameterSource fe = new ForEachParameterSource()
+            ParameterSourceInfo fe = new ParameterSourceInfo()
             {
                 Name = "Named ParameterInfo Block",
-                Source = "Element:IndexedElement[0]:Element",
-                Parse = true,
-                Target = "Element:IndexedElement[0]:Element",
-                Encode = "None | Base64",
-                Replace = "Regex Expression"
+                Source = "Element:IndexedElement[0]:Element"
             };
 
             return fe;
@@ -71,6 +108,10 @@ namespace Synapse.Core
 
     public class ForEachItem : IReplacementValueOptions
     {
+        public ParameterSourceInfo ParameterSource { get; set; }
+        [YamlIgnore]
+        public bool HasParameterSource { get { return ParameterSource != null; } }
+
         public string Target { get; set; }
         public string Replace { get; set; }
         public string Encode { get; set; }
@@ -93,6 +134,7 @@ namespace Synapse.Core
         {
             ForEachItem fe = new ForEachItem()
             {
+                ParameterSource = ParameterSourceInfo.CreateSample(),
                 Target = "Element:IndexedElement[0]:Element",
                 Encode = "None | Base64",
                 Replace = "Regex Expression"

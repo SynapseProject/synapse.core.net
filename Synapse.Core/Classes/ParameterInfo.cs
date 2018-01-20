@@ -41,7 +41,7 @@ namespace Synapse.Core
 
         public ForEachInfo ForEach { get; set; }
         [YamlIgnore]
-        public bool HasForEach { get { return ForEach != null && ForEach.HasContent; } }
+        public bool HasForEach { get { return ForEach != null && ForEach.HasItems; } }
 
 
         public CryptoProvider Crypto { get; set; }

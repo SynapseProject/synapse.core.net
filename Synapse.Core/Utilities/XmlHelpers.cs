@@ -232,7 +232,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values, ref List<ForEachItem> forEach)
+        public static void Merge(ref XmlDocument destination, List<ParentExitDataValue> parentExitData, ref XmlDocument values)
         {
             IEnumerable<ParentExitDataValue> transforms = parentExitData.Where( pex => pex.HasTransformInPlace );
             foreach( ParentExitDataValue ped in transforms )
@@ -301,21 +301,17 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static void SelectForEachFromValues(List<ForEachParameterSource> parameterSetSources, ref XmlDocument values,
-            ref List<ForEachItem> forEach, Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
+        internal static void SelectForEachFromValues(List<ForEachItem> parameterSetSources, ref XmlDocument values,
+            Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
-            if( forEach == null )
-                forEach = new List<ForEachItem>();
-
-            foreach( ForEachParameterSource pss in parameterSetSources )
+            foreach( ForEachItem fe in parameterSetSources )
             {
+                ParameterSourceInfo pss = fe.ParameterSource;
+
                 XmlDocument v = pss.HasName ? GetParamSet( pss.Name, globalParamSets, pss.IsNameParentExitData, parentExitData ) : values;
                 XmlNode src = v?.SelectSingleNode( pss.Source );
                 if( src != null )
                 {
-                    ForEachItem fe = pss.ToForEachItem();
-                    forEach.Add( fe );
-
                     if( src.NodeType == XmlNodeType.Element )
                     {
                         XmlNodeList nodes = src.SelectNodes( "*" );

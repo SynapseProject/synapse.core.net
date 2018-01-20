@@ -123,7 +123,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues, ref List<ForEachItem> forEach)
+        public static void Merge(ref Dictionary<object, object> destination, List<ParentExitDataValue> parentExitData, ref Dictionary<object, object> parentExitDataValues)
         {
             //if there's nothing to do, get out!
             if( parentExitDataValues == null || (parentExitDataValues != null && parentExitDataValues.Count == 0) )
@@ -184,14 +184,13 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static void SelectForEachFromValues(List<ForEachParameterSource> forEachFromValues, ref Dictionary<object, object> values, ref List<ForEachItem> forEach,
+        internal static void SelectForEachFromValues(List<ForEachItem> forEachFromValues, ref Dictionary<object, object> values,
             Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
-            if( forEach == null )
-                forEach = new List<ForEachItem>();
-
-            foreach( ForEachParameterSource pss in forEachFromValues )
+            foreach( ForEachItem fe in forEachFromValues )
             {
+                ParameterSourceInfo pss = fe.ParameterSource;
+
                 string[] path = pss.Source?.Split( ':' );
                 if( path.Length > 0 )
                 {
@@ -201,9 +200,6 @@ namespace Synapse.Core.Utilities
                     {
                         if( pss.Parse )
                             element = TryParseValue( element );
-
-                        ForEachItem fe = pss.ToForEachItem();
-                        forEach.Add( fe );
 
                         if( element is List<object> )
                             fe.Values = (List<object>)element;

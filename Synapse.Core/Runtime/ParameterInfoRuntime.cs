@@ -91,8 +91,6 @@ namespace Synapse.Core
             if( !HasForEach )
                 ForEach = new ForEachInfo();
 
-            List<ForEachItem> forEach = ForEach.Items;
-
             if( HasParentExitData && parentExitData != null )
             {
                 if( parms == null )
@@ -110,18 +108,16 @@ namespace Synapse.Core
                 if( !HasForEach )
                     ForEach = new ForEachInfo();
 
-                XmlHelpers.Merge( ref parms, ParentExitData, ref pea, ref forEach );
+                XmlHelpers.Merge( ref parms, ParentExitData, ref pea );
             }
 
             //expand ForEach variables
-            if( ForEach.HasParameterSources && parms != null )
-                XmlHelpers.SelectForEachFromValues( ForEach.ParameterSources, ref parms, ref forEach, globalParamSets, parentExitData );
-
-            ForEach.Items = forEach;
+            if( ForEach.HasParameterSourceItems && parms != null )
+                XmlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref parms, globalParamSets, parentExitData );
 
             //expand ForEach variables
             if( HasForEach && parms != null )
-                forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach.Items );
+                forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
 
 
             return parms;
@@ -172,7 +168,7 @@ namespace Synapse.Core
             if( !HasForEach )
                 ForEach = new ForEachInfo();
 
-            List<ForEachItem> forEach = ForEach.Items;
+            List<ForEachItem> forEach = ForEach;
 
             if( HasParentExitData && p != null && parentExitData != null )
             {
@@ -182,18 +178,16 @@ namespace Synapse.Core
 
                 Dictionary<object, object> ip = (Dictionary<object, object>)parms;
                 Dictionary<object, object> pv = (Dictionary<object, object>)values;
-                YamlHelpers.Merge( ref ip, ParentExitData, ref pv, ref forEach ); //add merge to destination
+                YamlHelpers.Merge( ref ip, ParentExitData, ref pv );
             }
 
             //expand ForEach variables
-            if( ForEach.HasParameterSources && p != null )
-                YamlHelpers.SelectForEachFromValues( ForEach.ParameterSources, ref p, ref forEach, globalParamSets, parentExitData );
-
-            ForEach.Items = forEach;
+            if( ForEach.HasParameterSourceItems && p != null )
+                YamlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref p, globalParamSets, parentExitData );
 
             //expand ForEach variables
             if( HasForEach && p != null )
-                forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach.Items );
+                forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
 
 
             return p;
