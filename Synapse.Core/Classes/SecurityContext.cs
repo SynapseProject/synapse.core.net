@@ -89,7 +89,7 @@ namespace Synapse.Core
 
         public override string ToString()
         {
-            return string.Format( $"[{Domain}]::[{UserName}]" );
+            return string.Format( $"[Domain:{Domain}], UserName:[{UserName}]" );
         }
 
         public static SecurityContext CreateSample()

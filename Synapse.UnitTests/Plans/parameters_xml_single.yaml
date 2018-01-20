@@ -20,11 +20,11 @@ Actions:
         </CXmlDoc>
       Dynamic:
       - Name: cnode0Dynamic
-        Path: /CXmlDoc[1]/CNode0[1]
+        Target: /CXmlDoc[1]/CNode0[1]
       - Name: cnode2_1Dynamic
-        Path: /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
+        Target: /CXmlDoc[1]/CNode2[1]/CNode2_1[1]
       - Name: cnode3_1Dynamic
-        Path: /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
+        Target: /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
   Parameters:
     Name: ParamSet00
     Type: Xml
@@ -40,11 +40,11 @@ Actions:
         </PXmlDoc>
     Dynamic:
     - Name: pnode0Dynamic
-      Path: /PXmlDoc[1]/PNode0[1]
+      Target: /PXmlDoc[1]/PNode0[1]
     - Name: pnode2_1Dynamic
-      Path: /PXmlDoc[1]/PNode2[1]/PNode2_1[1]
+      Target: /PXmlDoc[1]/PNode2[1]/PNode2_1[1]
     - Name: pnode3_1Dynamic
-      Path: /PXmlDoc[1]/PNode3[1]/PNode3_1[1]/@PAttr0
+      Target: /PXmlDoc[1]/PNode3[1]/PNode3_1[1]/@PAttr0
   Actions:
   - Name: action1
     Handler:

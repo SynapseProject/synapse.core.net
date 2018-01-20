@@ -23,5 +23,5 @@ Actions:
         Destination: ReturnStatus
       Dynamic:
       - Name: ListMemberx
-        Path: ExitData
+        Target: ExitData
         Parse: True

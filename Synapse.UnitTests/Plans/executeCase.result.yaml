@@ -21,7 +21,7 @@ Actions:
       BranchStatus: Failed
     Parameters:
       ForEach:
-      - Path: ReturnStatus
+      - Target: ReturnStatus
         Values:
         - Initializing
         - Complete

@@ -45,14 +45,16 @@ Parameters:
     ReturnStatus: Tombstoned
   Dynamic:
   - Name: ed
-    Path: ExitData
+    Target: ExitData
     Parse: true
     Options: []
   ParentExitData:
-  - Source: Something:Wonderful:Stars
-    Destination: SleepMilliseconds
-  - Source: Foo:Bar
-    Destination: ReturnStatus
+  - CopyToValues:
+      Source: Something:Wonderful:Stars
+      Target: SleepMilliseconds
+  - CopyToValues:
+      Source: Foo:Bar
+      Target: ReturnStatus
   ForEach: {}
 Actions: []
 Result:

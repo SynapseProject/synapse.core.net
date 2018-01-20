@@ -37,4 +37,4 @@ Actions:
         Destination: /EmptyHandlerParameters/ReturnStatus
       Dynamic:
       - Name: ListMemberx
-        Path: /EmptyHandlerParameters/ExitData
+        Target: /EmptyHandlerParameters/ExitData

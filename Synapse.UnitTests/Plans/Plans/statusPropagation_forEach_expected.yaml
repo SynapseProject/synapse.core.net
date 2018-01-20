@@ -34,7 +34,7 @@ Actions:
     Parameters:
       ForEach:
         Items:
-        - Path: ReturnStatus
+        - Target: ReturnStatus
           Values:
           - Initializing
           - Complete

@@ -114,8 +114,8 @@ namespace Synapse.Core
             }
 
             //expand ForEach variables
-            if( ForEach.HasParameterSetSources && parms != null )
-                XmlHelpers.SelectForEachFromValues( ForEach.ParameterSetSources, ref parms, ref forEach, globalParamSets );
+            if( ForEach.HasParameterSources && parms != null )
+                XmlHelpers.SelectForEachFromValues( ForEach.ParameterSources, ref parms, ref forEach, globalParamSets, parentExitData );
 
             ForEach.Items = forEach;
 
@@ -186,8 +186,8 @@ namespace Synapse.Core
             }
 
             //expand ForEach variables
-            if( ForEach.HasParameterSetSources && p != null )
-                YamlHelpers.SelectForEachFromValues( ForEach.ParameterSetSources, ref p, ref forEach, globalParamSets );
+            if( ForEach.HasParameterSources && p != null )
+                YamlHelpers.SelectForEachFromValues( ForEach.ParameterSources, ref p, ref forEach, globalParamSets, parentExitData );
 
             ForEach.Items = forEach;
 

@@ -17,12 +17,12 @@ Actions:
           CNode3_2: CValue3_2_inline
       Dynamic:
       - Name: cnode0Dynamic
-        Path: CNode0
+        Target: CNode0
         Encode: Base64
       - Name: cnode2_1Dynamic
-        Path: CNode2:CNode2_1
+        Target: CNode2:CNode2_1
       - Name: cnode3_1Dynamic
-        Path: CNode3:CNode3_1
+        Target: CNode3:CNode3_1
         Replace: ~replace~
   Parameters:
     Name: ParamSet00
@@ -36,11 +36,11 @@ Actions:
         PNode3_2: PValue3_2_inline
     Dynamic:
     - Name: pnode0Dynamic
-      Path: PNode0
+      Target: PNode0
     - Name: pnode2_1Dynamic
-      Path: PNode2:PNode2_1
+      Target: PNode2:PNode2_1
     - Name: pnode3_1Dynamic
-      Path: PNode3:PNode3_1
+      Target: PNode3:PNode3_1
   Actions:
   - Name: action1
     Handler:

@@ -52,7 +52,7 @@ Actions:
           Encoding: Base64
     Dynamic:
     - Name: jsonPayload
-      Path: Arguments:Expressions[0]:ReplaceWith
+      Target: Arguments:Expressions[0]:ReplaceWith
 - Name: Xml
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
