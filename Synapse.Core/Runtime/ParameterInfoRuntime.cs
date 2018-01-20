@@ -168,8 +168,6 @@ namespace Synapse.Core
             if( !HasForEach )
                 ForEach = new ForEachInfo();
 
-            List<ForEachItem> forEach = ForEach;
-
             if( HasParentExitData && p != null && parentExitData != null )
             {
                 string tmp = YamlHelpers.Serialize( parentExitData );
