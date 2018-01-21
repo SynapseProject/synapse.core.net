@@ -17,7 +17,7 @@ Actions:
   - Name: Child
     Parameters:
       Dynamic:
-      - Name: ed
+      - Source: ed
         Target: ExitData
         Parse: True
       ParentExitData:

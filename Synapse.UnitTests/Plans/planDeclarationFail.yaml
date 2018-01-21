@@ -24,11 +24,11 @@ Actions:
         PNode3_1: PValue3_1_inline
         PNode3_2: PValue3_2_inline
     Dynamic:
-    - Name: pnode0Dynamic
+    - Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
+    - Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
+    - Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
 - Name: ac1
   Description: No Parameters declaration
@@ -54,11 +54,11 @@ Actions:
         PNode3_1: PValue3_1_inline
         PNode3_2: PValue3_2_inline
     Dynamic:
-    - Name: pnode0Dynamic
+    - Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
+    - Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
+    - Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
 - Name: ac3
   Description: Has Handler, but no Handler.Config.  No Parameters
@@ -78,11 +78,11 @@ Actions:
         PNode3_1: PValue3_1_inline
         PNode3_2: PValue3_2_inline
     Dynamic:
-    - Name: pnode0Dynamic
+    - Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
+    - Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
+    - Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
 - Name: ac5
   Description: No Handler declaration, partially formed Parameters
@@ -91,10 +91,10 @@ Actions:
     Type: Yaml
     Values:
     Dynamic:
-    - Name: pnode0Dynamic
+    - Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
+    - Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
+    - Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
 - Description: No Name, no declaration at all

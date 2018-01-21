@@ -10,8 +10,8 @@ Actions:
         ReturnAttributes:
         - xse
     Dynamic:
-    - Name: filter
+    - Source: filter
       Target: SearchRequests[0]:Filter
-    - Name: attributes
+    - Source: attributes
       Target: SearchRequests[0]:ReturnAttributes
       Parse: true

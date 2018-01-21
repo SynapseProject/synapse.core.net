@@ -44,10 +44,10 @@ Parameters:
     SleepMilliseconds: 2001
     ReturnStatus: Tombstoned
   Dynamic:
-  - Name: ed
+  - Options: []
+    Source: ed
     Target: ExitData
     Parse: true
-    Options: []
   ParentExitData:
   - CopyToValues:
       Source: Something:Wonderful:Stars
