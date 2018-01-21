@@ -176,10 +176,14 @@ namespace Synapse.cli
                 {
                     a.Description = $"Resolved Handler from [{hr.RuntimeType}].";
                     a.Handler.Type = handlerType;
-                    a.Handler.Config = new ParameterInfo();
-                    a.Handler.Config.Values = hr.GetConfigInstance();
-                    a.Parameters = new ParameterInfo();
-                    a.Parameters.Values = hr.GetParametersInstance();
+                    a.Handler.Config = new ParameterInfo
+                    {
+                        Values = hr.GetConfigInstance()
+                    };
+                    a.Parameters = new ParameterInfo
+                    {
+                        Values = hr.GetParametersInstance()
+                    };
                 }
                 else
                 {
@@ -191,12 +195,12 @@ namespace Synapse.cli
 
             if( !string.IsNullOrWhiteSpace( outPath ) )
             {
-                File.WriteAllText( outPath, p.ToYaml() );
+                File.WriteAllText( outPath, p.ToYaml( verbose ) );
                 Console.WriteLine( $"Created sample Plan at [{outPath}]." );
             }
             else
             {
-                Console.WriteLine( p.ToYaml() );
+                Console.WriteLine( p.ToYaml( verbose ) );
             }
         }
 
