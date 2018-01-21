@@ -65,16 +65,9 @@ namespace Synapse.Core
         public string Signature { get; set; }
 
 
-        public string ToYaml()
+        public string ToYaml(bool emitDefaultValues = false)
         {
-            string yaml = string.Empty;
-            using( StringWriter s = new StringWriter() )
-            {
-                Serializer serializer = new Serializer();
-                serializer.Serialize( s, this );
-                yaml = s.ToString();
-            }
-            return yaml;
+            return Utilities.YamlHelpers.Serialize( this, emitDefaultValues: emitDefaultValues ); ;
         }
 
         public void ToYaml(TextWriter tw)
