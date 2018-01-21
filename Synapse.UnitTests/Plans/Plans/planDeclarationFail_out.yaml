@@ -34,14 +34,14 @@ Actions:
         PNode3_1: PValue3_1_inline
         PNode3_2: PValue3_2_inline
     Dynamic:
-    - Name: pnode0Dynamic
-      Options: []
+    - Options: []
+      Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
     ForEach: []
   Actions: []
@@ -60,7 +60,7 @@ Actions:
           CNode3_2: CValue3_2_inline
 
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 97
+      InstanceId: 98
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -75,7 +75,7 @@ Actions:
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 97
+  InstanceId: 98
 - Name: ac1
   Description: No Parameters declaration
   Handler:
@@ -106,11 +106,11 @@ Actions:
           CNode3_2: CValue3_2_inline
 
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 98
+      InstanceId: 99
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 98
+  InstanceId: 99
 - Name: ac2
   Description: No Handler declaration
   Handler:
@@ -137,14 +137,14 @@ Actions:
         PNode3_1: PValue3_1_inline
         PNode3_2: PValue3_2_inline
     Dynamic:
-    - Name: pnode0Dynamic
-      Options: []
+    - Options: []
+      Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
     ForEach: []
   Actions: []
@@ -152,7 +152,7 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 99
+      InstanceId: 100
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -167,7 +167,7 @@ Actions:
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 99
+  InstanceId: 100
 - Name: ac3
   Description: Has Handler, but no Handler.Config.  No Parameters
   Handler:
@@ -180,11 +180,11 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 100
+      InstanceId: 101
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 100
+  InstanceId: 101
 - Name: ac4
   Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
   Handler:
@@ -211,14 +211,14 @@ Actions:
         PNode3_1: PValue3_1_inline
         PNode3_2: PValue3_2_inline
     Dynamic:
-    - Name: pnode0Dynamic
-      Options: []
+    - Options: []
+      Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
     ForEach: []
   Actions: []
@@ -226,7 +226,7 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 101
+      InstanceId: 102
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -241,7 +241,7 @@ Actions:
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 101
+  InstanceId: 102
 - Name: ac5
   Description: No Handler declaration, partially formed Parameters
   Handler:
@@ -255,14 +255,14 @@ Actions:
     Name: myYamlParms
     Values: {}
     Dynamic:
-    - Name: pnode0Dynamic
-      Options: []
+    - Options: []
+      Source: pnode0Dynamic
       Target: PNode0
-    - Name: pnode2_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
-    - Name: pnode3_1Dynamic
-      Options: []
+    - Options: []
+      Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
     ForEach: []
   Actions: []
@@ -270,14 +270,14 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 102
+      InstanceId: 103
       IsDryRun: true
       Parameters: >+
         {}
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 102
+  InstanceId: 103
 - Name: ''
   Description: No Name, no declaration at all
   Handler:
@@ -290,13 +290,13 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 103
+      InstanceId: 104
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 103
+  InstanceId: 104
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 1/20/2018 1:17:17 PM
+LastModified: 1/21/2018 11:56:44 AM

@@ -40,9 +40,9 @@ Parameters:
     - - []
     - - []
   Dynamic:
-  - Name: ed
+  - Options: []
+    Source: ed
     Target: /EmptyHandlerParameters/ExitData
-    Options: []
   ParentExitData:
   - CopyToValues:
       Source: /Something/Wonderful/Stars

@@ -206,9 +206,9 @@ namespace Synapse.Core.Utilities
 
             foreach( DynamicValue dv in patch )
             {
-                if( values.ContainsKey( dv.Name ) )
+                if( values.ContainsKey( dv.Source ) )
                 {
-                    string value = values[dv.Name];
+                    string value = values[dv.Source];
 
                     XmlNode src = source.SelectSingleNode( dv.Target );
                     if( src != null )

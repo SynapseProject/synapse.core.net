@@ -38,7 +38,7 @@ Actions:
               - v3: G8oTjhLAjHXFvOmHFhHz7miH0wbTmoQvugsvmD9NFwgq+8RhEesAcZM12MmYpi2Kq7ZS16+AXdj7NbYsEZ4yePYdnl4qcD8jEYoYOJTmj+s2fFKNwL9lQTi+44AT6AF4wE4RJOKpxR7xuwhpbGZHWSIQrzZAtwTnpQpwty+MQ2M=
           Encoding: Base64
     Dynamic:
-    - Name: jsonPayload
+    - Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
       KeyUri: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\pubPriv.xml

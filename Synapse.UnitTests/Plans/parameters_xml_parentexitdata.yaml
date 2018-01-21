@@ -31,7 +31,7 @@ Actions:
     Parameters:
       Type: Xml
       Dynamic:
-      - Name: ed
+      - Source: ed
         Target: /EmptyHandlerParameters/ExitData
       ParentExitData:
       - CopyToValues:

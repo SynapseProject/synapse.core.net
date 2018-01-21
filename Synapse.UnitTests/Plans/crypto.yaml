@@ -51,7 +51,7 @@ Actions:
               - v3: 3
           Encoding: Base64
     Dynamic:
-    - Name: jsonPayload
+    - Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
 - Name: Xml
   Handler:

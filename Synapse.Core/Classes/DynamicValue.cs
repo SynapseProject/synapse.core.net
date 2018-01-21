@@ -5,12 +5,11 @@ namespace Synapse.Core
 {
     public class DynamicValue : SourceTarget
     {
-        public string Name { get; set; }
         public List<Option> Options { get; set; } = new List<Option>();
 
         public override string ToString()
         {
-            return $"[Name:{Name}], Target:[{Target}], Parse:[{Parse}], Replace:[{Replace}], Encode:[{Encode}]";
+            return $"[Name:{Source}], Target:[{Target}], Parse:[{Parse}], Replace:[{Replace}], Encode:[{Encode}]";
         }
 
 
@@ -18,7 +17,7 @@ namespace Synapse.Core
         {
             DynamicValue dv = new DynamicValue()
             {
-                Name = "URI parameter name",
+                Source = "URI parameter name",
                 Target = "Element:IndexedElement[0]:Element",
                 Parse = true,
                 Encode = "None | Base64",

@@ -17,11 +17,13 @@ Actions:
   - Name: Child
     Parameters:
       ParentExitData:
-      - Source: Something:Wonderful:Stars
-        Destination: SleepMilliseconds
-      - Source: Foo:Bar
-        Destination: ReturnStatus
+      - CopyToValues:
+          Source: Something:Wonderful:Stars
+          Target: SleepMilliseconds
+      - CopyToValues:
+          Source: Foo:Bar
+          Target: ReturnStatus
       Dynamic:
-      - Name: ListMemberx
+      - Source: ListMemberx
         Target: ExitData
         Parse: True

@@ -38,8 +38,8 @@ Actions:
               - v3: 3
           Encoding: Base64
     Dynamic:
-    - Name: jsonPayload
-      Options: []
+    - Options: []
+      Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
       Key:
@@ -92,4 +92,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 1/20/2018 1:17:07 PM
+LastModified: 1/21/2018 11:56:34 AM

@@ -31,10 +31,12 @@ Actions:
     Parameters:
       Type: Xml
       ParentExitData:
-      - Source: /Something/Wonderful/Stars
-        Destination: /EmptyHandlerParameters/SleepMilliseconds[1]
-      - Source: /Something/Foo/Bar
-        Destination: /EmptyHandlerParameters/ReturnStatus
+      - CopyToValues:
+          Source: /Something/Wonderful/Stars
+          Target: /EmptyHandlerParameters/SleepMilliseconds[1]
+      - CopyToValues:
+          Source: /Something/Foo/Bar
+          Target: /EmptyHandlerParameters/ReturnStatus
       Dynamic:
-      - Name: ListMemberx
+      - Source: ListMemberx
         Target: /EmptyHandlerParameters/ExitData

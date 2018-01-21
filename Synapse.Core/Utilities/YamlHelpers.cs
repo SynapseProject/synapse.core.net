@@ -114,9 +114,9 @@ namespace Synapse.Core.Utilities
 
             foreach( DynamicValue dv in dynamicValues )
             {
-                if( values.ContainsKey( dv.Name ) )
+                if( values.ContainsKey( dv.Source ) )
                 {
-                    object value = dv.Parse ? TryParseValue( values[dv.Name] ) : values[dv.Name];
+                    object value = dv.Parse ? TryParseValue( values[dv.Source] ) : values[dv.Source];
                     Dictionary<object, object> patch = ConvertPathElementToDict( dv.Target, value );
                     ApplyPatchValues( source, patch, dv );
                 }
