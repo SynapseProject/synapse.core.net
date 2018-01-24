@@ -16,13 +16,15 @@ namespace Synapse.cli
 
         static void Main(string[] args)
         {
+            Arguments a = null;
             try
             {
                 int exitCode = 11;
 
                 EnsureDatabaseExists();
 
-                Arguments a = new Arguments( args );
+                a = new Arguments( args );
+
                 if( !a.IsParsed )
                     WriteHelpAndExit( a.Message );
 
@@ -118,7 +120,8 @@ namespace Synapse.cli
             }
             catch( Exception ex )
             {
-                WriteHelpAndExit( ex.Message );
+                ex = ex.ToFriendlyYamlException( yaml: a.Plan );
+                WriteHelpAndExit( ExceptionHelpers.UnwindException( ex ) );
             }
         }
 
