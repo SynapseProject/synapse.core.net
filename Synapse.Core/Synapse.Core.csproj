@@ -103,6 +103,7 @@
     <Compile Include="Runtime\ActionItem.cs" />
     <Compile Include="Runtime\PlanSignature.cs" />
     <Compile Include="Utilities\AssemblyLoader.cs" />
+    <Compile Include="Utilities\ExceptionHelpers.cs" />
     <Compile Include="Utilities\JsonHelpers.cs" />
     <Compile Include="Utilities\XmlHelpers.cs" />
     <Compile Include="Dal\ActionInstance.cs" />
