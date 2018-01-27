@@ -38,8 +38,15 @@ namespace Synapse.Core
         public bool HasParameterSource { get { return ParameterSource != null; } }
 
         public string Target { get; set; }
+
         public string Replace { get; set; }
-        public string Encode { get; set; }
+        [YamlIgnore]
+        public bool HasReplace { get { return !string.IsNullOrWhiteSpace( Replace ); } }
+
+        public EncodingType Encode { get; set; }
+        [YamlIgnore]
+        public bool IsBase64Encode { get { return Encode == EncodingType.Base64; } }
+
         public List<object> Values { get; set; } = new List<object>();
 
         [YamlIgnore]
@@ -61,7 +68,7 @@ namespace Synapse.Core
             {
                 ParameterSource = ParameterSourceInfo.CreateSample(),
                 Target = "Element:IndexedElement[0]:Element",
-                Encode = "None | Base64",
+                Encode = EncodingType.Base64,
                 Replace = "Regex Expression"
             };
             fe.Values.AddRange( new string[] { "value0", "value1" } );

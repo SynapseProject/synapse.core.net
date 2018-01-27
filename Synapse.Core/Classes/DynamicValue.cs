@@ -20,7 +20,7 @@ namespace Synapse.Core
                 Source = "URI parameter name",
                 Target = "Element:IndexedElement[0]:Element",
                 Parse = true,
-                Encode = "None | Base64",
+                Encode = EncodingType.Base64,
                 Replace = "Regex Expression"
             };
             dv.Options.Add( Option.CreateSample() );

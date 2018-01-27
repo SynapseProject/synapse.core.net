@@ -8,8 +8,15 @@ namespace Synapse.Core
         public string Source { get; set; }
         public string Target { get; set; }
         public bool Parse { get; set; }
+
         public string Replace { get; set; }
-        public string Encode { get; set; }
+        [YamlIgnore]
+        public bool HasReplace { get { return !string.IsNullOrWhiteSpace( Replace ); } }
+
+        public EncodingType Encode { get; set; }
+        [YamlIgnore]
+        public bool IsBase64Encode { get { return Encode == EncodingType.Base64; } }
+
 
         public override string ToString()
         {
@@ -23,7 +30,7 @@ namespace Synapse.Core
                 Source = "Element:IndexedElement[0]:Element",
                 Target = "Element:IndexedElement[0]:Element",
                 Parse = true,
-                Encode = "None | Base64",
+                Encode = EncodingType.Base64,
                 Replace = "Regex Expression"
             };
         }
