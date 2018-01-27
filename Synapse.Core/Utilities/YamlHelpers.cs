@@ -366,6 +366,8 @@ namespace Synapse.Core.Utilities
 
         internal static object RegexReplaceOrValue(object input, object replacement, IReplacementValueOptions rv)
         {
+            if( replacement is Dictionary<object, object> && ((Dictionary<object, object>)replacement).Count > 0 )
+                replacement = ((Dictionary<object, object>)replacement).ElementAt( 0 ).Value;
             object value = replacement;
 
             if( rv != null )
