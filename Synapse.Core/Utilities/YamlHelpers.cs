@@ -364,16 +364,19 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        internal static object RegexReplaceOrValue(object input, object replacement, IReplacementValueOptions dv)
+        internal static object RegexReplaceOrValue(object input, object replacement, IReplacementValueOptions rv)
         {
             object value = replacement;
 
-            if( dv != null )
+            if( rv != null )
             {
-                if( !string.IsNullOrWhiteSpace( dv.Replace ) )
-                    value = Regex.Replace( input.ToString(), dv.Replace, replacement.ToString(), RegexOptions.IgnoreCase );
-
-                if( !string.IsNullOrWhiteSpace( dv.Encode ) && dv.Encode.ToLower() == "base64" )
+                if( rv.HasReplace )
+                {
+                    if( rv.IsBase64Encode )
+                        replacement = CryptoHelpers.Encode( replacement.ToString() );
+                    value = Regex.Replace( input.ToString(), rv.Replace, replacement.ToString(), RegexOptions.IgnoreCase );
+                }
+                else if( rv.IsBase64Encode )
                     value = CryptoHelpers.Encode( value.ToString() );
             }
 

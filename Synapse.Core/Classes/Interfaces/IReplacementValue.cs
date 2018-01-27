@@ -5,6 +5,8 @@ namespace Synapse.Core
     public interface IReplacementValueOptions
     {
         string Replace { get; set; }
-        string Encode { get; set; }
+        bool HasReplace { get; }
+        EncodingType Encode { get; set; }
+        bool IsBase64Encode { get; }
     }
 }

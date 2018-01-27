@@ -359,10 +359,13 @@ namespace Synapse.Core.Utilities
 
             if( rv != null )
             {
-                if( !string.IsNullOrWhiteSpace( rv.Replace ) )
+                if( rv.HasReplace )
+                {
+                    if( rv.IsBase64Encode )
+                        replacement = CryptoHelpers.Encode( replacement );
                     value = Regex.Replace( input, rv.Replace, replacement, RegexOptions.IgnoreCase );
-
-                if( !string.IsNullOrWhiteSpace( rv.Encode ) && rv.Encode.ToLower() == "base64" )
+                }
+                else if( rv.IsBase64Encode )
                     value = CryptoHelpers.Encode( value );
             }
 

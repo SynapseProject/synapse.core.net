@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Enums\EncodingType.cs" />
     <Compile Include="Classes\Interfaces\IReplacementValue.cs" />
     <Compile Include="Classes\SaveExitDataInfo.cs" />
     <Compile Include="Classes\SourceTarget.cs" />
