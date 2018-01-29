@@ -135,7 +135,7 @@ namespace Synapse.Common
         public static string GetLogFileFolder(string name)
         {
             string fullPath = GetLogFileName( name );
-            return string.IsNullOrWhiteSpace( fullPath ) ? Path.GetDirectoryName( fullPath ) : null;
+            return !string.IsNullOrWhiteSpace( fullPath ) ? Path.GetDirectoryName( fullPath ) : null;
         }
     }
 }
