@@ -170,7 +170,7 @@ namespace Synapse.Core
 
             if( HasParentExitData && p != null && parentExitData != null )
             {
-                string tmp = YamlHelpers.Serialize( parentExitData );
+                string tmp = parentExitData is string ? parentExitData.ToString() : YamlHelpers.Serialize( parentExitData );
                 object values = YamlHelpers.Deserialize( tmp );
                 //select the exact values
 
