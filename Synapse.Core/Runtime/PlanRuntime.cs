@@ -560,8 +560,28 @@ namespace Synapse.Core
         #region utility methods
         void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, object parentExitData)
         {
-            List<ActionItem> resolvedActions = null;
-            a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
+            bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
+            if( cancel )
+            {
+                _wantsCancel = true;
+                return;
+            }
+
+            try
+            {
+                List<ActionItem> resolvedActions = null;
+                a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
+            }
+            catch( Exception ex )
+            {
+                if( !a.HasResult ) { a.Result = new ExecuteResult(); }
+
+                a.Result.Status = StatusType.Failed;
+                a.Result.Message = $"Exception in ResolveConfigAndParameters: [{ex.Message}]";
+
+                OnProgress( a.Name, "ResolveConfigAndParameters", ex.Message, StatusType.Failed, a.InstanceId, -2 );
+                throw;
+            }
         }
         void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions, object parentExitData)
         {
@@ -578,6 +598,11 @@ namespace Synapse.Core
             }
             catch( Exception ex )
             {
+                if( !a.HasResult ) { a.Result = new ExecuteResult(); }
+
+                a.Result.Status = StatusType.Failed;
+                a.Result.Message = $"Exception in ResolveConfigAndParameters: [{ex.Message}]";
+
                 OnProgress( a.Name, "ResolveConfigAndParameters", ex.Message, StatusType.Failed, a.InstanceId, -2 );
                 throw;
             }
