@@ -159,28 +159,7 @@ namespace Synapse.Core
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
                     List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
-                    List<ActionItem> nonresolvedParmsActionGroup = new List<ActionItem>();
-                    ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup, ref nonresolvedParmsActionGroup, parentResult.ExitData );
-
-                    if( nonresolvedParmsActionGroup.Count > 0 )
-                    {
-                        foreach( ActionItem a in nonresolvedParmsActionGroup )
-                        {
-                            ActionItem clone = a.Clone();
-                            parentContext.Actions.Add( clone );
-
-                            ExecuteResult r = a.Result;
-                            parentContext.Result.SetBranchStatusChecked( r );
-                            clone.Handler.Type = a.Handler.Type;
-                            clone.Handler.StartInfo = a.Handler.StartInfo;
-                            clone.Result = r;
-
-                            parentContext.Result.SetBranchStatusChecked( clone.Result );
-                        }
-
-                        throw new ApplicationException( $"Error in ResolveConfigAndParameters for {nonresolvedParmsActionGroup.Count} Actions.  See ResultPlan [{ResultPlan.Name}] for information." );
-                    }
-
+                    ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup, parentResult.ExitData );
 
                     foreach( ActionItem ai in resolvedParmsActionGroup )
                         ai.Parameters.ForEach = null;
@@ -257,29 +236,9 @@ namespace Synapse.Core
                 actions.Where( a => (((a.ExecuteCase & queryStatus) == a.ExecuteCase) || (a.ExecuteCase == StatusType.Any)) );
 
             List<ActionItem> resolvedParmsActions = new List<ActionItem>();
-            List<ActionItem> nonresolvedParmsActions = new List<ActionItem>();
             Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
-                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions, ref nonresolvedParmsActions, parentResult.ExitData )
+                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions, parentResult.ExitData )
             );
-
-            if( nonresolvedParmsActions.Count > 0 )
-            {
-                foreach( ActionItem a in nonresolvedParmsActions )
-                {
-                    ActionItem clone = a.Clone();
-                    parentContext.Actions.Add( clone );
-
-                    ExecuteResult r = a.Result;
-                    parentContext.Result.SetBranchStatusChecked( r );
-                    clone.Handler.Type = a.Handler.Type;
-                    clone.Handler.StartInfo = a.Handler.StartInfo;
-                    clone.Result = r;
-
-                    parentContext.Result.SetBranchStatusChecked( clone.Result );
-                }
-
-                throw new ApplicationException( $"Error in ResolveConfigAndParameters for {nonresolvedParmsActions.Count} Actions.  See ResultPlan [{ResultPlan.Name}] for information." );
-            }
 
             Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
             {
@@ -290,7 +249,10 @@ namespace Synapse.Core
                 ActionItem clone = a.Clone();
                 parentContext.Actions.Add( clone );
 
-                ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, parentResult.ExitData, dryRun );
+                ExecuteResult r = a.Result;
+                if( r?.Status != StatusType.Failed )
+                    r = executeHandlerMethod( parentSecurityContext, a, dynamicData, parentResult.ExitData, dryRun );
+
                 parentContext.Result.SetBranchStatusChecked( r );
                 clone.Handler.Type = a.Handler.Type;
                 clone.Handler.StartInfo = a.Handler.StartInfo;
@@ -627,7 +589,7 @@ namespace Synapse.Core
                 throw;
             }
         }
-        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions, ref List<ActionItem> nonresolvedActions, object parentExitData)
+        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions, object parentExitData)
         {
             bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
             if( cancel )
@@ -649,7 +611,7 @@ namespace Synapse.Core
 
                 OnProgress( a.Name, "ResolveConfigAndParameters", ex.Message, StatusType.Failed, a.InstanceId, -2 );
 
-                nonresolvedActions.Add( a );
+                resolvedActions.Add( a );
             }
         }
 
