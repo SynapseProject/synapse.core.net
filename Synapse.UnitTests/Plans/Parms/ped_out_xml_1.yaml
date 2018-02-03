@@ -50,7 +50,6 @@ Parameters:
   - CopyToValues:
       Source: /Something/Foo/Bar
       Target: /EmptyHandlerParameters/ReturnStatus
-  ForEach: []
 Actions: []
 Result:
   Status: Tombstoned
