@@ -12,6 +12,7 @@ namespace Synapse.Core
 {
     public partial class ParameterInfo : IParameterInfo
     {
+        const string __nodata = "[Unable to capture data for error message.]";
         private Dictionary<string, string> _dynamicData = null;
 
         public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null,
@@ -127,10 +128,17 @@ namespace Synapse.Core
         {
             object parms = null;
 
-            if( HasInheritedValues )
+            try
             {
-                string tmp = YamlHelpers.Serialize( ((ParameterInfo)InheritedValues).Values );
-                parms = YamlHelpers.Deserialize( tmp );
+                if( HasInheritedValues )
+                {
+                    string tmp = YamlHelpers.Serialize( ((ParameterInfo)InheritedValues).Values );
+                    parms = YamlHelpers.Deserialize( tmp );
+                }
+            }
+            catch( Exception ex )
+            {
+                throw new Exception( $"Could not process inherited values.", ex );
             }
 
             //make rest call
@@ -168,15 +176,24 @@ namespace Synapse.Core
             if( !HasForEach )
                 ForEach = new ForEachInfo();
 
-            if( HasParentExitData && p != null && parentExitData != null )
+            string xd = __nodata;
+            try
             {
-                string tmp = parentExitData is string ? parentExitData.ToString() : YamlHelpers.Serialize( parentExitData );
-                object values = YamlHelpers.Deserialize( tmp );
-                //select the exact values
+                if( HasParentExitData && p != null && parentExitData != null )
+                {
+                    xd = parentExitData is string ? parentExitData.ToString() : YamlHelpers.Serialize( parentExitData );
+                    xd = YamlHelpers.Serialize( parentExitData );
+                    object values = YamlHelpers.Deserialize( xd );
+                    //select the exact values
 
-                Dictionary<object, object> ip = (Dictionary<object, object>)parms;
-                Dictionary<object, object> pv = (Dictionary<object, object>)values;
-                YamlHelpers.Merge( ref ip, ParentExitData, ref pv );
+                    Dictionary<object, object> ip = (Dictionary<object, object>)parms;
+                    Dictionary<object, object> pv = (Dictionary<object, object>)values;
+                    YamlHelpers.Merge( ref ip, ParentExitData, ref pv );
+                }
+            }
+            catch( Exception ex )
+            {
+                throw new Exception( GetExceptionMessage( "ParentExitData", xd ), ex );
             }
 
             //expand ForEach variables
@@ -189,6 +206,15 @@ namespace Synapse.Core
 
 
             return p;
+        }
+
+        string GetExceptionMessage(string context, string data)
+        {
+            string b64 = null;
+            if( data != __nodata )
+                try { b64 = $", Data as Base64: [{CryptoHelpers.Encode( data )}]"; }
+                catch { }
+            return $"Could not process {context} values. Data: [{data}]{b64}";
         }
 
         string ResolveUnspecified(object parentExitData)
