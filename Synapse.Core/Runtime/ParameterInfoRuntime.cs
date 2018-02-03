@@ -89,9 +89,6 @@ namespace Synapse.Core
                 XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
             }
 
-            if( !HasForEach )
-                ForEach = new ForEachInfo();
-
             if( HasParentExitData && parentExitData != null )
             {
                 if( parms == null )
@@ -106,23 +103,23 @@ namespace Synapse.Core
                 else
                     pea = (XmlDocument)parentExitData;
 
-                if( !HasForEach )
-                    ForEach = new ForEachInfo();
-
                 XmlHelpers.Merge( ref parms, ParentExitData, ref pea );
             }
 
-            //expand ForEach variables
-            if( ForEach.HasParameterSourceItems && parms != null )
-                XmlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref parms, globalParamSets, parentExitData );
-
-            //expand ForEach variables
             if( HasForEach && parms != null )
+            {
+                //assemble ForEach variables
+                if( ForEach.HasParameterSourceItems )
+                    XmlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref parms, globalParamSets, parentExitData );
+
+                //expand ForEach variables
                 forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
+            }
 
 
             return parms;
         }
+
 
         Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms, object parentExitData, Dictionary<string, ParameterInfo> globalParamSets)
         {
@@ -144,42 +141,79 @@ namespace Synapse.Core
             //make rest call
             if( HasUri )
             {
-                string uriContent = WebRequestClient.GetString( Uri );
+                string ud = Uri.ToString();
 
-                if( parms != null )
+                try
                 {
-                    object values = YamlHelpers.Deserialize<object>( uriContent );
+                    string uriContent = WebRequestClient.GetString( Uri );
+                    ud = uriContent;
 
-                    Dictionary<object, object> ip = (Dictionary<object, object>)parms;
-                    Dictionary<object, object> uv = (Dictionary<object, object>)values;
-                    YamlHelpers.Merge( ref ip, uv );
+                    if( parms != null )
+                    {
+                        object values = YamlHelpers.Deserialize<object>( uriContent );
+
+                        Dictionary<object, object> ip = (Dictionary<object, object>)parms;
+                        Dictionary<object, object> uv = (Dictionary<object, object>)values;
+                        YamlHelpers.Merge( ref ip, uv );
+                    }
+                    else
+                    {
+                        parms = YamlHelpers.Deserialize<object>( uriContent );
+                    }
                 }
-                else
+                catch( Exception ex )
                 {
-                    parms = YamlHelpers.Deserialize<object>( uriContent );
+                    throw new Exception( GetResolveExceptionMessage( "Uri", ud ), ex );
                 }
             }
 
+
             if( parms == null )
                 parms = new Dictionary<object, object>();
-            Dictionary<object, object> p = (Dictionary<object, object>)parms;
-
-            //merge parms
-            if( HasValues && p != null )
-                YamlHelpers.Merge( ref p, (Dictionary<object, object>)Values );
-
-            //kv_replace
-            if( HasDynamic && p != null )
-                YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
 
 
-            if( !HasForEach )
-                ForEach = new ForEachInfo();
-
-            string xd = __nodata;
+            Dictionary<object, object> p = null;
             try
             {
-                if( HasParentExitData && p != null && parentExitData != null )
+                p = (Dictionary<object, object>)parms;
+            }
+            catch( Exception ex )
+            {
+                throw new Exception( GetResolveExceptionMessage( "CastParmsToDictionary", parms.GetType().ToString() ), ex );
+            }
+
+
+            try
+            {
+                //merge parms
+                if( HasValues && p != null )
+                    YamlHelpers.Merge( ref p, (Dictionary<object, object>)Values );
+            }
+            catch( Exception ex )
+            {
+                throw new Exception( GetResolveExceptionMessage( "Merge:Inhetited+Uri=>Values", parms.GetType().ToString() ), ex );
+            }
+
+
+            try
+            {
+                //kv_replace
+                if( HasDynamic && p != null )
+                    YamlHelpers.Merge( ref p, Dynamic, _dynamicData );
+            }
+            catch( Exception ex )
+            {
+                string dd = __nodata;
+                try { dd = YamlHelpers.Serialize( _dynamicData ); } catch { }
+                throw new Exception( GetResolveExceptionMessage( "Merge:Dynamic", dd ), ex );
+            }
+
+
+            if( HasParentExitData && p != null && parentExitData != null )
+            {
+                string xd = __nodata;
+
+                try
                 {
                     xd = parentExitData is string ? parentExitData.ToString() : YamlHelpers.Serialize( parentExitData );
                     xd = YamlHelpers.Serialize( parentExitData );
@@ -190,28 +224,47 @@ namespace Synapse.Core
                     Dictionary<object, object> pv = (Dictionary<object, object>)values;
                     YamlHelpers.Merge( ref ip, ParentExitData, ref pv );
                 }
-            }
-            catch( Exception ex )
-            {
-                throw new Exception( GetExceptionMessage( "ParentExitData", xd ), ex );
+                catch( Exception ex )
+                {
+                    throw new Exception( GetResolveExceptionMessage( "ParentExitData", xd ), ex );
+                }
             }
 
-            //expand ForEach variables
-            if( ForEach.HasParameterSourceItems && p != null )
-                YamlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref p, globalParamSets, parentExitData );
 
-            //expand ForEach variables
             if( HasForEach && p != null )
-                forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
+            {
+                //assemble ForEach variables
+                if( ForEach.HasParameterSourceItems )
+                    try
+                    {
+                        YamlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref p, globalParamSets, parentExitData );
+                    }
+                    catch( Exception ex )
+                    {
+                        throw new Exception( GetResolveExceptionMessage( "ForEach:HasParameterSourceItems", null ), ex );
+                    }
+
+                //expand ForEach variables
+                try
+                {
+                    forEachParms = YamlHelpers.ExpandForEachAndApplyPatchValues( ref p, ForEach );
+                }
+                catch( Exception ex )
+                {
+                    string pd = __nodata;
+                    try { pd = YamlHelpers.Serialize( p ); } catch { }
+                    throw new Exception( GetResolveExceptionMessage( "ExpandForEach", pd ), ex );
+                }
+            }
 
 
             return p;
         }
 
-        string GetExceptionMessage(string context, string data)
+        string GetResolveExceptionMessage(string context, string data)
         {
             string b64 = null;
-            if( data != __nodata )
+            if( !string.IsNullOrWhiteSpace( data ) && data != __nodata )
                 try { b64 = $", Data as Base64: [{CryptoHelpers.Encode( data )}]"; }
                 catch { }
             return $"Could not process {context} values. Data: [{data}]{b64}";
