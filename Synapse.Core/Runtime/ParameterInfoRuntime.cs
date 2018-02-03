@@ -240,8 +240,6 @@ namespace Synapse.Core
                     errData = __nodata;
 
                     string xd = parentExitData is string ? parentExitData.ToString() : YamlHelpers.Serialize( parentExitData );
-                    //todo: remove this vvv, intentionally throwing err
-                    xd = YamlHelpers.Serialize( parentExitData ); //todo: remove this <<<, intentionally throwing err
                     errData = xd;
                     context = "ParentExitData=>Deserialize";
                     object values = YamlHelpers.Deserialize( xd );
