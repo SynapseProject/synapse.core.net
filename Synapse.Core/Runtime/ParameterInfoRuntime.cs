@@ -12,8 +12,8 @@ namespace Synapse.Core
 {
     public partial class ParameterInfo : IParameterInfo
     {
-        const string __nodata = "[Unable to capture data for error message.]";
-        private Dictionary<string, string> _dynamicData = null;
+        const string __nodata = "Unable to capture data for error message.";
+        Dictionary<string, string> _dynamicData = null;
 
         public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null,
             Dictionary<string, ParameterInfo> globalParamSets = null)
@@ -52,72 +52,113 @@ namespace Synapse.Core
 
         XmlDocument ResolveXml(ref List<object> forEachParms, object parentExitData, Dictionary<string, ParameterInfo> globalParamSets)
         {
-            XmlDocument parms = null;
+            string context = "ResolveXml";
+            string errData = __nodata;
 
-            if( HasInheritedValues )
-                parms = (XmlDocument)((XmlDocument)((ParameterInfo)InheritedValues).Values).Clone();
-
-            if( HasUri )
+            try
             {
-                string uriContent = WebRequestClient.GetString( Uri );
-                XmlDocument uriXml = new XmlDocument();
-                uriXml.LoadXml( uriContent );
+                XmlDocument parms = null;
 
-                if( parms != null )
-                    XmlHelpers.Merge( ref parms, uriXml );
-                else
-                    parms = uriXml;
-            }
+                if( HasInheritedValues )
+                {
+                    context = "InheritedValues=>Clone";
+                    errData = InheritedValues.GetType().ToString();
+                    parms = (XmlDocument)((XmlDocument)((ParameterInfo)InheritedValues).Values).Clone();
+                }
 
-            //merge parms
-            if( HasValues )
-            {
-                XmlDocument values = new XmlDocument();
-                values.LoadXml( Values.ToString() );
+                if( HasUri )
+                {
+                    context = "Uri=>Fetch";
+                    try { errData = new Uri( Uri ).ToString(); } catch { errData = Uri.ToString(); }
 
-                if( parms != null )
-                    XmlHelpers.Merge( ref parms, values );
-                else
-                    parms = values;
-            }
+                    string uriContent = WebRequestClient.GetString( Uri );
+                    context = "Uri=>Fetch, LoadXml";
+                    errData = uriContent;
+                    XmlDocument uriXml = new XmlDocument();
+                    uriXml.LoadXml( uriContent );
 
-            //kv_replace
-            if( HasDynamic )
-            {
+                    context = parms != null ? "Merge->Inherited" : "Assign to parms";
+                    context = $"Uri=>{context}";
+                    errData = XmlHelpers.Serialize<XmlDocument>( uriXml );
+                    if( parms != null )
+                        XmlHelpers.Merge( ref parms, uriXml );
+                    else
+                        parms = uriXml;
+                }
+
+                //merge parms
+                if( HasValues )
+                {
+                    context = "HasValues=>LoadXml";
+                    errData = Values.ToString();
+                    XmlDocument values = new XmlDocument();
+                    values.LoadXml( Values.ToString() );
+
+                    context = parms != null ? "Merge->Inherited+Uri+Values" : "Assign to parms";
+                    context = $"Uri=>{context}";
+                    errData = XmlHelpers.Serialize<XmlDocument>( values );
+                    if( parms != null )
+                        XmlHelpers.Merge( ref parms, values );
+                    else
+                        parms = values;
+                }
+
+
                 if( parms == null )
                     parms = new XmlDocument();
-                XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
-            }
+                
+                
+                //kv_replace
+                if( HasDynamic )
+                {
+                    context = "HasDynamic=>Merge->Inherited+Uri+Values+Dynamic";
+                    try { errData = YamlHelpers.Serialize( _dynamicData ); } catch { errData = __nodata; } //YamlHelpers not a mistake, used it on purpose for easy to read error data
+                    XmlHelpers.Merge( ref parms, Dynamic, _dynamicData );
+                }
 
-            if( HasParentExitData && parentExitData != null )
+                if( HasParentExitData && parentExitData != null )
+                {
+                    context = "ParentExitData=>Init Xml Source";
+                    errData = parentExitData.GetType().ToString();
+
+                    XmlDocument xd = new XmlDocument();
+                    if( parentExitData is XmlNode )
+                        xd.InnerXml = ((XmlNode)parentExitData).OuterXml;
+                    else if( parentExitData is XmlNode[] )
+                        xd.InnerXml = ((XmlNode[])parentExitData)[0].OuterXml;
+                    else if( parentExitData is string )
+                        xd.InnerXml = (string)parentExitData;
+                    else
+                        xd = (XmlDocument)parentExitData;
+
+                    context = "ParentExitData=>Merge->Inhetited+Uri+Values+Dynamic+ParentExitData";
+                    errData = XmlHelpers.Serialize<XmlDocument>( xd );
+                    XmlHelpers.Merge( ref parms, ParentExitData, ref xd );
+                }
+
+                if( HasForEach && parms != null )
+                {
+                    //assemble ForEach variables
+                    if( ForEach.HasParameterSourceItems )
+                    {
+                        context = "ForEach=>HasParameterSourceItems";
+                        errData = null;
+                        XmlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref parms, globalParamSets, parentExitData );
+                    }
+
+                    //expand ForEach variables
+                    context = "ForEach=>ExpandForEach";
+                    try { errData = XmlHelpers.Serialize<XmlDocument>( parms ); } catch { errData = __nodata; }
+                    forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
+                }
+
+
+                return parms;
+            }
+            catch( Exception ex )
             {
-                if( parms == null )
-                    parms = new XmlDocument();
-                XmlDocument pea = new XmlDocument();
-                if( parentExitData is XmlNode )
-                    pea.InnerXml = ((XmlNode)parentExitData).OuterXml;
-                else if( parentExitData is XmlNode[] )
-                    pea.InnerXml = ((XmlNode[])parentExitData)[0].OuterXml;
-                else if( parentExitData is string )
-                    pea.InnerXml = (string)parentExitData;
-                else
-                    pea = (XmlDocument)parentExitData;
-
-                XmlHelpers.Merge( ref parms, ParentExitData, ref pea );
+                throw new Exception( GetResolveExceptionMessage( context, errData ), ex );
             }
-
-            if( HasForEach && parms != null )
-            {
-                //assemble ForEach variables
-                if( ForEach.HasParameterSourceItems )
-                    XmlHelpers.SelectForEachFromValues( ForEach.ParameterSourceItems, ref parms, globalParamSets, parentExitData );
-
-                //expand ForEach variables
-                forEachParms = XmlHelpers.ExpandForEachAndApplyPatchValues( ref parms, ForEach );
-            }
-
-
-            return parms;
         }
 
 
@@ -151,7 +192,7 @@ namespace Synapse.Core
 
                     if( parms != null )
                     {
-                        context = "Uri=>Desrialize, Merge->Inherited";
+                        context = "Uri=>Desrialize, Merge->Inherited+Uri";
                         object values = YamlHelpers.Deserialize<object>( uriContent );
 
                         Dictionary<object, object> ip = (Dictionary<object, object>)parms;
