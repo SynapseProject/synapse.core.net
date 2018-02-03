@@ -157,28 +157,8 @@ namespace Synapse.Core.Utilities
                         if( ped.CopyToValues.Parse )
                             element = TryParseValue( element );
 
-                        //if( ped.CastToForEachItems )
-                        //{
-                        //    if( forEach == null )
-                        //        forEach = new List<ForEachItem>();
-
-                        //    ForEachItem fe = new ForEachItem() { Target = ped.CopyToValues.Target };
-                        //    forEach.Add( fe );
-
-                        //    if( element is List<object> )
-                        //        fe.Values = (List<object>)element;
-                        //    else
-                        //    {
-                        //        string elementAsYaml = Serialize( element );
-                        //        Dictionary<object, object> elementAsDict = Deserialize( elementAsYaml );
-                        //        fe.Values = FindFirstListInDict( elementAsDict );
-                        //    }
-                        //}
-                        //else
-                        //{
                         Dictionary<object, object> patch = ConvertPathElementToDict( ped.CopyToValues.Target, element ); //?.ToString()
                         ApplyPatchValues( destination, patch, ped.CopyToValues );
-                        //}
                     }
                 }
             }
