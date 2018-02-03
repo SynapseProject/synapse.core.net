@@ -606,8 +606,10 @@ namespace Synapse.Core
             {
                 if( !a.HasResult ) { a.Result = new ExecuteResult(); }
 
+                string message = ExceptionHelpers.UnwindException( "ResolveConfigAndParameters", ex, asSingleLine: false );
+
                 a.Result.Status = a.Result.BranchStatus = StatusType.Failed;
-                a.Result.Message = $"Exception in ResolveConfigAndParameters: [{ex.Message}]";
+                a.Result.Message = $"Exception in ResolveConfigAndParameters: [{message}]";
 
                 OnProgress( a.Name, "ResolveConfigAndParameters", ex.Message, StatusType.Failed, a.InstanceId, -2 );
 
