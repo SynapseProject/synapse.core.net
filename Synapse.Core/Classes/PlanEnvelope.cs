@@ -8,7 +8,9 @@ namespace Synapse.Core
     public class StartPlanEnvelope
     {
         public Plan Plan { get; set; }
-        public Dictionary<string, string> DynamicParameters { get; set; }
+        public Dictionary<string, string> DynamicParameters { get; set; } = new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
+
+        public Dictionary<string, string> GetCaseInsensitiveDynamicParameters() { return new Dictionary<string, string>( DynamicParameters, StringComparer.OrdinalIgnoreCase ); }
 
         public string ToYaml(bool encode = false)
         {
