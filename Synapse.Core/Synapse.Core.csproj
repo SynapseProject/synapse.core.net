@@ -116,7 +116,6 @@
     <Compile Include="Runtime\PlanRuntime.cs" />
     <Compile Include="Runtime\PlanTaskScheduler.cs" />
     <Compile Include="Runtime\SecurityContextRuntime.cs" />
-    <Compile Include="Classes\Interfaces\ISynapseServer.cs" />
     <Compile Include="Utilities\CryptoHelpers.cs" />
     <Compile Include="Utilities\ServiceException.cs" />
     <Compile Include="Utilities\WebRequestClient.cs" />
