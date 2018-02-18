@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "Synapse.Tester" )]
-[assembly: AssemblyCopyright( "Copyright ©  Steve Shortt, 2016" )]
+[assembly: AssemblyCopyright( "Copyright ©  Steve Shortt, 2016 - 2018" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
