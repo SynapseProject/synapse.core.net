@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle( "Synapse.cli" )]
-[assembly: AssemblyDescription( "Commnd-line support for executing, encrypting/decrypting, and creating sample Plans." )]
+[assembly: AssemblyDescription( "Commnd-line support for executing/encrypting/decrypting Plans and for creating sample Plans." )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "" )]
 [assembly: AssemblyProduct( "Synapse.cli" )]
