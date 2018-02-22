@@ -3,7 +3,7 @@ Description: Echo Test
 Actions:
 - Name: Action001
   Handler:
-    Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   RunAs: &o0
@@ -19,7 +19,7 @@ Actions:
   Actions:
   - Name: Action002
     Handler:
-      Type: EchoHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: &o1
@@ -62,4 +62,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 2/3/2018 1:26:59 PM
+LastModified: 2/22/2018 1:34:04 AM

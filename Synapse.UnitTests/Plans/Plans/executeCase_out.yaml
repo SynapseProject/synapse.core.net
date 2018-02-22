@@ -3,7 +3,7 @@ Description: Tests selection of ActionGroup/Actions based on Status match to Exe
 Actions:
 - Name: ac0
   Handler:
-    Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo:
       Parameters: >+
@@ -51,7 +51,7 @@ Actions:
       - Name: ac0.g.0
         ExecuteCase: Complete
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
           StartInfo:
             Parameters: >+
@@ -71,7 +71,7 @@ Actions:
       - Name: ac0.g.1
         ExecuteCase: Complete
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
           StartInfo:
             Parameters: >+
@@ -101,7 +101,7 @@ Actions:
   - Name: ac0.1
     ExecuteCase: Complete
     Handler:
-      Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: EmptyHandler ExitData default value.
@@ -109,7 +109,7 @@ Actions:
     Actions:
     - Name: ac0.1.1
       Handler:
-        Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
         StartInfo:
           Parameters: >+
@@ -123,7 +123,7 @@ Actions:
       - Name: ac0.1.1.0
         ExecuteCase: Complete
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
           StartInfo:
             Parameters: >+
@@ -158,7 +158,7 @@ Actions:
     SecurityContext: LAPTOP-TK2D9TB6\Steve
 - Name: ac2
   Handler:
-    Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo:
       Parameters: >+
@@ -178,4 +178,4 @@ StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 2/3/2018 1:26:49 PM
+LastModified: 2/22/2018 1:33:54 AM

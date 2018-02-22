@@ -55,11 +55,11 @@ Actions:
     InstanceId: 16
   Result:
     Status: Failed
-    ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
+    ExitData: Could not load type 'Synapse.Core.Runtime.EmptyHandlerFooHandler' from assembly 'Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982'.
     BranchStatus: Failed
   InstanceId: 15
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 2/3/2018 1:26:50 PM
+LastModified: 2/22/2018 1:33:55 AM

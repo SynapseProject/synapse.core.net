@@ -1,6 +1,6 @@
 Name: Child
 Handler:
-  Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+  Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
   Config: {}
   StartInfo:
     Parameters: >-
