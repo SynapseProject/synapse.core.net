@@ -3,14 +3,14 @@ Description: Load handlers with full or partial names.  Hierarchy below to enabl
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
-    Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: EmptyHandler ExitData default value.
@@ -18,7 +18,7 @@ Actions:
     Actions:
     - Name: SimpleClassName
       Handler:
-        Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
         StartInfo:
           ParentExitData: EmptyHandler ExitData default value.
@@ -26,7 +26,7 @@ Actions:
       Actions:
       - Name: AbbreviatedClassName
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
           Config: {}
           StartInfo:
             ParentExitData: EmptyHandler ExitData default value.
@@ -34,7 +34,7 @@ Actions:
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
           Handler:
-            Type: EmptyHandler, Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+            Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
             Config: {}
             StartInfo:
               ParentExitData: EmptyHandler ExitData default value.
@@ -62,4 +62,4 @@ Actions:
   InstanceId: 10
 StartInfo: {}
 Result: {}
-LastModified: 2/3/2018 1:26:50 PM
+LastModified: 2/22/2018 1:33:55 AM
