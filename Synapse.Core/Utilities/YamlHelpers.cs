@@ -275,7 +275,15 @@ namespace Synapse.Core.Utilities
                         source[key] = RegexReplaceOrValue( source[key], patch[key], dv );
                 }
                 else
-                    source[key] = patch[key];
+                {
+                    if( patch[key] is List<object> )
+                    {
+                        source[key] = new List<object>();
+                        ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key], dv );
+                    }
+                    else
+                        source[key] = patch[key];
+                }
             }
         }
 
@@ -319,8 +327,14 @@ namespace Synapse.Core.Utilities
                     {
                         if( patchValue is Dictionary<object, object> )
                             ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
-                        else if( patchValue is List<object> && listItemValue[patchKey] is List<object> )
-                            ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
+                        else if( patchValue is List<object> )
+                        {
+                            if( !listItemValue.ContainsKey( patchKey ) )
+                                listItemValue.Add( patchKey, new List<object>() );
+
+                            if( listItemValue[patchKey] is List<object> )
+                                ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
+                        }
                         else //if( patchValue is 'the value' )
                             listItemValue[patchKey] = patchValue;
                     }
@@ -331,10 +345,22 @@ namespace Synapse.Core.Utilities
                         //update the value at index i
                         source[i] = RegexReplaceOrValue( source[i], patchValue, dv );
                 }
-                else
-                    //i is outside source lbound/ubound
-                    //add the value to the collection, where [string.empty] is a placeholder for the non-existent value at index i
-                    source.Add( RegexReplaceOrValue( string.Empty, patchValue, dv ) );
+                else //i is outside source lbound/ubound
+                {
+                    if( patchValue is Dictionary<object, object> )
+                    {
+                        source.Add( new Dictionary<object, object>() { { patchKey, new Dictionary<object, object>() } } );
+                        ApplyPatchValues( (Dictionary<object, object>)source[source.Count - 1], (Dictionary<object, object>)patchValue, dv );
+                    }
+                    else if( patchValue is List<object> )
+                    {
+                        source.Add( new Dictionary<object, object>() { { patchKey, new List<object>() } } );
+                        ApplyPatchValues( (Dictionary<object, object>)source[source.Count - 1], patchItem, dv );
+                    }
+                    else
+                        //add the value to the collection, where [string.empty] is a placeholder for the non-existent value at index i
+                        source.Add( RegexReplaceOrValue( string.Empty, patchValue, dv ) );
+                }
             }
             else
             {
@@ -655,16 +681,19 @@ namespace Synapse.Core.Utilities
         {
             StringBuilder yaml = new StringBuilder();
 
+            bool isList = false;
             string[] lines = path.Split( ':' );
             for( int i = 0; i < lines.Length; i++ )
             {
                 int index = -1;
+                isList = false;
                 string newLine = CheckPathElementIsIndexed( lines[i], out index );
                 yaml.AppendLine( newLine.PadLeft( (2 * i) + newLine.Length ) + ":" );
 
                 //appends [- SynapseListIndex: indexValue]
                 if( index > -1 )
                 {
+                    isList = true;
                     string sli = $"- {__sli}: {index}";
                     yaml.AppendLine( sli.PadLeft( (2 * i) + sli.Length ) );
                 }
@@ -672,7 +701,14 @@ namespace Synapse.Core.Utilities
 
             string buf = yaml.ToString().Trim();
             if( value != null )
-                buf = $"{buf} {__token}";
+                if( isList )
+                {
+                    string v = "Value";
+                    yaml.AppendLine( $"{v.PadLeft( (2 * lines.Length) + v.Length )}: {__token}" );
+                    buf = yaml.ToString().Trim();
+                }
+                else
+                    buf = $"{buf} {__token}";
 
             Dictionary<object, object> yamldoc = Deserialize( buf );
 
