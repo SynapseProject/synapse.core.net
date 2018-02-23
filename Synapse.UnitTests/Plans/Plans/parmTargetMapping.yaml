@@ -1,0 +1,30 @@
+Name: SamplePlan
+Description: Example Config/Parameters
+DefaultHandlerType: Synapse.Core:EmptyHandler
+Actions:
+- Name: returnData
+  Parameters:
+    Values:
+      SleepMilliseconds: 1000
+      ReturnStatus: Complete
+      ExitData: >-
+        Top:
+          - Arr0:
+            - ca0.0
+            - ca0.1:
+              - gc0.1.0
+          - Arr1
+          - Arr2:
+            Obj:
+              Prop0: foo
+              Prop1:
+                Prop1.1:
+                - p1.1.0
+                - p1.1.1
+  Actions:
+  - Name: mapData
+    Parameters:
+      ParentExitData:
+      - CopyToValues:
+          Source: Top[0]:ca0.1[0]
+          Target: Element:IndexedElement[0]:Element
