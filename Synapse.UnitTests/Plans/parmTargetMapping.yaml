@@ -1,0 +1,46 @@
+Name: SamplePlan
+Description: Example Config/Parameters
+DefaultHandlerType: Synapse.Core:EmptyHandler
+Actions:
+- Name: returnData
+  Parameters:
+    Values:
+      SleepMilliseconds: 0
+      ReturnStatus: Complete
+      ExitData: >-
+        Top:
+          - Arr0:
+            - ca0.0
+            - ca0.1:
+              - gc0.1.0: gc0.1.0
+              - gc0.1.1: gc0.1.1
+          - Arr1
+          - Arr2:
+              Obj:
+                Prop0: foo
+                Prop1:
+                  Prop1.1:
+                  - p1.1.0
+                  - p1.1.1
+  Actions:
+  - Name: mapData
+    Parameters:
+      ParentExitData:
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[0]:gc0.1.0
+          Target: x:y
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: i[0]:j
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: m:n[0]
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: o[0]:p[0]
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: j[0]:k[0]:l
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: f[0]:g:h[0]:j

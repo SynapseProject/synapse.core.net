@@ -276,7 +276,12 @@ namespace Synapse.Core.Utilities
                 }
                 else
                 {
-                    if( patch[key] is List<object> )
+                    if( patch[key] is Dictionary<object, object> )
+                    {
+                        source[key] = new Dictionary<object, object>();
+                        ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], dv );
+                    }
+                    else if( patch[key] is List<object> )
                     {
                         source[key] = new List<object>();
                         ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key], dv );
