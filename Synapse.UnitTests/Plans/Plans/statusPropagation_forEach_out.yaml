@@ -38,7 +38,8 @@ Actions:
         ExecuteCase: Any
         Handler:
           Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
+          Config:
+            Values: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: Failed
@@ -53,12 +54,13 @@ Actions:
           ExitData: EmptyHandler ExitData default value.
           BranchStatus: Failed
           SecurityContext: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 128
+        InstanceId: 132
       - Name: ac0.g.1
         ExecuteCase: Any
         Handler:
           Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
+          Config:
+            Values: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: Waiting
@@ -73,13 +75,13 @@ Actions:
           ExitData: EmptyHandler ExitData default value.
           BranchStatus: Waiting
           SecurityContext: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 129
+        InstanceId: 133
       Result:
         Status: Initializing
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Failed
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 126
+      InstanceId: 128
     - Name: ac0.g
       ExecuteCase: Any
       Handler:
@@ -92,8 +94,7 @@ Actions:
         ExecuteCase: Any
         Handler:
           Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config:
-            Values: {}
+          Config: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: Failed
@@ -113,8 +114,7 @@ Actions:
         ExecuteCase: Any
         Handler:
           Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config:
-            Values: {}
+          Config: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: Waiting
@@ -135,10 +135,10 @@ Actions:
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Failed
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 127
+      InstanceId: 129
     Result:
       BranchStatus: Failed
-    InstanceId: 125
+    InstanceId: 127
   Actions:
   - Name: ac0.1
     ExecuteCase: Any
@@ -167,7 +167,7 @@ Actions:
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Cancelled
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 133
+      InstanceId: 135
     - Name: ac0.1.2
       ExecuteCase: Any
       Handler:
@@ -187,7 +187,7 @@ Actions:
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Initializing
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 134
+      InstanceId: 136
     - Name: ac0.1.3
       ExecuteCase: Any
       Handler:
@@ -207,36 +207,18 @@ Actions:
         ExitData: EmptyHandler ExitData default value.
         BranchStatus: Complete
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 135
+      InstanceId: 137
     Result:
       ExitData: EmptyHandler ExitData default value.
       BranchStatus: Cancelled
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 132
+    InstanceId: 134
   Result:
     Status: New
     ExitData: EmptyHandler ExitData default value.
     BranchStatus: Cancelled
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 122
-- Name: ac2
-  Handler:
-    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        ReturnStatus: CompletedWithErrors
-
-  Parameters:
-    Values:
-      ReturnStatus: CompletedWithErrors
-  Actions: []
-  Result:
-    Status: CompletedWithErrors
-    ExitData: EmptyHandler ExitData default value.
-    BranchStatus: CompletedWithErrors
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 123
+  InstanceId: 124
 - Name: ac1
   ExecuteCase: Any
   Handler:
@@ -255,9 +237,27 @@ Actions:
     ExitData: EmptyHandler ExitData default value.
     BranchStatus: Cancelling
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 124
+  InstanceId: 125
+- Name: ac2
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        ReturnStatus: CompletedWithErrors
+
+  Parameters:
+    Values:
+      ReturnStatus: CompletedWithErrors
+  Actions: []
+  Result:
+    Status: CompletedWithErrors
+    ExitData: EmptyHandler ExitData default value.
+    BranchStatus: CompletedWithErrors
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 126
 StartInfo: {}
 Result:
   Status: Cancelled
   BranchStatus: Cancelled
-LastModified: 2/22/2018 1:34:04 AM
+LastModified: 2/25/2018 3:47:23 PM

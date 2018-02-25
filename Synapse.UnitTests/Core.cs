@@ -365,6 +365,30 @@ namespace Synapse.UnitTests
         }
 
         [Test]
+        [Category( "ParmTargetMapping" )]
+        [TestCase( "parmTargetMapping.yaml" )]
+        public void ParmTargetMapping(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+
+            // Act
+            plan.Start( null, true, true );
+
+
+            Plan expectedPlan = Plan.FromYaml( $"{__plansOut}\\{plan.Name}.result.yaml" );
+
+
+            object actualParmValues = plan.ResultPlan.Actions[0].Actions[0].Parameters.Values;
+            object expectedParmValues = expectedPlan.Actions[0].Actions[0].Parameters.Values;
+
+            string actual = YamlHelpers.Serialize( actualParmValues );
+            string expected = YamlHelpers.Serialize( expectedParmValues );
+
+            Assert.AreEqual( actual, expected );
+        }
+
+        [Test]
         [Category( "PlanDeclaration" )]
         [TestCase( "planDeclarationFail.yaml" )]
         public void PlanDeclaration(string planFile)

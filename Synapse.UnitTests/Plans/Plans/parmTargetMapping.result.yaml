@@ -1,0 +1,221 @@
+Name: parmTargetMapping
+Description: Test data selection from yaml/json and placement into destination structure
+Actions:
+- Name: returnData
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        SleepMilliseconds: 0
+
+        ReturnStatus: Complete
+
+        ExitData: >-
+
+          Top:
+
+            - Arr0:
+
+              - ca0.0
+
+              - ca0.1:
+
+                - gc0.1.0: value0
+
+                - gc0.1.1: value1
+
+                - gc0.1.2: value2
+
+            - Arr1
+
+            - Arr2:
+
+                Obj:
+
+                  Prop0: value3
+
+                  Prop1:
+
+                    Prop1.1:
+
+                    - value4
+
+                    - value5
+
+                    - value6
+
+  Parameters:
+    Values:
+      SleepMilliseconds: 0
+      ReturnStatus: Complete
+      ExitData: >-
+        Top:
+          - Arr0:
+            - ca0.0
+            - ca0.1:
+              - gc0.1.0: value0
+              - gc0.1.1: value1
+              - gc0.1.2: value2
+          - Arr1
+          - Arr2:
+              Obj:
+                Prop0: value3
+                Prop1:
+                  Prop1.1:
+                  - value4
+                  - value5
+                  - value6
+  Actions:
+  - Name: mapData
+    Handler:
+      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        Parameters: "h:\r\n- a:\r\n    b:\r\n    - value0\r\ni:\r\n- a:\r\n    b:\r\n    - value0\r\n    - value1\r\n    - value2\r\nk:\r\n  a:\r\n  - value4\r\n  - value5\r\n  - value7\r\n  - value6\r\n  b: \r\na:\r\n  b: value0\r\nb:\r\n- value1\r\nc:\r\n  a:\r\n  - value1\r\nd:\r\n- a:\r\n  - value1\r\ne:\r\n- a:\r\n  - value1\r\nf:\r\n- a:\r\n    b:\r\n    - value1\r\ng:\r\n  a:\r\n    b:\r\n    - value0\r\n    - value1\r\nj:\r\n  a:\r\n  - value4\r\n  - value5\r\n  - value6\r\nl:\r\n  a:\r\n    Prop1.1:\r\n    - value4\r\n    - value5\r\n    - value6\r\n"
+        ParentExitData: >-
+          Top:
+            - Arr0:
+              - ca0.0
+              - ca0.1:
+                - gc0.1.0: value0
+                - gc0.1.1: value1
+                - gc0.1.2: value2
+            - Arr1
+            - Arr2:
+                Obj:
+                  Prop0: value3
+                  Prop1:
+                    Prop1.1:
+                    - value4
+                    - value5
+                    - value6
+    Parameters:
+      Values:
+        h:
+        - a:
+            b:
+            - value0
+        i:
+        - a:
+            b:
+            - value0
+            - value1
+            - value2
+        k:
+          a:
+          - value4
+          - value5
+          - value7
+          - value6
+          b: 
+        a:
+          b: value0
+        b:
+        - value1
+        c:
+          a:
+          - value1
+        d:
+        - a:
+          - value1
+        e:
+        - a:
+          - value1
+        f:
+        - a:
+            b:
+            - value1
+        g:
+          a:
+            b:
+            - value0
+            - value1
+        j:
+          a:
+          - value4
+          - value5
+          - value6
+        l:
+          a:
+            Prop1.1:
+            - value4
+            - value5
+            - value6
+      ParentExitData:
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[0]:gc0.1.0
+          Target: a:b
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: b[0]:a
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: c:a[0]
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: d[0]:a[0]
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: e[0]:a[0]:b
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: f[0]:a:b[0]:c
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[0]:gc0.1.0
+          Target: g:a:b[0]:c
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: g:a:b[1]:d
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[0]:gc0.1.0
+          Target: h[0]:a:b[0]:c
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[0]:gc0.1.0
+          Target: i[0]:a:b[0]:c
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[1]:gc0.1.1
+          Target: i[0]:a:b[1]:c
+      - CopyToValues:
+          Source: Top[0]:Arr0[1]:ca0.1[2]:gc0.1.2
+          Target: i[0]:a:b[2]:c
+      - CopyToValues:
+          Source: Top[2]:Arr2:Obj:Prop1:Prop1.1
+          Target: j:a
+      - CopyToValues:
+          Source: Top[2]:Arr2:Obj:Prop1:Prop1.1[2]
+          Target: k:a[3]
+      - CopyToValues:
+          Source: Top[2]:Arr2:Obj:Prop1
+          Target: l:a
+    Actions: []
+    Result:
+      ExitData: EmptyHandler ExitData default value.
+      SecurityContext: LAPTOP-TK2D9TB6\Steve
+    InstanceId: 1
+  Result:
+    Status: Complete
+    ExitData: >-
+      Top:
+        - Arr0:
+          - ca0.0
+          - ca0.1:
+            - gc0.1.0: value0
+            - gc0.1.1: value1
+            - gc0.1.2: value2
+        - Arr1
+        - Arr2:
+            Obj:
+              Prop0: value3
+              Prop1:
+                Prop1.1:
+                - value4
+                - value5
+                - value6
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+StartInfo: {}
+Result:
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 2/25/2018 4:08:11 PM

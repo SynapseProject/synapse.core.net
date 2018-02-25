@@ -135,7 +135,16 @@ namespace Synapse.Core.Utilities
                 string[] path = ped.Source?.Split( ':' );
                 if( path.Length > 0 )
                 {
-                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.TransformInPlace.Source } );
+                    object element = null;
+                    try
+                    {
+                        element = SelectElements( parentExitDataValues, new List<string>() { ped.TransformInPlace.Source } );
+                    }
+                    catch( Exception ex )
+                    {
+                        throw new Exception( $"Could not resolve ParentExitData->TransformInPlace->Source: [{ped.TransformInPlace.Source}] for Target: [{ped.TransformInPlace.Target}].  Exception: {ex.Message}" );
+                    }
+
                     if( element != null )
                     {
                         if( ped.TransformInPlace.Parse )
@@ -151,7 +160,16 @@ namespace Synapse.Core.Utilities
                 string[] path = ped.Source?.Split( ':' );
                 if( path?.Length > 0 )
                 {
-                    object element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
+                    object element = null;
+                    try
+                    {
+                        element = SelectElements( parentExitDataValues, new List<string>() { ped.Source } );
+                    }
+                    catch( Exception ex )
+                    {
+                        throw new Exception( $"Could not resolve ParentExitData->CopyToValues->Source: [{ped.Source}] for Target: [{ped.CopyToValues.Target}].  Exception: {ex.Message}" );
+                    }
+
                     if( element != null )
                     {
                         if( ped.CopyToValues.Parse )
@@ -175,7 +193,18 @@ namespace Synapse.Core.Utilities
                 if( path.Length > 0 )
                 {
                     Dictionary<object, object> parms = pss.HasName ? GetParamSet( pss.Name, globalParamSets, pss.IsNameParentExitData, parentExitData ) : values;
-                    object element = SelectElements( parms, new List<string>() { pss.Source } );
+
+                    object element = null;
+                    try
+                    {
+                        element = SelectElements( parms, new List<string>() { pss.Source } );
+                    }
+                    catch( Exception ex )
+                    {
+                        throw new Exception( $"Could not resolve ForEach->ParameterSourceItems->Source: [{pss.Source}].  Exception: {ex.Message}" );
+                    }
+
+
                     if( element != null )
                     {
                         if( pss.Parse )
@@ -272,7 +301,20 @@ namespace Synapse.Core.Utilities
                     else if( source[key] is List<object> )
                         ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key], dv );
                     else //( source[key] is string )
-                        source[key] = RegexReplaceOrValue( source[key], patch[key], dv );
+                    {
+                        if( patch[key] is Dictionary<object, object> )
+                        {
+                            source[key] = new Dictionary<object, object>();
+                            ApplyPatchValues( (Dictionary<object, object>)source[key], (Dictionary<object, object>)patch[key], dv );
+                        }
+                        else if( patch[key] is List<object> )
+                        {
+                            source[key] = new List<object>();
+                            ApplyPatchValues( (List<object>)source[key], (List<object>)patch[key], dv );
+                        }
+                        else
+                            source[key] = RegexReplaceOrValue( source[key], patch[key], dv );
+                    }
                 }
                 else
                 {
@@ -308,22 +350,13 @@ namespace Synapse.Core.Utilities
             //updated syntax to Pattern Matching: if patch[0] is Dict => patchItem
             if( patch[0] is Dictionary<object, object> patchItem )
             {
-                object patchKey = null;
-                object patchValue = null;
-
-                //remove the metadata of index
+                //get the metadata index value, remove metadata
                 int i = int.Parse( patchItem[__sli].ToString() );
                 patchItem.Remove( __sli );
+                //get the value to updated/added at index 'i'
+                object patchKey = patchItem.ElementAt( 0 ).Key;
+                object patchValue = patchItem[patchKey];
 
-                //todo: [ss]: from here, to..
-                foreach( object key in patchItem.Keys )
-                    patchKey = key;
-
-                if( patchItem.ContainsKey( patchKey ) )
-                    patchValue = patchItem[patchKey];
-                //..here needs a little examination.  seems redundant to check for a key in the collection
-                //that was just iterated above.  further, what is the use-case for iterating down after
-                //removing [__sli]?  When is there a third item in the collection?
 
                 if( i >= 0 && i < source.Count )
                 {
@@ -355,7 +388,8 @@ namespace Synapse.Core.Utilities
                     if( patchValue is Dictionary<object, object> )
                     {
                         source.Add( new Dictionary<object, object>() { { patchKey, new Dictionary<object, object>() } } );
-                        ApplyPatchValues( (Dictionary<object, object>)source[source.Count - 1], (Dictionary<object, object>)patchValue, dv );
+                        ApplyPatchValues( (Dictionary<object, object>)((Dictionary<object, object>)source[source.Count - 1])[patchKey],
+                            (Dictionary<object, object>)patchValue, dv );
                     }
                     else if( patchValue is List<object> )
                     {
@@ -623,42 +657,43 @@ namespace Synapse.Core.Utilities
 
             Dictionary<object, object> patchItem = (Dictionary<object, object>)searchPath[0];
 
+            //get the metadata index value, remove metadata
             int i = int.Parse( patchItem[__sli].ToString() );
             patchItem.Remove( __sli );
 
-            object patchKey = null;
-            object patchValue = null;
-
-            //todo: [ss]: from here, to..
-            foreach( object key in patchItem.Keys )
-                patchKey = key;
-
-            if( patchItem.ContainsKey( patchKey ) )
-                patchValue = patchItem[patchKey];
-            //..here needs a little examination.  seems redundant to check for a key in the collection
-            //that was just iterated above.  further, what is the use-case for iterating down after
-            //removing [__sli]?  When is there a third item in the collection?
-
-            if( i >= 0 && i < source.Count )
+            if( patchItem.Count > 0 )
             {
-                //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
-                if( source[i] is Dictionary<object, object> listItemValue )
+                //get the value to updated/added at index 'i'
+                object patchKey = patchItem.ElementAt( 0 ).Key;
+                object patchValue = patchItem[patchKey];
+
+
+                if( i >= 0 && i < source.Count )
                 {
-                    if( patchValue is Dictionary<object, object> )
-                        result = FindElement( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
-                    else if( patchValue is List<object> )
-                        result = FindElement( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
-                    else //if( patchValue is 'the value' )
-                        result = listItemValue[patchKey];
+                    //updated syntax to Pattern Matching: if source[i] is Dict => listItemValue
+                    if( source[i] is Dictionary<object, object> listItemValue )
+                    {
+                        if( patchValue is Dictionary<object, object> )
+                            result = FindElement( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue );
+                        else if( patchValue is List<object> )
+                            result = FindElement( (List<object>)listItemValue[patchKey], (List<object>)patchValue );
+                        else //if( patchValue is 'the value' )
+                            result = listItemValue[patchKey];
+                    }
+                    else if( source[i] is List<object> )
+                        result = FindElement( (List<object>)source[i], (List<object>)patchKey );
+                    else
+                        result = source[i];
                 }
-                else if( source[i] is List<object> )
-                    result = FindElement( (List<object>)source[i], (List<object>)patchKey );
-                else
+                //else  //todo: return source?
+                //    //i is outside source lbound/ubound
+                //    result = source;
+            }
+            else
+            {
+                if( i >= 0 && i < source.Count )
                     result = source[i];
             }
-            //else  //todo: return source?
-            //    //i is outside source lbound/ubound
-            //    result = source;
 
 
             return result;
