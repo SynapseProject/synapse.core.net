@@ -116,6 +116,9 @@ namespace Synapse.Core.Utilities
             {
                 if( values.ContainsKey( dv.Source ) )
                 {
+                    if( !dv.Validate( values[dv.Source], out string validationErrorMessage ) )
+                        throw new ArgumentException( validationErrorMessage );
+
                     object value = dv.Parse ? TryParseValue( values[dv.Source] ) : values[dv.Source];
                     Dictionary<object, object> patch = ConvertPathElementToDict( dv.Target, value );
                     ApplyPatchValues( source, patch, dv );
