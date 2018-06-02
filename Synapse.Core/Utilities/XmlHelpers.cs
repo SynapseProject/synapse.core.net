@@ -209,6 +209,8 @@ namespace Synapse.Core.Utilities
                 if( values.ContainsKey( dv.Source ) )
                 {
                     string value = values[dv.Source];
+                    if( !dv.Validate( value, out string validationErrorMessage ) )
+                        throw new ArgumentException( validationErrorMessage );
 
                     XmlNode src = source.SelectSingleNode( dv.Target );
                     if( src != null )
