@@ -5,6 +5,7 @@ namespace Synapse.Core
 {
     public class SourceTarget : IReplacementValueOptions
     {
+        public string Description { get; set; }
         public string Source { get; set; }
         public string Target { get; set; }
         public bool Parse { get; set; }
@@ -27,6 +28,7 @@ namespace Synapse.Core
         {
             return new SourceTarget()
             {
+                Description = "A human-friendly description.",
                 Source = "Element:IndexedElement[0]:Element",
                 Target = "Element:IndexedElement[0]:Element",
                 Parse = true,

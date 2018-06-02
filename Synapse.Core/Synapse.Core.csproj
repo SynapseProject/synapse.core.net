@@ -104,6 +104,7 @@
     <Compile Include="Utilities\AssemblyLoader.cs" />
     <Compile Include="Utilities\ExceptionHelpers.cs" />
     <Compile Include="Utilities\JsonHelpers.cs" />
+    <Compile Include="Utilities\PlanExtensions.cs" />
     <Compile Include="Utilities\XmlHelpers.cs" />
     <Compile Include="Dal\ActionInstance.cs" />
     <Compile Include="Dal\PlanInstance.cs" />
