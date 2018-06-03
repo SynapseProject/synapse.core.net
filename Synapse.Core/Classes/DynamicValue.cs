@@ -9,7 +9,7 @@ namespace Synapse.Core
         public List<Option> Options { get; set; } = new List<Option>();
 
         public TypeCode DataType { get; set; } = TypeCode.String;
-        public string ValidationRegex { get; set; }
+        public string Validation { get; set; }
         public bool RestrictToOptions { get; set; } = true;
 
         public override string ToString()
@@ -29,7 +29,7 @@ namespace Synapse.Core
                 Encode = EncodingType.Base64,
                 Replace = "Regex Expression",
                 DataType = TypeCode.String,
-                ValidationRegex = "Regex Expression",
+                Validation = "Regex Expression",
                 RestrictToOptions = true
             };
             dv.Options.Add( Option.CreateSample() );
@@ -52,7 +52,7 @@ namespace Synapse.Core
                 Encode = EncodingType.None,
                 Replace = null,
                 DataType = DataType,
-                ValidationRegex = ValidationRegex,
+                Validation = Validation,
                 RestrictToOptions = RestrictToOptions && Options?.Count > 0,
 
                 Options = Options?.Count == 0 ? null : Options
@@ -72,16 +72,16 @@ namespace Synapse.Core
                 }
                 catch
                 {
-                    errorMessage = $"Could not convert DynamicValue [{value}] to [{DataType}] for parameter [{Source}].";
+                    errorMessage = $"DynamicValue [{value}] failed validation rule type requirement of [{DataType}] for parameter [{Source}].";
                     ok = false;
                 }
             }
 
-            if( !string.IsNullOrWhiteSpace( ValidationRegex ) )
+            if( !string.IsNullOrWhiteSpace( Validation ) )
             {
-                if( !Regex.Match( value, ValidationRegex ).Success )
+                if( !Regex.Match( value, Validation ).Success )
                 {
-                    errorMessage = $"DynamicValue [{value}] failed validation rule [{ValidationRegex}] for parameter [{Source}].";
+                    errorMessage = $"DynamicValue [{value}] failed validation rule [{Validation}] for parameter [{Source}].";
                     ok = false;
                 }
             }
@@ -100,7 +100,7 @@ namespace Synapse.Core
 
                 if( !found )
                 {
-                    errorMessage = $"DynamicValue [{value}] failed validation rule [{nameof( RestrictToOptions )} for parameter [{Source}].";
+                    errorMessage = $"DynamicValue [{value}] failed validation rule [{nameof( RestrictToOptions )}] for parameter [{Source}].";
                     ok = false;
                 }
             }
@@ -113,6 +113,8 @@ namespace Synapse.Core
     {
         public string Key { get; set; }
         public string Value { get; set; }
+        public string Description { get; set; }
+        public bool IsDefault { get; set; }
 
         public override string ToString()
         {
@@ -124,7 +126,8 @@ namespace Synapse.Core
             Option o = new Option()
             {
                 Key = "key",
-                Value = "value"
+                Value = "value",
+                IsDefault = true
             };
 
             return o;

@@ -1,6 +1,74 @@
 Name: planDeclarationFail
 Description: Test missing/partial Plan/Action declaration.
 Actions:
+- Name: ac3
+  Description: Has Handler, but no Handler.Config.  No Parameters
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Parameters: {}
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 100
+      IsDryRun: true
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 100
+- Name: ac1
+  Description: No Parameters declaration
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config:
+      Values:
+        CNode0: CValue0_inline
+        CNode1: CValue1_inline
+        CNode3:
+          CNode3_1: CValue3_1_inline
+          CNode3_2: CValue3_2_inline
+    StartInfo: {}
+  Parameters: {}
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      Config: >+
+        CNode0: CValue0_inline
+
+        CNode1: CValue1_inline
+
+        CNode3:
+
+          CNode3_1: CValue3_1_inline
+
+          CNode3_2: CValue3_2_inline
+
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 101
+      IsDryRun: true
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 101
+- Name: ''
+  Description: No Name, no declaration at all
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Parameters: {}
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 102
+      IsDryRun: true
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 102
 - Name: ac0
   Description: Fully formed, correctly structured Action; here for reference
   Handler:
@@ -34,12 +102,18 @@ Actions:
         PNode3_2: PValue3_2_inline
     Dynamic:
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode0Dynamic
       Target: PNode0
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
   Actions: []
@@ -58,7 +132,7 @@ Actions:
           CNode3_2: CValue3_2_inline
 
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 100
+      InstanceId: 103
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -71,74 +145,6 @@ Actions:
 
           PNode3_2: PValue3_2_inline
 
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 100
-- Name: ac3
-  Description: Has Handler, but no Handler.Config.  No Parameters
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo: {}
-  Parameters: {}
-  Actions: []
-  Result:
-    Status: Complete
-    ExitData:
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 101
-      IsDryRun: true
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 101
-- Name: ac1
-  Description: No Parameters declaration
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config:
-      Values:
-        CNode0: CValue0_inline
-        CNode1: CValue1_inline
-        CNode3:
-          CNode3_1: CValue3_1_inline
-          CNode3_2: CValue3_2_inline
-    StartInfo: {}
-  Parameters: {}
-  Actions: []
-  Result:
-    Status: Complete
-    ExitData:
-      Config: >+
-        CNode0: CValue0_inline
-
-        CNode1: CValue1_inline
-
-        CNode3:
-
-          CNode3_1: CValue3_1_inline
-
-          CNode3_2: CValue3_2_inline
-
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 102
-      IsDryRun: true
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 102
-- Name: ''
-  Description: No Name, no declaration at all
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo: {}
-  Parameters: {}
-  Actions: []
-  Result:
-    Status: Complete
-    ExitData:
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 103
-      IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
   InstanceId: 103
@@ -156,12 +162,18 @@ Actions:
     Values: {}
     Dynamic:
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode0Dynamic
       Target: PNode0
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
   Actions: []
@@ -204,12 +216,18 @@ Actions:
         PNode3_2: PValue3_2_inline
     Dynamic:
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode0Dynamic
       Target: PNode0
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
   Actions: []
@@ -260,12 +278,18 @@ Actions:
         PNode3_2: PValue3_2_inline
     Dynamic:
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode0Dynamic
       Target: PNode0
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode2_1Dynamic
       Target: PNode2:PNode2_1
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: pnode3_1Dynamic
       Target: PNode3:PNode3_1
   Actions: []
@@ -293,4 +317,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 2/25/2018 3:47:23 PM
+LastModified: 6/3/2018 1:08:49 PM

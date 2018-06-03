@@ -1,0 +1,52 @@
+﻿Name: plan0
+Description: test Dynamic->Validation
+DefaultHandlerType: Synapse.Core:EmptyHandler
+Actions:
+- Name: action0
+  Parameters:
+    Name: ParamSet0
+    Type: Xml
+    Dynamic:
+    - Description: fails DataType conversion
+      Source: sleep0  #send a simple Int32
+      Target: SleepMilliseconds
+      DataType: DateTime
+- Name: action1
+  Parameters:
+    Name: ParamSet1
+    Type: Xml
+    Dynamic:
+    - Description: fails Validation (in range 1 - 2000)
+      Source: sleep1   #send value 2001
+      Target: SleepMilliseconds
+      Validation: ^([1-9]|[01][0-9][0-9]|200[0-0])$
+- Name: action2
+  Parameters:
+    Name: ParamSet2
+    Type: Xml
+    Dynamic:
+    - Description: fails RestrictToOptions = true
+      Source: sleep2  #send value 2001
+      Target: SleepMilliseconds
+      RestrictToOptions: true  #RestrictToOptions defaults to true when Options?.Count > 0, setting here for clarity
+      Options:
+      - Key: 1000
+        Value: 1000
+      - Key: 2000
+        Value: 2000
+- Name: action3
+  Parameters:
+    Name: ParamSet3
+    Type: Xml
+    Dynamic:
+    - Description: passes all conditions - Int32, in range (1 - 2000), is within Options
+      Source: sleep3   #send value 2000
+      Target: SleepMilliseconds
+      DataType: Int32
+      Validation: ^([1-9]|[01][0-9][0-9]|200[0-0])$
+      RestrictToOptions: true  #RestrictToOptions defaults to true when Options?.Count > 0, setting here for clarity
+      Options:
+      - Key: 1000
+        Value: 1000
+      - Key: 2000
+        Value: 2000
