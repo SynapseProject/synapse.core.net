@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: HEdC2xdYs+gLCTFzQuPgmsYxyExuBjW7KT2JgibeG9/Mytl8gmtQ4QYFAFBpb6Rcm8f2HIGTnUxkXJSJVwQqnFQ2PvthxZxk6Ri1/z+ZA8eDXBBZzWCKWGzOoba21ZYOkop/b2/UVjOd36SZAyzLfXQTBBbGlhuZuISu8QIJLkI=
+        ArgString: bvQiS5AsKFodjISibaWXcbtOA/ZBggt96ydQ2sLBSIwyqbJ0ZwTRq67ugaYJNqg/a74BURZq7OL/tg2BoSS0MCe3bX2Pn8jmcXKUBcXJOBw8TF2J374y78szGVKAAz//6vKFz1izaX8muinSvmd5I+3tmoaQC19icSvX1NhDOcc=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: ycCjX/jIk2ZOy5RWGCO5/mZD9UNr7MYmeZG0bR3zdus1CIbN3B7awtkxomfyHDOo40z+HkblyfVz9OucuHnQdH9h+EyVb8XyraY/lrK+snM2Xo7MyPgUZUsNiykWgx2YoeFgZg4DbDT62faFj3MQEqTaIfoewoHxI7CCdHIe4YE=
+          Encoding: xc6GNRr0+acY+ag93JNYuWO4hcrEjJdw2Y/VxOckbuGj8X8DDT1Rs0cZjEbsZm2zgm1OS0WI5+R4hh9LnZlrAc2uBJVPDdyCNLlLu45JMfctACAwNPIXIZOHGOG8+oOsfEkXu8eQAkY0iOHrDwYv1c5g5RDyWZckHINWHOhUoZM=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: yunuxF41LRT3ZWdUFwX6N47dD+AcyknjRgCYEUoQWvU0ayQY+ISM6CHGWDjWnagKJ9jGs2lDK08CcXh3DbtjMDsVW3fguSNaIByzbO6CY2khHcXmPPzrSKW0dSHuaxC3WEIczX041R38Zsck94WsjN7i6scogLku4w61WF4ldP8=
+              - v1: QxidCJAHN4kDKaagQsmAC/Onfzj6IR3efH7BAxT3Y2VYINxR1Jq7tAuECoI4KuKoeQGgc0uTZUo1E1nWrV0K+Kytp51z9SIi7vB20RdBTnj/gGFOydOkeU1hcBS2PyLL1RlSAkhSetqBCgDUkiNlUPNqrEhUye7iCQf5iqrydmk=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,10 +35,12 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: RIwQrjyoIkUsLSDzyawNPN/6Dx79KM5C0G4d010Nsj/7vTrAbXgArA8pdN3Euul1Atp+ORpcAoS25Qvq1klf7D4u7iCPEKP7MvAVFzlRwEGPQlpOrWA6YsTRrQkYqlqfE5jJzZnBp5QAf9hRFXrnnk1rtWFyZRa3gLdCoPcQjgQ=
+              - v3: pO8ZJj9rsU3C3EdgkjLn0vuWnhDDBLT51gtV+R47fTRNH4DdhV3UPdd1wjmzJ+caB8Y58GzkuENJJONgPdcfr6M+1Xic2zW2kjHMPIN5ehGYYKLvp2IesIa80hHiZ4bFH6HtpQ3wEqGVxX698W0KP7agVYvEHJkxgWqQHYCmRsE=
           Encoding: Base64
     Dynamic:
     - Options: []
+      DataType: String
+      RestrictToOptions: true
       Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
@@ -63,15 +65,15 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>G2pZm5G2ZVYBFBUdFgcuFHhM+al29uJKe6UxGwDUTjKxxBBLG477ezjgifgbPyHDdkGFLqx3ZmwFJOPA0JYCyzQYKxRGgmtBeUG75X0LLWByRUJyZwzSVDGSbwqV7aQQTP/OhUV/FV2KBO43NyGD9suajehLJ1L/nP+nyavpERo=</CNode0>
+          <CNode0>0mQcpVmFEweK9m2pz7vr4pYhGr0pGXzEUYR1QupUjP52B/caMQOMAislaEV0K0HCB0TfLEDRi21iyPoEJtcsM/fayj0UC0ysWHlA0b4eG2Oz/rz9UEhTF99CeDv7H4hWKLsvDF4PE9QSf2e391VuOPjm8AagUdStq3648VtmFtE=</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="Zmy4NLOv7VfzrP/30w0TipQ3dfVqYCPU6MHuy60AIeLqb/QnUTpoPn0dvoqpQ1OkGa9XfbQEIf8uXb+A0HZ4feYKHfBw2o4NNCPOQFmzsdwZltqRg/5eu1vZXFDStrQraLe5zWWc9FqhbEwaY81d181z9bKSgM6pYLAUBWzBb84=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="wUMHNDRwveQW7jWRUDf7eigil1eEpZ2lGSw81m0gu1wDdHM6JIhMfsn8+rIC/VkLOTXz7AfLX1gEx56OnBB0IRJu668NZwqHf15aYyGsV5F6jqtaakDpDYIjm9QS3FILNw04jzVRrTzWlOHitlC0kOcGZe2oNPvqsLWOAVKD4WU=">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>0UBdzDjZ+uWvD2OtYOpx8aJ9VIkPCtAdNYSH0UPM711IOTE8mVzd0c2N8fEc5EkpI6HWIwb2PDlznicsQC1vInT2VBTHoGQ+VCITOjLrUErGg4lff0bwxLnHNn1wlwIPutnfAXa0uMQdb2T9sY8Z6UH5TkoOL2R7rSAH5JE5yR4=</CNode3_2>
+            <CNode3_2>Htsx7btFJ2nTwcVvHds1xYKPpAGzIhnf7VouCcWqePuDtQ/dXHiTLPBC2qIGXXNmeSjgdvEa9XIrHQ6GUTr5dMfqco0uSGIeotnsl+Dk+f+cWJRBPq644qLz57FlSVs2YY4/zbmBru7b5DGcRKjCP2QtX05uYSG3UbGfC27YTPI=</CNode3_2>
 
           </CNode3>
 
@@ -92,4 +94,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 2/25/2018 3:47:13 PM
+LastModified: 6/3/2018 1:08:39 PM

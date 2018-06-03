@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+
 using NUnit.Framework;
 
 using Synapse.Core;
-using Synapse.Core.Runtime;
 using Synapse.Core.Utilities;
 
 namespace Synapse.UnitTests
@@ -54,6 +55,49 @@ namespace Synapse.UnitTests
             string actualMergedParms = plan.Actions[0].Parameters.GetSerializedValues();
             //File.WriteAllText( $"{__parms}\\{type}_out.{type}", actualMergedParms );
             Assert.AreEqual( expectedMergeParms, actualMergedParms );
+        }
+
+
+        [Test]
+        [Category( "Parameters" )]
+        [Category( "Parameters_Validation" )]
+        [TestCase( "parameters_yaml_validation.yaml" )]
+        [TestCase( "parameters_xml_validation.yaml" )]
+        public void ValidateParameters_Static(string planFile)
+        {
+            // Arrange
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planFile}" );
+            Dictionary<string, string> parms = new Dictionary<string, string>
+            {
+                { "sleep0", "2001" },
+                { "sleep1", "2001" },
+                { "sleep2", "2001" },
+                { "sleep3", "2000" }
+            };
+
+            // Act
+            plan.Start( parms, true, true );
+
+            // Assert
+            string expected = "DynamicValue [2001] failed validation rule type requirement of [DateTime] for parameter [sleep0].";
+            ActionItem action = plan.ResultPlan.Actions.Single( a => a.Name.Equals( "action0", StringComparison.OrdinalIgnoreCase ) );
+            bool found = action.Result.Message.Contains( expected );
+            Assert.IsTrue( found );
+
+            expected = "DynamicValue [2001] failed validation rule [^([1-9]|[01][0-9][0-9]|200[0-0])$] for parameter [sleep1].";
+            action = plan.ResultPlan.Actions.Single( a => a.Name.Equals( "action1", StringComparison.OrdinalIgnoreCase ) );
+            found = action.Result.Message.Contains( expected );
+            Assert.IsTrue( found );
+
+            expected = "DynamicValue [2001] failed validation rule [RestrictToOptions] for parameter [sleep2].";
+            action = plan.ResultPlan.Actions.Single( a => a.Name.Equals( "action2", StringComparison.OrdinalIgnoreCase ) );
+            found = action.Result.Message.Contains( expected );
+            Assert.IsTrue( found );
+
+            expected = "EmptyHandler ExitData default value.";
+            action = plan.ResultPlan.Actions.Single( a => a.Name.Equals( "action3", StringComparison.OrdinalIgnoreCase ) );
+            found = action.Result.ExitData.ToString().Contains( expected );
+            Assert.IsTrue( found );
         }
 
 

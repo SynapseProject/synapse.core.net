@@ -39,6 +39,8 @@ Parameters:
     ReturnStatus: Tombstoned
   Dynamic:
   - Options: []
+    DataType: String
+    RestrictToOptions: true
     Source: ed
     Target: ExitData
     Parse: true

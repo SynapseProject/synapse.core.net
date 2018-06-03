@@ -41,6 +41,8 @@ Parameters:
     - - []
   Dynamic:
   - Options: []
+    DataType: String
+    RestrictToOptions: true
     Source: ed
     Target: /EmptyHandlerParameters/ExitData
   ParentExitData:
