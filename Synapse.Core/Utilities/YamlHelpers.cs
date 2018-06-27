@@ -46,15 +46,18 @@ namespace Synapse.Core.Utilities
 
         public static void SerializeFile(string path, object data, bool serializeAsJson = false, bool formatJson = true, bool emitDefaultValues = false)
         {
-            if( !serializeAsJson )
+            using( StreamWriter writer = new StreamWriter( path ) )
+                Serialize( writer, data, serializeAsJson, emitDefaultValues );
+
+            if (formatJson && serializeAsJson) 
             {
-                using( StreamWriter writer = new StreamWriter( path ) )
-                    Serialize( writer, data, serializeAsJson, emitDefaultValues );
-            }
-            else //gets formatted json
-            {
-                string result = Serialize( data, serializeAsJson, formatJson, emitDefaultValues );
-                File.WriteAllText( path, result );
+                String origFile = $"{path}.tmp";
+                File.Move(path, origFile);
+                using (StreamReader raw = new StreamReader(origFile))
+                using (StreamWriter formatted = new StreamWriter(path))
+                    JsonHelpers.FormatJson(raw, formatted);
+
+                File.Delete(origFile);
             }
         }
 
