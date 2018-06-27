@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Synapse.Core.Utilities
 {
@@ -9,30 +10,45 @@ namespace Synapse.Core.Utilities
     {
         //taken from accepted answer on
         //  http://stackoverflow.com/questions/4580397/json-formatter-in-c
-        //minor code cleanup, plus added --> s = s.Replace( " \"", "\"" ).Replace( ": {", ":{" );
-        //to deal with output of yaml.net
+        //minor code cleanup, added ignore of all whitespace not in quotes
+        //to deal with output of yaml.net.  Modified to use TextWriters as well.
 
         private const string __indent = "  ";
         public static string FormatJson(string s)
         {
-            s = s.Replace( " \"", "\"" ).Replace( ": {", ":{" );
+            StringBuilder sb = new StringBuilder();
+            using (StringReader reader = new StringReader(s))
+            {
+                using (StringWriter writer = new StringWriter(sb))
+                {
+                    FormatJson(reader, writer);
+                    writer.Flush();
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static void FormatJson(TextReader reader, TextWriter writer)
+        {
             int indent = 0;
             bool quoted = false;
-            StringBuilder sb = new StringBuilder();
+            bool escaped = false;
 
-            for( int i = 0; i < s.Length; i++ )
+            int  chInt = 0;
+
+            while ( (chInt = reader.Read() ) != -1)
             {
-                var ch = s[i];
+                char ch = (char)chInt;
                 switch( ch )
                 {
                     case '{':
                     case '[':
                     {
-                        sb.Append( ch );
+                        writer.Write( ch );
                         if( !quoted )
                         {
-                            sb.AppendLine();
-                            Enumerable.Range( 0, ++indent ).ForEach( item => sb.Append( __indent ) );
+                            writer.WriteLine();
+                            Enumerable.Range( 0, ++indent ).ForEach( item => writer.Write( __indent ) );
                         }
                         break;
                     }
@@ -40,56 +56,64 @@ namespace Synapse.Core.Utilities
                     case '}':
                     case ']':
                     {
-                        if( !quoted )
+                        if ( !quoted )
                         {
-                            sb.AppendLine();
-                            Enumerable.Range( 0, --indent ).ForEach( item => sb.Append( __indent ) );
+                            writer.WriteLine();
+                            Enumerable.Range( 0, --indent ).ForEach( item => writer.Write( __indent ) );
                         }
-                        sb.Append( ch );
+                        writer.Write( ch );
                         break;
                     }
 
                     case '"':
                     {
-                        sb.Append( ch );
-                        bool escaped = false;
-
-                        int index = i;
-                        while( index > 0 && s[--index] == '\\' )
-                            escaped = !escaped;
-
+                        writer.Write( ch );
                         if( !escaped )
                             quoted = !quoted;
                         break;
                     }
 
+                    case '\\':
+                    {
+                        // Keep Track Of Escapes To Determine If Applies To Double-Quote or Another Back-Slash
+                        // "Key" : "Value\\"            (Escape Applies To Back-Slash)
+                        // "Key" : " \"Quoted\" Value"  (Escape Applies To Double-Quote)
+                        escaped = !escaped;
+                        writer.Write(ch);
+                        break;
+                    }
+
                     case ',':
                     {
-                        sb.Append( ch );
+                        writer.Write( ch );
                         if( !quoted )
                         {
-                            sb.AppendLine();
-                            Enumerable.Range( 0, indent ).ForEach( item => sb.Append( __indent ) );
+                            writer.WriteLine();
+                            Enumerable.Range( 0, indent ).ForEach( item => writer.Write( __indent ) );
                         }
                         break;
                     }
 
                     case ':':
                     {
-                        sb.Append( ch );
+                        writer.Write( ch );
                         if( !quoted )
-                            sb.Append( " " );
+                            writer.Write( " " );
                         break;
                     }
 
                     default:
                     {
-                        sb.Append( ch );
+                        // Ignore Any White Space Characters That Aren't Between Quotes
+                        if (!Char.IsWhiteSpace(ch) || quoted)
+                            writer.Write( ch );
                         break;
                     }
                 }
+
+                if (ch != '\\')
+                    escaped = false;
             }
-            return sb.ToString();
         }
     }
 
