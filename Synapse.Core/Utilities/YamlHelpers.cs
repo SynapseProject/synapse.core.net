@@ -49,15 +49,15 @@ namespace Synapse.Core.Utilities
             using( StreamWriter writer = new StreamWriter( path ) )
                 Serialize( writer, data, serializeAsJson, emitDefaultValues );
 
-            if (formatJson && serializeAsJson) 
+            if( formatJson && serializeAsJson )
             {
                 String origFile = $"{path}.tmp";
-                File.Move(path, origFile);
-                using (StreamReader raw = new StreamReader(origFile))
-                using (StreamWriter formatted = new StreamWriter(path))
-                    JsonHelpers.FormatJson(raw, formatted);
+                File.Move( path, origFile );
+                using( StreamReader raw = new StreamReader( origFile ) )
+                    using( StreamWriter formatted = new StreamWriter( path ) )
+                        JsonHelpers.FormatJson( raw, formatted );
 
-                File.Delete(origFile);
+                File.Delete( origFile );
             }
         }
 

@@ -51,7 +51,7 @@ namespace Synapse.cli
                 }
                 else if( a.IsGenKey )
                 {
-                    CryptoHelpers.GenerateRsaKeys( a.KeyContainerName, $"{a.GenKey}.pubPriv", $"{a.GenKey}.pubOnly" );
+                    CryptoHelpers.GenerateRsaKeys( a.KeyContainerName, $"{a.GenKey}.pubPriv", $"{a.GenKey}.pubOnly", a.KeySize );
                     Console.WriteLine( $"Created public/private keypair in [{a.GenKey}.pubPriv]." );
                     Console.WriteLine( $"Created public key (only) in [{a.GenKey}.pubOnly]." );
                 }
@@ -276,6 +276,8 @@ namespace Synapse.cli
             //Console_WriteLine( "  synapse.cli.exe /plan:{0}filePath{1}|{0}encodedPlanString{1}", ConsoleColor.Cyan, "{", "}" );
             //Console.WriteLine( "    [/resultPlan:{0}filePath{1}|true] [/dryRun:true|false]", "{", "}" );
             //Console.WriteLine( "    [/taskModel:inProc|external] [/render:encode|decode] [dynamic parameters]\r\n" );
+
+            //execute plans
             Console_WriteLine( " synapse.cli.exe plan:{0}filePath{1} [dryRun:true|false]", ConsoleColor.Cyan, "{", "}" );
             Console.WriteLine( "   [resultPlan:{0}filePath{1}|true] [dynamic parameters]", "{", "}" );
             Console_WriteLine( "\r\n  - Execute Plans.\r\n", ConsoleColor.Green, "" );
@@ -293,18 +295,25 @@ namespace Synapse.cli
             //Console.WriteLine( "{0,-15}  encodedPlanString.", "" );
             Console.WriteLine( "  dynamic{0,-6}Any remaining arg:value pairs will passed to the plan", "" );
             Console.WriteLine( "{0,-15}  as dynamic parms.\r\n", "" );
-            Console_WriteLine( " synapse.cli.exe genkey:{0}filePath{1} [kcn:{0}keyContainerName{1}]", ConsoleColor.Cyan, "{", "}" );
+
+            //genkey
+            Console_WriteLine( " synapse.cli.exe genkey:{0}filePath{1} [keySize:{0}size{1}] [kcn:{0}keyContainerName{1}]", ConsoleColor.Cyan, "{", "}" );
             Console_WriteLine( "\r\n  - Create RSA keypair for use in encrypt/decrypt actions.\r\n", ConsoleColor.Green, "" );
             Console.WriteLine( "  genkey{0,5}  - filePath: Valid path to create keys.", "" );
+            Console.WriteLine( "  keySize{0,5} - The size of the key to use in bits, default is 1024.", "" );
             Console.WriteLine( "  kcn{0,9} - keyContainerName: Optional container within file.", "" );
             Console.WriteLine( "     {0,10}If keyContainerName is specified, it must be used in", "" );
             Console.WriteLine( "     {0,12}encrypt/decrypt actions (specified in Plans settings).\r\n", "" );
+
+            //encrypt|decrypt plans
             Console_WriteLine( " synapse.cli.exe encrypt|decrypt:{0}filePath{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
             Console_WriteLine( "\r\n  - Encrypt/decrypt Plan elements based on Plan/Action Crypto sections.\r\n", ConsoleColor.Green, "" );
             Console.WriteLine( "  encrypt{0,5} - filePath: Valid path to plan file to encrypt.", "" );
             Console.WriteLine( "  decrypt{0,5} - filePath: Valid path to plan file to decrypt.", "" );
             Console.WriteLine( "  out{0,9} - filePath: Optional output filePath.", "" );
             Console.WriteLine( "     {0,10}If [out] not specified, will encrypt/decrypt in-place.\r\n", "" );
+
+            //sample
             Console_WriteLine( " synapse.cli.exe sample:{0}handlerLib:{0}all|handlerName{1},...{1} [out:{0}filePath{1}]", ConsoleColor.Cyan, "{", "}" );
             Console.WriteLine( "   [verbose:true|false]", "{", "}" );
             Console_WriteLine( "\r\n  - Create a sample Plan with the specified Handler(s).\r\n", ConsoleColor.Green, "" );
@@ -342,6 +351,7 @@ namespace Synapse.cli
         const string __decrypt = "decrypt";
         const string __out = "out";
         const string __genkey = "genkey";
+        const string __keysize = "keysize";
         const string __keycontainername = "kcn";
         const string __sample = "sample";
         const string __verbose = "verbose";
@@ -406,8 +416,7 @@ namespace Synapse.cli
                 #region DryRun
                 if( Args.Keys.Contains( __dryrun ) )
                 {
-                    bool dryrun = false;
-                    if( bool.TryParse( Args[__dryrun], out dryrun ) )
+                    if( bool.TryParse( Args[__dryrun], out bool dryrun ) )
                         DryRun = dryrun;
                     else
                         Message += "  * Unable to parse DryRun value as bool.\r\n";
@@ -518,6 +527,22 @@ namespace Synapse.cli
                 }
                 #endregion
 
+                #region KeySize
+                if( Args.Keys.Contains( __keysize ) )
+                {
+                    if( int.TryParse( Args[__keysize], out int keysize ) )
+                        KeySize = keysize;
+                    else
+                        Message += "  * Unable to parse KeySize value as int.\r\n";
+
+                    Args.Remove( __keysize );
+                }
+                else
+                {
+                    KeySize = 0;
+                }
+                #endregion
+
                 #region KeyContainerName
                 if( Args.Keys.Contains( __keycontainername ) )
                 {
@@ -580,6 +605,7 @@ namespace Synapse.cli
         public bool HasOut { get { return !string.IsNullOrWhiteSpace( Out ); } }
         public string GenKey { get; internal set; }
         public bool IsGenKey { get { return !string.IsNullOrWhiteSpace( GenKey ); } }
+        public int KeySize { get; internal set; }
         public string KeyContainerName { get; internal set; }
         public string Sample { get; internal set; }
         public bool IsSample { get { return !string.IsNullOrWhiteSpace( Sample ); } }
