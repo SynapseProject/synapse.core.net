@@ -1,70 +1,12 @@
 Name: RunAs0
 Description: Test change of security context
 Actions:
-- Name: 1
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo: {}
-  Parameters: {}
-  Actions:
-  - Name: 1.1
-    Handler:
-      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
-      StartInfo:
-        ParentExitData: &o0
-          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-          RunAs: &o5
-            Domain: LAPTOP-TK2D9TB6
-            UserName: synapse2
-            Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
-            IsInheritable: true
-            BlockInheritance: true
-            Crypto:
-              Key:
-                Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-                ContainerName: foo
-              Elements:
-              - Password
-              Errors: []
-    RunAs: &o1
-      Domain: LAPTOP-TK2D9TB6
-      UserName: synapse2
-      Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
-      IsInheritable: true
-      BlockInheritance: true
-      IsInherited: true
-      Crypto:
-        Key:
-          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          ContainerName: foo
-        Elements:
-        - Password
-        Errors: []
-    Parameters: {}
-    Actions: []
-    Result:
-      Status: Complete
-      ExitData:
-        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 2
-        ParentExitData: *o0
-        RunAs: *o1
-      BranchStatus: Complete
-      SecurityContext: LAPTOP-TK2D9TB6\synapse2
-    InstanceId: 2
-  Result:
-    Status: Complete
-    ExitData: *o0
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse2
 - Name: 0
   Handler:
     Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  RunAs: &o2
+  RunAs: &o0
     Domain: LAPTOP-TK2D9TB6
     UserName: synapse0
     Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
@@ -84,11 +26,11 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: &o3
+        ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-          InstanceId: 1
-          RunAs: *o2
-    RunAs: &o4
+          InstanceId: 105
+          RunAs: *o0
+    RunAs: &o2
       Domain: LAPTOP-TK2D9TB6
       UserName: synapse1
       Password: I8fu58fzs220PQdjToRMikTRaB1GsAeVMklLKqLmIXw42eMw9wjIEppJHDu1GI8bDNXVM+qKKIsaZgwdLbSO5oGU85VBLSVBrudeu2DNyUMjPIO3soxlmFpl1WH1jtk04G5EeDzNI/sSd7TYn2H0QSMyoBVkx5R6UAxQ+Pur8/c=
@@ -107,37 +49,87 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 3
-        ParentExitData: *o3
-        RunAs: *o4
+        InstanceId: 108
+        ParentExitData: *o1
+        RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    InstanceId: 3
+    InstanceId: 108
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: *o3
+        ParentExitData: *o1
     Parameters: {}
     Actions: []
     Result:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-        InstanceId: 4
-        ParentExitData: *o3
-        RunAs: *o2
+        InstanceId: 109
+        ParentExitData: *o1
+        RunAs: *o0
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse0
-    InstanceId: 4
+    InstanceId: 109
   Result:
     Status: Complete
-    ExitData: *o3
+    ExitData: *o1
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse0
-  InstanceId: 1
-RunAs: *o5
+  InstanceId: 105
+- Name: 1
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Parameters: {}
+  Actions:
+  - Name: 1.1
+    Handler:
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        ParentExitData: The user name or password is incorrect
+    RunAs:
+      Domain: LAPTOP-TK2D9TB6
+      UserName: synapse2
+      Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+      IsInheritable: true
+      BlockInheritance: true
+      IsInherited: true
+      Crypto:
+        Key:
+          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          ContainerName: foo
+        Elements:
+        - Password
+        Errors: []
+    Parameters: {}
+    Actions: []
+    Result:
+      Status: Failed
+      ExitData: The user name or password is incorrect
+    InstanceId: 107
+  Result:
+    Status: Failed
+    ExitData: The user name or password is incorrect
+    BranchStatus: Failed
+  InstanceId: 106
+RunAs:
+  Domain: LAPTOP-TK2D9TB6
+  UserName: synapse2
+  Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+  IsInheritable: true
+  BlockInheritance: true
+  Crypto:
+    Key:
+      Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+      ContainerName: foo
+    Elements:
+    - Password
+    Errors: []
 Crypto:
   Key:
     Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -146,6 +138,6 @@ Crypto:
   Errors: []
 StartInfo: {}
 Result:
-  Status: Complete
-  BranchStatus: Complete
-LastModified: 6/3/2018 1:32:50 PM
+  Status: Failed
+  BranchStatus: Failed
+LastModified: 6/30/2018 12:51:40 PM
