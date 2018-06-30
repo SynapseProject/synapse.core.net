@@ -1,17 +1,29 @@
 Name: crypto
 Description: Test RemoteCommand Handler
 IsActive: true
+Crypto:
+  Key:
+    Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
 Actions:
 - Name: Hostname
   Handler:
     Type: Synapse.Handlers.CommandLine:CommandHandler
     Config:
+      Type: Yaml
       Values:
         WorkingDirectory: C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml
         Command: powershell.exe
         TimeoutMills: 30000
         TimeoutAction: Error
   Parameters:
+    Type: Yaml
+    Crypto:
+      Elements:
+      - Type
+      - Values:Arguments:ArgString
+      - Values:Arguments:Expressions[0]:Encoding
+      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
+      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
     Values:
       Parser: Regex
       Arguments:
@@ -38,60 +50,25 @@ Actions:
               - v3: 3
           Encoding: Base64
     Dynamic:
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: jsonPayload
+    - Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
-    Crypto:
-      Key:
-        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        ContainerName: foo
-      Elements:
-      - Type
-      - Values:Arguments:ArgString
-      - Values:Arguments:Expressions[0]:Encoding
-      - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
-      - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
-      Errors:
-      - Type
-  Actions: []
 - Name: Xml
   Handler:
     Type: Synapse.Core:Synapse.Core.Runtime.EmptyHandler
     Config:
       Name: ConfigSet00
       Type: Xml
-      Values: >-
+      Values:
         <CXmlDoc>
-
-          <CNode0>CValue0_inline</CNode0>
-
-          <CNode1>CValue1_inline</CNode1>
-
-          <CNode3>
-
-            <CNode3_1 CAttr3_1="CAValue3_1_inline">CValue3_1_inline</CNode3_1>
-
-            <CNode3_2>CValue3_2_inline</CNode3_2>
-
-          </CNode3>
-
+            <CNode0>CValue0_inline</CNode0>
+            <CNode1>CValue1_inline</CNode1>
+            <CNode3>
+                <CNode3_1 CAttr3_1="CAValue3_1_inline">CValue3_1_inline</CNode3_1>
+                <CNode3_2>CValue3_2_inline</CNode3_2>
+            </CNode3>
         </CXmlDoc>
       Crypto:
-        Key:
-          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          ContainerName: foo
         Elements:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
-  Actions: []
-Crypto:
-  Key:
-    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    ContainerName: foo
-  Elements: []
-  Errors: []
-StartInfo: {}
-LastModified: 6/30/2018 1:24:37 PM
