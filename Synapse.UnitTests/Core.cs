@@ -582,7 +582,34 @@ namespace Synapse.UnitTests
 
         [Test]
         [Category( "Crypto" )]
+        [TestCase( "cryptoFail" )]
+        public void CryptoFail(string planName)
+        {
+            string[] parts = new string[] {
+                "Actions[0]:Parameters:Values:Arguments:ArgString",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[0]:Encoding",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1",
+                "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3" };
+
+            Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planName}.yaml" );
+            object e = YamlHelpers.SelectElements( plan, parts );
+
+            try
+            {
+                Plan crypto = plan.EncryptElements();
+                Assert.Fail( "Encryption impropery succeeded." );
+            }
+            catch(Exception ex)
+            {
+                Assert.IsInstanceOf( typeof( FileNotFoundException ), ex );
+                Assert.AreEqual( @"Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].", ex.Message );
+            }
+        }
+
+        [Test]
+        [Category( "Crypto" )]
         [TestCase( "crypto" )]
+        [TestCase( "cryptoUri" )]
         public void EncryptPlan(string planName)
         {
             string[] parts = new string[] {
@@ -608,6 +635,7 @@ namespace Synapse.UnitTests
         [Test]
         [Category( "Crypto" )]
         [TestCase( "crypto" )]
+        [TestCase( "cryptoUri" )]
         public void DecryptPlan(string planName)
         {
             string[] parts = new string[] {
