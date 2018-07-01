@@ -12,6 +12,7 @@ namespace Synapse.Core
         Running = 4,
         Waiting = 8,
         Cancelling = 16,
+        Zombie = 32,
 
         //Terminal states:
         //Complete/Success share the same value intentionally,
