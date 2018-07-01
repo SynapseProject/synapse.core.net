@@ -10,6 +10,7 @@
     <CNode3_2>CValue3_2_inline</CNode3_2>
   </CNode3>
 </CXmlDoc>
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -22,6 +23,7 @@
     <CNode3_2>CValue3_2_inline</CNode3_2>
   </CNode3>
 </CXmlDoc>
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -34,6 +36,7 @@
     <CNode3_2>CValue3_2_inline</CNode3_2>
   </CNode3>
 </CXmlDoc>
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>

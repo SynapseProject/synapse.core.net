@@ -22,8 +22,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -48,8 +47,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -74,8 +72,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -100,8 +97,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -126,8 +122,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -152,8 +147,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -178,8 +172,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -204,8 +197,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -230,8 +222,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -256,8 +247,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -282,8 +272,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -308,8 +297,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -334,8 +322,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -360,8 +347,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_0</CNode1>
@@ -386,8 +372,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-
+===
 <CXmlDoc>
   <CNode0 CAttr0="CAValue0_file">CValue0_dynamic</CNode0>
   <CNode1>CValue1_forach_1</CNode1>
@@ -412,5 +397,3 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
---------------------
-

@@ -10,6 +10,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
+===
 <PXmlDoc>
   <PNode0 PAttr0="PAValue0_inline">PValue0_dynamic</PNode0>
   <PNode1>PValue1_forach_0</PNode1>
@@ -22,6 +23,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
+===
 <PXmlDoc>
   <PNode0 PAttr0="PAValue0_inline">PValue0_dynamic</PNode0>
   <PNode1>PValue1_forach_1</PNode1>
@@ -34,6 +36,7 @@
     <PNode3_2>PValue3_2_inline</PNode3_2>
   </PNode3>
 </PXmlDoc>
+===
 <PXmlDoc>
   <PNode0 PAttr0="PAValue0_inline">PValue0_dynamic</PNode0>
   <PNode1>PValue1_forach_1</PNode1>
