@@ -512,11 +512,11 @@ namespace Synapse.Core.Utilities
                                 src.Value = c.Crypto.SafeHandleCrypto( src.Value );
                         }
                         else
-                            errors.Add( element );
+                            errors.Add( $"Element: [{element}] failed with error: [SelectSingleNode returned null]." );
                     }
-                    catch
+                    catch( Exception ex )
                     {
-                        errors.Add( element );
+                        errors.Add( $"Element: [{element}] failed with error: [{ex.Message.Trim()}]." );
                     }
                 }
 

@@ -85,12 +85,11 @@ namespace Synapse.Core
                 //try to decrypt
                 // - if success, then the value is already encrypted with these RSA keys, return orig string (s)
                 // - if failure, needs to be encrypted
-                string decrypted = null;
-                if( !TryDecryptOrValue( s, out decrypted ) )
-                    TryEncryptOrValue( s, out response );
+                if( !TryDecryptOrValue( s, out string decrypted ) )
+                    response = Encrypt( s );
             }
             else
-                TryDecryptOrValue( s, out response );
+                response = Decrypt( s );
 
             return response;
         }

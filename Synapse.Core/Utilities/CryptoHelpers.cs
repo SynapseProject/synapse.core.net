@@ -54,6 +54,9 @@ namespace Synapse.Core.Utilities
             if( string.IsNullOrWhiteSpace( keyContainerName ) && string.IsNullOrWhiteSpace( pubPrivFilePath ) && string.IsNullOrWhiteSpace( pubOnlyFilePath ) )
                 throw new ArgumentException( "Invalid argument" );
 
+            if( string.IsNullOrWhiteSpace( keyContainerName ) )
+                keyContainerName = null;
+
             CspParameters cspParams = new CspParameters
             {
                 KeyContainerName = keyContainerName
