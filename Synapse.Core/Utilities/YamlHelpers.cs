@@ -54,8 +54,8 @@ namespace Synapse.Core.Utilities
                 String origFile = $"{path}.tmp";
                 File.Move( path, origFile );
                 using( StreamReader raw = new StreamReader( origFile ) )
-                    using( StreamWriter formatted = new StreamWriter( path ) )
-                        JsonHelpers.FormatJson( raw, formatted );
+                using( StreamWriter formatted = new StreamWriter( path ) )
+                    JsonHelpers.FormatJson( raw, formatted );
 
                 File.Delete( origFile );
             }
@@ -492,9 +492,9 @@ namespace Synapse.Core.Utilities
                         Dictionary<object, object> patch = ConvertPathElementToDict( element );
                         HandleElementCrypto( source, patch, c.Crypto );
                     }
-                    catch
+                    catch( Exception ex )
                     {
-                        errors.Add( element );
+                        errors.Add( $"Element: [{element}] failed with error: [{ex.Message.Trim()}]." );
                     }
                 }
 
