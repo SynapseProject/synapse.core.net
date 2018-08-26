@@ -1,6 +1,23 @@
 Name: executeCase
 Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
 Actions:
+- Name: ac2
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        ReturnStatus: CompletedWithErrors
+
+  Parameters:
+    Values:
+      ReturnStatus: CompletedWithErrors
+  Actions: []
+  Result:
+    Status: CompletedWithErrors
+    ExitData: EmptyHandler ExitData default value.
+    BranchStatus: CompletedWithErrors
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
 - Name: ac0
   Handler:
     Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -156,26 +173,9 @@ Actions:
     ExitData: EmptyHandler ExitData default value.
     BranchStatus: Failed
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-- Name: ac2
-  Handler:
-    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        ReturnStatus: CompletedWithErrors
-
-  Parameters:
-    Values:
-      ReturnStatus: CompletedWithErrors
-  Actions: []
-  Result:
-    Status: CompletedWithErrors
-    ExitData: EmptyHandler ExitData default value.
-    BranchStatus: CompletedWithErrors
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
   InstanceId: 1
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 7/1/2018 2:43:41 AM
+LastModified: 8/26/2018 12:18:12 PM
