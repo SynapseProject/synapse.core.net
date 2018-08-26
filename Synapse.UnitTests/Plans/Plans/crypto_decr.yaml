@@ -54,7 +54,11 @@ Actions:
       - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
       Errors:
-      - Type
+      - 'Element: [Type] failed with error: [The given key was not present in the dictionary.].'
+      - 'Element: [Values:Arguments:ArgString] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+      - 'Element: [Values:Arguments:Expressions[0]:Encoding] failed with error: [Invalid length for a Base-64 char array or string.].'
+      - 'Element: [Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1] failed with error: [Invalid length for a Base-64 char array or string.].'
+      - 'Element: [Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3] failed with error: [Invalid length for a Base-64 char array or string.].'
   Actions: []
 - Name: Xml
   Handler:
@@ -86,6 +90,10 @@ Actions:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
+        Errors:
+        - 'Element: [/CXmlDoc[1]/CNode0[1]] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_2[1]] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
   Actions: []
 Crypto:
   Key:
@@ -94,4 +102,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 7/1/2018 2:43:41 AM
+LastModified: 8/26/2018 12:18:11 PM

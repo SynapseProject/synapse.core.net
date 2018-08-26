@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: zP3toTl2W5azRg8hSCWm8REdH6Ew9uNxWFzmazNcIJLln6pUC2sKE+VRHoWwM2QLVtnllttD3FVbZXiPJji4t50kVspBof5xuaq3dynWka7gQgcN30B/zjInZAPjOfvKLCSK73RZHo4YpWIlEWtzHi0kkcbeRFgh1LeGBgNwhi0=
+        ArgString: vfNXuLz0LhdijxXqXOrblxrAFUjhHcmPLIGy0lUOkK37fNA0utN+k01x73QassOr5CS7W485JUUucgeKz0gPoy0XO1hSi5ERI3wP116sOb+Z86sQ0yILL/t09xBPn6cWBAOK0dw87k9KnCXP68E9vZmsKtBiX/Vk0a0zY+Oy4JU=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: UiiFTSPIK2uZv2uZI5c3H1vKbm5m8IPzOBDRZWZZ/+2OutTE5OhTlQdzPAV0+kgevAQ529RnhWuGIMsjk6wMdM5dLanDuwncSedzYgNyczc7ZkNwST1MwuowYno/avteSE4GiFsMBMdXxE8a70DjKIxL2KJCEEnSZ1QM5fzDDJo=
+          Encoding: 2xHB+L1v4KPUsHIpLvyow+0JrbD7CCmjH/tdHYxB1Sm29QMXlg5F7aaacBAqWt8Uw4FR/59XgsSo0SEA521+J5AGx8HrrhABF3XZoHxgJzz/hKYZh4uTUfIEPBecOiPApZxr8L4OE5SGMevlG8YrYTMd+FnWpq+F5yD5SO3kMDk=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: V6dDJ28An4DHmfBc3DDOUaKJRw9/PyhgA0ZkgLDo9N5vLJE+6f4160k8rXeLz6aSjrxpu3ZM0zVj5wb70IdUKmKS6nE7WYLyVD7Acg8/QI/n9bgtRgEVL1zoKX+lkNnH0M+bFZj1bu8E+/J35dOy75DCsqmUJtRKoQZD1LNOJcc=
+              - v1: o65qFK//ytlH8bKaPAv7h0b3kxMl3k/JbvdbBmSoqXYhKAbbuVZUq0/JCXyqIpR+8GJ80ZSQO3KJzMmMrPOy86HmY3BlPsBleIJlluj5wrFvIRiurvAjvWAMGb9wn5CL6Bs6O7aQ9ld9/KmaeSN4IscLS7P57Yqsn+tD6T33k/8=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: a0/vYXXcMr2hJCkifIr4Qib5xtQp8ITpiXNtK0W+riKzac+8t/mFE45SPh3OUK1/bBd5lh2kkkon3oU6DKOh/mctzujMb0bwS/dwGHt84S2ivs0mhPL7+gZ8k2c+m0Kgf6kNFbKxHyqBCODrGQr4Uo+HOCL5d5T3kYIerJ2BvxM=
+              - v3: HqfPSWTg49rk5eWqM/vBscRZ9nSq+JYrUO5w/4r+ZKLEYgl44F0vcyYGniO9y2O2rbHD5EYkj8PScUbse2gClXDKQFsf2anPFZSbg3QQlgn2bgmlcLYw8PEhpeGxTL/fqqdGV5MpFPAxutLT6Lx9hwRPQjQbveGHkcJ4lJc6Z9U=
           Encoding: Base64
     Dynamic:
     - Options: []
@@ -54,7 +54,7 @@ Actions:
       - Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
       Errors:
-      - Type
+      - 'Element: [Type] failed with error: [The given key was not present in the dictionary.].'
   Actions: []
 - Name: Xml
   Handler:
@@ -65,15 +65,15 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>KBeUORfNiFnC5zsG3v5Gz+tWTqzeBKqmgn/e05l6ZjDywajWqvll2EtXYlizodN36xy7UqIeGTm8h6EseQcHYP3wNZeo9+LWHimqvy39XsEu/RwkVikbA0rlWIyvxltmoo3lj7dsZaO4vgtUD2316+MlXyqJg3Oke1/DfJl8erM=</CNode0>
+          <CNode0>UCYrpYjb4YSSC6NzU04qZ2V9698O3rQll0Op3u/t8/nouywjvbyfEutMXEa2huUGJuSMy++7gJDxYBjU0YZ1Skq3Qu/Suy7z80MX/2Ti9YspabERDozniBz4hz/mLjV/REMJbzBS1YDnSE9MS7CgGBYfDGhBfecxOR7nZcGcsUA=</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="TwFmPyTfgRlDZQsyri+ZbLN6RA47Ax9dTcpC1o6Feq7+wlDUji2y65zVErc5erRM7y5XBz/N+dPTgo2GsuYFrC1mWILpiaxAJEwrGZlZ7+Kiiukru+3PW7w/0mnay+Cf/s6xtaJ36tJAYRGrdBuaSOFVmVyfFHpkqlAb6h7Uz+E=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="hRxq9mc37h/MAxiEIl/UdEFSv+nJWBX9hIwOb9i4NmRlljutt+cwC9iO4lXMIyEDLX0k1mOaFjR5aYbxQ/1X0hcYI8BtncHziU5XqChYtQ5V9yRovLQrxODWG39v2NLZQ7u7zUX6WpMwhzl+S0Rn11KPZ/HX4XW30aVYY9m4RHw=">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>rtKqTz6pIya/yRDe2BEdNKaBRX6UFozooQTE1wd2WSm8yw3wLRKT6Ohi5BeeRjwIZUfSP+YtKijydviWXKewcWUz7aOJytt34xRGzbSPMk0JADJmrwXSx+Dx1Mg8HihRM6ZGFoH/nG+V6ccz/SmNxT6seLy0pPf7Xxs/vTzq7O8=</CNode3_2>
+            <CNode3_2>XGIOZMrxdWLxe4mJff59u+r/pq5qsY8k30l5HBk/qc2J028H6hUEwM/v2NDeTGFb4uU71D+/J+7VbjrpJFJIgMvLctYDCn7BG0Xv3M6H3HIxmn3636XLdzoJ07vVga5DeKryvrW88iYYNC0YdtpAsfijHGfHYPqmPiHYC8XGHl0=</CNode3_2>
 
           </CNode3>
 
@@ -94,4 +94,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 7/1/2018 2:43:41 AM
+LastModified: 8/26/2018 12:18:11 PM

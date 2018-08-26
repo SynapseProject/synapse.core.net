@@ -31,7 +31,7 @@ Actions:
         StartInfo:
           ParentExitData: &o1
             CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-            InstanceId: 120
+            InstanceId: 121
             ParentExitData: The user name or password is incorrect
             RunAs: *o0
       RunAs: &o2
@@ -42,23 +42,23 @@ Actions:
         Status: Complete
         ExitData:
           CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-          InstanceId: 121
+          InstanceId: 122
           ParentExitData: *o1
           RunAs: *o2
         BranchStatus: Complete
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 121
+      InstanceId: 122
     Result:
       Status: Complete
       ExitData: *o1
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 120
+    InstanceId: 121
   Result:
     Status: Failed
     ExitData: The user name or password is incorrect
     BranchStatus: Failed
-  InstanceId: 119
+  InstanceId: 120
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse1
@@ -68,4 +68,4 @@ StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 7/1/2018 2:43:51 AM
+LastModified: 8/26/2018 12:18:21 PM
