@@ -2,14 +2,14 @@
 
 namespace Synapse.Core
 {
-	public enum SerializationType
-	{
+    public enum SerializationType
+    {
         Yaml,
         Xml,
-		Json,
+        Json,
         Html,
-		Unspecified
-	}
+        Unspecified
+    }
 
     public struct SerializationContentType
     {
@@ -21,7 +21,7 @@ namespace Synapse.Core
 
         public static string GetContentType(SerializationType serializationType)
         {
-            switch(serializationType)
+            switch( serializationType )
             {
                 case SerializationType.Xml: { return Xml; }
                 case SerializationType.Json: { return Json; }
@@ -30,5 +30,10 @@ namespace Synapse.Core
                 default: { return Yaml; }
             }
         }
+
+        public static bool IsApplicationYaml(string mediaType) { return mediaType.Equals( Yaml, StringComparison.OrdinalIgnoreCase ); }
+        public static bool IsApplicationXml(string mediaType) { return mediaType.Equals( Xml, StringComparison.OrdinalIgnoreCase ); }
+        public static bool IsApplicationJson(string mediaType) { return mediaType.Equals( Json, StringComparison.OrdinalIgnoreCase ); }
+        public static bool IsApplicationHtml(string mediaType) { return mediaType.Equals( Html, StringComparison.OrdinalIgnoreCase ); }
     }
 }
