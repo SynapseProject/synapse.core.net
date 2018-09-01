@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -9,7 +8,6 @@ using Synapse.Core.Utilities;
 
 namespace Synapse.Core
 {
-    [DataContract()]
     public class StartPlanEnvelope
     {
         public StartPlanEnvelope()
@@ -46,7 +44,6 @@ namespace Synapse.Core
         }
 
         [XmlElement]
-        [DataMember]
         public XmlDynamicParameters XmlDynamicParameters { get; set; } = new XmlDynamicParameters();
 
 
@@ -92,14 +89,11 @@ namespace Synapse.Core
         }
     }
 
-    [DataContract()]
     public class Param
     {
         [XmlAttribute]
-        [DataMember]
         public string Name { get; set; }
         [XmlText]
-        [DataMember]
         public string Text { get; set; }
 
         public override string ToString()
@@ -108,11 +102,9 @@ namespace Synapse.Core
         }
     }
 
-    [DataContract()]
     public class XmlDynamicParameters
     {
         [XmlElement]
-        [DataMember]
         public List<Param> Parm { get; set; } = new List<Param>();
     }
 }
