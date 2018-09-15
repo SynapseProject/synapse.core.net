@@ -105,7 +105,7 @@ namespace Synapse.Core
             CreateInstance();
 #endif
 
-            AddStartInfoToGlobalParamSets();
+            AddStartInfoToDynamicData(ref dynamicData);
 
             ResultPlan = new Plan
             {
@@ -135,25 +135,18 @@ namespace Synapse.Core
             return Result;
         }
 
-        void AddStartInfoToGlobalParamSets()
+        void AddStartInfoToDynamicData(ref Dictionary<string, string> dynamicData)
         {
-            Dictionary<string, object> si = new Dictionary<string, object>
-            {
-                { nameof( Name ), Name },
-                { nameof( UniqueName ), UniqueName },
-                { nameof( IsActive ), IsActive },
-                { nameof( InstanceId ), InstanceId },
-                { nameof( StartInfo.RequestNumber ), StartInfo.RequestNumber },
-                { nameof( StartInfo.RequestUser ), StartInfo.RequestUser }
-            };
+            if( dynamicData == null )
+                dynamicData = new Dictionary<string, string>();
 
-            ParameterInfo pi = new ParameterInfo
-            {
-                Name = "PlanStartInfo",
-                Values = si
-            };
-
-            _paramSets.Add( pi.Name, pi );
+            string name = "PlanStartInfo_";
+            dynamicData.Add( $"{name}{nameof( Name )}", Name );
+            dynamicData.Add( $"{name}{nameof( UniqueName )}", UniqueName );
+            dynamicData.Add( $"{name}{nameof( IsActive )}", IsActive.ToString() );
+            dynamicData.Add( $"{name}{nameof( InstanceId )}", InstanceId.ToString() );
+            dynamicData.Add( $"{name}{nameof( StartInfo.RequestNumber )}", StartInfo.RequestNumber );
+            dynamicData.Add( $"{name}{nameof( StartInfo.RequestUser )}", StartInfo.RequestUser );
         }
 
         void ProcessRecursive(IActionContainer parentContext, SecurityContext parentSecurityContext,
