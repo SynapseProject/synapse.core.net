@@ -11,6 +11,18 @@ namespace Synapse.Core
         public TypeCode DataType { get; set; } = TypeCode.String;
         public string Validation { get; set; }
         public bool RestrictToOptions { get; set; } = true;
+        public DefaultValue Default { get; set; }
+
+        public bool TryGetDefaultValue(out object value)
+        {
+            bool ok = Default != null && (Default.Value != null || Default.AllowNull);
+            if( ok )
+                value = Default.Value;
+            else
+                value = null;
+
+            return ok;
+        }
 
         public override string ToString()
         {
@@ -107,6 +119,12 @@ namespace Synapse.Core
 
             return ok;
         }
+    }
+
+    public class DefaultValue
+    {
+        public object Value { get; set; }
+        public bool AllowNull { get; set; }
     }
 
     public class Option
