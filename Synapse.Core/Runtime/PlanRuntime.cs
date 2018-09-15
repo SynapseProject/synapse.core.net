@@ -105,6 +105,8 @@ namespace Synapse.Core
             CreateInstance();
 #endif
 
+            AddStartInfoToGlobalParamSets();
+
             ResultPlan = new Plan
             {
                 Name = Name,
@@ -131,6 +133,27 @@ namespace Synapse.Core
 #endif
 
             return Result;
+        }
+
+        void AddStartInfoToGlobalParamSets()
+        {
+            Dictionary<string, object> si = new Dictionary<string, object>
+            {
+                { nameof( Name ), Name },
+                { nameof( UniqueName ), UniqueName },
+                { nameof( IsActive ), IsActive },
+                { nameof( InstanceId ), InstanceId },
+                { nameof( StartInfo.RequestNumber ), StartInfo.RequestNumber },
+                { nameof( StartInfo.RequestUser ), StartInfo.RequestUser }
+            };
+
+            ParameterInfo pi = new ParameterInfo
+            {
+                Name = "PlanStartInfo",
+                Values = si
+            };
+
+            _paramSets.Add( pi.Name, pi );
         }
 
         void ProcessRecursive(IActionContainer parentContext, SecurityContext parentSecurityContext,
