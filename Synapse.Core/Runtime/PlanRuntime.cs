@@ -135,18 +135,22 @@ namespace Synapse.Core
             return Result;
         }
 
+        /// <summary>
+        /// Adds seelcted values to global DynamicData parms dict, ref for clarity that it mutates the values
+        /// </summary>
+        /// <param name="dynamicData"></param>
         void AddStartInfoToDynamicData(ref Dictionary<string, string> dynamicData)
         {
             if( dynamicData == null )
                 dynamicData = new Dictionary<string, string>();
 
             string name = "PlanStartInfo_";
-            dynamicData.Add( $"{name}{nameof( Name )}", Name );
-            dynamicData.Add( $"{name}{nameof( UniqueName )}", UniqueName );
-            dynamicData.Add( $"{name}{nameof( IsActive )}", IsActive.ToString() );
-            dynamicData.Add( $"{name}{nameof( InstanceId )}", InstanceId.ToString() );
-            dynamicData.Add( $"{name}{nameof( StartInfo.RequestNumber )}", StartInfo.RequestNumber );
-            dynamicData.Add( $"{name}{nameof( StartInfo.RequestUser )}", StartInfo.RequestUser );
+            dynamicData[$"{name}{nameof( Name )}"] = Name;
+            dynamicData[$"{name}{nameof( UniqueName )}"] = UniqueName;
+            dynamicData[$"{name}{nameof( IsActive )}"] = IsActive.ToString();
+            dynamicData[$"{name}{nameof( InstanceId )}"] = InstanceId.ToString();
+            dynamicData[$"{name}{nameof( StartInfo.RequestNumber )}"] = StartInfo.RequestNumber;
+            dynamicData[$"{name}{nameof( StartInfo.RequestUser )}"] = StartInfo.RequestUser;
         }
 
         void ProcessRecursive(IActionContainer parentContext, SecurityContext parentSecurityContext,
