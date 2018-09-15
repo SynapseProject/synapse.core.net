@@ -354,7 +354,7 @@ namespace Synapse.Core.Utilities
             if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
 
             //updated syntax to Pattern Matching: if patch[0] is Dict => patchItem
-            if( patch[0] is Dictionary<object, object> patchItem && patchItem.ContainsKey( __sli ) )
+            if( patch?.Count > 0 && patch[0] is Dictionary<object, object> patchItem && patchItem.ContainsKey( __sli ) )
             {
                 //get the metadata index value, remove metadata
                 int i = int.Parse( patchItem[__sli].ToString() );
