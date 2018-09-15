@@ -370,7 +370,11 @@ namespace Synapse.Core.Utilities
                     if( source[i] is Dictionary<object, object> listItemValue )
                     {
                         if( patchValue is Dictionary<object, object> )
+                        {
+                            if( listItemValue[patchKey] == null )
+                                listItemValue[patchKey] = new Dictionary<object, object>();
                             ApplyPatchValues( (Dictionary<object, object>)listItemValue[patchKey], (Dictionary<object, object>)patchValue, dv );
+                        }
                         else if( patchValue is List<object> )
                         {
                             if( !listItemValue.ContainsKey( patchKey ) )
