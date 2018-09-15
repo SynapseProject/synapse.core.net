@@ -48,33 +48,53 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasCrypto { get { return Crypto != null; } }
 
+        /// <summary>
+        /// Serializes Valus to string, decrypting as required.
+        /// </summary>
+        /// <param name="planCrypto">Plan-level Crypto settings, to be inherited by local Crypto.</param>
+        /// <returns>Yaml-/Json-/Xml-serialized values.</returns>
         public string GetSerializedValues(CryptoProvider planCrypto = null)
+        {
+            return GetSerializedValues( planCrypto, out string safeSerializedValues );
+        }
+        /// <summary>
+        /// Serializes Valus to string, decrypting as required.  safeSerializedValues does not include decrypted values.
+        /// </summary>
+        /// <param name="planCrypto">Plan-level Crypto settings, to be inherited by local Crypto.</param>
+        /// <param name="safeSerializedValues">Serialized Values, but with any Encrypted values still shown as encrypted.</param>
+        /// <returns>Yaml-/Json-/Xml-serialized values.</returns>
+        public string GetSerializedValues(CryptoProvider planCrypto, out string safeSerializedValues)
         {
             ParameterInfo pi = this;
             if( HasCrypto )
                 pi = GetCryptoValues( planCrypto, isEncryptMode: false );
 
             string v = null;
+            safeSerializedValues = null;
             switch( Type )
             {
                 case SerializationType.Yaml:
                 {
                     v = Utilities.YamlHelpers.Serialize( pi.Values );
+                    safeSerializedValues = Utilities.YamlHelpers.Serialize( this.Values );
                     break;
                 }
                 case SerializationType.Json:
                 {
                     v = Utilities.YamlHelpers.Serialize( pi.Values, serializeAsJson: true );
+                    safeSerializedValues = Utilities.YamlHelpers.Serialize( this.Values, serializeAsJson: true );
                     break;
                 }
                 case SerializationType.Xml:
                 {
                     v = Utilities.XmlHelpers.Serialize<object>( pi.Values );
+                    safeSerializedValues = Utilities.XmlHelpers.Serialize<object>( this.Values );
                     break;
                 }
                 case SerializationType.Unspecified:
                 {
                     v = pi.Values.ToString();
+                    safeSerializedValues = this.Values.ToString();
                     break;
                 }
             }

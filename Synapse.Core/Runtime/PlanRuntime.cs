@@ -275,7 +275,7 @@ namespace Synapse.Core
             try
             {
                 //string parms = ResolveConfigAndParameters( a, dynamicData );
-                string parms = a.Parameters.GetSerializedValues( Crypto );
+                string parms = a.Parameters.GetSerializedValues( Crypto, out string safeSerializedValues );
 
                 IHandlerRuntime rt = CreateHandlerRuntime( a );
                 rt.Progress += rt_Progress;
@@ -302,6 +302,8 @@ namespace Synapse.Core
                     sc?.Impersonate( Crypto );
 
                     a.Result = rt.Execute( startInfo );
+
+                    a.Handler.StartInfo.Parameters = safeSerializedValues; //avoids serializing decrypted values to the History Plan (bug #93)
                     a.Result.BranchStatus = a.Result.Status;
                     a.Result.SecurityContext = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
 
