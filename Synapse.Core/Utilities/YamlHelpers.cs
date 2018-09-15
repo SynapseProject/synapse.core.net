@@ -112,17 +112,24 @@ namespace Synapse.Core.Utilities
         public static void Merge(ref Dictionary<object, object> source, List<DynamicValue> dynamicValues, Dictionary<string, string> values)
         {
             //if there's nothing to do, get out!
-            if( values == null || (values != null && values.Count == 0) )
+            if( dynamicValues == null || dynamicValues?.Count == 0 )
                 return;
 
             foreach( DynamicValue dv in dynamicValues )
             {
-                if( values.ContainsKey( dv.Source ) )
+                string val = null;
+                if( (values?.ContainsKey( dv.Source )).Value && !string.IsNullOrWhiteSpace( values[dv.Source] ) )
+                    val = values[dv.Source];
+
+                if( string.IsNullOrWhiteSpace( val ) && dv.TryGetDefaultValue( out object defaultValue ))
+                    val = Serialize( defaultValue );
+
+                if( !string.IsNullOrWhiteSpace( val ) )
                 {
-                    if( !dv.Validate( values[dv.Source], out string validationErrorMessage ) )
+                    if( !dv.Validate( val, out string validationErrorMessage ) )
                         throw new ArgumentException( validationErrorMessage );
 
-                    object value = dv.Parse ? TryParseValue( values[dv.Source] ) : values[dv.Source];
+                    object value = dv.Parse ? TryParseValue( val ) : val;
                     Dictionary<object, object> patch = ConvertPathElementToDict( dv.Target, value );
                     ApplyPatchValues( source, patch, dv );
                 }
