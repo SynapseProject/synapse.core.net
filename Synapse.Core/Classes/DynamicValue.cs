@@ -23,6 +23,7 @@ namespace Synapse.Core
 
             return ok;
         }
+        internal bool DefaultAllowNull { get { return Default.Value != null || Default.AllowNull; } }
 
         public override string ToString()
         {
