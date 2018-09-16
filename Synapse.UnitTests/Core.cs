@@ -146,6 +146,7 @@ namespace Synapse.UnitTests
         [Category( "Parameters" )]
         [Category( "Parameters_Inherit" )]
         [TestCase( "parameters_yaml_single.yaml" )]
+        //[TestCase( "parameters_yaml_global.yaml" )]
         [TestCase( "parameters_json_single.yaml" )]
         [TestCase( "parameters_xml_single.yaml" )]
         public void MergeParameters_Inherit(string planFile)

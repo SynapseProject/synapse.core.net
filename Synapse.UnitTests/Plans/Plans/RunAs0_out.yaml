@@ -28,7 +28,7 @@ Actions:
       StartInfo:
         ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-          InstanceId: 106
+          InstanceId: 107
           RunAs: *o0
     RunAs: &o2
       Domain: LAPTOP-TK2D9TB6
@@ -49,12 +49,12 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 109
+        InstanceId: 110
         ParentExitData: *o1
         RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    InstanceId: 109
+    InstanceId: 110
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -67,18 +67,18 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-        InstanceId: 110
+        InstanceId: 111
         ParentExitData: *o1
         RunAs: *o0
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse0
-    InstanceId: 110
+    InstanceId: 111
   Result:
     Status: Complete
     ExitData: *o1
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse0
-  InstanceId: 106
+  InstanceId: 107
 - Name: 1
   Handler:
     Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
@@ -111,12 +111,12 @@ Actions:
     Result:
       Status: Failed
       ExitData: The user name or password is incorrect
-    InstanceId: 108
+    InstanceId: 109
   Result:
     Status: Failed
     ExitData: The user name or password is incorrect
     BranchStatus: Failed
-  InstanceId: 107
+  InstanceId: 108
 RunAs:
   Domain: LAPTOP-TK2D9TB6
   UserName: synapse2
@@ -140,4 +140,4 @@ StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 8/26/2018 12:18:21 PM
+LastModified: 9/15/2018 9:25:44 PM

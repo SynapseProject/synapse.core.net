@@ -15,7 +15,7 @@ namespace Synapse.Core
 
         public bool TryGetDefaultValue(out object value)
         {
-            bool ok = Default != null && (Default.Value != null || Default.AllowNull);
+            bool ok = DefaultAllowNull;
             if( ok )
                 value = Default.Value;
             else
@@ -23,7 +23,7 @@ namespace Synapse.Core
 
             return ok;
         }
-        internal bool DefaultAllowNull { get { return Default.Value != null || Default.AllowNull; } }
+        internal bool DefaultAllowNull { get { return Default != null && (Default.Value != null || Default.AllowNull); } }
 
         public override string ToString()
         {
