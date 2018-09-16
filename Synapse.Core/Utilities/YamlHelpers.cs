@@ -121,10 +121,11 @@ namespace Synapse.Core.Utilities
                 if( (values?.ContainsKey( dv.Source )).Value && !string.IsNullOrWhiteSpace( values[dv.Source] ) )
                     val = values[dv.Source];
 
-                if( string.IsNullOrWhiteSpace( val ) && dv.TryGetDefaultValue( out object defaultValue ))
-                    val = Serialize( defaultValue );
+                if( string.IsNullOrWhiteSpace( val ) && dv.TryGetDefaultValue( out object defaultValue ) )
+                    if( defaultValue != null )
+                        val = Serialize( defaultValue );
 
-                if( !string.IsNullOrWhiteSpace( val ) )
+                if( !string.IsNullOrWhiteSpace( val ) || dv.DefaultAllowNull )
                 {
                     if( !dv.Validate( val, out string validationErrorMessage ) )
                         throw new ArgumentException( validationErrorMessage );
@@ -391,7 +392,7 @@ namespace Synapse.Core.Utilities
                                 ApplyPatchValues( (List<object>)listItemValue[patchKey], (List<object>)patchValue, dv );
                         }
                         else //if( patchValue is 'the value' )
-                            listItemValue[patchKey] = patchValue;
+                            listItemValue[patchKey] = RegexReplaceOrValue( listItemValue[patchKey], patchValue, dv );
                     }
                     else if( source[i] is List<object> )
                         //recurse back in
@@ -434,12 +435,13 @@ namespace Synapse.Core.Utilities
             {
                 if( rv.HasReplace )
                 {
+                    string repl = $"{replacement}";
                     if( rv.IsBase64Encode )
-                        replacement = CryptoHelpers.Encode( replacement.ToString() );
-                    value = Regex.Replace( input.ToString(), rv.Replace, replacement.ToString(), RegexOptions.IgnoreCase );
+                        repl = CryptoHelpers.Encode( repl );
+                    value = Regex.Replace( input.ToString(), rv.Replace, repl, RegexOptions.IgnoreCase );
                 }
                 else if( rv.IsBase64Encode )
-                    value = CryptoHelpers.Encode( value.ToString() );
+                    value = CryptoHelpers.Encode( $"{value}" );
             }
 
             return value;

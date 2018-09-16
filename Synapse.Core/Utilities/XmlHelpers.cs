@@ -198,17 +198,26 @@ namespace Synapse.Core.Utilities
             throw new ArgumentException( "Couldn't find element within parent" );
         }
 
-        public static void Merge(ref XmlDocument source, List<DynamicValue> patch, Dictionary<string, string> values)
+        public static void Merge(ref XmlDocument source, List<DynamicValue> dynamicValues, Dictionary<string, string> values)
         {
             if( source == null ) { throw new ArgumentException( "Source cannot be null.", "source" ); }
-            if( patch == null ) { throw new ArgumentException( "Patch cannot be null.", "patch" ); }
-            if( values == null ) { throw new ArgumentException( "Values cannot be null.", "values" ); }
 
-            foreach( DynamicValue dv in patch )
+            //if there's nothing to do, get out!
+            if( dynamicValues == null || dynamicValues?.Count == 0 )
+                return;
+
+            foreach( DynamicValue dv in dynamicValues )
             {
-                if( values.ContainsKey( dv.Source ) )
+                string value = null;
+                if( (values?.ContainsKey( dv.Source )).Value && !string.IsNullOrWhiteSpace( values[dv.Source] ) )
+                    value = values[dv.Source];
+
+                if( string.IsNullOrWhiteSpace( value ) && dv.TryGetDefaultValue( out object defaultValue ) )
+                    if( defaultValue != null )
+                        value = defaultValue.ToString();
+
+                if( !string.IsNullOrWhiteSpace( value ) || dv.DefaultAllowNull )
                 {
-                    string value = values[dv.Source];
                     if( !dv.Validate( value, out string validationErrorMessage ) )
                         throw new ArgumentException( validationErrorMessage );
 
