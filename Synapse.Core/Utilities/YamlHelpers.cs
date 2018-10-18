@@ -25,7 +25,7 @@ namespace Synapse.Core.Utilities
             if( emitDefaultValues )
                 builder.EmitDefaults();
 
-            serializer = builder.Build();
+            serializer = builder.Build() as Serializer;
 
             serializer.Serialize( tw, data );
         }
@@ -68,7 +68,7 @@ namespace Synapse.Core.Utilities
                 DeserializerBuilder builder = new DeserializerBuilder();
                 if( ignoreUnmatchedProperties )
                     builder.IgnoreUnmatchedProperties();
-                Deserializer deserializer = builder.Build();
+                Deserializer deserializer = builder.Build() as Deserializer;
                 return deserializer.Deserialize<T>( reader );
             }
         }
@@ -78,7 +78,7 @@ namespace Synapse.Core.Utilities
             DeserializerBuilder builder = new DeserializerBuilder();
             if( ignoreUnmatchedProperties )
                 builder.IgnoreUnmatchedProperties();
-            Deserializer deserializer = builder.Build();
+            Deserializer deserializer = builder.Build() as Deserializer;
             return deserializer.Deserialize<T>( reader );
         }
 
@@ -90,7 +90,7 @@ namespace Synapse.Core.Utilities
                 DeserializerBuilder builder = new DeserializerBuilder();
                 if( ignoreUnmatchedProperties )
                     builder.IgnoreUnmatchedProperties();
-                Deserializer deserializer = builder.Build();
+                Deserializer deserializer = builder.Build() as Deserializer;
                 ssc = deserializer.Deserialize<T>( reader );
             }
             return ssc;
