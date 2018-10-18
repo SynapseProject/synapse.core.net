@@ -43,7 +43,8 @@ namespace Synapse.Core
                 Replace = "Regex Expression",
                 DataType = TypeCode.String,
                 Validation = "Regex Expression",
-                RestrictToOptions = true
+                RestrictToOptions = true,
+                Default = new DefaultValue { Value = "Simple value or YAML/JSON/XML structure", AllowNull = true }
             };
             dv.Options.Add( Option.CreateSample() );
             dv.Options.Add( Option.CreateSample() );
