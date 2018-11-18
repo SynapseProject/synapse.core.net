@@ -61,8 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Enums\EncodingType.cs" />
+    <Compile Include="Classes\Interfaces\ISecurityContextRuntime.cs" />
     <Compile Include="Classes\Interfaces\IReplacementValue.cs" />
     <Compile Include="Classes\SaveExitDataInfo.cs" />
+    <Compile Include="Classes\SecurityContextInfo.cs" />
     <Compile Include="Classes\SourceTarget.cs" />
     <Compile Include="Classes\ParentExitDataValue.cs" />
     <Compile Include="Classes\Enums\StatusUpdateStrategy.cs" />
