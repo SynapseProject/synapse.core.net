@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Enums\EncodingType.cs" />
+    <Compile Include="Classes\Interfaces\ICryptoRuntime.cs" />
     <Compile Include="Classes\Interfaces\ISecurityContextRuntime.cs" />
     <Compile Include="Classes\Interfaces\IReplacementValue.cs" />
     <Compile Include="Classes\SaveExitDataInfo.cs" />
@@ -89,7 +90,6 @@
     <Compile Include="Classes\BaseClasses\StartInfoBase.cs" />
     <Compile Include="Classes\BaseClasses\HandlerRuntimeBase.cs" />
     <Compile Include="Classes\Interfaces\ICloneable.cs" />
-    <Compile Include="Classes\SecurityContext.cs" />
     <Compile Include="Classes\DynamicValue.cs" />
     <Compile Include="Classes\Enums\StatusType.cs" />
     <Compile Include="Classes\Enums\MessageType.cs" />
@@ -115,7 +115,6 @@
     <Compile Include="Runtime\ParameterInfoRuntime.cs" />
     <Compile Include="Runtime\PlanRuntime.cs" />
     <Compile Include="Runtime\PlanTaskScheduler.cs" />
-    <Compile Include="Runtime\SecurityContextRuntime.cs" />
     <Compile Include="Utilities\CryptoHelpers.cs" />
     <Compile Include="Utilities\ServiceException.cs" />
     <Compile Include="Utilities\WebRequestClient.cs" />
