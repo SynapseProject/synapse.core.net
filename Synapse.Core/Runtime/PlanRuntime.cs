@@ -306,6 +306,7 @@ namespace Synapse.Core
                     a.IngestParentSecurityContext( parentSecurityContext );
                     SecurityContext sc = a.RunAs; //just an alias
                     sc?.Crypto?.InheritSettingsIfRequired( Crypto );
+                    ISecurityContextRuntime scr = CreateSecurityContextRuntime( a );
 
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
                     {
@@ -319,7 +320,16 @@ namespace Synapse.Core
                     };
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
 
-                    sc?.Impersonate( Crypto );
+
+                    string securityContextParms = a.Parameters.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
+                    SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
+                    {
+                        Parameters = securityContextParms,
+                        IsDryRun = dryRun,
+                        Crypto = sc.Crypto
+                    };
+
+                    scr?.Logon( securityContextStartInfo );
 
                     a.Result = rt.Execute( startInfo );
 
@@ -329,7 +339,7 @@ namespace Synapse.Core
 
                     SaveExitDataAs( a );
 
-                    sc?.Undo();
+                    scr?.Logoff();
                 }
 
                 return a.Result;
@@ -666,6 +676,35 @@ namespace Synapse.Core
             }
 
             return hr;
+        }
+
+        ISecurityContextRuntime CreateSecurityContextRuntime(ActionItem a)
+        {
+            SecurityContext securityContext = a.RunAs;
+
+            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + securityContext.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
+            if( cancel )
+            {
+                _wantsCancel = true;
+                return null;
+            }
+
+            ISecurityContextRuntime sc = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Type, "todo" );
+
+            if( sc != null )
+            {
+                securityContext.Type = sc.RuntimeType;
+                sc.ActionName = a.Name;
+
+                string config = securityContext.HasConfig ? securityContext.Config.GetSerializedValues( Crypto ) : null;
+                sc.Initialize( config );
+            }
+            else
+            {
+                throw new Exception( $"Could not load {securityContext.Type}." );
+            }
+
+            return sc;
         }
 
         void SaveExitDataAs(ActionItem a)

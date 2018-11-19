@@ -32,6 +32,10 @@ namespace Synapse.Core
         public CryptoProvider Crypto { get; internal set; }
     }
 
+    /// <summary>
+    /// this is a convenience-wrapper on HandlerStartInfo that is used to avoid
+    /// serialization of props not mentioned here (mainly RunAs and Crypto)
+    /// </summary>
     public class HandlerStartInfoData
     {
         public HandlerStartInfoData()

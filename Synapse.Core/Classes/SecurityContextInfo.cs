@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class SecurityContextInfo : ICloneable<SecurityContextInfo>, IInheritable
+    public class SecurityContext : ICloneable<SecurityContext>, IInheritable
     {
         bool _blockInheritance = false;
         bool _blockInheritanceIsSet = false;
@@ -19,6 +19,7 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
 
+        #region IInheritable
         /// <summary>
         /// Specifies if this SecurityContext block can be inherited by child SecurityContext blocks.
         /// </summary>
@@ -55,6 +56,8 @@ namespace Synapse.Core
                 IsInherited = false;  //overwrite any user-declared setting
             }
         }
+        #endregion
+
 
         #region Clone, Sample
         object ICloneable.Clone()
@@ -62,9 +65,9 @@ namespace Synapse.Core
             return Clone( true );
         }
 
-        public SecurityContextInfo Clone(bool shallow = true)
+        public SecurityContext Clone(bool shallow = true)
         {
-            SecurityContextInfo sc = (SecurityContextInfo)MemberwiseClone();
+            SecurityContext sc = (SecurityContext)MemberwiseClone();
             if( HasConfig )
                 sc.Config = Config.Clone( shallow );
             if( HasParameters )
@@ -78,9 +81,9 @@ namespace Synapse.Core
         }
 
 
-        public static SecurityContextInfo CreateSample()
+        public static SecurityContext CreateSample()
         {
-            SecurityContextInfo handler = new SecurityContextInfo()
+            SecurityContext handler = new SecurityContext()
             {
                 Type = "Synapse.Handlers.CommandLine:CommandHandler",
                 Config = ParameterInfo.CreateSample()
@@ -89,5 +92,10 @@ namespace Synapse.Core
             return handler;
         }
         #endregion
+
+
+        public CryptoProvider Crypto { get; set; }
+        [YamlIgnore]
+        public bool HasCrypto { get { return Crypto != null; } }
     }
 }
