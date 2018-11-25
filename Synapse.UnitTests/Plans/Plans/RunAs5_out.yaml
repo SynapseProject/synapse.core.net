@@ -6,10 +6,12 @@ Actions:
     Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  RunAs:
-    Domain: LAPTOP-TK2D9TB6
-    UserName: synapse2
-    Password: ',^e-2:3mtk3!j-Py'
+  RunAs: &o0
+    Parameters:
+      Values:
+        Domain: LAPTOP-TK2D9TB6
+        UserName: synapse2
+        Password: ',^e-2:3mtk3!j-Py'
     IsInheritable: true
     BlockInheritance: true
   Parameters: {}
@@ -19,8 +21,11 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: The user name or password is incorrect
-    RunAs: &o0
+        ParentExitData: &o1
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+          InstanceId: 9
+          RunAs: *o0
+    RunAs: &o2
       BlockInheritance: true
     Parameters: {}
     Actions:
@@ -29,12 +34,12 @@ Actions:
         Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
         StartInfo:
-          ParentExitData: &o1
+          ParentExitData: &o3
             CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-            InstanceId: 119
-            ParentExitData: The user name or password is incorrect
-            RunAs: *o0
-      RunAs: &o2
+            InstanceId: 10
+            ParentExitData: *o1
+            RunAs: *o2
+      RunAs: &o4
         IsInheritable: true
       Parameters: {}
       Actions: []
@@ -42,30 +47,33 @@ Actions:
         Status: Complete
         ExitData:
           CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-          InstanceId: 120
-          ParentExitData: *o1
-          RunAs: *o2
+          InstanceId: 11
+          ParentExitData: *o3
+          RunAs: *o4
         BranchStatus: Complete
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 120
+      InstanceId: 11
     Result:
       Status: Complete
-      ExitData: *o1
+      ExitData: *o3
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 119
+    InstanceId: 10
   Result:
-    Status: Failed
-    ExitData: The user name or password is incorrect
-    BranchStatus: Failed
-  InstanceId: 118
+    Status: Complete
+    ExitData: *o1
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse2
+  InstanceId: 9
 RunAs:
-  Domain: LAPTOP-TK2D9TB6
-  UserName: synapse1
-  Password: ',^e-2:3mtk3!j-Py'
+  Parameters:
+    Values:
+      Domain: LAPTOP-TK2D9TB6
+      UserName: synapse1
+      Password: ',^e-2:3mtk3!j-Py'
   IsInheritable: true
 StartInfo: {}
 Result:
-  Status: Failed
-  BranchStatus: Failed
-LastModified: 10/18/2018 12:23:17 AM
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 11/25/2018 11:39:40 AM

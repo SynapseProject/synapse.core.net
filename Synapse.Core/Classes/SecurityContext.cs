@@ -10,6 +10,8 @@ namespace Synapse.Core
         bool _blockInheritanceIsSet = false;
 
         public string Type { get; set; }
+        [YamlIgnore]
+        public bool HasType { get { return !string.IsNullOrWhiteSpace( Type ); } }
 
         public ParameterInfo Config { get; set; }
         [YamlIgnore]
@@ -18,6 +20,9 @@ namespace Synapse.Core
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
+
+        [YamlIgnore]
+        public bool IsDeclared { get { return HasType || HasConfig || HasParameters; } }
 
         #region IInheritable
         /// <summary>
@@ -46,6 +51,7 @@ namespace Synapse.Core
             if( sourceContext != null && sourceContext.IsInheritable && !this.BlockInheritance )
             {
                 Config = sourceContext.Config?.Clone();
+                Parameters = sourceContext.Parameters?.Clone();
                 Crypto = new CryptoProvider();
                 Crypto.InheritSettingsIfRequired( sourceContext.Crypto, CryptoInheritElementAction.Replace );
                 IsInheritable = true;

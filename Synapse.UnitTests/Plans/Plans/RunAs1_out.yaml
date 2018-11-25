@@ -7,9 +7,11 @@ Actions:
     Config: {}
     StartInfo: {}
   RunAs: &o0
-    Domain: LAPTOP-TK2D9TB6
-    UserName: synapse0
-    Password: ',^e-2:3mtk3!j-Py'
+    Parameters:
+      Values:
+        Domain: LAPTOP-TK2D9TB6
+        UserName: synapse0
+        Password: ',^e-2:3mtk3!j-Py'
     IsInheritable: true
     BlockInheritance: true
   Parameters: {}
@@ -21,7 +23,6 @@ Actions:
       StartInfo:
         ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-          InstanceId: 109
           RunAs: *o0
     RunAs: &o2
       IsInheritable: true
@@ -32,26 +33,26 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 110
+        InstanceId: 1
         ParentExitData: *o1
         RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 110
+    InstanceId: 1
   Result:
     Status: Complete
     ExitData: *o1
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse0
-  InstanceId: 109
 RunAs:
-  Domain: LAPTOP-TK2D9TB6
-  UserName: synapse2
-  Password: ',^e-2:3mtk3!j-Py'
+  Parameters:
+    Values:
+      Domain: LAPTOP-TK2D9TB6
+      UserName: synapse2
+      Password: ',^e-2:3mtk3!j-Py'
   IsInheritable: true
-  BlockInheritance: true
 StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 10/18/2018 12:23:17 AM
+LastModified: 11/25/2018 11:39:40 AM
