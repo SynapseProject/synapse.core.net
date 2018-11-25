@@ -37,8 +37,8 @@ namespace Synapse.Core
         public SecurityContext RunAs { get; set; }
         [YamlIgnore]
         public bool HasRunAs { get { return RunAs != null; } }
-        [YamlIgnore]
-        public bool HasValidRunAs { get { return RunAs != null && RunAs.IsValid; } }
+        //[YamlIgnore]
+        //public bool HasValidRunAs { get { return RunAs != null && RunAs.IsValid; } }
 
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]

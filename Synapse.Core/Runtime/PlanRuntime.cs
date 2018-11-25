@@ -303,11 +303,6 @@ namespace Synapse.Core
 
                 if( !WantsStopOrPause() )
                 {
-                    a.IngestParentSecurityContext( parentSecurityContext );
-                    SecurityContext sc = a.RunAs; //just an alias
-                    sc?.Crypto?.InheritSettingsIfRequired( Crypto );
-                    ISecurityContextRuntime scr = CreateSecurityContextRuntime( a );
-
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
                     {
                         Parameters = parms,
@@ -315,20 +310,23 @@ namespace Synapse.Core
                         PlanInstanceId = InstanceId,
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData,
-                        RunAs = sc,
+                        RunAs = a.RunAs,
                         Crypto = a.Parameters?.Crypto
                     };
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
 
 
-                    string securityContextParms = a.Parameters.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
+                    a.IngestParentSecurityContext( parentSecurityContext );
+                    a.RunAs?.Crypto?.InheritSettingsIfRequired( Crypto );
+                    string securityContextParms = a.RunAs?.Parameters.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
                     SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
                     {
                         Parameters = securityContextParms,
                         IsDryRun = dryRun,
-                        Crypto = sc.Crypto
+                        Crypto = a.RunAs?.Crypto
                     };
 
+                    ISecurityContextRuntime scr = CreateSecurityContextRuntime( a );
                     scr?.Logon( securityContextStartInfo );
 
                     a.Result = rt.Execute( startInfo );
@@ -522,12 +520,22 @@ namespace Synapse.Core
                         InstanceId = a.InstanceId,
                         ParentExitData = parentExitData
                     };
-                    a.RunAs?.Impersonate( Crypto );
+
+                    ISecurityContextRuntime scr = CreateSecurityContextRuntime( a );
+                    string securityContextParms = a.Parameters.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
+                    SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
+                    {
+                        Parameters = securityContextParms,
+                        IsDryRun = dryRun,
+                        Crypto = a.RunAs?.Crypto
+                    };
+                    scr?.Logon( securityContextStartInfo );
+
                     ExecuteResult r = rt.Execute( startInfo );
 
                     SaveExitDataAs( a );
 
-                    a.RunAs?.Undo();
+                    scr?.Logoff();
 
                     if( r.Status > returnResult.Status )
                         returnResult = r;
@@ -689,7 +697,7 @@ namespace Synapse.Core
                 return null;
             }
 
-            ISecurityContextRuntime sc = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Type, "todo" );
+            ISecurityContextRuntime sc = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Type, "Synapse.Handlers.SecurityContext:Win32Impersonator" );
 
             if( sc != null )
             {

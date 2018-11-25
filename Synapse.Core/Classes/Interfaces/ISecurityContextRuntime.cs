@@ -2,20 +2,10 @@
 
 namespace Synapse.Core
 {
-    public interface ISecurityContextRuntime
+    public interface ISecurityContextRuntime : IRuntimeComponent<ISecurityContextRuntime>
     {
-        string ActionName { get; set; }
-        string RuntimeType { get; set; }
-
-        object GetConfigInstance();
-        object GetParametersInstance();
-
-        ISecurityContextRuntime Initialize(string config);
-
         ExecuteResult Logon(SecurityContextStartInfo startInfo);
         void Logoff();
-
-        event EventHandler<LogMessageEventArgs> LogMessage;
     }
 
     public class SecurityContextStartInfo : StartInfoBase

@@ -1,42 +1,25 @@
 ﻿using System;
-using System.Security;
+
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    //todo: resolve config, use config to get decryption info, use u/p to auth to provider for impersonation thread
-    public partial class SecurityContext : IInheritable
+    public class SecurityContext : ICloneable<SecurityContext>, IInheritable, ICrypto
     {
-        string _userName = null;
         bool _blockInheritance = false;
         bool _blockInheritanceIsSet = false;
 
+        public string Type { get; set; }
 
-        public SecurityContext()
-        {
-        }
-
-        public string Domain { get; set; }
-        /// <summary>
-        /// The logon username.  If sepcified, BlockInheritance defaults to true.
-        /// </summary>
-        public string UserName
-        {
-            get { return _userName; }
-            set
-            {
-                _userName = value;
-                if( !_blockInheritanceIsSet ) //don't userride a user-specified setting
-                    _blockInheritance = !string.IsNullOrWhiteSpace( _userName );
-            }
-        }
-        public string Password { get; set; }
-        public string Provider { get; set; } //ad, aws, azure
-        /// <summary>
-        /// Indicates if UserName/Password have values set.
-        /// </summary>
+        public ParameterInfo Config { get; set; }
         [YamlIgnore]
-        public bool IsValid { get { return !string.IsNullOrWhiteSpace( UserName ) && !string.IsNullOrWhiteSpace( Password ); } }
+        public bool HasConfig { get { return Config != null; } }
+
+        public ParameterInfo Parameters { get; set; }
+        [YamlIgnore]
+        public bool HasParameters { get { return Parameters != null; } }
+
+        #region IInheritable
         /// <summary>
         /// Specifies if this SecurityContext block can be inherited by child SecurityContext blocks.
         /// </summary>
@@ -58,22 +41,10 @@ namespace Synapse.Core
         /// </summary>
         public bool IsInherited { get; set; } = false;
 
-
-        public ParameterInfo Config { get; set; }
-
-        public CryptoProvider Crypto { get; set; }
-        [YamlIgnore]
-        public bool HasCrypto { get { return Crypto != null; } }
-
-
         public void InheritSettingsIfAllowed(SecurityContext sourceContext)
         {
             if( sourceContext != null && sourceContext.IsInheritable && !this.BlockInheritance )
             {
-                Domain = sourceContext.Domain;
-                UserName = sourceContext.UserName;
-                Password = sourceContext.Password;
-                Provider = sourceContext.Provider;
                 Config = sourceContext.Config?.Clone();
                 Crypto = new CryptoProvider();
                 Crypto.InheritSettingsIfRequired( sourceContext.Crypto, CryptoInheritElementAction.Replace );
@@ -85,26 +56,54 @@ namespace Synapse.Core
                 IsInherited = false;  //overwrite any user-declared setting
             }
         }
+        #endregion
 
+
+        #region Clone, Sample
+        object ICloneable.Clone()
+        {
+            return Clone( true );
+        }
+
+        public SecurityContext Clone(bool shallow = true)
+        {
+            SecurityContext sc = (SecurityContext)MemberwiseClone();
+            if( HasConfig )
+                sc.Config = Config.Clone( shallow );
+            if( HasParameters )
+                sc.Parameters = Parameters.Clone( shallow );
+            return sc;
+        }
 
         public override string ToString()
         {
-            return string.Format( $"[Domain:{Domain}], UserName:[{UserName}]" );
+            return Type;
         }
+
 
         public static SecurityContext CreateSample()
         {
-            SecurityContext sc = new SecurityContext()
+            SecurityContext handler = new SecurityContext()
             {
-                Domain = "AD Domain",
-                UserName = "username",
-                Password = "Use Crypto to Encrypt this value",
-                Provider = "Reserved for future use: AD, AWS, Azure, etc.",
-
-                Crypto = CryptoProvider.CreateSample()
+                Type = "Synapse.Handlers.CommandLine:CommandHandler",
+                Config = ParameterInfo.CreateSample()
             };
 
-            return sc;
+            return handler;
+        }
+        #endregion
+
+
+        public CryptoProvider Crypto { get; set; }
+        [YamlIgnore]
+        public bool HasCrypto { get { return Crypto != null; } }
+
+
+        public SecurityContext GetCryptoValues(CryptoProvider planCrypto = null, bool isEncryptMode = true)
+        {
+            if( HasCrypto )
+                Crypto.InheritSettingsIfRequired( planCrypto );
+            return Utilities.YamlHelpers.GetCryptoValues( this, isEncryptMode );
         }
     }
 }
