@@ -2,15 +2,19 @@ Name: RunAs1
 Description: Test change of security context
 DefaultHandlerType: Synapse.Core:EchoHandler
 RunAs:
-  Domain: LAPTOP-TK2D9TB6
-  UserName: synapse2
-  Password: ',^e-2:3mtk3!j-Py'
+  Parameters:
+    Values:
+      Domain: LAPTOP-TK2D9TB6
+      UserName: synapse2
+      Password: ',^e-2:3mtk3!j-Py'
 Actions:
 - Name: 0
   RunAs:
-    Domain: LAPTOP-TK2D9TB6
-    UserName: synapse0
-    Password: ',^e-2:3mtk3!j-Py'
+    Parameters:
+      Values:
+        Domain: LAPTOP-TK2D9TB6
+        UserName: synapse0
+        Password: ',^e-2:3mtk3!j-Py'
     BlockInheritance: true
   Actions:
   - Name: 0.1

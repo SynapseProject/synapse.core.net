@@ -721,7 +721,7 @@ namespace Synapse.UnitTests
 
             Assert.AreEqual( expectedRunAs.Count, actualRunAs.Count );
             foreach( string key in expectedRunAs.Keys )
-                Assert.AreEqual( expectedRunAs[key].ToLower(), actualRunAs[key].ToLower() );
+                Assert.AreEqual( expectedRunAs[key].ToLower(), actualRunAs[key]?.ToLower() );
         }
     }
 }

@@ -318,7 +318,7 @@ namespace Synapse.Core
 
                     a.IngestParentSecurityContext( parentSecurityContext );
                     a.RunAs?.Crypto?.InheritSettingsIfRequired( Crypto );
-                    string securityContextParms = a.RunAs?.Parameters.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
+                    string securityContextParms = a.RunAs?.Parameters?.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
                     SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
                     {
                         Parameters = securityContextParms,
@@ -326,8 +326,10 @@ namespace Synapse.Core
                         Crypto = a.RunAs?.Crypto
                     };
 
-                    ISecurityContextRuntime scr = CreateSecurityContextRuntime( a );
-                    scr?.Logon( securityContextStartInfo );
+                    ISecurityContextRuntime scr = a.RunAs != null && a.RunAs.IsDeclared ? CreateSecurityContextRuntime( a ) : null;
+                    ExecuteResult logonResult = scr?.Logon( securityContextStartInfo );
+                    if( logonResult?.Status == StatusType.Failed )
+                        throw new Exception( logonResult.Message );
 
                     a.Result = rt.Execute( startInfo );
 
@@ -689,6 +691,8 @@ namespace Synapse.Core
         ISecurityContextRuntime CreateSecurityContextRuntime(ActionItem a)
         {
             SecurityContext securityContext = a.RunAs;
+            if( securityContext == null )
+                return null;
 
             bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + securityContext.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
@@ -697,22 +701,22 @@ namespace Synapse.Core
                 return null;
             }
 
-            ISecurityContextRuntime sc = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Type, "Synapse.Handlers.SecurityContext:Win32Impersonator" );
+            ISecurityContextRuntime scr = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Type, "Synapse.Handlers.SecurityContext:Win32Impersonator" );
 
-            if( sc != null )
+            if( scr != null )
             {
-                securityContext.Type = sc.RuntimeType;
-                sc.ActionName = a.Name;
+                securityContext.Type = scr.RuntimeType;
+                scr.ActionName = a.Name;
 
                 string config = securityContext.HasConfig ? securityContext.Config.GetSerializedValues( Crypto ) : null;
-                sc.Initialize( config );
+                scr.Initialize( config );
             }
             else
             {
                 throw new Exception( $"Could not load {securityContext.Type}." );
             }
 
-            return sc;
+            return scr;
         }
 
         void SaveExitDataAs(ActionItem a)
