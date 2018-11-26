@@ -15,9 +15,8 @@ Actions:
         Crypto:
           Key:
             Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-            ContainerName: foo
           Elements:
-          - Password
+          - Values:Password
       IsInheritable: true
       BlockInheritance: true
   - Name: 0.2
@@ -29,11 +28,8 @@ Actions:
         UserName: synapse0
         Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
       Crypto:
-        Key:
-          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          ContainerName: foo
         Elements:
-        - Password
+        - Values:Password
     IsInheritable: true
     BlockInheritance: true
 - Name: 1
@@ -49,17 +45,13 @@ RunAs:
       UserName: synapse2
       Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
     Crypto:
-      Key:
-        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        ContainerName: foo
       Elements:
-      - Password
+      - Values:Password
   IsInheritable: true
   BlockInheritance: true
 Crypto:
   Key:
     Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    ContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}

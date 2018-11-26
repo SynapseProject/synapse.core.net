@@ -537,6 +537,8 @@ namespace Synapse.Core.Utilities
                 else
                     foreach( string error in errors )
                         result.Crypto.Errors.Add( error );
+
+                c.Crypto.Errors = result.Crypto.Errors;
             }
 
             return result;

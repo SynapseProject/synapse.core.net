@@ -317,13 +317,13 @@ namespace Synapse.Core
 
 
                     a.IngestParentSecurityContext( parentSecurityContext );
-                    a.RunAs?.Crypto?.InheritSettingsIfRequired( Crypto );
+                    //a.RunAs?.Crypto?.InheritSettingsIfRequired( Crypto );
                     string securityContextParms = a.RunAs?.Parameters?.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
                     SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
                     {
                         Parameters = securityContextParms,
                         IsDryRun = dryRun,
-                        Crypto = a.RunAs?.Crypto
+                        //Crypto = a.RunAs?.Crypto
                     };
 
                     ISecurityContextRuntime scr = a.RunAs != null && a.RunAs.IsDeclared ? CreateSecurityContextRuntime( a ) : null;
@@ -529,7 +529,7 @@ namespace Synapse.Core
                     {
                         Parameters = securityContextParms,
                         IsDryRun = dryRun,
-                        Crypto = a.RunAs?.Crypto
+                        //Crypto = a.RunAs?.Crypto
                     };
                     scr?.Logon( securityContextStartInfo );
 
