@@ -3,7 +3,9 @@ Description: Test change of security context
 Actions:
 - Name: 1
   Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
+    StartInfo: {}
   Parameters: {}
   Actions:
   - Name: 1.1
@@ -11,30 +13,41 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: Destination array was not long enough. Check destIndex and length, and the array's lower bounds.
-    RunAs: &o0
+        ParentExitData: &o0
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+    RunAs: &o1
+      Parameters:
+        Values: &o3
+          Domain: LAPTOP-TK2D9TB6
+          UserName: synapse2
+          Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+        Crypto: &o4
+          Key:
+            Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          Elements:
+          - Values:Password
       IsInheritable: true
+      IsInherited: true
     Parameters: {}
     Actions: []
     Result:
       Status: Complete
       ExitData:
-        CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 2
-        ParentExitData: Destination array was not long enough. Check destIndex and length, and the array's lower bounds.
-        RunAs: *o0
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+        InstanceId: 4
+        ParentExitData: *o0
+        RunAs: *o1
       BranchStatus: Complete
-      SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 2
+      SecurityContext: LAPTOP-TK2D9TB6\synapse2
+    InstanceId: 4
   Result:
-    Status: Failed
-    ExitData: Destination array was not long enough. Check destIndex and length, and the array's lower bounds.
-    BranchStatus: Failed
+    Status: Complete
+    ExitData: *o0
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse2
 - Name: 0
   Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
-    StartInfo: {}
   RunAs:
     Parameters:
       Values:
@@ -44,10 +57,8 @@ Actions:
       Crypto:
         Key:
           Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          ContainerName: foo
         Elements:
-        - Password
-        Errors: []
+        - Values:Password
     IsInheritable: true
     BlockInheritance: true
   Parameters: {}
@@ -57,8 +68,8 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: The user name or password is incorrect
-    RunAs:
+        ParentExitData: Index was outside the bounds of the array.
+    RunAs: &o2
       Parameters:
         Values:
           Domain: LAPTOP-TK2D9TB6
@@ -67,58 +78,57 @@ Actions:
         Crypto:
           Key:
             Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-            ContainerName: foo
           Elements:
-          - Password
-          Errors: []
+          - Values:Password
       IsInheritable: true
       BlockInheritance: true
     Parameters: {}
     Actions: []
     Result:
-      Status: Failed
-      ExitData: The user name or password is incorrect
-    InstanceId: 3
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
+        InstanceId: 2
+        ParentExitData: Index was outside the bounds of the array.
+        RunAs: *o2
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\synapse1
+    InstanceId: 2
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: The user name or password is incorrect
+        ParentExitData: Index was outside the bounds of the array.
     Parameters: {}
     Actions: []
     Result:
-      Status: Failed
-      ExitData: The user name or password is incorrect
-    InstanceId: 4
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+        InstanceId: 3
+        ParentExitData: Index was outside the bounds of the array.
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\synapse0
+    InstanceId: 3
   Result:
     Status: Failed
-    ExitData: The user name or password is incorrect
+    ExitData: Index was outside the bounds of the array.
     BranchStatus: Failed
   InstanceId: 1
 RunAs:
   Parameters:
-    Values:
-      Domain: LAPTOP-TK2D9TB6
-      UserName: synapse2
-      Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
-    Crypto:
-      Key:
-        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        ContainerName: foo
-      Elements:
-      - Password
-      Errors: []
+    Values: *o3
+    Crypto: *o4
   IsInheritable: true
   BlockInheritance: true
 Crypto:
   Key:
     Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    ContainerName: foo
   Elements: []
   Errors: []
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 11/25/2018 11:52:03 AM
+LastModified: 11/25/2018 11:05:13 PM

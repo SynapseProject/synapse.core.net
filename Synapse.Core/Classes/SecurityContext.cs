@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class SecurityContext : ICloneable<SecurityContext>, IInheritable, ICrypto
+    public class SecurityContext : ICloneable<SecurityContext>, IInheritable    //, ICrypto
     {
         bool _blockInheritance = false;
         bool _blockInheritanceIsSet = false;
@@ -50,10 +50,11 @@ namespace Synapse.Core
         {
             if( sourceContext != null && sourceContext.IsInheritable && !this.BlockInheritance )
             {
+                Type = sourceContext.Type;
                 Config = sourceContext.Config?.Clone();
                 Parameters = sourceContext.Parameters?.Clone();
-                Crypto = new CryptoProvider();
-                Crypto.InheritSettingsIfRequired( sourceContext.Crypto, CryptoInheritElementAction.Replace );
+                //Crypto = new CryptoProvider();
+                //Crypto.InheritSettingsIfRequired( sourceContext.Crypto, CryptoInheritElementAction.Replace );
                 IsInheritable = true;
                 IsInherited = true;
             }
@@ -91,8 +92,12 @@ namespace Synapse.Core
         {
             SecurityContext handler = new SecurityContext()
             {
-                Type = "Synapse.Handlers.CommandLine:CommandHandler",
-                Config = ParameterInfo.CreateSample()
+                Type = "Synapse.Handlers.SecurityContext:Win32Impersonator",
+                Config = ParameterInfo.CreateSample(),
+                Parameters = ParameterInfo.CreateSample(),
+                IsInheritable = true,
+                BlockInheritance = true,
+                IsInherited = true
             };
 
             return handler;
@@ -100,16 +105,16 @@ namespace Synapse.Core
         #endregion
 
 
-        public CryptoProvider Crypto { get; set; }
-        [YamlIgnore]
-        public bool HasCrypto { get { return Crypto != null; } }
+        //public CryptoProvider Crypto { get; set; }
+        //[YamlIgnore]
+        //public bool HasCrypto { get { return Crypto != null; } }
 
 
-        public SecurityContext GetCryptoValues(CryptoProvider planCrypto = null, bool isEncryptMode = true)
-        {
-            if( HasCrypto )
-                Crypto.InheritSettingsIfRequired( planCrypto );
-            return Utilities.YamlHelpers.GetCryptoValues( this, isEncryptMode );
-        }
+        //public SecurityContext GetCryptoValues(CryptoProvider planCrypto = null, bool isEncryptMode = true)
+        //{
+        //    if( HasCrypto )
+        //        Crypto.InheritSettingsIfRequired( planCrypto );
+        //    return Utilities.YamlHelpers.GetCryptoValues( this, isEncryptMode );
+        //}
     }
 }
