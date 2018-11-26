@@ -303,6 +303,7 @@ namespace Synapse.Core
 
                 if( !WantsStopOrPause() )
                 {
+                    #region  prep the Handler parms
                     HandlerStartInfo startInfo = new HandlerStartInfo( StartInfo )
                     {
                         Parameters = parms,
@@ -313,23 +314,29 @@ namespace Synapse.Core
                         RunAs = a.RunAs,
                         Crypto = a.Parameters?.Crypto
                     };
+                    //startInfoData serializes less than full HandlerStartInfo (avoids Crypto/RunAs)
                     a.Handler.StartInfo = new HandlerStartInfoData( startInfo );
+                    #endregion
 
+                    #region SecurityContext
+                    ISecurityContextRuntime scr = null;
 
                     a.IngestParentSecurityContext( parentSecurityContext );
-                    //a.RunAs?.Crypto?.InheritSettingsIfRequired( Crypto );
-                    string securityContextParms = a.RunAs?.Parameters?.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
-                    SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
+                    if( a.HasRunAs && a.RunAs.IsValid )
                     {
-                        Parameters = securityContextParms,
-                        IsDryRun = dryRun,
-                        //Crypto = a.RunAs?.Crypto
-                    };
+                        string securityContextParms = a.RunAs.Parameters?.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
+                        SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
+                        {
+                            Parameters = securityContextParms,
+                            IsDryRun = dryRun
+                        };
 
-                    ISecurityContextRuntime scr = a.RunAs != null && a.RunAs.IsDeclared ? CreateSecurityContextRuntime( a ) : null;
-                    ExecuteResult logonResult = scr?.Logon( securityContextStartInfo );
-                    if( logonResult?.Status == StatusType.Failed )
-                        throw new Exception( logonResult.Message );
+                        scr = CreateSecurityContextRuntime( a );
+                        ExecuteResult logonResult = scr?.Logon( securityContextStartInfo );
+                        if( logonResult?.Status == StatusType.Failed )
+                            throw new Exception( logonResult.Message );
+                    }
+                    #endregion
 
                     a.Result = rt.Execute( startInfo );
 

@@ -14,9 +14,6 @@ Actions:
         Password: ',^e-2:3mtk3!j-Py'
     IsInheritable: true
     IsInherited: true
-    Crypto:
-      Elements: []
-      Errors: []
   Parameters: {}
   Actions:
   - Name: Action002
@@ -26,34 +23,31 @@ Actions:
       StartInfo:
         ParentExitData: &o2
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-          InstanceId: 4
+          InstanceId: 116
           RunAs: *o0
     RunAs: &o3
       Parameters:
         Values: *o1
       IsInheritable: true
       IsInherited: true
-      Crypto:
-        Elements: []
-        Errors: []
     Parameters: {}
     Actions: []
     Result:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 5
+        InstanceId: 117
         ParentExitData: *o2
         RunAs: *o3
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    InstanceId: 5
+    InstanceId: 117
   Result:
     Status: Complete
     ExitData: *o2
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse1
-  InstanceId: 4
+  InstanceId: 116
 RunAs:
   Parameters:
     Values: *o1
@@ -62,4 +56,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 11/25/2018 11:39:40 AM
+LastModified: 11/25/2018 11:53:08 PM

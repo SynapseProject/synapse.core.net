@@ -4,11 +4,8 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class SecurityContext : ICloneable<SecurityContext>, IInheritable    //, ICrypto
+    public class SecurityContext : ICloneable<SecurityContext>, IInheritable
     {
-        bool _blockInheritance = false;
-        bool _blockInheritanceIsSet = false;
-
         public string Type { get; set; }
         [YamlIgnore]
         public bool HasType { get { return !string.IsNullOrWhiteSpace( Type ); } }
@@ -22,7 +19,7 @@ namespace Synapse.Core
         public bool HasParameters { get { return Parameters != null; } }
 
         [YamlIgnore]
-        public bool IsDeclared { get { return HasType || HasConfig || HasParameters; } }
+        public bool IsValid { get { return HasType || HasConfig || HasParameters; } }
 
         #region IInheritable
         /// <summary>
@@ -30,17 +27,9 @@ namespace Synapse.Core
         /// </summary>
         public bool IsInheritable { get; set; } = true;
         /// <summary>
-        /// Specifies if this SecurityContext instance will block inheritance from the parent SecurityContext instance.  Defaults to false unless UserName is specified.
+        /// Specifies if this SecurityContext instance will block inheritance from the parent SecurityContext instance.
         /// </summary>
-        public bool BlockInheritance
-        {
-            get { return _blockInheritance; }
-            set
-            {
-                _blockInheritance = value;
-                _blockInheritanceIsSet = true;
-            }
-        }
+        public bool BlockInheritance { get; set; }
         /// <summary>
         /// Indicates if the current settings are inherited from the parent SecurityContext block.
         /// </summary>
@@ -53,8 +42,6 @@ namespace Synapse.Core
                 Type = sourceContext.Type;
                 Config = sourceContext.Config?.Clone();
                 Parameters = sourceContext.Parameters?.Clone();
-                //Crypto = new CryptoProvider();
-                //Crypto.InheritSettingsIfRequired( sourceContext.Crypto, CryptoInheritElementAction.Replace );
                 IsInheritable = true;
                 IsInherited = true;
             }
@@ -103,18 +90,5 @@ namespace Synapse.Core
             return handler;
         }
         #endregion
-
-
-        //public CryptoProvider Crypto { get; set; }
-        //[YamlIgnore]
-        //public bool HasCrypto { get { return Crypto != null; } }
-
-
-        //public SecurityContext GetCryptoValues(CryptoProvider planCrypto = null, bool isEncryptMode = true)
-        //{
-        //    if( HasCrypto )
-        //        Crypto.InheritSettingsIfRequired( planCrypto );
-        //    return Utilities.YamlHelpers.GetCryptoValues( this, isEncryptMode );
-        //}
     }
 }

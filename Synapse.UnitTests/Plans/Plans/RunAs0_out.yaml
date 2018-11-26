@@ -1,54 +1,12 @@
 Name: RunAs0
 Description: Test change of security context
 Actions:
-- Name: 1
+- Name: 0
   Handler:
     Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
-  Parameters: {}
-  Actions:
-  - Name: 1.1
-    Handler:
-      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
-      StartInfo:
-        ParentExitData: &o0
-          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-    RunAs: &o1
-      Parameters:
-        Values: &o3
-          Domain: LAPTOP-TK2D9TB6
-          UserName: synapse2
-          Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
-        Crypto: &o4
-          Key:
-            Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          Elements:
-          - Values:Password
-      IsInheritable: true
-      IsInherited: true
-    Parameters: {}
-    Actions: []
-    Result:
-      Status: Complete
-      ExitData:
-        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-        InstanceId: 4
-        ParentExitData: *o0
-        RunAs: *o1
-      BranchStatus: Complete
-      SecurityContext: LAPTOP-TK2D9TB6\synapse2
-    InstanceId: 4
-  Result:
-    Status: Complete
-    ExitData: *o0
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\synapse2
-- Name: 0
-  Handler:
-    Config: {}
-  RunAs:
+  RunAs: &o0
     Parameters:
       Values:
         Domain: LAPTOP-TK2D9TB6
@@ -68,7 +26,10 @@ Actions:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: Index was outside the bounds of the array.
+        ParentExitData: &o1
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+          InstanceId: 107
+          RunAs: *o0
     RunAs: &o2
       Parameters:
         Values:
@@ -88,38 +49,85 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 2
-        ParentExitData: Index was outside the bounds of the array.
+        InstanceId: 110
+        ParentExitData: *o1
         RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    InstanceId: 2
+    InstanceId: 110
   - Name: 0.2
     Handler:
       Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
-        ParentExitData: Index was outside the bounds of the array.
+        ParentExitData: *o1
     Parameters: {}
     Actions: []
     Result:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-        InstanceId: 3
-        ParentExitData: Index was outside the bounds of the array.
+        InstanceId: 111
+        ParentExitData: *o1
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse0
-    InstanceId: 3
+    InstanceId: 111
   Result:
-    Status: Failed
-    ExitData: Index was outside the bounds of the array.
-    BranchStatus: Failed
-  InstanceId: 1
+    Status: Complete
+    ExitData: *o1
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse0
+  InstanceId: 107
+- Name: 1
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo: {}
+  Parameters: {}
+  Actions:
+  - Name: 1.1
+    Handler:
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
+      StartInfo:
+        ParentExitData: &o3
+          CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+          InstanceId: 108
+    RunAs: &o4
+      Parameters:
+        Values: &o5
+          Domain: LAPTOP-TK2D9TB6
+          UserName: synapse2
+          Password: qbMVEA84crGWB7jB5e9Q8odPa4M2Q9vPEWouNA9gp7qSZB+68ueqNlOY5XIFVymkPz1vkUmPkzQ2aRfg8vVZ/fPEWvnv8xCuZIrMQxVlT41d9jo4i+mBFG2H3GyLJxBAAxChI+ckrLxvZ1u9OS/7a+Pvdn38iztpyQ2eFbJ/fvs=
+        Crypto: &o6
+          Key:
+            Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          Elements:
+          - Values:Password
+      IsInheritable: true
+      IsInherited: true
+    Parameters: {}
+    Actions: []
+    Result:
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
+        InstanceId: 109
+        ParentExitData: *o3
+        RunAs: *o4
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\synapse2
+    InstanceId: 109
+  Result:
+    Status: Complete
+    ExitData: *o3
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\synapse2
+  InstanceId: 108
 RunAs:
   Parameters:
-    Values: *o3
-    Crypto: *o4
+    Values: *o5
+    Crypto: *o6
   IsInheritable: true
   BlockInheritance: true
 Crypto:
@@ -129,6 +137,6 @@ Crypto:
   Errors: []
 StartInfo: {}
 Result:
-  Status: Failed
-  BranchStatus: Failed
-LastModified: 11/25/2018 11:05:13 PM
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 11/25/2018 11:53:08 PM

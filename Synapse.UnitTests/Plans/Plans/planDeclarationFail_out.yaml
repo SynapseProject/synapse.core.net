@@ -13,9 +13,11 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 100
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 100
 - Name: ac1
   Description: No Parameters declaration
   Handler:
@@ -45,164 +47,11 @@ Actions:
           CNode3_2: CValue3_2_inline
 
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 1
+      InstanceId: 101
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 1
-- Name: ac4
-  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-  Parameters:
-    Name: myYamlParms
-    Values:
-      PNode0: PValue0_inline
-      PNode1: PValue1_inline
-      PNode3:
-        PNode3_1: PValue3_1_inline
-        PNode3_2: PValue3_2_inline
-    Dynamic:
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode0Dynamic
-      Target: PNode0
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode2_1Dynamic
-      Target: PNode2:PNode2_1
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode3_1Dynamic
-      Target: PNode3:PNode3_1
-  Actions: []
-  Result:
-    Status: Complete
-    ExitData:
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 2
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 2
-- Name: ac2
-  Description: No Handler declaration
-  Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-  Parameters:
-    Name: myYamlParms
-    Values:
-      PNode0: PValue0_inline
-      PNode1: PValue1_inline
-      PNode3:
-        PNode3_1: PValue3_1_inline
-        PNode3_2: PValue3_2_inline
-    Dynamic:
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode0Dynamic
-      Target: PNode0
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode2_1Dynamic
-      Target: PNode2:PNode2_1
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode3_1Dynamic
-      Target: PNode3:PNode3_1
-  Actions: []
-  Result:
-    Status: Complete
-    ExitData:
-      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 3
-      IsDryRun: true
-      Parameters: >+
-        PNode0: PValue0_inline
-
-        PNode1: PValue1_inline
-
-        PNode3:
-
-          PNode3_1: PValue3_1_inline
-
-          PNode3_2: PValue3_2_inline
-
-    BranchStatus: Complete
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 3
-- Name: ac5
-  Description: No Handler declaration, partially formed Parameters
-  Handler:
-    Config: {}
-  Parameters:
-    Name: myYamlParms
-    Values: {}
-    Dynamic:
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode0Dynamic
-      Target: PNode0
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode2_1Dynamic
-      Target: PNode2:PNode2_1
-    - Options: []
-      DataType: String
-      RestrictToOptions: true
-      Source: pnode3_1Dynamic
-      Target: PNode3:PNode3_1
-  Actions: []
-  Result:
-    Status: Failed
-    BranchStatus: Failed
-    Message: 'Exception in ResolveConfigAndParameters: [An error occurred in: ResolveConfigAndParameters\r\nObject reference not set to an instance of an object.\r\n]'
-  InstanceId: 4
+  InstanceId: 101
 - Name: ''
   Description: No Name, no declaration at all
   Handler:
@@ -215,11 +64,11 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 5
+      InstanceId: 102
       IsDryRun: true
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 5
+  InstanceId: 102
 - Name: ac0
   Description: Fully formed, correctly structured Action; here for reference
   Handler:
@@ -283,7 +132,7 @@ Actions:
           CNode3_2: CValue3_2_inline
 
       CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 6
+      InstanceId: 103
       IsDryRun: true
       Parameters: >+
         PNode0: PValue0_inline
@@ -298,9 +147,174 @@ Actions:
 
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\Steve
-  InstanceId: 6
+  InstanceId: 103
+- Name: ac4
+  Description: Has Handler, but no Handler.Config.  Parameters do not declare Type.
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode0Dynamic
+      Target: PNode0
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode2_1Dynamic
+      Target: PNode2:PNode2_1
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode3_1Dynamic
+      Target: PNode3:PNode3_1
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 104
+      IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 104
+- Name: ac5
+  Description: No Handler declaration, partially formed Parameters
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        {}
+
+  Parameters:
+    Name: myYamlParms
+    Values: {}
+    Dynamic:
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode0Dynamic
+      Target: PNode0
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode2_1Dynamic
+      Target: PNode2:PNode2_1
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode3_1Dynamic
+      Target: PNode3:PNode3_1
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 105
+      IsDryRun: true
+      Parameters: >+
+        {}
+
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 105
+- Name: ac2
+  Description: No Handler declaration
+  Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+  Parameters:
+    Name: myYamlParms
+    Values:
+      PNode0: PValue0_inline
+      PNode1: PValue1_inline
+      PNode3:
+        PNode3_1: PValue3_1_inline
+        PNode3_2: PValue3_2_inline
+    Dynamic:
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode0Dynamic
+      Target: PNode0
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode2_1Dynamic
+      Target: PNode2:PNode2_1
+    - Options: []
+      DataType: String
+      RestrictToOptions: true
+      Source: pnode3_1Dynamic
+      Target: PNode3:PNode3_1
+  Actions: []
+  Result:
+    Status: Complete
+    ExitData:
+      CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 106
+      IsDryRun: true
+      Parameters: >+
+        PNode0: PValue0_inline
+
+        PNode1: PValue1_inline
+
+        PNode3:
+
+          PNode3_1: PValue3_1_inline
+
+          PNode3_2: PValue3_2_inline
+
+    BranchStatus: Complete
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
+  InstanceId: 106
 StartInfo: {}
 Result:
-  Status: Failed
-  BranchStatus: Failed
-LastModified: 11/25/2018 10:31:59 AM
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 11/25/2018 11:53:08 PM
