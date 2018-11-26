@@ -528,10 +528,13 @@ namespace Synapse.Core.Utilities
 
         public static Plan HandlePlanCrypto(Plan p, bool isEncryptMode = true)
         {
-            if( p.HasRunAs && p.RunAs.HasConfig && p.RunAs.Config.HasCrypto )
-                p.RunAs.Config = p.RunAs.Config.GetCryptoValues( p.Crypto, isEncryptMode );
-            if( p.HasRunAs && p.RunAs.HasParameters && p.RunAs.Parameters.HasCrypto )
-                p.RunAs.Parameters = p.RunAs.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
+            if( p.HasRunAs )
+            {
+                if( p.RunAs.HasConfig && p.RunAs.Config.HasCrypto )
+                    p.RunAs.Config = p.RunAs.Config.GetCryptoValues( p.Crypto, isEncryptMode );
+                if( p.RunAs.HasParameters && p.RunAs.Parameters.HasCrypto )
+                    p.RunAs.Parameters = p.RunAs.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
+            }
 
             Stack<IEnumerable<ActionItem>> actionLists = new Stack<IEnumerable<ActionItem>>();
             actionLists.Push( p.Actions );
@@ -542,10 +545,13 @@ namespace Synapse.Core.Utilities
 
                 foreach( ActionItem a in actions )
                 {
-                    if( a.HasRunAs && a.RunAs.HasConfig && a.RunAs.Config.HasCrypto )
-                        a.RunAs.Config = a.RunAs.Config.GetCryptoValues( p.Crypto, isEncryptMode );
-                    if( a.HasRunAs && a.RunAs.HasParameters && a.RunAs.Parameters.HasCrypto )
-                        a.RunAs.Parameters = a.RunAs.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
+                    if( a.HasRunAs )
+                    {
+                        if( a.RunAs.HasConfig && a.RunAs.Config.HasCrypto )
+                            a.RunAs.Config = a.RunAs.Config.GetCryptoValues( p.Crypto, isEncryptMode );
+                        if( a.RunAs.HasParameters && a.RunAs.Parameters.HasCrypto )
+                            a.RunAs.Parameters = a.RunAs.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
+                    }
                     if( a.Handler != null && a.Handler.HasConfig && a.Handler.Config.HasCrypto )
                         a.Handler.Config = a.Handler.Config.GetCryptoValues( p.Crypto, isEncryptMode );
                     if( a.HasParameters && a.Parameters.HasCrypto )

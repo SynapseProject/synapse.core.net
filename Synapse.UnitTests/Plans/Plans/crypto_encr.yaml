@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: D8OkiwLbgIp7YwU65T4fFuDyxsLdaQsE1Art5SOv1pZAz+uqo3Y75wDDinZvLY5Cgfql3wS6cL1un16Zk2LE7AvMO+X1GtqPtqSIdMqQczEusL8rhhBDwpDqSmx/7sw2XMLYuHo/Tjpv07XroHIONbQPlV7V4XMU3ftfF041NW0=
+        ArgString: tycTGE1yzc7zx3q9LodQI7Me+1wZEGlmBQXWJgLsMlzJOurJ4oBjVXHD/Z32lU8onje1kgDgg7JU6OtOPk4JKG164hnHR41lEduy/zjHCOHvEfnPxD1XGRyMPPMjl+FLq6pQlmRPqTmvMYFZ29GvQKBcKZ9TeCWlfcdvagRQics=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: xg8EOkH9apTvsFCgXvKJWtYGRfNRm9REvQj4rXDtXeXuYCB4+QGniNByVScD/HCVNQW8F/VP2r5m2ZgZX7sjUSwbBrMAopXO4FbgXafX1gJzizlEknRF2o2L8iiDR/NSivRQB2LKd3FXpNEodtYr0UxCO5cn4vuk4X95ivzd/v4=
+          Encoding: uB8HOp1JCqeL9D6VP6O24kgLxNHbOJoP7WqntuJk/sNH2H96ths3Jx+6Wj85GWCI/57rVcnyJ0udkR3RZcgIUqUZMyfk3DNIIVlIRLtppgublQ99phyFdM+jS+bSCNTUcFAQ4DUAo10D1IWgPakkfU/vC2upiPH74BMlkrVCFXU=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: eeDDT/Blh/tmIqz8PggZUzPYoMw0oT8+Csn9RhZDJ3dwKti0/5PEquU9vK+tgQu6+6QBck/G3Gm4O1bXyQddpyqgMstpgzO1p3dedPYq8Nr2bzEmiAB+FISZN+P+C0evWtLo87hyPchx4sbKRskg620XZbUSf4OpQM0V7D3B/TM=
+              - v1: YPEL2i/JaekGpnS/3nEgOr9mSNsxv6pouzotGYRf9eBNhz3T+XqXy4Osf7PBa8Mbi9dEmVY7kJee/UUhfZG29UwmgocmJ3/pDps3ZlCUyE8AAvrqdDLUgHUu88M93J3Lgra+980gmS+6Zq+Spr/vEm9cwIbWU1v5AEJiohkqHVw=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: hXU0Iig+kdm+XcV6JExGWABuOS4D4fS7daDQZFVGg3zxmOx9FHU2IJ8l30uOXIkvwj1k+mO2jHCVTeGd0Bp4J7e2ObYONvxVrW5Tb99gIcfgdJjSOqtaol4Ogde9qbJak2qMMVkq51fmANk1pGHb9pSEVeLJPHV8Dft6w1/CaK8=
+              - v3: NKqNf8PzWZytez1cGgdzJ+p0KRUcLfckT5K5cJGFplCXVo5vpcKx836uV8YR6PIWVCe/7P+iJIdK55dAhHrsf/hxuXvMl1rohq7UJPh8OYOvM7pnzAI+D9FA0Ces0YFnUzdqBpWd33wcSDG5e7nOJRWvPqpTs5g1rvVlIVGxPbw=
           Encoding: Base64
     Dynamic:
     - Options: []
@@ -65,15 +65,15 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>egHsfGHwA8TDSWDYQk0obVu9u2fXyt/zYjfywCTd6BHLKWcUjOyd2ISilXcsg2xVs8gGiulvIZ1EZtK2BVpd4lKKGJMtdN2sZaMItJ1eM9ABUUxYzUsJ8POG2OQbPOt79exYOgjEGdORxB6uW/SR1taiwcU/BcP9WSFt17J/WNc=</CNode0>
+          <CNode0>ezK+hcr4DDZ/YEc/JKFQofytEAEgli3GD50kCg9igyF+5dgh+PYgcYpaBEBDRFk7qcPaG4qPzglJnbB7XoVKxPV0KXqG60POCB+jt98oDZynveae0lhTGI9Ub6LQfkSRxEtCA3X8MRYFum248aAmd+3zt7e9ggjR6b5Kf0n+J6w=</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="CzoF0Li47iC6QN30E3XihgMIMwBTEkDFjMDkVXt4Y+LE44id+06aZOoIMRB8jOgFCIt2AqTlaFqXLHbcohL/XNnUuRdcCCXtdwCt1D+uBpLL9atXnKIzv6+kXSatnyYo7rcRBLNKYSbtgdLtGPu1T9LrTvU9W3fbpIIPM1JIxvo=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="1QOeSt9v6Bj+TOTcyAs1ShXxv3AuJttCmGEB818NxU+G5rUPX0kAzS/ww7ovx6PjBla5Wf6wCmfCaGfbDstlMc7Akmixqg6Qx2eK3JYfo81JBHOsVTeCAnfF1cc9fKhAegQgWvYQs9hy0p3vBAUgS5Kms+4tJgpXVMZqATOcqMY=">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>VauSkw7Q9kPBaRdJiZejTYKyTXL8gh4W6c+Ow+qAi0lWcrycG4xPLp64AtsLS7ElgFTBkwQLViuo5dNy24jEhKBLuy+XWSA9mMnSSYw7kT4k3geApmhLOdzC32X2O1SGZS6VjVJGrluhGpOdXLtjR+JYBw4A1dt6ywblMtwlsi8=</CNode3_2>
+            <CNode3_2>UzUWrGQhEGe6XJsmwzpkP3HVpyIBRcN6tLscCL/5tS9SsNhgTx0aRoVVP52nPf3zMAv37jU2nvkpl3jOIPmdYqObhXJIldvElvQYhrsMkKI7MUYwt1i5oywIyuyjBo2CgjvOuoUhAr4FMDwj4rvZwcIMLKQLX+with0PzZgenP8=</CNode3_2>
 
           </CNode3>
 
@@ -94,4 +94,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 11/25/2018 10:31:38 AM
+LastModified: 11/25/2018 11:52:58 PM
