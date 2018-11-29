@@ -36,13 +36,15 @@ namespace Synapse.Core
     /// this is a convenience-wrapper on HandlerStartInfo that is used to avoid
     /// serialization of props not mentioned here (mainly RunAs and Crypto)
     /// </summary>
-    public class HandlerStartInfoData
+    public class HandlerStartInfoData : StartInfoBase
     {
         public HandlerStartInfoData()
         { }
 
         public HandlerStartInfoData(HandlerStartInfo handlerStartInfo)
         {
+            RequestNumber = handlerStartInfo.RequestNumber;
+            RequestUser = handlerStartInfo.RequestUser;
             Parameters = handlerStartInfo.Parameters;
             ParentExitData = handlerStartInfo.ParentExitData;
         }

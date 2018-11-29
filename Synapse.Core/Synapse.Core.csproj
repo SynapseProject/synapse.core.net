@@ -60,8 +60,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Interfaces\IComponentInfo.cs" />
     <Compile Include="Classes\BaseClasses\SecurityContextRuntimeBase.cs" />
     <Compile Include="Classes\Enums\EncodingType.cs" />
+    <Compile Include="Classes\BaseClasses\ComponentInfoBase.cs" />
     <Compile Include="Classes\Interfaces\ICryptoRuntime.cs" />
     <Compile Include="Classes\Interfaces\IRuntimeComponent.cs" />
     <Compile Include="Classes\Interfaces\ISecurityContextRuntime.cs" />
