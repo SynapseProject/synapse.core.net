@@ -701,26 +701,26 @@ namespace Synapse.Core
             if( securityContext == null )
                 return null;
 
-            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + securityContext.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
+            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + securityContext.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
                 _wantsCancel = true;
                 return null;
             }
 
-            ISecurityContextRuntime scr = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Type, "Synapse.Handlers.SecurityContext:Win32Impersonator" );
+            ISecurityContextRuntime scr = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Provider.Type, "Synapse.Handlers.SecurityContext:Win32Impersonator" );
 
             if( scr != null )
             {
-                securityContext.Type = scr.RuntimeType;
+                securityContext.Provider.Type = scr.RuntimeType;
                 scr.ActionName = a.Name;
 
-                string config = securityContext.HasConfig ? securityContext.Config.GetSerializedValues( Crypto ) : null;
+                string config = securityContext.Provider.HasConfig ? securityContext.Provider.Config.GetSerializedValues( Crypto ) : null;
                 scr.Initialize( config );
             }
             else
             {
-                throw new Exception( $"Could not load {securityContext.Type}." );
+                throw new Exception( $"Could not load {securityContext.Provider.Type}." );
             }
 
             return scr;

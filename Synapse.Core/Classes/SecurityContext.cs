@@ -4,22 +4,49 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
+    public class SecurityContextProviderInfo : ComponentInfoBase, ICloneable<SecurityContextProviderInfo>
+    {
+        new public SecurityContextProviderStartInfo StartInfo
+        {
+            get { return base.StartInfo as SecurityContextProviderStartInfo; }
+            set { base.StartInfo = value; }
+        }
+
+        public SecurityContextProviderInfo Clone(bool shallow = true)
+        {
+            return GetClone<SecurityContextProviderInfo>( shallow );
+        }
+
+        public static SecurityContextProviderInfo CreateSample()
+        {
+            return CreateSample<SecurityContextProviderInfo>( "Synapse.Handlers.SecurityContext:Win32Impersonator" );
+        }
+    }
+
+    public class SecurityContextProviderStartInfo : StartInfoBase
+    {
+    }
+
     public class SecurityContext : ICloneable<SecurityContext>, IInheritable
     {
-        public string Type { get; set; }
+        public SecurityContextProviderInfo Provider { get; set; }
         [YamlIgnore]
-        public bool HasType { get { return !string.IsNullOrWhiteSpace( Type ); } }
+        public bool HasProvider { get { return Provider != null; } }
 
-        public ParameterInfo Config { get; set; }
-        [YamlIgnore]
-        public bool HasConfig { get { return Config != null; } }
+        //public string Type { get; set; }
+        //[YamlIgnore]
+        //public bool HasType { get { return !string.IsNullOrWhiteSpace( Type ); } }
+
+        //public ParameterInfo Config { get; set; }
+        //[YamlIgnore]
+        //public bool HasConfig { get { return Config != null; } }
 
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
 
         [YamlIgnore]
-        public bool IsValid { get { return HasType || HasConfig || HasParameters; } }
+        public bool IsValid { get { return (HasProvider && (Provider.HasType || Provider.HasConfig)) || HasParameters; } }
 
         #region IInheritable
         /// <summary>
@@ -39,8 +66,9 @@ namespace Synapse.Core
         {
             if( sourceContext != null && sourceContext.IsInheritable && !this.BlockInheritance )
             {
-                Type = sourceContext.Type;
-                Config = sourceContext.Config?.Clone();
+                //Type = sourceContext.Type;
+                //Config = sourceContext.Config?.Clone();
+                Provider = sourceContext.Provider?.Clone();
                 Parameters = sourceContext.Parameters?.Clone();
                 IsInheritable = true;
                 IsInherited = true;
@@ -62,25 +90,28 @@ namespace Synapse.Core
         public SecurityContext Clone(bool shallow = true)
         {
             SecurityContext sc = (SecurityContext)MemberwiseClone();
-            if( HasConfig )
-                sc.Config = Config.Clone( shallow );
+            //if( HasConfig )
+            //    sc.Config = Config.Clone( shallow );
+            if( HasProvider )
+                sc.Provider = Provider.Clone( shallow );
             if( HasParameters )
                 sc.Parameters = Parameters.Clone( shallow );
             return sc;
         }
 
-        public override string ToString()
-        {
-            return Type;
-        }
+        //public override string ToString()
+        //{
+        //    return Type;
+        //}
 
 
         public static SecurityContext CreateSample()
         {
             SecurityContext handler = new SecurityContext()
             {
-                Type = "Synapse.Handlers.SecurityContext:Win32Impersonator",
-                Config = ParameterInfo.CreateSample(),
+                //Type = "Synapse.Handlers.SecurityContext:Win32Impersonator",
+                //Config = ParameterInfo.CreateSample(),
+                Provider = SecurityContextProviderInfo.CreateSample(),
                 Parameters = ParameterInfo.CreateSample(),
                 IsInheritable = true,
                 BlockInheritance = true,

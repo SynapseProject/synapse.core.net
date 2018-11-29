@@ -530,8 +530,8 @@ namespace Synapse.Core.Utilities
         {
             if( p.HasRunAs )
             {
-                if( p.RunAs.HasConfig && p.RunAs.Config.HasCrypto )
-                    p.RunAs.Config = p.RunAs.Config.GetCryptoValues( p.Crypto, isEncryptMode );
+                if( p.RunAs.Provider.HasConfig && p.RunAs.Provider.Config.HasCrypto )
+                    p.RunAs.Provider.Config = p.RunAs.Provider.Config.GetCryptoValues( p.Crypto, isEncryptMode );
                 if( p.RunAs.HasParameters && p.RunAs.Parameters.HasCrypto )
                     p.RunAs.Parameters = p.RunAs.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
             }
@@ -547,8 +547,8 @@ namespace Synapse.Core.Utilities
                 {
                     if( a.HasRunAs )
                     {
-                        if( a.RunAs.HasConfig && a.RunAs.Config.HasCrypto )
-                            a.RunAs.Config = a.RunAs.Config.GetCryptoValues( p.Crypto, isEncryptMode );
+                        if( a.RunAs.Provider.HasConfig && a.RunAs.Provider.Config.HasCrypto )
+                            a.RunAs.Provider.Config = a.RunAs.Provider.Config.GetCryptoValues( p.Crypto, isEncryptMode );
                         if( a.RunAs.HasParameters && a.RunAs.Parameters.HasCrypto )
                             a.RunAs.Parameters = a.RunAs.Parameters.GetCryptoValues( p.Crypto, isEncryptMode );
                     }
