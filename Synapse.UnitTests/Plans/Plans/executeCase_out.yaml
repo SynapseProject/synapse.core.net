@@ -1,31 +1,14 @@
 Name: executeCase
 Description: Tests selection of ActionGroup/Actions based on Status match to ExecuteCase
 Actions:
-- Name: ac2
-  Handler:
-    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
-    StartInfo:
-      Parameters: >+
-        ReturnStatus: CompletedWithErrors
-
-  Parameters:
-    Values:
-      ReturnStatus: CompletedWithErrors
-  Actions: []
-  Result:
-    Status: CompletedWithErrors
-    ExitData: EmptyHandler ExitData default value.
-    BranchStatus: CompletedWithErrors
-    SecurityContext: LAPTOP-TK2D9TB6\Steve
 - Name: ac0
   Handler:
-    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
     StartInfo:
       Parameters: >+
         ReturnStatus: New
 
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
   Parameters:
     Values:
       ReturnStatus: New
@@ -68,13 +51,13 @@ Actions:
       - Name: ac0.g.0
         ExecuteCase: Complete
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: Failed
 
             ParentExitData: EmptyHandler ExitData default value.
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config: {}
         Parameters:
           Values:
             ReturnStatus: Failed
@@ -88,13 +71,13 @@ Actions:
       - Name: ac0.g.1
         ExecuteCase: Complete
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: Waiting
 
             ParentExitData: EmptyHandler ExitData default value.
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config: {}
         Parameters:
           Values:
             ReturnStatus: Waiting
@@ -118,21 +101,21 @@ Actions:
   - Name: ac0.1
     ExecuteCase: Complete
     Handler:
-      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
       StartInfo:
         ParentExitData: EmptyHandler ExitData default value.
+      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
     Parameters: {}
     Actions:
     - Name: ac0.1.1
       Handler:
-        Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-        Config: {}
         StartInfo:
           Parameters: >+
             ReturnStatus: Complete
 
           ParentExitData: EmptyHandler ExitData default value.
+        Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Config: {}
       Parameters:
         Values:
           ReturnStatus: Complete
@@ -140,13 +123,13 @@ Actions:
       - Name: ac0.1.1.0
         ExecuteCase: Complete
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
           StartInfo:
             Parameters: >+
               ReturnStatus: CompletedWithErrors
 
             ParentExitData: EmptyHandler ExitData default value.
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config: {}
         Parameters:
           Values:
             ReturnStatus: CompletedWithErrors
@@ -173,9 +156,26 @@ Actions:
     ExitData: EmptyHandler ExitData default value.
     BranchStatus: Failed
     SecurityContext: LAPTOP-TK2D9TB6\Steve
+- Name: ac2
+  Handler:
+    StartInfo:
+      Parameters: >+
+        ReturnStatus: CompletedWithErrors
+
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
+  Parameters:
+    Values:
+      ReturnStatus: CompletedWithErrors
+  Actions: []
+  Result:
+    Status: CompletedWithErrors
+    ExitData: EmptyHandler ExitData default value.
+    BranchStatus: CompletedWithErrors
+    SecurityContext: LAPTOP-TK2D9TB6\Steve
   InstanceId: 1
 StartInfo: {}
 Result:
   Status: Failed
   BranchStatus: Failed
-LastModified: 11/25/2018 11:52:59 PM
+LastModified: 11/29/2018 12:00:05 PM

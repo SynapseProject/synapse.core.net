@@ -3,10 +3,11 @@ Description: Echo Test
 Actions:
 - Name: Action001
   Handler:
+    StartInfo: {}
     Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
-    StartInfo: {}
   RunAs: &o0
+    Provider: {}
     Parameters:
       Values:
         Domain: LAPTOP-TK2D9TB6
@@ -18,28 +19,30 @@ Actions:
   Actions:
   - Name: Action002
     Handler:
-      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
       StartInfo:
         ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-          InstanceId: 121
+          InstanceId: 122
           RunAs: *o0
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
     RunAs: &o2
+      Provider: {}
       BlockInheritance: true
     Parameters: {}
     Actions:
     - Name: Action003
       Handler:
-        Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-        Config: {}
         StartInfo:
           ParentExitData: &o3
             CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-            InstanceId: 122
+            InstanceId: 123
             ParentExitData: *o1
             RunAs: *o2
+        Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Config: {}
       RunAs: &o4
+        Provider: {}
         IsInheritable: true
       Parameters: {}
       Actions: []
@@ -47,24 +50,24 @@ Actions:
         Status: Complete
         ExitData:
           CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-          InstanceId: 123
+          InstanceId: 124
           ParentExitData: *o3
           RunAs: *o4
         BranchStatus: Complete
         SecurityContext: LAPTOP-TK2D9TB6\Steve
-      InstanceId: 123
+      InstanceId: 124
     Result:
       Status: Complete
       ExitData: *o3
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 122
+    InstanceId: 123
   Result:
     Status: Complete
     ExitData: *o1
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse2
-  InstanceId: 121
+  InstanceId: 122
 RunAs:
   Parameters:
     Values:
@@ -76,4 +79,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 11/25/2018 11:53:08 PM
+LastModified: 11/29/2018 12:00:15 PM

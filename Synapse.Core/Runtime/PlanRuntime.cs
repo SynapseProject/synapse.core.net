@@ -701,6 +701,8 @@ namespace Synapse.Core
             if( securityContext == null )
                 return null;
 
+            securityContext.EnsureInitialized();
+
             bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + securityContext.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
@@ -708,7 +710,7 @@ namespace Synapse.Core
                 return null;
             }
 
-            ISecurityContextRuntime scr = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Provider.Type, "Synapse.Handlers.SecurityContext:Win32Impersonator" );
+            ISecurityContextRuntime scr = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Provider.Type, SecurityContextProviderInfo.DefaultType );
 
             if( scr != null )
             {
