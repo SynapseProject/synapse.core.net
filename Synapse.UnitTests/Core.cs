@@ -680,6 +680,7 @@ namespace Synapse.UnitTests
         [Test]
         [Category( "RunAs" )]
         [TestCase( "RunAs0.yaml" )]
+        [TestCase( "RunAs0x.yaml" )]
         [TestCase( "RunAs1.yaml" )]
         [TestCase( "RunAs2.yaml" )]
         [TestCase( "RunAs3.yaml" )]

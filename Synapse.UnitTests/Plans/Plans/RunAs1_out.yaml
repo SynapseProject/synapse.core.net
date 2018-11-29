@@ -3,10 +3,11 @@ Description: Test change of security context
 Actions:
 - Name: 0
   Handler:
+    StartInfo: {}
     Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
-    StartInfo: {}
   RunAs: &o0
+    Provider: {}
     Parameters:
       Values:
         Domain: LAPTOP-TK2D9TB6
@@ -18,14 +19,15 @@ Actions:
   Actions:
   - Name: 0.1
     Handler:
-      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
       StartInfo:
         ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-          InstanceId: 112
+          InstanceId: 113
           RunAs: *o0
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
     RunAs: &o2
+      Provider: {}
       IsInheritable: true
       BlockInheritance: true
     Parameters: {}
@@ -34,18 +36,18 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
-        InstanceId: 113
+        InstanceId: 114
         ParentExitData: *o1
         RunAs: *o2
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\Steve
-    InstanceId: 113
+    InstanceId: 114
   Result:
     Status: Complete
     ExitData: *o1
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse0
-  InstanceId: 112
+  InstanceId: 113
 RunAs:
   Parameters:
     Values:
@@ -57,4 +59,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 11/25/2018 11:53:08 PM
+LastModified: 11/29/2018 12:00:15 PM

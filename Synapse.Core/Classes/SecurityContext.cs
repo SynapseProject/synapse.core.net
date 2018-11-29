@@ -6,11 +6,9 @@ namespace Synapse.Core
 {
     public class SecurityContextProviderInfo : ComponentInfoBase, ICloneable<SecurityContextProviderInfo>
     {
-        new public SecurityContextProviderStartInfo StartInfo
-        {
-            get { return base.StartInfo as SecurityContextProviderStartInfo; }
-            set { base.StartInfo = value; }
-        }
+        public static readonly string DefaultType = "Synapse.Handlers.SecurityContext:Win32Impersonator";
+
+        public SecurityContextProviderStartInfo StartInfo { get; set; }
 
         public SecurityContextProviderInfo Clone(bool shallow = true)
         {
@@ -19,7 +17,7 @@ namespace Synapse.Core
 
         public static SecurityContextProviderInfo CreateSample()
         {
-            return CreateSample<SecurityContextProviderInfo>( "Synapse.Handlers.SecurityContext:Win32Impersonator" );
+            return CreateSample<SecurityContextProviderInfo>( DefaultType );
         }
     }
 
@@ -29,6 +27,12 @@ namespace Synapse.Core
 
     public class SecurityContext : ICloneable<SecurityContext>, IInheritable
     {
+        public void EnsureInitialized()
+        {
+            if( Provider == null )
+                Provider = new SecurityContextProviderInfo();
+        }
+
         public SecurityContextProviderInfo Provider { get; set; }
         [YamlIgnore]
         public bool HasProvider { get { return Provider != null; } }

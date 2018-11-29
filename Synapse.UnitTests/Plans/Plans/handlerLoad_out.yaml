@@ -3,41 +3,41 @@ Description: Load handlers with full or partial names.  Hierarchy below to enabl
 Actions:
 - Name: FullName-Assembly:FullyQualifiedClassName
   Handler:
+    StartInfo: {}
     Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
-    StartInfo: {}
   Parameters: {}
   Actions:
   - Name: FullyQualifiedClassName
     Handler:
-      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-      Config: {}
       StartInfo:
         ParentExitData: EmptyHandler ExitData default value.
+      Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+      Config: {}
     Parameters: {}
     Actions:
     - Name: SimpleClassName
       Handler:
-        Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-        Config: {}
         StartInfo:
           ParentExitData: EmptyHandler ExitData default value.
+        Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+        Config: {}
       Parameters: {}
       Actions:
       - Name: AbbreviatedClassName
         Handler:
-          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-          Config: {}
           StartInfo:
             ParentExitData: EmptyHandler ExitData default value.
+          Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+          Config: {}
         Parameters: {}
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
           Handler:
-            Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-            Config: {}
             StartInfo:
               ParentExitData: EmptyHandler ExitData default value.
+            Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+            Config: {}
           Parameters: {}
           Actions: []
           Result:
@@ -62,4 +62,4 @@ Actions:
   InstanceId: 10
 StartInfo: {}
 Result: {}
-LastModified: 11/25/2018 11:52:59 PM
+LastModified: 11/29/2018 12:00:05 PM

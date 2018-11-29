@@ -18,6 +18,9 @@ namespace Synapse.Core
             if( Handler == null )
                 Handler = new HandlerInfo();
 
+            if( HasRunAs )
+                RunAs.EnsureInitialized();
+
             if( Result == null )
                 Result = new ExecuteResult();
         }

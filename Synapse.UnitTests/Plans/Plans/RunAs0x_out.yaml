@@ -3,13 +3,14 @@ Description: Test change of security context
 Actions:
 - Name: 0
   Handler:
-    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
-    Config: {}
     StartInfo:
       Parameters: >+
         Password: p41lLqQ+TIYL2qORNHbuoRL3SfVMqKe9WnROi4SXvWYA6kIsTX5HORmiiZ3MON6yAlIIX0TIwDNM2omY8dDbY1Lh6tIN4KvyFnqA54pTxdVAeqyf9hFuBRPZ5DVNjElGlFOrbF0OPQzSR2yA6Vr1iKnwgDFc4HeOhYQoqYyHn28=
 
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+    Config: {}
   RunAs: &o0
+    Provider: {}
     Parameters:
       Values:
         Domain: LAPTOP-TK2D9TB6
@@ -34,12 +35,14 @@ Actions:
     Status: Complete
     ExitData:
       CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
+      InstanceId: 112
       Parameters: >+
         Password: ',^e-2:3mtk3!j-Py'
 
       RunAs: *o0
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse0
+  InstanceId: 112
 Crypto:
   Key:
     Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -49,4 +52,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 11/25/2018 10:43:50 PM
+LastModified: 11/29/2018 12:00:15 PM
