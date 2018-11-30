@@ -24,6 +24,21 @@ namespace Synapse.Core
 
     public class CryptoProvider
     {
+        public void EnsureInitialized()
+        {
+            if( Provider == null )
+                Provider = new CryptoProviderInfo();
+        }
+
+        public CryptoProviderInfo Provider { get; set; }
+        [YamlIgnore]
+        public bool HasProvider { get { return Provider != null; } }
+
+        public ParameterInfo Parameters { get; set; }
+        [YamlIgnore]
+        public bool HasParameters { get { return Parameters != null; } }
+
+
         public CryptoKeyInfo Key { get; set; }
         [YamlIgnore]
         public bool HasKey { get { return Key != null && !string.IsNullOrWhiteSpace( Key?.Uri ); } }

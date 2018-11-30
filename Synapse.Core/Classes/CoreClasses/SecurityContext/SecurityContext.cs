@@ -85,5 +85,27 @@ namespace Synapse.Core
             return handler;
         }
         #endregion
+
+
+        public ISecurityContextRuntime CreateSecurityContextRuntime(CryptoProvider planCrypto)
+        {
+
+            ISecurityContextRuntime scr = Utilities.AssemblyLoader.Load<ISecurityContextRuntime>( Provider.Type, SecurityContextProviderInfo.DefaultType );
+
+            if( scr != null )
+            {
+                Provider.Type = scr.RuntimeType;
+
+                string config = Provider.HasConfig ? Provider.Config.GetSerializedValues( planCrypto ) : null;
+                scr.Initialize( config );
+            }
+            else
+            {
+                throw new Exception( $"Could not load {Provider.Type}." );
+            }
+
+            return scr;
+        }
+
     }
 }
