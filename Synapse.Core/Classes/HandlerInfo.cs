@@ -6,7 +6,7 @@ namespace Synapse.Core
 {
     public class HandlerInfo : ComponentInfoBase, ICloneable<HandlerInfo>
     {
-        //setting the Order causes StartInfo to be serialized after base class values
+        //setting the Order causes StartInfo to be serialized after base class properties
         [YamlMember( Order = 100 )]
         new public HandlerStartInfoData StartInfo
         {

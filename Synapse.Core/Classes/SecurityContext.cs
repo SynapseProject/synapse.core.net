@@ -4,31 +4,6 @@ using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class SecurityContextProviderInfo : ComponentInfoBase, ICloneable<SecurityContextProviderInfo>
-    {
-        public static readonly string DefaultType = "Synapse.Handlers.SecurityContext:Win32Impersonator";
-
-        new public SecurityContextProviderStartInfo StartInfo
-        {
-            get { return base.StartInfo as SecurityContextProviderStartInfo; }
-            set { base.StartInfo = value; }
-        }
-
-        public SecurityContextProviderInfo Clone(bool shallow = true)
-        {
-            return GetClone<SecurityContextProviderInfo>( shallow );
-        }
-
-        public static SecurityContextProviderInfo CreateSample()
-        {
-            return CreateSample<SecurityContextProviderInfo>( DefaultType );
-        }
-    }
-
-    public class SecurityContextProviderStartInfo : StartInfoBase
-    {
-    }
-
     public class SecurityContext : ICloneable<SecurityContext>, IInheritable
     {
         public void EnsureInitialized()
@@ -94,11 +69,6 @@ namespace Synapse.Core
                 sc.Parameters = Parameters.Clone( shallow );
             return sc;
         }
-
-        //public override string ToString()
-        //{
-        //    return Type;
-        //}
 
 
         public static SecurityContext CreateSample()
