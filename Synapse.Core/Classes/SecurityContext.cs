@@ -41,14 +41,6 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasProvider { get { return Provider != null; } }
 
-        //public string Type { get; set; }
-        //[YamlIgnore]
-        //public bool HasType { get { return !string.IsNullOrWhiteSpace( Type ); } }
-
-        //public ParameterInfo Config { get; set; }
-        //[YamlIgnore]
-        //public bool HasConfig { get { return Config != null; } }
-
         public ParameterInfo Parameters { get; set; }
         [YamlIgnore]
         public bool HasParameters { get { return Parameters != null; } }
@@ -74,8 +66,6 @@ namespace Synapse.Core
         {
             if( sourceContext != null && sourceContext.IsInheritable && !this.BlockInheritance )
             {
-                //Type = sourceContext.Type;
-                //Config = sourceContext.Config?.Clone();
                 Provider = sourceContext.Provider?.Clone();
                 Parameters = sourceContext.Parameters?.Clone();
                 IsInheritable = true;
@@ -98,8 +88,6 @@ namespace Synapse.Core
         public SecurityContext Clone(bool shallow = true)
         {
             SecurityContext sc = (SecurityContext)MemberwiseClone();
-            //if( HasConfig )
-            //    sc.Config = Config.Clone( shallow );
             if( HasProvider )
                 sc.Provider = Provider.Clone( shallow );
             if( HasParameters )
@@ -117,8 +105,6 @@ namespace Synapse.Core
         {
             SecurityContext handler = new SecurityContext()
             {
-                //Type = "Synapse.Handlers.SecurityContext:Win32Impersonator",
-                //Config = ParameterInfo.CreateSample(),
                 Provider = SecurityContextProviderInfo.CreateSample(),
                 Parameters = ParameterInfo.CreateSample(),
                 IsInheritable = true,
