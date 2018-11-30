@@ -6,7 +6,11 @@ namespace Synapse.Core
 {
     public class HandlerInfo : ComponentInfoBase, ICloneable<HandlerInfo>
     {
-        public HandlerStartInfoData StartInfo { get; set; }
+        new public HandlerStartInfoData StartInfo
+        {
+            get { return base.StartInfo as HandlerStartInfoData; }
+            set { base.StartInfo = value; }
+        }
 
         public HandlerInfo Clone(bool shallow = true)
         {

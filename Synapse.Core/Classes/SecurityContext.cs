@@ -8,7 +8,11 @@ namespace Synapse.Core
     {
         public static readonly string DefaultType = "Synapse.Handlers.SecurityContext:Win32Impersonator";
 
-        public SecurityContextProviderStartInfo StartInfo { get; set; }
+        new public SecurityContextProviderStartInfo StartInfo
+        {
+            get { return base.StartInfo as SecurityContextProviderStartInfo; }
+            set { base.StartInfo = value; }
+        }
 
         public SecurityContextProviderInfo Clone(bool shallow = true)
         {

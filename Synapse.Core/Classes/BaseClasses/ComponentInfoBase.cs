@@ -14,7 +14,8 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasConfig { get { return Config != null; } }
 
-        IStartInfo IComponentInfo.StartInfo { get; set; }
+        [YamlIgnore]
+        public IStartInfo StartInfo { get; set; }
 
         object ICloneable.Clone() { return GetClone<IComponentInfo>( true ); }
         IComponentInfo ICloneable<IComponentInfo>.Clone(bool shallow) { return GetClone<IComponentInfo>( true ); }
