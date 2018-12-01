@@ -8,8 +8,10 @@ namespace Synapse.Core
     {
         public void EnsureInitialized()
         {
-            if( Provider == null )
-                Provider = new SecurityContextProviderInfo();
+            if( !HasProvider )
+                Provider = new SecurityContextProviderInfo() { Type = SecurityContextProviderInfo.DefaultType };
+            else if( !Provider.HasType )
+                Provider.Type = SecurityContextProviderInfo.DefaultType;
         }
 
         public SecurityContextProviderInfo Provider { get; set; }
@@ -85,27 +87,5 @@ namespace Synapse.Core
             return handler;
         }
         #endregion
-
-
-        public ISecurityContextRuntime CreateSecurityContextRuntime(CryptoProvider planCrypto)
-        {
-
-            ISecurityContextRuntime scr = Utilities.AssemblyLoader.Load<ISecurityContextRuntime>( Provider.Type, SecurityContextProviderInfo.DefaultType );
-
-            if( scr != null )
-            {
-                Provider.Type = scr.RuntimeType;
-
-                string config = Provider.HasConfig ? Provider.Config.GetSerializedValues( planCrypto ) : null;
-                scr.Initialize( config );
-            }
-            else
-            {
-                throw new Exception( $"Could not load {Provider.Type}." );
-            }
-
-            return scr;
-        }
-
     }
 }

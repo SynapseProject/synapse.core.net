@@ -697,35 +697,19 @@ namespace Synapse.Core
 
         ISecurityContextRuntime CreateSecurityContextRuntime(ActionItem a)
         {
-            SecurityContext securityContext = a.RunAs;
-            if( securityContext == null )
+            if( !a.HasRunAs )
                 return null;
 
-            securityContext.EnsureInitialized();
+            a.RunAs.EnsureInitialized();
 
-            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + securityContext.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
+            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + a.RunAs.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
                 _wantsCancel = true;
                 return null;
             }
 
-            ISecurityContextRuntime scr = AssemblyLoader.Load<ISecurityContextRuntime>( securityContext.Provider.Type, SecurityContextProviderInfo.DefaultType );
-
-            if( scr != null )
-            {
-                securityContext.Provider.Type = scr.RuntimeType;
-                scr.ActionName = a.Name;
-
-                string config = securityContext.Provider.HasConfig ? securityContext.Provider.Config.GetSerializedValues( Crypto ) : null;
-                scr.Initialize( config );
-            }
-            else
-            {
-                throw new Exception( $"Could not load {securityContext.Provider.Type}." );
-            }
-
-            return scr;
+            return a.RunAs.Provider.CreateSecurityContextRuntime( Crypto, a.Name ); ;
         }
 
         void SaveExitDataAs(ActionItem a)
