@@ -500,7 +500,7 @@ namespace Synapse.Core.Utilities
 
             if( c.HasCrypto )
             {
-                c.Crypto.LoadRsaKeys();
+                c.Crypto.CreateInstance();
                 c.Crypto.IsEncryptMode = isEncryptMode;
 
                 List<string> errors = new List<string>();

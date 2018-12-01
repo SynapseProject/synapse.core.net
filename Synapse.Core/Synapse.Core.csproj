@@ -60,6 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\BaseClasses\CryptoRuntimeBase.cs" />
+    <Compile Include="Classes\CoreClasses\Crypto\CryptoParameters.cs" />
     <Compile Include="Classes\CoreClasses\Crypto\CryptoProviderInfo.cs" />
     <Compile Include="Classes\CoreClasses\Crypto\CryptoProviderStartInfo.cs" />
     <Compile Include="Classes\Interfaces\IComponentInfo.cs" />
