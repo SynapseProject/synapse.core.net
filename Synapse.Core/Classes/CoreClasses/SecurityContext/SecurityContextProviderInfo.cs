@@ -1,11 +1,8 @@
-﻿
-using System;
-
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class SecurityContextProviderInfo : ComponentInfoBase, ICloneable<SecurityContextProviderInfo>
+    public class SecurityContextProviderInfo : ComponentInfoBase, ICloneable<SecurityContextProviderInfo>, IRuntimeComponentCreator<ISecurityContextRuntime>
     {
         public static readonly string DefaultType = "Synapse.Handlers.SecurityContext:Win32Impersonator";
 
@@ -31,22 +28,7 @@ namespace Synapse.Core
         public ISecurityContextRuntime CreateRuntime(string planDefaultSecurityContextType, CryptoProvider planCrypto, string actionName)
         {
             string defaultType = !string.IsNullOrWhiteSpace( planDefaultSecurityContextType ) ? planDefaultSecurityContextType : DefaultType;
-            ISecurityContextRuntime rt = Utilities.AssemblyLoader.Load<ISecurityContextRuntime>( Type, defaultType );
-
-            if( rt != null )
-            {
-                Type = rt.RuntimeType;
-                rt.ActionName = actionName;
-
-                string config = HasConfig ? Config.GetSerializedValues( planCrypto ) : null;
-                rt.Initialize( config );
-            }
-            else
-            {
-                throw new Exception( $"Could not load {Type}." );
-            }
-
-            return rt;
+            return CreateRuntime<ISecurityContextRuntime>( defaultType, planCrypto, actionName );
         }
     }
 }

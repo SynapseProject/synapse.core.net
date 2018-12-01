@@ -668,31 +668,14 @@ namespace Synapse.Core
 
         IHandlerRuntime CreateHandlerRuntime(ActionItem a)
         {
-            HandlerInfo handler = a.Handler;
-
-            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + handler.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
+            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + a.Handler.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
                 _wantsCancel = true;
                 return new EmptyHandler();
             }
 
-            IHandlerRuntime hr = AssemblyLoader.Load( handler.Type, DefaultHandlerType );
-
-            if( hr != null )
-            {
-                handler.Type = hr.RuntimeType;
-                hr.ActionName = a.Name;
-
-                string config = handler.HasConfig ? handler.Config.GetSerializedValues( Crypto ) : null;
-                hr.Initialize( config );
-            }
-            else
-            {
-                throw new Exception( $"Could not load {handler.Type}." );
-            }
-
-            return hr;
+            return a.Handler.CreateRuntime( DefaultHandlerType, Crypto, a.Name ); ; ;
         }
 
         ISecurityContextRuntime CreateSecurityContextRuntime(ActionItem a)
@@ -702,14 +685,14 @@ namespace Synapse.Core
 
             a.RunAs.EnsureInitialized();
 
-            bool cancel = OnProgress( a.Name, "CreateHandlerRuntime: " + a.RunAs.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
+            bool cancel = OnProgress( a.Name, "CreateSecurityContextRuntime: " + a.RunAs.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {
                 _wantsCancel = true;
                 return null;
             }
 
-            return a.RunAs.Provider.CreateSecurityContextRuntime( Crypto, a.Name ); ;
+            return a.RunAs.Provider.CreateRuntime( DefaultSecurityContextProviderType, Crypto, a.Name );
         }
 
         void SaveExitDataAs(ActionItem a)
