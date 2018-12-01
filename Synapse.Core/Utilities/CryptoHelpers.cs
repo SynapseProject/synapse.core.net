@@ -174,6 +174,12 @@ namespace Synapse.Core.Utilities
             byte[] encrypted = rsa.Encrypt( valueBytes, false );
             return Convert.ToBase64String( encrypted );
         }
+
+        public static string Encrypt(ICryptoRuntime cryptoRuntime, string value)
+        {
+            string parmValue = new ParameterInfo { Values = new CryptoParameters { Value = value } }.GetSerializedValues();
+            return cryptoRuntime.Encrypt( new CryptoStartInfo { Parameters = parmValue } ).ExitData.ToString();
+        }
         #endregion
 
 
@@ -221,6 +227,12 @@ namespace Synapse.Core.Utilities
             byte[] valueBytes = Convert.FromBase64String( value );
             byte[] decrypted = rsa.Decrypt( valueBytes, false );
             return Encoding.ASCII.GetString( decrypted );
+        }
+
+        public static string Decrypt(ICryptoRuntime cryptoRuntime, string value)
+        {
+            string parmValue = new ParameterInfo { Values = new CryptoParameters { Value = value } }.GetSerializedValues();
+            return cryptoRuntime.Decrypt( new CryptoStartInfo { Parameters = parmValue } ).ExitData.ToString();
         }
         #endregion
 

@@ -15,19 +15,21 @@ namespace Synapse.Core
         Replace
     }
 
-    public class CryptoKeyInfo
-    {
-        public string Uri { get; set; }
-        public string ContainerName { get; set; }
-        public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
-    }
+    //public class CryptoKeyInfo
+    //{
+    //    public string Uri { get; set; }
+    //    public string ContainerName { get; set; }
+    //    public CspProviderFlags CspFlags { get; set; } = CspProviderFlags.NoFlags;
+    //}
 
     public class CryptoProvider
     {
         public void EnsureInitialized()
         {
-            if( Provider == null )
-                Provider = new CryptoProviderInfo();
+            if( !HasProvider )
+                Provider = new CryptoProviderInfo() { Type = CryptoProviderInfo.DefaultType };
+            else if( !Provider.HasType )
+                Provider.Type = CryptoProviderInfo.DefaultType;
         }
 
         public CryptoProviderInfo Provider { get; set; }
@@ -39,9 +41,9 @@ namespace Synapse.Core
         public bool HasParameters { get { return Parameters != null; } }
 
 
-        public CryptoKeyInfo Key { get; set; }
-        [YamlIgnore]
-        public bool HasKey { get { return Key != null && !string.IsNullOrWhiteSpace( Key?.Uri ); } }
+        //public CryptoKeyInfo Key { get; set; }
+        //[YamlIgnore]
+        //public bool HasKey { get { return Key != null && !string.IsNullOrWhiteSpace( Key?.Uri ); } }
 
         public List<string> Elements { get; set; } = new List<string>();
         [YamlIgnore]
@@ -52,28 +54,39 @@ namespace Synapse.Core
         public bool HasErrors { get { return Errors != null && Errors?.Count > 0; } }
 
 
-        public void InheritSettingsIfRequired(CryptoProvider provider, CryptoInheritElementAction inheritElementAction = CryptoInheritElementAction.None)
+        CryptoProvider _planCrypto = null;
+        public void InheritSettingsIfRequired(CryptoProvider sourceProvider, CryptoInheritElementAction inheritElementAction = CryptoInheritElementAction.None)
         {
-            if( provider?.Key == null )
-                return;
+            _planCrypto = sourceProvider;
+            sourceProvider?.EnsureInitialized();
+            EnsureInitialized();
 
-            if( Key == null )
-                Key = new CryptoKeyInfo();
+            if( !HasProvider )
+                Provider = sourceProvider?.Provider?.Clone();
+            if( !HasParameters )
+                Parameters = sourceProvider?.Parameters?.Clone();
 
-            if( string.IsNullOrWhiteSpace( Key.Uri ) || string.IsNullOrWhiteSpace( Key.ContainerName ) )
-            {
-                Key.Uri = provider.Key.Uri;
-                Key.ContainerName = provider.Key.ContainerName;
-                Key.CspFlags = provider.Key.CspFlags;
-            }
+
+            //if( provider?.Key == null )
+            //    return;
+
+            //if( Key == null )
+            //    Key = new CryptoKeyInfo();
+
+            //if( string.IsNullOrWhiteSpace( Key.Uri ) || string.IsNullOrWhiteSpace( Key.ContainerName ) )
+            //{
+            //    Key.Uri = provider.Key.Uri;
+            //    Key.ContainerName = provider.Key.ContainerName;
+            //    Key.CspFlags = provider.Key.CspFlags;
+            //}
 
             if( inheritElementAction != CryptoInheritElementAction.None )
             {
                 if( inheritElementAction == CryptoInheritElementAction.Replace || Elements == null )
                     Elements = new List<string>();
 
-                if( provider.Elements != null && provider.Elements.Count > 0 )
-                    foreach( string el in provider.Elements )
+                if( sourceProvider.Elements != null && sourceProvider.Elements.Count > 0 )
+                    foreach( string el in sourceProvider.Elements )
                         Elements.Add( el );
             }
         }
@@ -81,13 +94,22 @@ namespace Synapse.Core
 
 
         #region helper methods
-        [YamlIgnore]
-        public RSACryptoServiceProvider Rsa { get; private set; }
+        //[YamlIgnore]
+        //public RSACryptoServiceProvider Rsa { get; private set; }
 
-        public void LoadRsaKeys()
+        //public void LoadRsaKeys()
+        //{
+        //    Rsa = CryptoHelpers.LoadRsaKeys( Key.ContainerName, Key.Uri, Key.CspFlags );
+        //}
+
+        public void CreateInstance()
         {
-            Rsa = CryptoHelpers.LoadRsaKeys( Key.ContainerName, Key.Uri, Key.CspFlags );
+            EnsureInitialized();
+            CryptoInstance = Provider.CreateRuntime( _planCrypto?.Provider.Type, _planCrypto, null );
         }
+
+        [YamlIgnore]
+        public ICryptoRuntime CryptoInstance { get; set; }
 
         [YamlIgnore]
         internal bool IsEncryptMode { get; set; } = true;
@@ -112,20 +134,20 @@ namespace Synapse.Core
         internal string HandleCrypto(string s)
         {
             if( IsEncryptMode )
-                return CryptoHelpers.Encrypt( Rsa, s );
+                return CryptoHelpers.Encrypt( CryptoInstance, s );
             else
-                return CryptoHelpers.Decrypt( Rsa, s );
+                return CryptoHelpers.Decrypt( CryptoInstance, s );
         }
 
 
         public string Encrypt(string s)
         {
-            return CryptoHelpers.Encrypt( Rsa, s );
+            return CryptoHelpers.Encrypt( CryptoInstance, s );
         }
 
         public string Decrypt(string s)
         {
-            return CryptoHelpers.Decrypt( Rsa, s );
+            return CryptoHelpers.Decrypt( CryptoInstance, s );
         }
 
         public bool TryEncryptOrValue(string value, out string encryptedValue)
@@ -134,7 +156,7 @@ namespace Synapse.Core
             encryptedValue = value;
             try
             {
-                encryptedValue = CryptoHelpers.Encrypt( Rsa, value );
+                encryptedValue = CryptoHelpers.Encrypt( CryptoInstance, value );
                 ok = true;
             }
             catch { }
@@ -148,7 +170,7 @@ namespace Synapse.Core
             decryptedValue = value;
             try
             {
-                decryptedValue = CryptoHelpers.Decrypt( Rsa, value );
+                decryptedValue = CryptoHelpers.Decrypt( CryptoInstance, value );
                 ok = true;
             }
             catch { }
@@ -162,12 +184,12 @@ namespace Synapse.Core
         {
             CryptoProvider cp = new CryptoProvider()
             {
-                Key = new CryptoKeyInfo()
-                {
-                    Uri = "Filepath to RSA key file; http support in future.",
-                    ContainerName = "RSA=supported container name",
-                    CspFlags = CspProviderFlags.NoFlags
-                }
+                //Key = new CryptoKeyInfo()
+                //{
+                //    Uri = "Filepath to RSA key file; http support in future.",
+                //    ContainerName = "RSA=supported container name",
+                //    CspFlags = CspProviderFlags.NoFlags
+                //}
             };
             cp.Errors = null;
             if( addElements )
