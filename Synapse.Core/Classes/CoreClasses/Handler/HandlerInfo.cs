@@ -1,10 +1,8 @@
-﻿using System;
-
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Synapse.Core
 {
-    public class HandlerInfo : ComponentInfoBase, ICloneable<HandlerInfo>
+    public class HandlerInfo : ComponentInfoBase, ICloneable<HandlerInfo>, IRuntimeComponentCreator<IHandlerRuntime>
     {
         public static readonly string DefaultType = "Synapse.Handlers.CommandLine:CommandHandler";
 
@@ -30,22 +28,7 @@ namespace Synapse.Core
         public IHandlerRuntime CreateRuntime(string planDefaultHandlerType, CryptoProvider planCrypto, string actionName)
         {
             string defaultType = !string.IsNullOrWhiteSpace( planDefaultHandlerType ) ? planDefaultHandlerType : DefaultType;
-            IHandlerRuntime rt = Utilities.AssemblyLoader.Load( Type, defaultType );
-
-            if( rt != null )
-            {
-                Type = rt.RuntimeType;
-                rt.ActionName = actionName;
-
-                string config = HasConfig ? Config.GetSerializedValues( planCrypto ) : null;
-                rt.Initialize( config );
-            }
-            else
-            {
-                throw new Exception( $"Could not load {Type}." );
-            }
-
-            return rt;
+            return CreateRuntime<IHandlerRuntime>( defaultType, planCrypto, actionName );
         }
     }
 }

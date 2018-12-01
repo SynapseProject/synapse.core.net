@@ -14,4 +14,9 @@ namespace Synapse.Core
 
         event EventHandler<LogMessageEventArgs> LogMessage;
     }
+
+    public interface IRuntimeComponentCreator<T> where T : class, IRuntimeComponent<T>
+    {
+        T CreateRuntime(string planDefaultType, CryptoProvider planCrypto, string actionName);
+    }
 }
