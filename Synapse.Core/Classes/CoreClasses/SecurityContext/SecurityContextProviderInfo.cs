@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -23,6 +25,28 @@ namespace Synapse.Core
         public static SecurityContextProviderInfo CreateSample()
         {
             return CreateSample<SecurityContextProviderInfo>( DefaultType );
+        }
+
+
+        public ISecurityContextRuntime CreateRuntime(string planDefaultSecurityContextType, CryptoProvider planCrypto, string actionName)
+        {
+            string defaultType = !string.IsNullOrWhiteSpace( planDefaultSecurityContextType ) ? planDefaultSecurityContextType : DefaultType;
+            ISecurityContextRuntime rt = Utilities.AssemblyLoader.Load<ISecurityContextRuntime>( Type, defaultType );
+
+            if( rt != null )
+            {
+                Type = rt.RuntimeType;
+                rt.ActionName = actionName;
+
+                string config = HasConfig ? Config.GetSerializedValues( planCrypto ) : null;
+                rt.Initialize( config );
+            }
+            else
+            {
+                throw new Exception( $"Could not load {Type}." );
+            }
+
+            return rt;
         }
     }
 }

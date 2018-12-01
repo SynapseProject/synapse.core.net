@@ -39,6 +39,28 @@ namespace Synapse.Core
         }
 
 
+        protected T CreateRuntime<T>(string defaultType, CryptoProvider planCrypto, string actionName) where T : class, IRuntimeComponent<T>
+        {
+            T rt = Utilities.AssemblyLoader.Load<T>( Type, defaultType );
+
+            if( rt != null )
+            {
+                Type = rt.RuntimeType;
+                rt.ActionName = actionName;
+
+                string config = HasConfig ? Config.GetSerializedValues( planCrypto ) : null;
+                rt.Initialize( config );
+            }
+            else
+            {
+                throw new Exception( $"Could not load {Type}." );
+            }
+
+            return rt;
+        }
+
+
+
         public override string ToString()
         {
             return Type;
