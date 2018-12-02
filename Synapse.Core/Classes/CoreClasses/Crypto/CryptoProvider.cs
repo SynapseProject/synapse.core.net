@@ -59,7 +59,7 @@ namespace Synapse.Core
         {
             _planCrypto = sourceProvider;
             sourceProvider?.EnsureInitialized();
-            EnsureInitialized();
+            // --> EnsureInitialized();
 
             if( !HasProvider )
                 Provider = sourceProvider?.Provider?.Clone();
