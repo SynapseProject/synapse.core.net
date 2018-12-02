@@ -45,7 +45,7 @@ namespace Synapse.Core
 
             if( rt != null )
             {
-                Type = rt.RuntimeType;
+                Type = rt.RuntimeType;  //todo: <-- bug!, runtimeType pulled on inheritance and fouls invocation
                 rt.ActionName = actionName;
 
                 string config = HasConfig ? Config.GetSerializedValues( planCrypto ) : null;

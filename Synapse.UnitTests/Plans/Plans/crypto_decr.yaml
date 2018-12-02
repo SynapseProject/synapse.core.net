@@ -44,9 +44,10 @@ Actions:
       Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
-      Key:
-        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        ContainerName: foo
+      Provider:
+        Config:
+          Values:
+            Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
       Elements:
       - Type
       - Values:Arguments:ArgString
@@ -55,10 +56,10 @@ Actions:
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
       Errors:
       - 'Element: [Type] failed with error: [The given key was not present in the dictionary.].'
-      - 'Element: [Values:Arguments:ArgString] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
-      - 'Element: [Values:Arguments:Expressions[0]:Encoding] failed with error: [Invalid length for a Base-64 char array or string.].'
-      - 'Element: [Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1] failed with error: [Invalid length for a Base-64 char array or string.].'
-      - 'Element: [Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3] failed with error: [Invalid length for a Base-64 char array or string.].'
+      - 'Element: [Values:Arguments:ArgString] failed with error: [Object reference not set to an instance of an object.].'
+      - 'Element: [Values:Arguments:Expressions[0]:Encoding] failed with error: [Object reference not set to an instance of an object.].'
+      - 'Element: [Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1] failed with error: [Object reference not set to an instance of an object.].'
+      - 'Element: [Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3] failed with error: [Object reference not set to an instance of an object.].'
   Actions: []
 - Name: Xml
   Handler:
@@ -83,23 +84,26 @@ Actions:
 
         </CXmlDoc>
       Crypto:
-        Key:
-          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          ContainerName: foo
+        Provider:
+          Config:
+            Values:
+              Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
         Elements:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
         Errors:
-        - 'Element: [/CXmlDoc[1]/CNode0[1]] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
-        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
-        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_2[1]] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+        - 'Element: [/CXmlDoc[1]/CNode0[1]] failed with error: [Object reference not set to an instance of an object.].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1] failed with error: [Object reference not set to an instance of an object.].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_2[1]] failed with error: [Object reference not set to an instance of an object.].'
   Actions: []
 Crypto:
-  Key:
-    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    ContainerName: foo
+  Provider:
+    Type: Synapse.Handlers.Crypto:RsaProvider
+    Config:
+      Values:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 11/29/2018 12:00:05 PM
+LastModified: 12/2/2018 2:39:08 PM

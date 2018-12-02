@@ -1,0 +1,63 @@
+Name: Child
+Handler:
+  Config: {}
+  StartInfo:
+    Parameters: >+
+      ExitData:
+
+      - 1
+
+      - 2
+
+      - 3
+
+      - 4
+
+      SleepMilliseconds: 2001
+
+      ReturnStatus: Tombstoned
+
+    ParentExitData:
+      Something:
+        Wonderful:
+          Stars: 2001
+      Foo:
+        Bar: Tombstoned
+      ListMember:
+      - 1
+      - 2
+      - 3
+Parameters:
+  Values:
+    ExitData:
+    - 1
+    - 2
+    - 3
+    - 4
+    SleepMilliseconds: 2001
+    ReturnStatus: Tombstoned
+  Dynamic:
+  - Options: []
+    DataType: String
+    RestrictToOptions: true
+    Source: ed
+    Target: ExitData
+    Parse: true
+  ParentExitData:
+  - CopyToValues:
+      Source: Something:Wonderful:Stars
+      Target: SleepMilliseconds
+  - CopyToValues:
+      Source: Foo:Bar
+      Target: ReturnStatus
+Actions: []
+Result:
+  Status: Tombstoned
+  ExitData:
+  - 1
+  - 2
+  - 3
+  - 4
+  BranchStatus: Tombstoned
+  SecurityContext: LAPTOP-TK2D9TB6\Steve
+InstanceId: 1

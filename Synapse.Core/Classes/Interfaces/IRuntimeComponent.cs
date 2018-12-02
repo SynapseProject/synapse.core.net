@@ -2,7 +2,7 @@
 
 namespace Synapse.Core
 {
-    public interface IRuntimeComponent<T>
+    public interface IRuntimeComponent
     {
         string ActionName { get; set; }
         string RuntimeType { get; set; }
@@ -10,9 +10,12 @@ namespace Synapse.Core
         object GetConfigInstance();
         object GetParametersInstance();
 
-        T Initialize(string config);
-
         event EventHandler<LogMessageEventArgs> LogMessage;
+    }
+
+    public interface IRuntimeComponent<T> : IRuntimeComponent
+    {
+        T Initialize(string config);
     }
 
     public interface IRuntimeComponentCreator<T> where T : class, IRuntimeComponent<T>
