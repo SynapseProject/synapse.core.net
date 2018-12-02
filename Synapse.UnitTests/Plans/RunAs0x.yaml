@@ -2,8 +2,10 @@ Name: RunAs0x
 Description: Test change of security context
 DefaultHandlerType: Synapse.Core:EchoHandler
 Crypto:
-  Key:
-    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+  Provider:
+    Config:
+      Values:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
 Actions:
 - Name: 0
   Parameters:

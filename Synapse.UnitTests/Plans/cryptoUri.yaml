@@ -2,8 +2,10 @@ Name: crypto
 Description: Test RemoteCommand Handler
 IsActive: true
 Crypto:
-  Key:
-    Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+  Provider:
+    Config:
+      Values:
+        Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
 Actions:
 - Name: Hostname
   Handler:

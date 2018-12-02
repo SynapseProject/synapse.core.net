@@ -13,8 +13,10 @@ Actions:
           UserName: synapse1
           Password: I8fu58fzs220PQdjToRMikTRaB1GsAeVMklLKqLmIXw42eMw9wjIEppJHDu1GI8bDNXVM+qKKIsaZgwdLbSO5oGU85VBLSVBrudeu2DNyUMjPIO3soxlmFpl1WH1jtk04G5EeDzNI/sSd7TYn2H0QSMyoBVkx5R6UAxQ+Pur8/c=
         Crypto:
-          Key:
-            Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+          Provider:
+            Config:
+              Values:
+                Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
           Elements:
           - Values:Password
       IsInheritable: true
@@ -50,9 +52,7 @@ RunAs:
   IsInheritable: true
   BlockInheritance: true
 Crypto:
-  Key:
-    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-  Elements: []
-  Errors: []
-StartInfo: {}
-LastModified: 9/29/2017 5:35:10 AM
+  Provider:
+    Config:
+      Values:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml

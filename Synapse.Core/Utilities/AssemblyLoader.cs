@@ -124,6 +124,8 @@ namespace Synapse.Core.Utilities
 
                 Type t = hrAsm.GetType( typeInfo[1], true );
                 obj = Activator.CreateInstance( t ) as T;
+                if( obj is IRuntimeComponent )
+                    ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
             }
             else
             {
@@ -146,6 +148,8 @@ namespace Synapse.Core.Utilities
 
                             Type t = hrAsm.GetType( type, true );
                             obj = Activator.CreateInstance( t ) as T;
+                            if( obj is IRuntimeComponent )
+                                ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
                         }
                         catch
                         {
@@ -161,6 +165,8 @@ namespace Synapse.Core.Utilities
                                     if( t.GetInterfaces().Contains( typeof( T ) ) && t.Name.ToLower().Contains( tl ) )
                                     {
                                         obj = Activator.CreateInstance( t ) as T;
+                                        if( obj is IRuntimeComponent )
+                                            ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
                                         break;
                                     }
                             }
