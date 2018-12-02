@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: gcWlTpsJTl3yQR5C+YUkP0IWLokha/FaahZ7WkjTD/omqGu++aHNAap8GTz4mq3mpjop55Ib0aVeKiK+IuLDWBf0XJOAOCfuJrvNOBEuoUtxI9IaxtyaQs1UpIAnqEo9ut3lueZ5yGN3Sr728pX6bLxLd1SFHGnZZcKNGPNJNLc=
+        ArgString: GGB3mS30RoEjQOxKpaAncpc/9Ef4bLPnH8NKPXZyIML7xUIJCnuOFe1CBMx2EZ2HkQeMQobncwok5tHR1wtwmSWEvfHNmIZaTX47xuYoLUqOlQ5jZoHoSkIG1vrVRftM/byUBlluKOywNJLK0nEkLUgoDwF2vVHnuIcCZSGEwio=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: pmC4YeykM+hCgMuiVaEUAE0ZhdhJcXBGeT5P9vYUzHM9JNrfUaaQy3f6uhb3IMy/kGLSxTABBiHhqxDFJ15fPl9IXV+4m3vCo3GiCBbis7bE/yj3mMe2ZaHf7q5hZ3TK4eekPZa0h47iRsn1Ow+VQO7ycm1LwlP7UVjVt+loBkg=
+          Encoding: P+Uc2UFb4fejB7QCzdBaP18LvQVOFj29BOYP1AQ30JfVydp4NeZpNJOO4hZYlkv/ztmjugtYOdtGWAnH2qhs3TMvp/HVWSc9aCsk8laTcF4IC5mgwJM5xIRL2ofD3EPkjIbOPILOYrhKKqGZtXoPnrKfpT0KqdLtqjIiNyahBuM=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: QmcISM0lWwTlJsREHX8mAGJYdl0jkgsfGCE8duhu6tnGbOZW0Bn4f7a2sRsTLlQ7bsoRpU5Dwk0ZhJ0NMLcoYHE8WtUV5pZtZTaAjmT7cCF3sFz5pWyRgyPnldfvDnFMXrVmyuIGuOQUbgd6rfX+ThCL6v3dyR69hHVrINWiEX8=
+              - v1: Z0D+tZLIiwvgwFI9UuW4drn1l6B56m8N424keGa4ilKLPsXGwhJjoQFHVVDqa1gG9gznl8xZSZ6QymyZjzvcsS1ZOlVVPl8bwQHNACe/wRtmTJ4RaQuEIM+VguhCxrAB8hzUgQEel6LY8XfUxFA7ohOSzcbAmJazaRtvRcxGW9c=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: lQyVP9915xuqWtAu4YLaEyn3zbYbK86wAmEyPd69LnOQ3s5yHKmKhsSRCBGyLrcToBQBZlmG+2nhfV1EBWGGkQXZYs77spqifINcMgIyr+v27wvr8cZblqO7IZ/geF8LYTyv1Y5srobFJbztPR5pQVd0cPj5g1Vg5MSiVPYDTIw=
+              - v3: UunmMBairZmABctu/n+i2ELavr9zJiyNnzS2wR5uYvBn4LyyuC/ApxrFxQMFRxI0TGnDDmX8CZWMlzMQ6ZyS2o0kloc8Lr2ysS1d2QYNpNJNWJNMjxaOX+LPxgGeJULXYzKcuK4FVEEyLYb0KngTPeR1C2jEEdec08czcdJC6+M=
           Encoding: Base64
     Dynamic:
     - Options: []
@@ -44,9 +44,10 @@ Actions:
       Source: jsonPayload
       Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
-      Key:
-        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-        ContainerName: foo
+      Provider:
+        Config:
+          Values:
+            Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
       Elements:
       - Type
       - Values:Arguments:ArgString
@@ -65,33 +66,36 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>emoj3jvT013oE4n+9FFu2WplXskEuel0UlcPyZFDwYz59unsg3MutXJ+E+ID6yjbV8nuBTZXfhamJMuJs0v02RZsc7HJj22oG4TaUhPK3G9Swvq/2PwLJhDQ8V0HRM0j67MXjaQZbZOKrf34hlQyDYV/SoXwMlIEMnyv3KWqwR4=</CNode0>
+          <CNode0>r/r01lPoSIWawk0zjvYTPBhUW0MWg3CUmOu1ij5S+ql+UX+9OeOTblteBxsqTa3J0JyGeXPZMyF8X26KsHiY1f153TGNE/AjbdoELzpp+L22obbKT+AV7+rjNu68NO/QE40TzFUZun0OCbzGfj5Q//KCCE/nzDqS50fmJengOCs=</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="ckfuLfMImqhcoCSettWa4sSYpt3EDNZ5aT8K3Zxgl0FUjbRsYXQ/LRHk9hlM80haHCmEKeZ16Fc/lXcJvVq/e8+NJdK13cnG9+arxOvE5UY0NP7R92UQe6qXcPJti0yprvurqc1mX8XsHScxYOxBG5z42ZiXt5325khsGPDJH/I=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="pnfz8rNcr4HqowhJX+er75FqZl3C8g/kGBJPvekHj514S6KBCTh1TBIsnXd0PDGxJZGeOnuFmzAlNo/wHXGTx9rDtiBsSgVNDEzDFr/L31ANEn0i9T0QRPMLzYVLZk9FLgjeIFk8hBkTdu+bX6U4lTi33QAUX50JmbLOy7UlARA=">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>xM8Bw21GV/3bvOxh038VYRBUthggMNosBQsUJnWgAsE0FCykczwNGXFfdeMxwcbjddrvbR9W947d0RV+xwJlZDD7bnZsMCcpIcV0fGoRVWlOD7KWEj39TArpbDQK+z03NXQrIKzxqn8E4Mei9TINAlobcFhabdvCBgrpM5GRoeo=</CNode3_2>
+            <CNode3_2>FO3nRrce2lQOPfLae2fytJmGW9OWa4gI9yGvO80mIp9owzS/2dBVuDp/NH8wClWSk0v07/jeJJh3fh4xKFPONyhNBoMBFqp3cl1oPw0GIdFvh5OUp8iKgLT6CrPtDzeyWCnDyoNll3wt5y3+2njkGmrjUHHDnzvtzqK2fk3MmTE=</CNode3_2>
 
           </CNode3>
 
         </CXmlDoc>
       Crypto:
-        Key:
-          Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-          ContainerName: foo
+        Provider:
+          Config:
+            Values:
+              Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
         Elements:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
   Actions: []
 Crypto:
-  Key:
-    Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
-    ContainerName: foo
+  Provider:
+    Type: Synapse.Handlers.Crypto:RsaProvider
+    Config:
+      Values:
+        Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 11/29/2018 12:00:05 PM
+LastModified: 12/1/2018 6:28:37 PM
