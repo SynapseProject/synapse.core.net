@@ -12,6 +12,7 @@ namespace Synapse.Core.Utilities
     {
         static HashSet<string> _knownFiles = null;
 
+        [Obsolete( "Use T Load<T>", true )]
         public static IHandlerRuntime Load(string handlerType, string defaultHandler)
         {
             IHandlerRuntime hr = null;
@@ -102,19 +103,29 @@ namespace Synapse.Core.Utilities
 
             if( _knownFiles == null )
             {
-                _knownFiles = new HashSet<string>();
-                _knownFiles.Add( "log4net" );
-                _knownFiles.Add( "microsoft.visualstudio.qualitytools.unittestframework" );
-                _knownFiles.Add( "nunit.framework" );
-                _knownFiles.Add( "sqlite.interop" );
-                _knownFiles.Add( "synapse.service.common" );
-                _knownFiles.Add( "synapse.unittests" );
-                _knownFiles.Add( "system.data.sqlite" );
-                _knownFiles.Add( "yamldotnet" );
+                _knownFiles = new HashSet<string>
+                {
+                    "log4net",
+                    "microsoft.visualstudio.qualitytools.unittestframework",
+                    "nunit.framework",
+                    "sqlite.interop",
+                    "synapse.service.common",
+                    "synapse.unittests",
+                    "system.data.sqlite",
+                    "yamldotnet"
+                };
             }
 
             if( string.IsNullOrWhiteSpace( type ) )
                 type = defaultType;
+
+            //todo: this is an awful way to test for AssemblyQualifiedName
+            bool isAssemblyQualifiedName = type.Contains( ", PublicKeyToken=" );
+
+            if( !isAssemblyQualifiedName && typeof( T ) == typeof( IHandlerRuntime ) && !type.ToLower().EndsWith( "handler" ) )
+                type = $"{type}Handler";
+            else if( !isAssemblyQualifiedName && typeof( T ) == typeof( IRuntimeProvider ) && !type.ToLower().EndsWith( "provider" ) )
+                type = $"{type}Provider";
 
             if( type.Contains( ":" ) )
             {
@@ -127,7 +138,7 @@ namespace Synapse.Core.Utilities
                 if( obj is IRuntimeComponent )
                     ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
             }
-            else if( type.Contains( ", PublicKeyToken=" ) )
+            else if( isAssemblyQualifiedName )
             {
                 Type t = Type.GetType( type );
                 obj = Activator.CreateInstance( t ) as T;

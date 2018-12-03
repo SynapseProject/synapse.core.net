@@ -71,6 +71,7 @@
     <Compile Include="Classes\CoreClasses\Crypto\CryptoStartInfo.cs" />
     <Compile Include="Classes\Interfaces\ICryptoRuntime.cs" />
     <Compile Include="Classes\Interfaces\IRuntimeComponent.cs" />
+    <Compile Include="Classes\Interfaces\IRuntimeProvider.cs" />
     <Compile Include="Classes\Interfaces\ISecurityContextRuntime.cs" />
     <Compile Include="Classes\Interfaces\IReplacementValue.cs" />
     <Compile Include="Classes\CoreClasses\SecurityContext\SecurityContextStartInfo.cs" />

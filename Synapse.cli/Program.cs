@@ -171,7 +171,7 @@ namespace Synapse.cli
                 IHandlerRuntime hr = null;
                 try
                 {
-                    hr = AssemblyLoader.Load( handlerType, handlerType );
+                    hr = AssemblyLoader.Load<IHandlerRuntime>( handlerType, handlerType );
                 }
                 catch { }
 
