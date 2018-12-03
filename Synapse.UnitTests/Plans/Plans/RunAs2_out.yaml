@@ -3,11 +3,12 @@ Description: Echo Test
 Actions:
 - Name: Action001
   Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   RunAs: &o0
     Provider:
-      Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+      Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Parameters:
       Values: &o1
         Domain: LAPTOP-TK2D9TB6
@@ -19,15 +20,16 @@ Actions:
   Actions:
   - Name: Action002
     Handler:
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: &o2
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-          InstanceId: 7
+          InstanceId: 114
           RunAs: *o0
     RunAs: &o3
       Provider:
-        Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+        Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
       Parameters:
         Values: *o1
       IsInheritable: true
@@ -38,18 +40,18 @@ Actions:
       Status: Complete
       ExitData:
         CurrentPrincipal: LAPTOP-TK2D9TB6\synapse1
-        InstanceId: 8
+        InstanceId: 115
         ParentExitData: *o2
         RunAs: *o3
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse1
-    InstanceId: 8
+    InstanceId: 115
   Result:
     Status: Complete
     ExitData: *o2
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse1
-  InstanceId: 7
+  InstanceId: 114
 RunAs:
   Parameters:
     Values: *o1
@@ -58,4 +60,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 12/2/2018 3:49:15 PM
+LastModified: 12/3/2018 1:21:10 AM

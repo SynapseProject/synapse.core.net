@@ -3,11 +3,12 @@ Description: Echo Test
 Actions:
 - Name: Action001
   Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   RunAs: &o0
     Provider:
-      Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+      Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Parameters:
       Values:
         Domain: LAPTOP-TK2D9TB6
@@ -19,13 +20,14 @@ Actions:
   Actions:
   - Name: Action002
     Handler:
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-          InstanceId: 14
+          InstanceId: 121
           RunAs: *o0
-    RunAs:
+    RunAs: &o2
       Provider:
         Type: Synapse.Handlers.SecurityContext:Win32Impersonator
       BlockInheritance: true
@@ -33,39 +35,42 @@ Actions:
     Actions:
     - Name: Action003
       Handler:
+        Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
         StartInfo:
-          ParentExitData: >-
-            Value cannot be null.
-
-            Parameter name: value
-      RunAs:
+          ParentExitData: &o3
+            CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+            InstanceId: 122
+            ParentExitData: *o1
+            RunAs: *o2
+      RunAs: &o4
         Provider:
           Type: Synapse.Handlers.SecurityContext:Win32Impersonator
         IsInheritable: true
       Parameters: {}
       Actions: []
       Result:
-        Status: Failed
-        ExitData: >-
-          Value cannot be null.
-
-          Parameter name: value
-      InstanceId: 16
+        Status: Complete
+        ExitData:
+          CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+          InstanceId: 123
+          ParentExitData: *o3
+          RunAs: *o4
+        BranchStatus: Complete
+        SecurityContext: LAPTOP-TK2D9TB6\Steve
+      InstanceId: 123
     Result:
-      Status: Failed
-      ExitData: >-
-        Value cannot be null.
-
-        Parameter name: value
-      BranchStatus: Failed
-    InstanceId: 15
+      Status: Complete
+      ExitData: *o3
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\Steve
+    InstanceId: 122
   Result:
     Status: Complete
     ExitData: *o1
-    BranchStatus: Failed
+    BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse2
-  InstanceId: 14
+  InstanceId: 121
 RunAs:
   Parameters:
     Values:
@@ -75,6 +80,6 @@ RunAs:
   IsInheritable: true
 StartInfo: {}
 Result:
-  Status: Failed
-  BranchStatus: Failed
-LastModified: 12/2/2018 3:49:15 PM
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 12/3/2018 1:21:10 AM

@@ -3,11 +3,12 @@ Description: Test change of security context
 Actions:
 - Name: 0
   Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   RunAs: &o0
     Provider:
-      Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+      Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Parameters:
       Values:
         Domain: LAPTOP-TK2D9TB6
@@ -19,13 +20,14 @@ Actions:
   Actions:
   - Name: 0.1
     Handler:
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: &o1
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse0
-          InstanceId: 5
+          InstanceId: 112
           RunAs: *o0
-    RunAs:
+    RunAs: &o2
       Provider:
         Type: Synapse.Handlers.SecurityContext:Win32Impersonator
       IsInheritable: true
@@ -33,18 +35,21 @@ Actions:
     Parameters: {}
     Actions: []
     Result:
-      Status: Failed
-      ExitData: >-
-        Value cannot be null.
-
-        Parameter name: value
-    InstanceId: 6
+      Status: Complete
+      ExitData:
+        CurrentPrincipal: LAPTOP-TK2D9TB6\Steve
+        InstanceId: 113
+        ParentExitData: *o1
+        RunAs: *o2
+      BranchStatus: Complete
+      SecurityContext: LAPTOP-TK2D9TB6\Steve
+    InstanceId: 113
   Result:
     Status: Complete
     ExitData: *o1
-    BranchStatus: Failed
+    BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse0
-  InstanceId: 5
+  InstanceId: 112
 RunAs:
   Parameters:
     Values:
@@ -54,6 +59,6 @@ RunAs:
   IsInheritable: true
 StartInfo: {}
 Result:
-  Status: Failed
-  BranchStatus: Failed
-LastModified: 12/2/2018 3:49:15 PM
+  Status: Complete
+  BranchStatus: Complete
+LastModified: 12/3/2018 1:21:10 AM

@@ -615,9 +615,9 @@ namespace Synapse.UnitTests
             try
             {
                 Plan crypto = plan.EncryptElements();
-                Assert.Fail( "Encryption impropery succeeded." );
+                Assert.Fail( "Encryption improperly succeeded." );
             }
-            catch(Exception ex)
+            catch( Exception ex )
             {
                 Assert.IsInstanceOf( typeof( FileNotFoundException ), ex );
                 Assert.AreEqual( @"Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].", ex.Message );

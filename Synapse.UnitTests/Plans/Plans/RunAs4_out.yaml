@@ -3,11 +3,12 @@ Description: Echo Test
 Actions:
 - Name: Action001
   Handler:
+    Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
     Config: {}
     StartInfo: {}
   RunAs: &o0
     Provider:
-      Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+      Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     Parameters:
       Values: &o1
         Domain: LAPTOP-TK2D9TB6
@@ -19,15 +20,16 @@ Actions:
   Actions:
   - Name: Action002
     Handler:
+      Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
       Config: {}
       StartInfo:
         ParentExitData: &o2
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-          InstanceId: 11
+          InstanceId: 118
           RunAs: *o0
     RunAs: &o3
       Provider:
-        Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+        Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
       Parameters:
         Values: *o1
       IsInheritable: true
@@ -36,16 +38,17 @@ Actions:
     Actions:
     - Name: Action003
       Handler:
+        Type: EchoHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
         Config: {}
         StartInfo:
           ParentExitData: &o4
             CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-            InstanceId: 12
+            InstanceId: 119
             ParentExitData: *o2
             RunAs: *o3
       RunAs: &o5
         Provider:
-          Type: Synapse.Handlers.SecurityContext:Win32Impersonator
+          Type: Win32Impersonator, Synapse.Handlers.SecurityContext, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Parameters:
           Values: *o1
         IsInheritable: true
@@ -56,24 +59,24 @@ Actions:
         Status: Complete
         ExitData:
           CurrentPrincipal: LAPTOP-TK2D9TB6\synapse2
-          InstanceId: 13
+          InstanceId: 120
           ParentExitData: *o4
           RunAs: *o5
         BranchStatus: Complete
         SecurityContext: LAPTOP-TK2D9TB6\synapse2
-      InstanceId: 13
+      InstanceId: 120
     Result:
       Status: Complete
       ExitData: *o4
       BranchStatus: Complete
       SecurityContext: LAPTOP-TK2D9TB6\synapse2
-    InstanceId: 12
+    InstanceId: 119
   Result:
     Status: Complete
     ExitData: *o2
     BranchStatus: Complete
     SecurityContext: LAPTOP-TK2D9TB6\synapse2
-  InstanceId: 11
+  InstanceId: 118
 RunAs:
   Parameters:
     Values:
@@ -85,4 +88,4 @@ StartInfo: {}
 Result:
   Status: Complete
   BranchStatus: Complete
-LastModified: 12/2/2018 3:49:15 PM
+LastModified: 12/3/2018 1:21:10 AM

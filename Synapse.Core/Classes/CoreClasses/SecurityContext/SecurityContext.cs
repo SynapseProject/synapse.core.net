@@ -23,7 +23,7 @@ namespace Synapse.Core
         public bool HasParameters { get { return Parameters != null; } }
 
         [YamlIgnore]
-        public bool IsValid { get { return (HasProvider && (Provider.HasType || Provider.HasConfig)) || HasParameters; } }
+        public bool IsValid { get { return (HasProvider && ((Provider.HasType && Provider.HasConfig) || (Provider.HasType && HasParameters))); } }
 
         #region IInheritable
         /// <summary>
