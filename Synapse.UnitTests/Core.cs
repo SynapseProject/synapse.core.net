@@ -612,16 +612,11 @@ namespace Synapse.UnitTests
             Plan plan = Plan.FromYaml( $"{__plansRoot}\\{planName}.yaml" );
             object e = YamlHelpers.SelectElements( plan, parts );
 
-            try
-            {
-                Plan crypto = plan.EncryptElements();
-                Assert.Fail( "Encryption improperly succeeded." );
-            }
-            catch( Exception ex )
-            {
-                Assert.IsInstanceOf( typeof( FileNotFoundException ), ex );
-                Assert.AreEqual( @"Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].", ex.Message );
-            }
+            Plan crypto = plan.EncryptElements();
+            File.WriteAllText( $"{__plansOut}\\{planName}_out.yaml", crypto.ToYaml() );
+
+            Assert.AreEqual( crypto.Actions[0].Parameters.Crypto.Elements.Count, crypto.Actions[0].Parameters.Crypto.Errors.Count, "All elements should have failed Crypto." );
+            Assert.AreEqual( crypto.Actions[1].Handler.Config.Crypto.Elements.Count, crypto.Actions[1].Handler.Config.Crypto.Errors.Count, "All elements should have failed Crypto." );
         }
 
         [Test]

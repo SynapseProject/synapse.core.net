@@ -322,19 +322,23 @@ namespace Synapse.Core
                     ISecurityContextRuntime scr = null;
 
                     a.IngestParentSecurityContext( parentSecurityContext );
-                    if( a.HasRunAs && a.RunAs.IsValid )
+                    if( a.HasRunAs )
                     {
-                        string securityContextParms = a.RunAs.Parameters?.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
-                        SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
+                        a.RunAs.EnsureInitialized();
+                        if( a.RunAs.IsValid )
                         {
-                            Parameters = securityContextParms,
-                            IsDryRun = dryRun
-                        };
+                            string securityContextParms = a.RunAs.Parameters?.GetSerializedValues( Crypto, out string safeSerializedsecurityContextValues );
+                            SecurityContextStartInfo securityContextStartInfo = new SecurityContextStartInfo( StartInfo )
+                            {
+                                Parameters = securityContextParms,
+                                IsDryRun = dryRun
+                            };
 
-                        scr = CreateSecurityContextRuntime( a );
-                        ExecuteResult logonResult = scr?.Logon( securityContextStartInfo );
-                        if( logonResult?.Status == StatusType.Failed )
-                            throw new Exception( logonResult.Message );
+                            scr = CreateSecurityContextRuntime( a );
+                            ExecuteResult logonResult = scr?.Logon( securityContextStartInfo );
+                            if( logonResult?.Status == StatusType.Failed )
+                                throw new Exception( logonResult.Message );
+                        }
                     }
                     #endregion
 
@@ -680,11 +684,6 @@ namespace Synapse.Core
 
         ISecurityContextRuntime CreateSecurityContextRuntime(ActionItem a)
         {
-            if( !a.HasRunAs )
-                return null;
-
-            a.RunAs.EnsureInitialized();
-
             bool cancel = OnProgress( a.Name, "CreateSecurityContextRuntime: " + a.RunAs.Provider.Type, "Start", StatusType.Initializing, a.InstanceId, -1 );
             if( cancel )
             {

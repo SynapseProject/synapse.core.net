@@ -57,10 +57,10 @@ Actions:
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
       Errors:
       - 'Element: [Type] failed with error: [The given key was not present in the dictionary.].'
-      - 'Element: [Values:Arguments:ArgString] failed with error: [Object reference not set to an instance of an object.].'
-      - 'Element: [Values:Arguments:Expressions[0]:Encoding] failed with error: [Object reference not set to an instance of an object.].'
-      - 'Element: [Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1] failed with error: [Object reference not set to an instance of an object.].'
-      - 'Element: [Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3] failed with error: [Object reference not set to an instance of an object.].'
+      - 'Element: [Values:Arguments:ArgString] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+      - 'Element: [Values:Arguments:Expressions[0]:Encoding] failed with error: [Invalid length for a Base-64 char array or string.].'
+      - 'Element: [Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1] failed with error: [Invalid length for a Base-64 char array or string.].'
+      - 'Element: [Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3] failed with error: [Invalid length for a Base-64 char array or string.].'
   Actions: []
 - Name: Xml
   Handler:
@@ -95,9 +95,9 @@ Actions:
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
         Errors:
-        - 'Element: [/CXmlDoc[1]/CNode0[1]] failed with error: [Object reference not set to an instance of an object.].'
-        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1] failed with error: [Object reference not set to an instance of an object.].'
-        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_2[1]] failed with error: [Object reference not set to an instance of an object.].'
+        - 'Element: [/CXmlDoc[1]/CNode0[1]] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_2[1]] failed with error: [The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.].'
   Actions: []
 Crypto:
   Provider:
@@ -108,4 +108,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 12/3/2018 1:21:00 AM
+LastModified: 12/3/2018 2:26:34 PM
