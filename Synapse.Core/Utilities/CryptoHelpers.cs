@@ -178,7 +178,11 @@ namespace Synapse.Core.Utilities
         public static string Encrypt(ICryptoRuntime cryptoRuntime, string value)
         {
             string parmValue = new ParameterInfo { Values = new CryptoParameters { Value = value } }.GetSerializedValues();
-            return cryptoRuntime.Encrypt( new CryptoStartInfo { Parameters = parmValue } ).ExitData.ToString();
+            ExecuteResult result = cryptoRuntime.Encrypt( new CryptoStartInfo { Parameters = parmValue } );
+            if( result.Status == StatusType.Success )
+                return result.ExitData.ToString();
+            else
+                throw new Exception( result.Message );
         }
         #endregion
 
@@ -232,7 +236,11 @@ namespace Synapse.Core.Utilities
         public static string Decrypt(ICryptoRuntime cryptoRuntime, string value)
         {
             string parmValue = new ParameterInfo { Values = new CryptoParameters { Value = value } }.GetSerializedValues();
-            return cryptoRuntime.Decrypt( new CryptoStartInfo { Parameters = parmValue } ).ExitData.ToString();
+            ExecuteResult result = cryptoRuntime.Decrypt( new CryptoStartInfo { Parameters = parmValue } );
+            if( result.Status == StatusType.Success )
+                return result.ExitData.ToString();
+            else
+                throw new Exception( result.Message );
         }
         #endregion
 

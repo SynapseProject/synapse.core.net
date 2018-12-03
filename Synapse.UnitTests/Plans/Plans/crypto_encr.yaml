@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: pLftS71kDhhzIAMhQCwEi7kPS/hw7DEqMb8R3mzFGrF0diH2SwW8UeJL1RT+kvg745D+dHrJha9+i9oKXAFwmUIwAdlJSIbmV61RFy3xz8QyPD9hvM5mmAJBemtYF7EyBWO/2XbjhDWUVUJGlD9+bnULb9g8UO50CkW01lV834U=
+        ArgString: tito/GTwXRWeiRj2pFXP2AhaVNVLCoQxvL3GupQe8EPeSWwnnwWqztWc071P6xE8oKO2oWVP5dwNVVYDzS4Jzjleuyt8VBjvf321tNoKP6tn7qQ5AYERmMFhbONnYN9vJTVo0dgttAmmt3MJPrfnyinD7W0xNxxdkYhV4kegn2s=
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: NHabTUiUEJn1csX4+9UGGIHlnh/suBd4QDT/8xUO4rUUmgB17MSfop4XofTi3jG/cRnSiqnoMjzd28M3fmWTxtMR66q9l574At4m0yRfjxVC3jYVkmN48tXKUV6Casw+8WpxqwOEh+LopbSKmPtwVtZnD72rj76AvNP6Dt++tfg=
+          Encoding: N1Ia3dtKBtztN5SU1ugEsZ8a1qtLi6HPILmFjAX49zRkshpEtJ7QOUV/UHKmfQFPV2QJNXsSm+umYNNJn53v2OZOOgwe3TTrnPyS9qnwRAdgvuw8RVtR26H0rDPjwHZ78eWuIK4UVw8DJmiQfPl/xPMROWEv9cwZ6YIPMpLGScs=
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: sqLVGVRJjYePVraNswymv8BMd9llvC4faP7gl0QqXcAm1XU21O45xlMJ8SOzmMEkK0/EhPC9pxz9YjwXmT1jmhw2Maaef7mNXrGJvrt0dSSkL1RPcRYdLPWhCydNjsP4QZ+6noIMo2XxAuzA3onMKt3WAZUd/m+2yx5rx6TBr7c=
+              - v1: CLrVYjNoV3Fw0lOR4UudnGVtq5O9idW3VNJyBlIStnR6e/1GxMV8UyOzcmydxuKh1ipV4ALlsZpqAsNBioVT3XwfwmWgJqoAixAyuJhpQn/ZtnKyOkP6qc1qhdHugq5Dv5wo/ct7s46q2KlY0v1KS1LTys4m2PmQIkfGVKoeMCQ=
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: p62AdW2hTnzXgSjpJ3Y2ijtUjZgRGjAqRXr3xy+TLlib2A1FljSU8P5g84zkancnFYO1quuT1MuGj2Rv/W0o9n5Od8rl7Zy9ZsI4zdyibzC41VyVRt1sLIoU57tJSWD5h9bFi8F5NypnH15OyBgEFuULGiuadnINf+40uqW6ESE=
+              - v3: xbomYMII8izDYC9hLEWWvsC1y90HqoAammL0RTLsuQmowtiWZ/pelzlCiFMujPcBTJnIS2WHeNBxVvXCiKS6MACi+8N7N2KTZcKbk3lL4utR+WN8b+5lYWfGSkFHtE8OnGTNc3BGCRfWJMFV7OFg/YS3jsveIsIAucTcnam0nOY=
           Encoding: Base64
     Dynamic:
     - Options: []
@@ -45,6 +45,7 @@ Actions:
       Target: Arguments:Expressions[0]:ReplaceWith
     Crypto:
       Provider:
+        Type: RsaProvider, Synapse.Handlers.Crypto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config:
           Values:
             Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -66,21 +67,22 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>rjf8DNpl7eQjPQvXhxAJDriUaiL3e+wsKlSx4pNMlFV8NSekLrJmfFLBR02WR5/WhxHw0wHKJlTs4gEOYavKgnaaLQgEL5/Qp2SuG1UYkskjjL3ii/zZjTpiJx0yICq1wxMxGNdBaPd2MlfhU/tChYtrbj3cE01q7Vw+bJMHlTM=</CNode0>
+          <CNode0>XrmruDGYMcE5w7GD/T+m6hQyRPeeDK06vOhaP8PihI1b8EIinirQ76Q7jey9xEtSI42G0qaYo78JPvlTn/xG7u+nde2oZKspcGgCMwpM84UQfbVEO3qaRP3g8ZCK0EYm1pW576yKruqLCg4r1rNW/p+7xck22Q+rIPnm7nwrl40=</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="MF0cPyxb36RB6G0olK5870DKnahVaa9P31Spr9pYFVz/jjZFpO/+6nbpCRiEWvUKco+0eQcWmi5cngCEqbyixM1fdngXgRUL6pPLLGFRBDl76Sf5JEIzJxaA4yTzvzpiT6AmMGpOwIel4rXIfOXVVjDFMOQ/KMU3mDBd40UlmZ8=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="z5HYGyPgE64M5XA8gWwUZHsnTNOx+1aB53ip0sS2OvrE1HTjFsFi1PklKNT/iCMQQWFoKDC0Dsf8N6fDMCNdciCUi82q6Pwt076ECfr8SGc0jiHUt9Hvph9K+GUUokYPbYuI9BT26feDO+DxsmZJrv9Xm6Ppn6RQNPIIbs/AK2o=">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>bvIltzr+dfvyxBDKzkObn/hSwKDeffW36Is54kStnDj+oMZEqm+rWPNIzYBeo7kzp6ri2OQzwghrvPzjBHtxfpJurwtMA6PI7hibDAMP5m3r5rCc9BTVkJdL5szo/E/d6zcsMG5TIklB2dFQTIhwfk0nKN1fijkQ7XbEU0cugf8=</CNode3_2>
+            <CNode3_2>CuHzsrsRnNCbq6Sca21mjMcr15yFnQT/y52ZWoyUBeQ2M8nNF0wIOK2r2jxG+OS3fyV7NsxVLeQtTCmSbzDT+Zpb1PNC2irrDzVPAb4nAqJUmZbvExI9OO80iViD5fALVayLqbqGPTNHFs8xpc4E3s/B3a///wKSh1HSXKsrAhM=</CNode3_2>
 
           </CNode3>
 
         </CXmlDoc>
       Crypto:
         Provider:
+          Type: RsaProvider, Synapse.Handlers.Crypto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
           Config:
             Values:
               Uri: C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
@@ -98,4 +100,4 @@ Crypto:
   Elements: []
   Errors: []
 StartInfo: {}
-LastModified: 12/2/2018 2:39:08 PM
+LastModified: 12/3/2018 1:21:00 AM

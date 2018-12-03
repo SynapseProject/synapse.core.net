@@ -127,6 +127,13 @@ namespace Synapse.Core.Utilities
                 if( obj is IRuntimeComponent )
                     ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
             }
+            else if( type.Contains( ", PublicKeyToken=" ) )
+            {
+                Type t = Type.GetType( type );
+                obj = Activator.CreateInstance( t ) as T;
+                if( obj is IRuntimeComponent )
+                    ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
+            }
             else
             {
                 string currentDir = Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location );
