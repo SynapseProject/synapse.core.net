@@ -1,4 +1,4 @@
-Name: crypto
+Name: cryptoFail
 Description: Test RemoteCommand Handler
 IsActive: true
 Actions:
@@ -15,17 +15,17 @@ Actions:
     Values:
       Parser: Regex
       Arguments:
-        ArgString: H5OPa69CYuJDgZAErnErIBI/fe12zdIXzPsOxmEvzp799AyNnSMZ1gCxrzYT5upcLf7zT/TxCsWbJ1XENg1EChpHdkhBzeF5l0tevsupm7t3sfQY2n9ohIu1rA1UwoXu2Zu79AEzH8ftcmXJ9ARjfHTzyPs7FFQ9PostdjxY0l8=
+        ArgString: -ExecutionPolicy Bypass -File C:\Devo\synapse\synapse.core.net\Synapse.Tester\yaml\ad-test.ps1 ~~PARAMS~~
         Expressions:
         - Find: ~~PARAMS~~
           ReplaceWith: foo
-          Encoding: CGYdBPVzkMmjn7mTXimj5v/+pfxF5m8h5eBcQJSsjXhtS0N47p4tDZL2kVl6KDRSK/cLUiDwEsTIGnHBoMiLL5bSdCJwficCUxyCTijKCr0mKsFd+4nU/pKoABX0wjhukCdyqzK97KnjWjezD39jN0AvUkRx6/Y8kGCZxtUb9QY=
+          Encoding: Base64
         - Find: ~~1~~
           ReplaceWith:
             foo:
               bar:
               - v0: 0
-              - v1: 3gdGeViqWy7V6QxUCJwMWXJpUmXCn1vPZnxEIAmr+eMp3e4e0MsNx/dPMSMxi0MnBXPMvQo7Y2sHwTryI9jBq1bDEXMFf6UvmmDg02sYPwsJz51I5D9CVQKQa/JXP53eBgCQgzlMh1UkvJVhbdLlxORLNa0yjgSKVMkqiJlqm/I=
+              - v1: 1
           Encoding: Base64
         - Find: ~~2~~
           ReplaceWith:
@@ -35,7 +35,7 @@ Actions:
               - v1: 1
             - bar:
               - v2: 2
-              - v3: jtwQCDuGW8T3E5zusaDVCs8/bkK0QTShVV8riHQvFKyeY/9VtQwRJ5vY1uUpvRcAcFRf1G3ZMSbqpZntumUK+Z5iQGh6hVexmQM+1aeON9CFSMMgQpCBW3PoMDlW62MI03YffFDSJ7xa5h+z9k168rvGSqCnMwsotpaMAXRXuxA=
+              - v3: 3
           Encoding: Base64
     Dynamic:
     - Options: []
@@ -48,7 +48,7 @@ Actions:
         Type: RsaProvider, Synapse.Handlers.Crypto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
         Config:
           Values:
-            Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+            Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml
       Elements:
       - Type
       - Values:Arguments:ArgString
@@ -57,6 +57,10 @@ Actions:
       - Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3
       Errors:
       - 'Element: [Type] failed with error: [The given key was not present in the dictionary.].'
+      - 'Element: [Values:Arguments:ArgString] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
+      - 'Element: [Values:Arguments:Expressions[0]:Encoding] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
+      - 'Element: [Values:Arguments:Expressions[1]:ReplaceWith:foo:bar[1]:v1] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
+      - 'Element: [Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
   Actions: []
 - Name: Xml
   Handler:
@@ -67,15 +71,15 @@ Actions:
       Values: >-
         <CXmlDoc>
 
-          <CNode0>YJf4ZQhpD+C+y8sAid1wb+hBUQm6aytWxVJ3M7mYULSoRg6o2eeTF0Tse4+0o28Rq+YykP5tj5+PhPBhj3mvlQVSVGAf9g1tTzHxISEXPfEhCAPqmiB8iDcEhP3QYa1fnjUa/8UIyc4Nj68a5Q64pv7Tf7DkzvhTxNavulIdapw=</CNode0>
+          <CNode0>CValue0_inline</CNode0>
 
           <CNode1>CValue1_inline</CNode1>
 
           <CNode3>
 
-            <CNode3_1 CAttr3_1="mR72QVOYZdn73JBrKJNHX1wtzZ+I9nWPYL5KL/oevTwT9v3BcGOl+qorF5zdGXSUxNTvjp/V0g2wCG+ISyM57nW9tVaTcg2coU/Kx6TwWqgrbkqNYqpRyyDCpb2x7c+F3n7qMqHKMPgo2AkIrQSmI+rRMDOzjh92nWiG/9yce9E=">CValue3_1_inline</CNode3_1>
+            <CNode3_1 CAttr3_1="CAValue3_1_inline">CValue3_1_inline</CNode3_1>
 
-            <CNode3_2>0KP5Pwh7rA3E/NOCINGmfs/xNJN84CP1aHWFVHwOCrBsPCorkGK/bgLf7mk5hUvAu/RprDOpfJOZtrEzl9nAteo7BlMbkerT5r2+o3ZK5gnuFtr9gPIbTgiimdr7TAcKAawTrzVv30+Kq8KnqzCm1gJP/EcynSrqxOUtSDmTNsU=</CNode3_2>
+            <CNode3_2>CValue3_2_inline</CNode3_2>
 
           </CNode3>
 
@@ -85,18 +89,22 @@ Actions:
           Type: RsaProvider, Synapse.Handlers.Crypto, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
           Config:
             Values:
-              Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+              Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml
         Elements:
         - /CXmlDoc[1]/CNode0[1]
         - /CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1
         - /CXmlDoc[1]/CNode3[1]/CNode3_2[1]
+        Errors:
+        - 'Element: [/CXmlDoc[1]/CNode0[1]] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_1[1]/@CAttr3_1] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
+        - 'Element: [/CXmlDoc[1]/CNode3[1]/CNode3_2[1]] failed with error: [Could not load RSA keys from [file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml].].'
   Actions: []
 Crypto:
   Provider:
     Type: Synapse.Handlers.Crypto:RsaProvider
     Config:
       Values:
-        Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\pubPriv.xml
+        Uri: file://C:\Devo\synapse\synapse.core.net\Synapse.UnitTests\Plans\crypto\FileDoesNotExist.xml
   Elements: []
   Errors: []
 StartInfo: {}

@@ -1,4 +1,4 @@
-Name: crypto
+Name: cryptoFail
 Description: Test RemoteCommand Handler
 IsActive: true
 Crypto:
