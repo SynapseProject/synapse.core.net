@@ -28,14 +28,6 @@ namespace Synapse.Core
         [YamlIgnore]
         public bool HasDefaultHandlerType { get { return !string.IsNullOrWhiteSpace( DefaultHandlerType ); } }
 
-        public string DefaultSecurityContextProviderType { get; set; }
-        [YamlIgnore]
-        public bool HasDefaultSecurityContextProviderType { get { return !string.IsNullOrWhiteSpace( DefaultSecurityContextProviderType ); } }
-
-        public string DefaultCrytoProviderType { get; set; }
-        [YamlIgnore]
-        public bool HasDefaultCrytoProviderType { get { return !string.IsNullOrWhiteSpace( DefaultCrytoProviderType ); } }
-
         ActionItem IActionContainer.ActionGroup
         {
             get { throw new NotImplementedException(); }

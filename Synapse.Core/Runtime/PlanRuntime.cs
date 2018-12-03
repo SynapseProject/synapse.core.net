@@ -691,7 +691,7 @@ namespace Synapse.Core
                 return null;
             }
 
-            return a.RunAs.Provider.CreateRuntime( DefaultSecurityContextProviderType, Crypto, a.Name );
+            return a.RunAs.Provider.CreateRuntime( Crypto?.Provider?.Type, Crypto, a.Name );
         }
 
         void SaveExitDataAs(ActionItem a)

@@ -19,3 +19,8 @@ Actions:
           Type: Empty
         Actions:
         - Name: NoHandlerSpecified-Use:Plan.DefaultHandlerType
+          Actions:
+          - Name: .NET AssemblyQualifiedName
+            Handler:
+              Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+

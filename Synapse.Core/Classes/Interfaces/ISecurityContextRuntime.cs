@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Synapse.Core
+﻿namespace Synapse.Core
 {
-    public interface ISecurityContextRuntime : IRuntimeComponent<ISecurityContextRuntime>
+    public interface ISecurityContextRuntime : IRuntimeComponent<ISecurityContextRuntime>, IRuntimeProvider
     {
         ExecuteResult Logon(SecurityContextStartInfo startInfo);
         void Logoff();

@@ -39,7 +39,19 @@ Actions:
             StartInfo:
               ParentExitData: EmptyHandler ExitData default value.
           Parameters: {}
-          Actions: []
+          Actions:
+          - Name: .NET AssemblyQualifiedName
+            Handler:
+              Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982
+              Config: {}
+              StartInfo:
+                ParentExitData: EmptyHandler ExitData default value.
+            Parameters: {}
+            Actions: []
+            Result:
+              ExitData: EmptyHandler ExitData default value.
+              SecurityContext: LAPTOP-TK2D9TB6\Steve
+            InstanceId: 15
           Result:
             ExitData: EmptyHandler ExitData default value.
             SecurityContext: LAPTOP-TK2D9TB6\Steve
@@ -62,4 +74,4 @@ Actions:
   InstanceId: 10
 StartInfo: {}
 Result: {}
-LastModified: 12/3/2018 2:26:34 PM
+LastModified: 12/3/2018 3:34:44 PM
