@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Synapse.Core.Utilities
 {
+    //this class is still in use for Plan signing
     public class CryptoHelpers
     {
         #region base64
@@ -119,7 +120,7 @@ namespace Synapse.Core.Utilities
                         using( StreamReader sr = new StreamReader( filePath ) )
                             rsaKey.FromXmlString( sr.ReadToEnd() );
                     }
-                    catch(Exception innerEx)
+                    catch( Exception innerEx )
                     {
                         throw new FileNotFoundException( $"Could not load RSA keys from [{filePath}].", innerEx );
                     }
