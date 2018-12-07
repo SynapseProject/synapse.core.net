@@ -131,9 +131,9 @@ namespace Synapse.Core.Utilities
             {
                 string[] typeInfo = type.Split( ':' );
                 AssemblyName an = new AssemblyName( typeInfo[0] );
-                Assembly hrAsm = Assembly.Load( an );
+                Assembly assm = Assembly.Load( an );
 
-                Type t = hrAsm.GetType( typeInfo[1], true );
+                Type t = assm.GetType( typeInfo[1], true );
                 obj = Activator.CreateInstance( t ) as T;
                 if( obj is IRuntimeComponent )
                     ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
@@ -162,9 +162,9 @@ namespace Synapse.Core.Utilities
                         try
                         {
                             AssemblyName an = new AssemblyName( current );
-                            Assembly hrAsm = Assembly.Load( an );
+                            Assembly assm = Assembly.Load( an );
 
-                            Type t = hrAsm.GetType( type, true );
+                            Type t = assm.GetType( type, true );
                             obj = Activator.CreateInstance( t ) as T;
                             if( obj is IRuntimeComponent )
                                 ((IRuntimeComponent)obj).RuntimeType = t.AssemblyQualifiedName;
@@ -175,10 +175,10 @@ namespace Synapse.Core.Utilities
                             try
                             {
                                 AssemblyName an = new AssemblyName( current );
-                                Assembly hrAsm = Assembly.Load( an );
+                                Assembly assm = Assembly.Load( an );
 
                                 string tl = type.ToLower();
-                                Type[] types = hrAsm.GetTypes();
+                                Type[] types = assm.GetTypes();
                                 foreach( Type t in types )
                                     if( t.GetInterfaces().Contains( typeof( T ) ) && t.Name.ToLower().Contains( tl ) )
                                     {
