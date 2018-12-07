@@ -12,17 +12,20 @@ namespace log4net.Appender.Dynamic
     {
         public static IAppender CreateFileAppender(string appenderName, string logfileName, string conversionPattern)
         {
-            FileAppender appender = new FileAppender();
-            appender.Name = appenderName;
-            appender.File = logfileName;
-            appender.AppendToFile = true;
-            appender.LockingModel = new FileAppender.MinimalLock();
-
-            PatternLayout layout = new PatternLayout();
-            layout.ConversionPattern = conversionPattern;
+            PatternLayout layout = new PatternLayout
+            {
+                ConversionPattern = conversionPattern
+            };
             layout.ActivateOptions();
 
-            appender.Layout = layout;
+            FileAppender appender = new FileAppender
+            {
+                Name = appenderName,
+                File = logfileName,
+                AppendToFile = true,
+                LockingModel = new FileAppender.MinimalLock(),
+                Layout = layout
+            };
             appender.ActivateOptions();
 
             return appender;
@@ -30,24 +33,32 @@ namespace log4net.Appender.Dynamic
 
         public static IAppender CreateRollingFileAppender(string appenderName, string logfileName, string conversionPattern)
         {
-            RollingFileAppender appender = new RollingFileAppender();
-            appender.Name = appenderName;
-            appender.File = logfileName;
-            appender.StaticLogFileName = true;
-            appender.AppendToFile = false;
-            appender.RollingStyle = RollingFileAppender.RollingMode.Size;
-            appender.MaxSizeRollBackups = 10;
-            appender.MaximumFileSize = "10MB";
-            appender.PreserveLogFileNameExtension = true;
-
-            PatternLayout layout = new PatternLayout();
-            layout.ConversionPattern = conversionPattern;
+            PatternLayout layout = new PatternLayout
+            {
+                ConversionPattern = conversionPattern
+            };
             layout.ActivateOptions();
 
-            appender.Layout = layout;
+            RollingFileAppender appender = new RollingFileAppender
+            {
+                Name = appenderName,
+                File = logfileName,
+                StaticLogFileName = true,
+                AppendToFile = false,
+                RollingStyle = RollingFileAppender.RollingMode.Size,
+                MaxSizeRollBackups = 10,
+                MaximumFileSize = "10MB",
+                PreserveLogFileNameExtension = true,
+                Layout = layout
+            };
             appender.ActivateOptions();
 
+#if NET45
             Config.BasicConfigurator.Configure( appender );
+#else
+            Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
+            Config.BasicConfigurator.Configure( repo, appender );
+#endif
 
             return appender;
         }

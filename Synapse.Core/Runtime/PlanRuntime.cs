@@ -346,7 +346,7 @@ namespace Synapse.Core
 
                     a.Handler.StartInfo.Parameters = safeSerializedValues; //avoids serializing decrypted values to the History Plan (bug #93)
                     a.Result.BranchStatus = a.Result.Status;
-                    a.Result.SecurityContext = System.Security.Principal.WindowsIdentity.GetCurrent().Name;
+                    a.Result.SecurityContext = Environment.UserName;
 
                     SaveExitDataAs( a );
 

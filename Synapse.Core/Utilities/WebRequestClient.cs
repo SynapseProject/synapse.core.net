@@ -1,13 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.ServiceModel;
-using System.Text;
-using System.Xml;
-using System.Xml.Serialization;
 
 namespace Synapse.Core.Utilities
 {

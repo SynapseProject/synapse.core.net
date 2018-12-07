@@ -1,155 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4464700A-50BA-4B62-BD7E-16628FDA8B94}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Synapse.Core</RootNamespace>
-    <AssemblyName>Synapse.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Synapse.Core.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+
+    <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=5.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.Signed.5.2.1\lib\net45\YamlDotNet.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Threading.Tasks" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Classes\BaseClasses\CryptoRuntimeBase.cs" />
-    <Compile Include="Classes\CoreClasses\Crypto\CryptoParameters.cs" />
-    <Compile Include="Classes\CoreClasses\Crypto\CryptoProviderInfo.cs" />
-    <Compile Include="Classes\CoreClasses\Crypto\CryptoProviderStartInfo.cs" />
-    <Compile Include="Classes\Interfaces\IComponentInfo.cs" />
-    <Compile Include="Classes\BaseClasses\SecurityContextRuntimeBase.cs" />
-    <Compile Include="Classes\Enums\EncodingType.cs" />
-    <Compile Include="Classes\BaseClasses\ComponentInfoBase.cs" />
-    <Compile Include="Classes\CoreClasses\Crypto\CryptoStartInfo.cs" />
-    <Compile Include="Classes\Interfaces\ICryptoRuntime.cs" />
-    <Compile Include="Classes\Interfaces\IRuntimeComponent.cs" />
-    <Compile Include="Classes\Interfaces\IRuntimeProvider.cs" />
-    <Compile Include="Classes\Interfaces\ISecurityContextRuntime.cs" />
-    <Compile Include="Classes\Interfaces\IReplacementValue.cs" />
-    <Compile Include="Classes\CoreClasses\SecurityContext\SecurityContextStartInfo.cs" />
-    <Compile Include="Classes\CoreClasses\SaveExitDataInfo.cs" />
-    <Compile Include="Classes\CoreClasses\SecurityContext\SecurityContext.cs" />
-    <Compile Include="Classes\CoreClasses\SecurityContext\SecurityContextProviderInfo.cs" />
-    <Compile Include="Classes\CoreClasses\SecurityContext\SecurityContextProviderStartInfo.cs" />
-    <Compile Include="Classes\CoreClasses\SourceTarget.cs" />
-    <Compile Include="Classes\CoreClasses\ParentExitDataValue.cs" />
-    <Compile Include="Classes\Enums\StatusUpdateStrategy.cs" />
-    <Compile Include="Classes\CoreClasses\ForEach.cs" />
-    <Compile Include="Classes\Enums\LogLevel.cs" />
-    <Compile Include="Classes\CoreClasses\ExecuteResult.cs" />
-    <Compile Include="Classes\Interfaces\ICancelEventArgs.cs" />
-    <Compile Include="Classes\Interfaces\IInheritable.cs" />
-    <Compile Include="Classes\Interfaces\IHandlerRuntime.cs" />
-    <Compile Include="Classes\Interfaces\IParameterInfo.cs" />
-    <Compile Include="Classes\Interfaces\IActionContainer.cs" />
-    <Compile Include="Classes\Interfaces\ICrypto.cs" />
-    <Compile Include="Classes\Interfaces\IPlanRuntimeContainer.cs" />
-    <Compile Include="Classes\Interfaces\IStartInfo.cs" />
-    <Compile Include="Classes\CoreClasses\LogMessageEventArgs.cs" />
-    <Compile Include="Classes\CoreClasses\Handler\HandlerProgressCancelEventArgs.cs" />
-    <Compile Include="Classes\CoreClasses\Handler\HandlerStartInfo.cs" />
-    <Compile Include="Classes\CoreClasses\PlanElementParms.cs" />
-    <Compile Include="Classes\CoreClasses\PlanEnvelope.cs" />
-    <Compile Include="Classes\CoreClasses\Crypto\CryptoProvider.cs" />
-    <Compile Include="Classes\CoreClasses\PlanStartInfo.cs" />
-    <Compile Include="Classes\BaseClasses\StartInfoBase.cs" />
-    <Compile Include="Classes\BaseClasses\HandlerRuntimeBase.cs" />
-    <Compile Include="Classes\Interfaces\ICloneable.cs" />
-    <Compile Include="Classes\CoreClasses\DynamicValue.cs" />
-    <Compile Include="Classes\Enums\StatusType.cs" />
-    <Compile Include="Classes\Enums\MessageType.cs" />
-    <Compile Include="Classes\CoreClasses\ParameterInfo.cs" />
-    <Compile Include="Classes\CoreClasses\ActionItem.cs" />
-    <Compile Include="Classes\Enums\SerializationType.cs" />
-    <Compile Include="Classes\CoreClasses\Handler\HandlerInfo.cs" />
-    <Compile Include="Classes\CoreClasses\Plan.cs" />
-    <Compile Include="Handlers\UriHandler.cs" />
-    <Compile Include="Handlers\EchoHandler.cs" />
-    <Compile Include="Runtime\ActionItem.cs" />
-    <Compile Include="Runtime\PlanSignature.cs" />
-    <Compile Include="Utilities\AssemblyLoader.cs" />
-    <Compile Include="Utilities\ExceptionHelpers.cs" />
-    <Compile Include="Utilities\JsonHelpers.cs" />
-    <Compile Include="Utilities\PlanExtensions.cs" />
-    <Compile Include="Utilities\XmlHelpers.cs" />
-    <Compile Include="Dal\ActionInstance.cs" />
-    <Compile Include="Dal\PlanInstance.cs" />
-    <Compile Include="Dal\SynapseDal.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Handlers\EmptyHandler.cs" />
-    <Compile Include="Runtime\ParameterInfoRuntime.cs" />
-    <Compile Include="Runtime\PlanRuntime.cs" />
-    <Compile Include="Runtime\PlanTaskScheduler.cs" />
-    <Compile Include="Utilities\CryptoHelpers.cs" />
-    <Compile Include="Utilities\ServiceException.cs" />
-    <Compile Include="Utilities\WebRequestClient.cs" />
-    <Compile Include="Utilities\YamlHelpers.cs" />
+    <Compile Remove="Classes\CoreClasses\SecurityContext\SecurityContext_.cs" />
+    <Compile Remove="Classes\Interfaces\ISynapseServer.cs" />
+    <Compile Remove="Handlers\FooBarHandler.cs" />
+    <Compile Remove="Handlers\MockHandler.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+    <Compile Remove="Runtime\PlanRuntimeExternal.cs" />
+    <Compile Remove="Runtime\PlanRuntimeInProc_.cs" />
+    <Compile Remove="Runtime\SecurityContextRuntime_.cs" />
+    <Compile Remove="Utilities\MergeHelpers.cs" />
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Synapse.Core.pfx" />
-    <None Include="Synapse.Core.snk" />
+    <PackageReference Include="YamlDotNet.Signed" Version="5.2.1" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(SolutionDir)scripts\setVersion.ps1 -path $(ProjectDir)Properties\AssemblyInfo.cs -versionFile $(SolutionDir)scripts\AssemblyInfo.xml</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(SolutionDir)scripts\updatePackage.ps1 -source $(TargetDir)$(TargetName).??? -solutionDir $(SolutionDir) -destReplace synapse.core.net\,synapse.server.net\packages -destPackage Synapse.Core.Signed* -destVersion \lib\net45 -exitError 1</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
