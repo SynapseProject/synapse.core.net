@@ -1,7 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <Authors>Steve Shortt</Authors>
+    <Description>Synapse.Core supports integration for building/executing Synapse Plans.  This is the unsigned version of the package.</Description>
+    <Copyright>Copyright ©  Steve Shortt, 2016 - 2019</Copyright>
+    <PackageLicenseUrl>https://github.com/SynapseProject/synapse.core.net/blob/master/license.txt</PackageLicenseUrl>
+    <PackageProjectUrl>http://synapse.readthedocs.io/en/latest/</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/SynapseProject/synapseproject.github.io/master/images/synapse_logo_64x64.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/SynapseProject/synapse.core.net.git</RepositoryUrl>
+    <PackageTags>Workflow Execute Process</PackageTags>
+    <PackageReleaseNotes>1.0.18291.0: Updated Yamldotnet to 5.2.1
+1.0.18258.1: Bug fixes for Dynamic parms merge and StartInfo encrypted values (#92, #93, #94), added support for DynamicValue--&amp;gt;DefaultValue (#95) and exposed PlanStartInfo in global vars (#86).</PackageReleaseNotes>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.18341.0</FileVersion>
+    <Version>1.0.18341.0</Version>
   </PropertyGroup>
 
     <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
@@ -25,5 +39,9 @@
   <ItemGroup>
     <PackageReference Include="YamlDotNet.Signed" Version="5.2.1" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(SolutionDir)scripts\setVersion.ps1 -path $(ProjectPath) -versionFile $(SolutionDir)scripts\AssemblyInfo.xml" />
+  </Target>
 
 </Project>

@@ -6,8 +6,9 @@ param (
  )
 
 $now = [DateTime]::Now
-$avp = 'AssemblyVersion\( \"(?<v>\d.\d.\d.\d)\" \)'
-$afvp = 'AssemblyFileVersion\( \"(?<v>.*)\" \)'
+$avp = '<AssemblyVersion>(?<v>\d.\d.\d.\d)\</AssemblyVersion>'
+$afvp = '<FileVersion>(?<v>.*)</FileVersion>'
+$vp = '<Version>(?<v>.*)</Version>'
 
 $file = [System.IO.File]::ReadAllText( $path )
 
@@ -16,7 +17,7 @@ if( [System.IO.File]::Exists( $versionFile ) )
     [Xml]$vf = Get-Content $versionFile
 
     #adjust AssemblyVersion
-    $v = 'AssemblyVersion( "{0}.{1}.{2}.{3}" )' -f $vf.ai.av.Major, $vf.ai.av.Minor, $vf.ai.av.Build, $vf.ai.av.Revision
+    $v = '<AssemblyVersion>{0}.{1}.{2}.{3}</AssemblyVersion>' -f $vf.ai.av.Major, $vf.ai.av.Minor, $vf.ai.av.Build, $vf.ai.av.Revision
     $file = ([regex]::Replace( $file, $avp, $v ))
 
     #adjust AssemblyFileVersion
@@ -24,15 +25,17 @@ if( [System.IO.File]::Exists( $versionFile ) )
     {
         $vf.ai.afv.Build = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
     }
-    $v = 'AssemblyFileVersion( "{0}.{1}.{2}.{3}" )' -f $vf.ai.afv.Major, $vf.ai.afv.Minor, $vf.ai.afv.Build, $vf.ai.afv.Revision
+    $v = '<FileVersion>{0}.{1}.{2}.{3}</FileVersion>' -f $vf.ai.afv.Major, $vf.ai.afv.Minor, $vf.ai.afv.Build, $vf.ai.afv.Revision
     $file = ([regex]::Replace( $file, $afvp, $v ))
+    $v = '<Version>{0}.{1}.{2}.{3}</Version>' -f $vf.ai.afv.Major, $vf.ai.afv.Minor, $vf.ai.afv.Build, $vf.ai.afv.Revision
+    $file = ([regex]::Replace( $file, $vp, $v ))
 }
 else
 {
     #adjust AssemblyVersion
     $vers = ([regex]::Match( $file, $avp )).Groups
     [Version]$version = [Version]$vers.Groups[1].Value
-    $v = 'AssemblyVersion( "{0}.{1}.{2}.{3}" )' -f $major, $minor, $version.Build, $version.Revision
+    $v = '<AssemblyVersion>{0}.{1}.{2}.{3}</AssemblyVersion>' -f $major, $minor, $version.Build, $version.Revision
     $file = ([regex]::Replace( $file, $avp, $v ))
 
 
@@ -47,8 +50,10 @@ else
         $revision = [int]$version.Revision + 1
     }
 
-    $v = 'AssemblyFileVersion( "{0}.{1}.{2}.{3}" )' -f $major, $minor, $build, $revision
+    $v = '<FileVersion>{0}.{1}.{2}.{3}</FileVersion>' -f $major, $minor, $build, $revision
     $file = ([regex]::Replace( $file, $afvp, $v ))
+    $v = '<Version>{0}.{1}.{2}.{3}</Version>' -f $major, $minor, $build, $revision
+    $file = ([regex]::Replace( $file, $vp, $v ))
 }
 
 #Write-Host $file
