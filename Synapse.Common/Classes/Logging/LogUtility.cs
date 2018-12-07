@@ -124,7 +124,7 @@ namespace Synapse.Common
     {
         public static string GetLogFileName(string name)
         {
-            var rootAppender = LogManager.GetRepository()
+            var rootAppender = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() )
                                          .GetAppenders()
                                          .OfType<log4net.Appender.FileAppender>()
                                          .FirstOrDefault( fa => fa.Name == name );

@@ -65,7 +65,12 @@ namespace log4net.Appender.Dynamic
 
         public static void AddAppender(string loggerName, string levelName, IAppender appender)
         {
+#if NET45
             ILog log = LogManager.GetLogger( loggerName );
+#else
+            Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
+            ILog log = LogManager.GetLogger( repo.Name, loggerName );
+#endif
             Logger l = (Logger)log.Logger;
 
             l.Level = l.Hierarchy.LevelMap[levelName];
@@ -75,7 +80,12 @@ namespace log4net.Appender.Dynamic
 
         public static void RemoveAppender(string loggerName, IAppender appender)
         {
+#if NET45
             ILog log = LogManager.GetLogger( loggerName );
+#else
+            Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
+            ILog log = LogManager.GetLogger( repo.Name, loggerName );
+#endif
             Logger l = (Logger)log.Logger;
 
             l.RemoveAppender( appender );
@@ -100,7 +110,12 @@ namespace log4net.Appender.Dynamic
             _loggerName = loggerName;
             _appender = FileAppenderFactory.CreateFileAppender( appenderName, logfileName, conversionPattern );
             FileAppenderFactory.AddAppender( loggerName, levelName, _appender );
+#if NET45
             _log = LogManager.GetLogger( loggerName );
+#else
+            Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
+            _log = LogManager.GetLogger( repo.Name, loggerName );
+#endif
         }
 
         public ILog Log { get { return _log; } }
@@ -125,7 +140,12 @@ namespace log4net.Appender.Dynamic
             _loggerName = loggerName;
             _appender = FileAppenderFactory.CreateRollingFileAppender( appenderName, logfileName, conversionPattern );
             FileAppenderFactory.AddAppender( loggerName, levelName, _appender );
+#if NET45
             _log = LogManager.GetLogger( loggerName );
+#else
+            Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
+            _log = LogManager.GetLogger( repo.Name, loggerName );
+#endif
         }
 
         public ILog Log { get { return _log; } }
