@@ -102,7 +102,6 @@ namespace log4net.Appender.Dynamic
     {
         string _loggerName = string.Empty;
         IAppender _appender = null;
-        ILog _log = null;
 
         public DynamicFileAppender(string loggerName, string appenderName,
             string logfileName, string conversionPattern, string levelName = "ALL")
@@ -114,17 +113,17 @@ namespace log4net.Appender.Dynamic
             _log = LogManager.GetLogger( loggerName );
 #else
             Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
-            _log = LogManager.GetLogger( repo.Name, loggerName );
+            Log = LogManager.GetLogger( repo.Name, loggerName );
 #endif
         }
 
-        public ILog Log { get { return _log; } }
+        public ILog Log { get; private set; } = null;
 
         public void Dispose()
         {
             _appender.Close();
             FileAppenderFactory.RemoveAppender( _loggerName, _appender );
-            _log = null;
+            Log = null;
         }
     }
 
@@ -132,7 +131,6 @@ namespace log4net.Appender.Dynamic
     {
         string _loggerName = string.Empty;
         IAppender _appender = null;
-        ILog _log = null;
 
         public RollingFileAppenderHelper(string loggerName, string appenderName,
             string logfileName, string conversionPattern, string levelName = "ALL")
@@ -144,17 +142,17 @@ namespace log4net.Appender.Dynamic
             _log = LogManager.GetLogger( loggerName );
 #else
             Repository.ILoggerRepository repo = LogManager.GetRepository( System.Reflection.Assembly.GetCallingAssembly() );
-            _log = LogManager.GetLogger( repo.Name, loggerName );
+            Log = LogManager.GetLogger( repo.Name, loggerName );
 #endif
         }
 
-        public ILog Log { get { return _log; } }
+        public ILog Log { get; private set; } = null;
 
         public void Dispose()
         {
             _appender.Close();
             FileAppenderFactory.RemoveAppender( _loggerName, _appender );
-            _log = null;
+            Log = null;
         }
     }
 }
