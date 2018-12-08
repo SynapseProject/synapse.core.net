@@ -13,9 +13,10 @@
     <PackageReleaseNotes>1.0.18291.0: Updated Yamldotnet to 5.2.1
 1.0.18258.1: Bug fixes for Dynamic parms merge and StartInfo encrypted values (#92, #93, #94), added support for DynamicValue--&amp;gt;DefaultValue (#95) and exposed PlanStartInfo in global vars (#86).</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.18341.0</FileVersion>
-    <Version>1.0.18341.0</Version>
+    <FileVersion>1.0.18342.0</FileVersion>
+    <Version>1.0.18342.0</Version>
   </PropertyGroup>
 
     <!-- Conditionally obtain references for the .NET Framework 4.5 target -->

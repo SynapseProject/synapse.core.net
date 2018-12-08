@@ -1,60 +1,51 @@
 param (
-    [string]$path,  #= "c:\Users\$($env:username)\desktop\AssemblyInfo.cs",
-    [int]$major = 0,
-    [int]$minor = 1,
-    [string]$versionFile  #= "c:\Users\$($env:username)\desktop\AssemblyInfo.xml"
- )
+    [Parameter(Mandatory=$true)]
+    [string]$path, #= ".\foo.csproj",
+    [Parameter(Mandatory=$true)]
+    [string]$versionFile #= ".\AssemblyInfo.xml"
+)
 
 $now = [DateTime]::Now
-$avp = '<AssemblyVersion>(?<v>\d.\d.\d.\d)\</AssemblyVersion>'
-$afvp = '<FileVersion>(?<v>.*)</FileVersion>'
-$vp = '<Version>(?<v>.*)</Version>'
 
-$file = [System.IO.File]::ReadAllText( $path )
+[string]$file = [System.IO.File]::ReadAllText( $path )
 
-if( [System.IO.File]::Exists( $versionFile ) )
-{
-    [Xml]$vf = Get-Content $versionFile
+function SetVersionInfo {
+    param (
+        [string] $tag,
+        [int]$major = 0,
+        [int]$minor = 1,
+        [int]$build = 2,
+        [int]$revision = 3
+    )
 
-    #adjust AssemblyVersion
-    $v = '<AssemblyVersion>{0}.{1}.{2}.{3}</AssemblyVersion>' -f $vf.ai.av.Major, $vf.ai.av.Minor, $vf.ai.av.Build, $vf.ai.av.Revision
-    $file = ([regex]::Replace( $file, $avp, $v ))
-
-    #adjust AssemblyFileVersion
-    if( $vf.ai.afv.Build.ToString() -eq '#' )
-    {
-        $vf.ai.afv.Build = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
+    $v = '<{0}>{1}.{2}.{3}.{4}</{0}>' -f $tag, $major, $minor, $build, $revision
+    $regex = '<{0}>(?<v>.*)</{0}>' -f $tag
+    if ( $file -match $regex ) {
+        $file = ([regex]::Replace( $file, $regex, $v ))
     }
-    $v = '<FileVersion>{0}.{1}.{2}.{3}</FileVersion>' -f $vf.ai.afv.Major, $vf.ai.afv.Minor, $vf.ai.afv.Build, $vf.ai.afv.Revision
-    $file = ([regex]::Replace( $file, $afvp, $v ))
-    $v = '<Version>{0}.{1}.{2}.{3}</Version>' -f $vf.ai.afv.Major, $vf.ai.afv.Minor, $vf.ai.afv.Build, $vf.ai.afv.Revision
-    $file = ([regex]::Replace( $file, $vp, $v ))
-}
-else
-{
-    #adjust AssemblyVersion
-    $vers = ([regex]::Match( $file, $avp )).Groups
-    [Version]$version = [Version]$vers.Groups[1].Value
-    $v = '<AssemblyVersion>{0}.{1}.{2}.{3}</AssemblyVersion>' -f $major, $minor, $version.Build, $version.Revision
-    $file = ([regex]::Replace( $file, $avp, $v ))
-
-
-    #adjust AssemblyFileVersion
-    $vers = ([regex]::Match( $file, $afvp )).Groups
-    [Version]$version = [Version]$vers.Groups[1].Value
-
-    $build = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
-    [int]$revision = 1
-    if( $version.Build.ToString() -eq $build )
-    {
-        $revision = [int]$version.Revision + 1
+    else {
+        $regex = '</PropertyGroup>'
+        if ( $file -match $regex ) {
+            $v = '  {0}{1}  </PropertyGroup>' -f $v, "`r`n"
+            $file = ([regex]::Replace( $file, $regex, $v ))
+        }
     }
 
-    $v = '<FileVersion>{0}.{1}.{2}.{3}</FileVersion>' -f $major, $minor, $build, $revision
-    $file = ([regex]::Replace( $file, $afvp, $v ))
-    $v = '<Version>{0}.{1}.{2}.{3}</Version>' -f $major, $minor, $build, $revision
-    $file = ([regex]::Replace( $file, $vp, $v ))
+    $file
 }
+
+
+[Xml]$vf = Get-Content $versionFile
+
+$file = SetVersionInfo 'AssemblyVersion' $vf.ai.av.Major $vf.ai.av.Minor $vf.ai.av.Build $vf.ai.av.Revision
+
+#adjust AssemblyFileVersion, Version
+if ( $vf.ai.afv.Build.ToString() -eq '#' ) {
+    $vf.ai.afv.Build = '{0}{1}' -f $now.ToString( 'yy' ), $now.DayOfYear.ToString( 'D3' )
+}
+$file = SetVersionInfo 'FileVersion' $vf.ai.afv.Major $vf.ai.afv.Minor $vf.ai.afv.Build $vf.ai.afv.Revision
+$file = SetVersionInfo 'Version' $vf.ai.afv.Major $vf.ai.afv.Minor $vf.ai.afv.Build $vf.ai.afv.Revision
+
 
 #Write-Host $file
 [System.IO.File]::SetAttributes( $path, [System.IO.FileAttributes]::Normal );
