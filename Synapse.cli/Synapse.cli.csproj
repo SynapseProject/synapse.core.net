@@ -1,10 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <ApplicationIcon>syn_logo_icon.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
     <StartupObject />
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.18342.0</FileVersion>
+    <Version>1.0.18342.0</Version>
   </PropertyGroup>
 
     <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
@@ -14,5 +17,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Synapse.Core\Synapse.Core.csproj" />
   </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell.exe -ExecutionPolicy Bypass -NoProfile -NonInteractive -File $(SolutionDir)scripts\setVersion.ps1 -path $(ProjectPath) -versionFile $(SolutionDir)scripts\AssemblyInfo.xml" />
+  </Target>
 
 </Project>
