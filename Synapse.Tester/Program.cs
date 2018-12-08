@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Synapse.Common;
 using Synapse.Core;
 using Synapse.Core.DataAccessLayer;
 using Synapse.Core.Runtime;
@@ -66,89 +67,105 @@ namespace Synapse.Tester
 
 
 
-            Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
+            LogUtility log = new LogUtility();
+            string logFileName = $"testLog_{DateTime.Now.Ticks}";
+            DirectoryInfo logRootPath = Directory.CreateDirectory( @".\Logs" );
+            string logFilePath = $"{logRootPath.FullName}\\{logFileName}.log";
+            log.InitDynamicFileAppender( logFileName, logFileName, logFilePath, "%d{ISO8601}|%-5p|(%t)|%m%n", "all" );
+            log.Write( "hi" );
 
-            object elements = YamlHelpers.SelectElements( guy,
-                new string[] { "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith",
-                    "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3" } );
+            string currentPath = Log4netHelpers.GetLogFileFolder( logFileName );
+            log.Write( currentPath );
 
-            Plan json = Plan.FromYaml( @"..\..\yaml\training_636282261765752616.yaml" );
-            elements = YamlHelpers.SelectElements( json,
-                new string[] { "Result" } );
-            elements = YamlHelpers.SelectElements( json,
-                new string[] { "Actions[0]:Result:ExitData" } );
-
-            Newtonsoft.Json.Linq.JObject o = Newtonsoft.Json.Linq.JObject.Parse( elements.ToString() );
+            log.CloseLog();
 
 
-            Plan encrypted = guy.EncryptElements();
-            YamlHelpers.SerializeFile( @"..\..\yaml\ad-test.encr.yaml", encrypted );
-            guy = encrypted.DecryptElements();
+            ////
 
 
-            Dictionary<string, string> p = new Dictionary<string, string>();
-            p.Add( "jsonPayload", "{ GroupName: \"MyNewGroup\", Users: [ \"Guy Michael Waguespack\", \"Steven James Shortt\", \"Kitten Foo\", \"Matthew Paige Damon\" ] }" );
-            p.Add( "prop0", "value0" );
-            p.Add( "prop1", "value1" );
-            p.Add( "prop2", "value2" );
-            p.Add( "prop3", "value3" );
-            p.Add( "prop4", "value4" );
-            guy.Start( p );
-            string rp = guy.ResultPlan.ToYaml();
-            Environment.Exit( 0 );
+            ////Plan guy = Plan.FromYaml( @"..\..\yaml\ad-test.yaml" );
+
+            ////object elements = YamlHelpers.SelectElements( guy,
+            ////    new string[] { "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith",
+            ////        "Actions[0]:Parameters:Values:Arguments:Expressions[2]:ReplaceWith:foo[1]:bar[1]:v3" } );
+
+            ////Plan json = Plan.FromYaml( @"..\..\yaml\training_636282261765752616.yaml" );
+            ////elements = YamlHelpers.SelectElements( json,
+            ////    new string[] { "Result" } );
+            ////elements = YamlHelpers.SelectElements( json,
+            ////    new string[] { "Actions[0]:Result:ExitData" } );
+
+            //////Newtonsoft.Json.Linq.JObject o = Newtonsoft.Json.Linq.JObject.Parse( elements.ToString() );
+
+
+            ////Plan encrypted = guy.EncryptElements();
+            ////YamlHelpers.SerializeFile( @"..\..\yaml\ad-test.encr.yaml", encrypted );
+            ////guy = encrypted.DecryptElements();
+
+
+            ////Dictionary<string, string> p = new Dictionary<string, string>();
+            ////p.Add( "jsonPayload", "{ GroupName: \"MyNewGroup\", Users: [ \"Guy Michael Waguespack\", \"Steven James Shortt\", \"Kitten Foo\", \"Matthew Paige Damon\" ] }" );
+            ////p.Add( "prop0", "value0" );
+            ////p.Add( "prop1", "value1" );
+            ////p.Add( "prop2", "value2" );
+            ////p.Add( "prop3", "value3" );
+            ////p.Add( "prop4", "value4" );
+            ////guy.Start( p );
+            ////string rp = guy.ResultPlan.ToYaml();
+            ////Environment.Exit( 0 );
 
 
 
-            string path = @"..\..\yaml\example.yml";
-            string outpath = @"..\..\yaml\example.out.yml";
-            if( args.Length > 0 )
-            {
-                Dictionary<string, string> parms = new Dictionary<string, string>();
-                parms["app"] = "someApp";
-                parms["type"] = "someType";
+            ////string path = @"..\..\yaml\example.yml";
+            ////string outpath = @"..\..\yaml\example.out.yml";
+            ////if( args.Length > 0 )
+            ////{
+            ////    Dictionary<string, string> parms = new Dictionary<string, string>();
+            ////    parms["app"] = "someApp";
+            ////    parms["type"] = "someType";
 
-                using( StreamReader sr = new StreamReader( path ) )
-                    plan = Plan.FromYaml( sr );
+            ////    using( StreamReader sr = new StreamReader( path ) )
+            ////        plan = Plan.FromYaml( sr );
 
-                plan.Actions[0].ActionGroup = plan.Actions[0].Clone();
-                using( StreamWriter file = new StreamWriter( outpath ) )
-                    plan.ToYaml( file );
+            ////    plan.Actions[0].ActionGroup = plan.Actions[0].Clone();
+            ////    using( StreamWriter file = new StreamWriter( outpath ) )
+            ////        plan.ToYaml( file );
 
-                plan.Progress += plan_Progress;
+            ////    plan.Progress += plan_Progress;
 
-                //PlanScheduler sch = new PlanScheduler( 5 );
-                //sch.StartPlan( "1", false, plan );
+            ////    //PlanScheduler sch = new PlanScheduler( 5 );
+            ////    //sch.StartPlan( "1", false, plan );
 
-                //HandlerResult result = plan.Start( parms, dryRun: false );
-                //Console.WriteLine( result );
-                using( StreamWriter file = new StreamWriter( outpath ) )
-                    plan.ToYaml( file );
-            }
-            else
-            {
-                ActionItem ac2 = ActionItem.CreateSample( "ac2" );
-                ActionItem ac1 = ActionItem.CreateSample( "ac1" );
-                ActionItem ac0 = ActionItem.CreateSample( "ac0" );
-                ac0.Actions = new List<ActionItem>();
-                ac0.Actions.Add( ac1 );
-                List<ActionItem> actions = new List<ActionItem>();
-                actions.Add( ac0 );
-                actions.Add( ac2 );
+            ////    //HandlerResult result = plan.Start( parms, dryRun: false );
+            ////    //Console.WriteLine( result );
+            ////    using( StreamWriter file = new StreamWriter( outpath ) )
+            ////        plan.ToYaml( file );
+            ////}
+            ////else
+            ////{
+            ////    ActionItem ac2 = ActionItem.CreateSample( "ac2" );
+            ////    ActionItem ac1 = ActionItem.CreateSample( "ac1" );
+            ////    ActionItem ac0 = ActionItem.CreateSample( "ac0" );
+            ////    ac0.Actions = new List<ActionItem>();
+            ////    ac0.Actions.Add( ac1 );
+            ////    List<ActionItem> actions = new List<ActionItem>();
+            ////    actions.Add( ac0 );
+            ////    actions.Add( ac2 );
 
-                plan = new Plan()
-                {
-                    Name = "plan0",
-                    Actions = actions,
-                    Description = "planDesc",
-                    IsActive = true
-                };
+            ////    plan = new Plan()
+            ////    {
+            ////        Name = "plan0",
+            ////        Actions = actions,
+            ////        Description = "planDesc",
+            ////        IsActive = true
+            ////    };
 
-                using( StreamWriter file = new StreamWriter( path ) )
-                {
-                    plan.ToYaml( file );
-                }
-            }
-            Console.Read();
+            ////    using( StreamWriter file = new StreamWriter( path ) )
+            ////    {
+            ////        plan.ToYaml( file );
+            ////    }
+            ////}
+            ////Console.Read();
         }
 
         static void plan_Progress(object sender, HandlerProgressCancelEventArgs e)
