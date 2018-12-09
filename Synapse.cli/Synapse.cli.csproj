@@ -6,11 +6,10 @@
     <OutputType>Exe</OutputType>
     <StartupObject />
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.18342.0</FileVersion>
-    <Version>1.0.18342.0</Version>
+    <FileVersion>1.0.18343.0</FileVersion>
+    <Version>1.0.18343.0</Version>
   </PropertyGroup>
 
-    <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
