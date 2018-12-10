@@ -106,7 +106,7 @@ namespace Synapse.Core
             CreateInstance();
 #endif
 
-            AddStartInfoToDynamicData(ref dynamicData);
+            AddStartInfoToDynamicData( ref dynamicData );
 
             ResultPlan = new Plan
             {
@@ -358,7 +358,7 @@ namespace Synapse.Core
 
                     a.Handler.StartInfo.Parameters = safeSerializedValues; //avoids serializing decrypted values to the History Plan (bug #93)
                     a.Result.BranchStatus = a.Result.Status;
-                    a.Result.SecurityContext = Environment.UserName;
+                    a.Result.SecurityContext = $"{Environment.UserDomainName}\\{Environment.UserName}";
 
                     SaveExitDataAs( a );
 
