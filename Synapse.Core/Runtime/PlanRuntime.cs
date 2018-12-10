@@ -128,7 +128,6 @@ namespace Synapse.Core
 
             ResultPlan.Result.Status = ResultPlan.Result.BranchStatus;
             Result = ResultPlan.Result;
-            ResultPlan.Actions = ResultPlan.ActionsBag.ToStandardList();
 
 #if sqlite
             UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
@@ -187,8 +186,7 @@ namespace Synapse.Core
                         ai.Parameters.ForEach = null;
 
                     actionGroup.InstanceId = ActionInstanceIdCounter++;
-                    ActionItem agclone = actionGroup.Clone();
-                    agclone.Result = new ExecuteResult();
+                    ActionItem agclone = actionGroup.Clone();   //Clone embeds EnsureInitialized, which inits Result and ActionsBag
                     parentContext.ActionGroup = agclone;
 
                     Parallel.ForEach( resolvedParmsActionGroup, a =>   // foreach( ActionItem a in resolvedParmsActionGroup )
@@ -198,7 +196,7 @@ namespace Synapse.Core
 #endif
                         a.InstanceId = ActionInstanceIdCounter++;
                         ActionItem clone = a.Clone();
-                        agclone.Actions.Add( clone );
+                        agclone.ActionsBag.Add( clone );
 
                         ExecuteResult r = executeHandlerMethod( parentSecurityContext, a, dynamicData, parentResult.ExitData, dryRun );
                         parentContext.ActionGroup.Result.SetBranchStatusChecked( r );
@@ -218,6 +216,8 @@ namespace Synapse.Core
                             if( clone.Result.Status > queryStatus ) queryStatus = clone.Result.Status;
                         }
                     } );
+
+                    agclone.Actions = agclone.ActionsBag.ToStandardList();
                 }
                 #endregion
                 #region actionGroup-single
@@ -292,6 +292,8 @@ namespace Synapse.Core
                     parentContext.Result.SetBranchStatusChecked( clone.Result );
                 }
             } );
+
+            parentContext.Actions = parentContext.ActionsBag.ToStandardList();
             #endregion
         }
 
