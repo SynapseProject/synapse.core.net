@@ -44,7 +44,7 @@ public class EchoHandlerResult : HandlerStartInfo
         Parameters = hsi.Parameters;
         RunAs = hsi.RunAs;
         Config = config;
-        CurrentPrincipal = Environment.UserName;
+        CurrentPrincipal = $"{Environment.UserDomainName}\\{Environment.UserName}";
     }
 
     public string Config { get; internal set; }
