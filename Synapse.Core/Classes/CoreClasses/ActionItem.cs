@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+
+using Synapse.Core.Utilities;
+
 using YamlDotNet.Serialization;
 
 namespace Synapse.Core
@@ -23,6 +27,9 @@ namespace Synapse.Core
 
             if( Result == null )
                 Result = new ExecuteResult();
+
+            if( _actionsBag == null )
+                _actionsBag = Actions != null ? Actions.ToConcurrentBag() : new ConcurrentBag<ActionItem>();
         }
 
         public string Name { get; set; }
@@ -54,6 +61,21 @@ namespace Synapse.Core
         public List<ActionItem> Actions { get; set; }
         [YamlIgnore]
         public bool HasActions { get { return ActionGroup != null || (Actions != null && Actions.Count > 0); } }
+
+        ConcurrentBag<ActionItem> _actionsBag = null;
+        [YamlIgnore]
+        public ConcurrentBag<ActionItem> ActionsBag
+        {
+            get
+            {
+                if( _actionsBag == null )
+                    _actionsBag = Actions?.ToConcurrentBag();
+
+                return _actionsBag;
+            }
+            set { _actionsBag = value; }
+        }
+
 
         public ExecuteResult Result { get; set; }
         [YamlIgnore]

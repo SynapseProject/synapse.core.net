@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -313,7 +314,7 @@ namespace Synapse.Core.Utilities
         }
 
         internal static void SelectForEachFromValues(List<ForEachItem> parameterSetSources, ref XmlDocument values,
-            Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
+            ConcurrentDictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
             foreach( ForEachItem fe in parameterSetSources )
             {
@@ -338,7 +339,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static XmlDocument GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets, bool isNameParentExitData, object parentExitData)
+        static XmlDocument GetParamSet(string key, ConcurrentDictionary<string, ParameterInfo> globalParamSets, bool isNameParentExitData, object parentExitData)
         {
             XmlDocument p = null;
 
