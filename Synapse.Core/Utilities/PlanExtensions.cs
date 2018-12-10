@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Synapse.Core.Utilities
@@ -15,12 +16,12 @@ namespace Synapse.Core.Utilities
         {
             List<DynamicValue> result = new List<DynamicValue>();
 
-            Stack<List<ActionItem>> actions = new Stack<List<ActionItem>>();
-            actions.Push( plan.Actions );
+            Stack<ConcurrentBag<ActionItem>> actions = new Stack<ConcurrentBag<ActionItem>>();
+            actions.Push( plan.ActionsBag );
 
             while( actions.Count > 0 )
             {
-                List<ActionItem> list = actions.Pop();
+                ConcurrentBag<ActionItem> list = actions.Pop();
 
                 foreach( ActionItem a in list )
                 {
@@ -32,11 +33,24 @@ namespace Synapse.Core.Utilities
                             result.AddRange( a.Parameters.Dynamic );
 
                     if( a.HasActions )
-                        actions.Push( a.Actions );
+                        actions.Push( a.ActionsBag );
                 }
             }
 
             return result;
+        }
+
+        public static ConcurrentBag<ActionItem> ToConcurrentBag(this List<ActionItem> actions)
+        {
+            ConcurrentBag<ActionItem> list = new ConcurrentBag<ActionItem>();
+            foreach( ActionItem actionItem in actions )
+                list.Add( actionItem );
+            return list;
+        }
+
+        public static List<ActionItem> ToStandardList(this ConcurrentBag<ActionItem> actions)
+        {
+            return new List<ActionItem>( actions );
         }
     }
 }

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Synapse.Core
 {
     public partial class ActionItem
     {
         public void ResolveConfigAndParameters(Dictionary<string, string> dynamicData,
-            Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
+            ConcurrentDictionary<string, ParameterInfo> globalConfigSets, ConcurrentDictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
-            List<ActionItem> resolvedActions = null;
+            ConcurrentBag<ActionItem> resolvedActions = null;
             ResolveConfigAndParameters( dynamicData, globalConfigSets, globalParamSets, ref resolvedActions, parentExitData );
         }
 
         public void ResolveConfigAndParameters(Dictionary<string, string> dynamicData,
-            Dictionary<string, ParameterInfo> globalConfigSets, Dictionary<string, ParameterInfo> globalParamSets, ref List<ActionItem> resolvedActions, object parentExitData)
+            ConcurrentDictionary<string, ParameterInfo> globalConfigSets, ConcurrentDictionary<string, ParameterInfo> globalParamSets, ref ConcurrentBag<ActionItem> resolvedActions, object parentExitData)
         {
             if( Handler == null )
                 Handler = new HandlerInfo();

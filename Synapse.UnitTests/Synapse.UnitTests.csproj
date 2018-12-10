@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Core.cs" />
     <Compile Remove="Properties\AssemblyInfo.cs" />
     <Compile Remove="Service.cs" />
   </ItemGroup>

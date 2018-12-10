@@ -1,0 +1,106 @@
+Name: plan0
+Description: test Dynamic->Validation
+Actions:
+- Name: action2
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        {}
+
+  Parameters:
+    Name: ParamSet2
+    Values: {}
+    Dynamic:
+    - Options:
+      - Key: 1000
+        Value: 1000
+      - Key: 2000
+        Value: 2000
+      DataType: String
+      RestrictToOptions: true
+      Description: fails RestrictToOptions = true
+      Source: sleep2
+      Target: SleepMilliseconds
+  Actions: []
+  Result:
+    ExitData: EmptyHandler ExitData default value.
+    SecurityContext: Steve
+  InstanceId: 2
+- Name: action0
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        {}
+
+  Parameters:
+    Name: ParamSet0
+    Values: {}
+    Dynamic:
+    - Options: []
+      DataType: DateTime
+      RestrictToOptions: true
+      Description: fails DataType conversion
+      Source: sleep0
+      Target: SleepMilliseconds
+  Actions: []
+  Result:
+    ExitData: EmptyHandler ExitData default value.
+    SecurityContext: Steve
+- Name: action1
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        {}
+
+  Parameters:
+    Name: ParamSet1
+    Values: {}
+    Dynamic:
+    - Options: []
+      DataType: String
+      Validation: ^([1-9]|[01][0-9][0-9]|200[0-0])$
+      RestrictToOptions: true
+      Description: fails Validation (in range 1 - 2000)
+      Source: sleep1
+      Target: SleepMilliseconds
+  Actions: []
+  Result:
+    ExitData: EmptyHandler ExitData default value.
+    SecurityContext: Steve
+- Name: action3
+  Handler:
+    Type: EmptyHandler, Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    Config: {}
+    StartInfo:
+      Parameters: >+
+        {}
+
+  Parameters:
+    Name: ParamSet3
+    Values: {}
+    Dynamic:
+    - Options:
+      - Key: 1000
+        Value: 1000
+      - Key: 2000
+        Value: 2000
+      DataType: Int32
+      Validation: ^([1-9]|[01][0-9][0-9]|200[0-0])$
+      RestrictToOptions: true
+      Description: passes all conditions - Int32, in range (1 - 2000), is within Options
+      Source: sleep3
+      Target: SleepMilliseconds
+  Actions: []
+  Result:
+    ExitData: EmptyHandler ExitData default value.
+    SecurityContext: Steve
+  InstanceId: 1
+StartInfo: {}
+Result: {}
+LastModified: 12/10/2018 1:22:27 AM

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Synapse.Core
         Dictionary<string, string> _dynamicData = null;
 
         public object Resolve(out List<object> forEachParms, Dictionary<string, string> dynamicData = null, object parentExitData = null,
-            Dictionary<string, ParameterInfo> globalParamSets = null)
+            ConcurrentDictionary<string, ParameterInfo> globalParamSets = null)
         {
             _dynamicData = dynamicData ?? new Dictionary<string, string>( StringComparer.OrdinalIgnoreCase );
             forEachParms = new List<object>();
@@ -49,7 +50,7 @@ namespace Synapse.Core
             return parms;
         }
 
-        XmlDocument ResolveXml(ref List<object> forEachParms, object parentExitData, Dictionary<string, ParameterInfo> globalParamSets)
+        XmlDocument ResolveXml(ref List<object> forEachParms, object parentExitData, ConcurrentDictionary<string, ParameterInfo> globalParamSets)
         {
             string context = "ResolveXml";
             string errData = __nodata;
@@ -161,7 +162,7 @@ namespace Synapse.Core
         }
 
 
-        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms, object parentExitData, Dictionary<string, ParameterInfo> globalParamSets)
+        Dictionary<object, object> ResolveYamlJson(ref List<object> forEachParms, object parentExitData, ConcurrentDictionary<string, ParameterInfo> globalParamSets)
         {
             string context = "ResolveYamlJson";
             string errData = __nodata;

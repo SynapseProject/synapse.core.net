@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -64,8 +65,8 @@ namespace Synapse.Core
         bool _wantsCancel = false;
         bool _wantsPause = false;
 
-        Dictionary<string, ParameterInfo> _configSets = new Dictionary<string, ParameterInfo>();
-        Dictionary<string, ParameterInfo> _paramSets = new Dictionary<string, ParameterInfo>();
+        ConcurrentDictionary<string, ParameterInfo> _configSets = new ConcurrentDictionary<string, ParameterInfo>();
+        ConcurrentDictionary<string, ParameterInfo> _paramSets = new ConcurrentDictionary<string, ParameterInfo>();
 
         #region control methods
         public void Stop() { _wantsCancel = true; }
@@ -121,12 +122,13 @@ namespace Synapse.Core
             };
 
             if( inProc )
-                ProcessRecursive( ResultPlan, RunAs, null, Actions, ResultPlan.Result, dynamicData, dryRun, ExecuteHandlerProcessInProc );
+                ProcessRecursive( ResultPlan, RunAs, null, ActionsBag, ResultPlan.Result, dynamicData, dryRun, ExecuteHandlerProcessInProc );
             else
-                ProcessRecursive( ResultPlan, RunAs, null, Actions, ResultPlan.Result, dynamicData, dryRun, ExecuteHandlerProcessExternal );
+                ProcessRecursive( ResultPlan, RunAs, null, ActionsBag, ResultPlan.Result, dynamicData, dryRun, ExecuteHandlerProcessExternal );
 
             ResultPlan.Result.Status = ResultPlan.Result.BranchStatus;
             Result = ResultPlan.Result;
+            ResultPlan.Actions = ResultPlan.ActionsBag.ToStandardList();
 
 #if sqlite
             UpdateInstanceStatus( Result.Status, Result.Status.ToString() );
@@ -154,7 +156,7 @@ namespace Synapse.Core
         }
 
         void ProcessRecursive(IActionContainer parentContext, SecurityContext parentSecurityContext,
-            ActionItem actionGroup, List<ActionItem> actions, ExecuteResult parentResult,
+            ActionItem actionGroup, ConcurrentBag<ActionItem> actions, ExecuteResult parentResult,
             Dictionary<string, string> dynamicData, bool dryRun,
             Func<SecurityContext, ActionItem, Dictionary<string, string>, object, bool, ExecuteResult> executeHandlerMethod)
         {
@@ -178,7 +180,7 @@ namespace Synapse.Core
                 if( (actionGroup.HasParameters && actionGroup.Parameters.HasForEach) ||
                     (actionGroup.Handler.HasConfig && actionGroup.Handler.Config.HasForEach) )
                 {
-                    List<ActionItem> resolvedParmsActionGroup = new List<ActionItem>();
+                    ConcurrentBag<ActionItem> resolvedParmsActionGroup = new ConcurrentBag<ActionItem>();
                     ResolveConfigAndParameters( actionGroup, dynamicData, ref resolvedParmsActionGroup, parentResult.ExitData );
 
                     foreach( ActionItem ai in resolvedParmsActionGroup )
@@ -209,7 +211,7 @@ namespace Synapse.Core
 
                         if( a.HasActions )
                         {
-                            ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                            ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.ActionsBag, r, dynamicData, dryRun, executeHandlerMethod );
                             parentContext.ActionGroup.Result.SetBranchStatusChecked( clone.Result );
                             parentContext.Result.SetBranchStatusChecked( clone.Result );
 
@@ -240,7 +242,7 @@ namespace Synapse.Core
 
                     if( actionGroup.HasActions )
                     {
-                        ProcessRecursive( clone, actionGroup.RunAs, null, actionGroup.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                        ProcessRecursive( clone, actionGroup.RunAs, null, actionGroup.ActionsBag, r, dynamicData, dryRun, executeHandlerMethod );
                         parentContext.Result.SetBranchStatusChecked( clone.Result );
 
                         if( clone.Result.Status > queryStatus ) queryStatus = clone.Result.Status;
@@ -255,9 +257,9 @@ namespace Synapse.Core
             IEnumerable<ActionItem> actionList =
                 actions.Where( a => (((a.ExecuteCase & queryStatus) == a.ExecuteCase) || (a.ExecuteCase == StatusType.Any)) );
 
-            List<ActionItem> resolvedParmsActions = new List<ActionItem>();
+            ConcurrentBag<ActionItem> resolvedParmsActions = new ConcurrentBag<ActionItem>();
             Parallel.ForEach( actionList, a =>   // foreach( ActionItem a in actionList )
-                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions, parentResult.ExitData )
+                ResolveConfigAndParameters( a, dynamicData, ref resolvedParmsActions, parentResult.ExitData )   //;
             );
 
             Parallel.ForEach( resolvedParmsActions, a =>   // foreach( ActionItem a in resolvedParmsActions )
@@ -267,20 +269,26 @@ namespace Synapse.Core
 #endif
                 a.InstanceId = ActionInstanceIdCounter++;
                 ActionItem clone = a.Clone();
-                parentContext.Actions.Add( clone );
+                parentContext.ActionsBag.Add( clone );
+
+                OnProgress( a.Name, "ProcessRecursive", $"parentContext.ActionsBag: {parentContext.ActionsBag.Count}", StatusType.New, a.InstanceId, 1 );
 
                 ExecuteResult r = a.Result;
                 if( r?.Status != StatusType.Failed )
                     r = executeHandlerMethod( parentSecurityContext, a, dynamicData, parentResult.ExitData, dryRun );
+
+                OnProgress( a.Name, "ProcessRecursive", "executeHandlerMethod returned.", a.Result.Status, a.InstanceId, 3 );
 
                 parentContext.Result.SetBranchStatusChecked( r );
                 clone.Handler.Type = a.Handler.Type;
                 clone.Handler.StartInfo = a.Handler.StartInfo;
                 clone.Result = r;
 
+                OnProgress( a.Name, "ProcessRecursive", "clone.Result set.", clone.Result.Status, a.InstanceId, 4 );
+
                 if( a.HasActions )
                 {
-                    ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.Actions, r, dynamicData, dryRun, executeHandlerMethod );
+                    ProcessRecursive( clone, a.RunAs, a.ActionGroup, a.ActionsBag, r, dynamicData, dryRun, executeHandlerMethod );
                     parentContext.Result.SetBranchStatusChecked( clone.Result );
                 }
             } );
@@ -343,6 +351,8 @@ namespace Synapse.Core
                     #endregion
 
                     a.Result = rt.Execute( startInfo );
+
+                    OnProgress( a.Name, "ExecuteHandlerProcessInProc", "Execute returned.", a.Result.Status, a.InstanceId, 2 );
 
                     a.Handler.StartInfo.Parameters = safeSerializedValues; //avoids serializing decrypted values to the History Plan (bug #93)
                     a.Result.BranchStatus = a.Result.Status;
@@ -628,7 +638,7 @@ namespace Synapse.Core
 
             try
             {
-                List<ActionItem> resolvedActions = null;
+                ConcurrentBag<ActionItem> resolvedActions = null;
                 a.ResolveConfigAndParameters( dynamicData, _configSets, _paramSets, ref resolvedActions, parentExitData );
             }
             catch( Exception ex )
@@ -642,7 +652,7 @@ namespace Synapse.Core
                 throw;
             }
         }
-        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref List<ActionItem> resolvedActions, object parentExitData)
+        void ResolveConfigAndParameters(ActionItem a, Dictionary<string, string> dynamicData, ref ConcurrentBag<ActionItem> resolvedActions, object parentExitData)
         {
             bool cancel = OnProgress( a.Name, "ResolveConfigAndParameters", "Start", StatusType.Initializing, a.InstanceId, -2 );
             if( cancel )

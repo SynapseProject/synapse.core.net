@@ -92,7 +92,7 @@ namespace Synapse.cli
                         {
                             Console.WriteLine( a.Plan );
                             _isSingleTaskModel = true;
-                            result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions[0], a.Args, a.Data, a.DryRun );
+                            result = plan.ExecuteHandlerProcess_SingleAction( plan.Actions.ElementAt( 0 ), a.Args, a.Data, a.DryRun );
                             break;
                         }
                     }

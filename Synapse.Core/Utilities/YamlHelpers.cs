@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -197,7 +198,7 @@ namespace Synapse.Core.Utilities
         }
 
         internal static void SelectForEachFromValues(List<ForEachItem> forEachFromValues, ref Dictionary<object, object> values,
-            Dictionary<string, ParameterInfo> globalParamSets, object parentExitData)
+            ConcurrentDictionary<string, ParameterInfo> globalParamSets, object parentExitData)
         {
             foreach( ForEachItem fe in forEachFromValues )
             {
@@ -237,7 +238,7 @@ namespace Synapse.Core.Utilities
             }
         }
 
-        static Dictionary<object, object> GetParamSet(string key, Dictionary<string, ParameterInfo> globalParamSets, bool isNameParentExitData, object parentExitData)
+        static Dictionary<object, object> GetParamSet(string key, ConcurrentDictionary<string, ParameterInfo> globalParamSets, bool isNameParentExitData, object parentExitData)
         {
             Dictionary<object, object> p = new Dictionary<object, object>();
 
