@@ -352,13 +352,19 @@ namespace Synapse.Core
                     }
                     #endregion
 
-                    a.Result = rt.Execute( startInfo );
+
+                    if( scr != null && scr.UseExecuteProxy )
+                        a.Result = scr.ExecuteProxy( rt.Execute, startInfo );
+                    else
+                        a.Result = rt.Execute( startInfo );
+
 
                     OnProgress( a.Name, "ExecuteHandlerProcessInProc", "Execute returned.", a.Result.Status, a.InstanceId, 2 );
 
                     a.Handler.StartInfo.Parameters = safeSerializedValues; //avoids serializing decrypted values to the History Plan (bug #93)
                     a.Result.BranchStatus = a.Result.Status;
-                    a.Result.SecurityContext = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                    if( string.IsNullOrWhiteSpace( a.Result.SecurityContext ) )
+                        a.Result.SecurityContext = $"{Environment.UserDomainName}\\{Environment.UserName}";
 
                     SaveExitDataAs( a );
 

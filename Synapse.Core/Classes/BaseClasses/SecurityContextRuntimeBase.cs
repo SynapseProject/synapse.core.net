@@ -15,6 +15,12 @@ namespace Synapse.Core
         public abstract ExecuteResult Logon(SecurityContextStartInfo startInfo);
         public abstract void Logoff();
 
+        public virtual bool UseExecuteProxy { get; set; } = false;
+        public virtual ExecuteResult ExecuteProxy(Func<HandlerStartInfo, ExecuteResult> func, HandlerStartInfo handlerStartInfo)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public virtual ISecurityContextRuntime Initialize(string config)
         {

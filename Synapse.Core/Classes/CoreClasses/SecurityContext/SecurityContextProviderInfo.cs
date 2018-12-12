@@ -4,7 +4,7 @@ namespace Synapse.Core
 {
     public class SecurityContextProviderInfo : ComponentInfoBase, ICloneable<SecurityContextProviderInfo>, IRuntimeComponentCreator<ISecurityContextRuntime>
     {
-        public static readonly string DefaultType = "Synapse.Handlers.SecurityContext:Win32Impersonator";
+        public static readonly string DefaultType = "Synapse.Handlers.SecurityContext:Win32IdentityProvider";
 
         //setting the Order causes StartInfo to be serialized after base class properties
         [YamlMember( Order = 100 )]
