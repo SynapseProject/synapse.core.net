@@ -667,8 +667,8 @@ namespace Synapse.UnitTests.MS
 
         [DataTestMethod]
         [TestCategory( "RunAs" )]
-        [DataRow( "RunAs0.yaml" )]
         //[DataRow( "RunAs0x.yaml" )]
+        [DataRow( "RunAs0.yaml" )]
         [DataRow( "RunAs1.yaml" )]
         [DataRow( "RunAs2.yaml" )]
         [DataRow( "RunAs3.yaml" )]

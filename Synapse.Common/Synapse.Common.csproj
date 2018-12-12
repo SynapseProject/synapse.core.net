@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.18344.0</FileVersion>
-    <Version>1.0.18344.0</Version>
+    <FileVersion>1.0.18345.0</FileVersion>
+    <Version>1.0.18345.0</Version>
   </PropertyGroup>
 
     <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Web" />
