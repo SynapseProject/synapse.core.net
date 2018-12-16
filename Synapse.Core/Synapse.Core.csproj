@@ -10,7 +10,8 @@
     <PackageIconUrl>https://raw.githubusercontent.com/SynapseProject/synapseproject.github.io/master/images/synapse_logo_64x64.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/SynapseProject/synapse.core.net</RepositoryUrl>
     <PackageTags>Workflow Execute Process</PackageTags>
-    <PackageReleaseNotes>1.0.18345.0: Upgrade to net461
+    <PackageReleaseNotes>1.0.18350.0: Clean build, all unit tests passing netstandard20 and net461
+1.0.18345.0: Upgrade to net461
 1.0.18344.0: Bug fixes to Plan execution concurrency; added .netstandard2.0 to package
 1.0.18291.0: Updated Yamldotnet to 5.2.1
 1.0.18258.1: Bug fixes for Dynamic parms merge and StartInfo encrypted values (#92, #93, #94), added support for DynamicValue--&amp;gt;DefaultValue (#95) and exposed PlanStartInfo in global vars (#86).</PackageReleaseNotes>
