@@ -5,6 +5,17 @@
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.18350.0</FileVersion>
     <Version>1.0.18350.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Steve Shortt</Authors>
+    <Copyright>Steve Shortt, 2016 - 2019</Copyright>
+    <PackageLicenseUrl>https://github.com/SynapseProject/synapse.core.net/blob/master/license.txt</PackageLicenseUrl>
+    <PackageProjectUrl>http://synapse.readthedocs.io/en/latest/</PackageProjectUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/SynapseProject/synapseproject.github.io/master/images/synapse_logo_64x64.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/SynapseProject/synapse.core.net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Workflow Execute Process</PackageTags>
+    <PackageReleaseNotes>1.0.18350.0: clean build for netstandard20 and net461</PackageReleaseNotes>
+    <Description>Synapse.Common is a utility library, shared among several projects.</Description>
   </PropertyGroup>
 
     <!-- Conditionally obtain references for the .NET Framework 4.5 target -->
