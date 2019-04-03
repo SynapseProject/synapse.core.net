@@ -18,8 +18,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.18350.0</FileVersion>
-    <Version>1.0.18350.0</Version>
+    <FileVersion>1.0.19092.0</FileVersion>
+    <Version>1.0.19092.0</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Synapse.Core.snk</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
@@ -46,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="YamlDotNet.Signed" Version="5.2.1" />
+    <PackageReference Include="YamlDotNet" Version="6.0.0" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
