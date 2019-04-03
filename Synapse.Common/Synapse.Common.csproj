@@ -14,7 +14,8 @@
     <RepositoryUrl>https://github.com/SynapseProject/synapse.core.net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Workflow Execute Process</PackageTags>
-    <PackageReleaseNotes>1.0.18350.0: clean build for netstandard20 and net461</PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.19092.0: Updated Yamldotnet to 6.0.0
+1.0.18350.0: Clean build for netstandard20 and net461</PackageReleaseNotes>
     <Description>Synapse.Common is a utility library, shared among several projects.</Description>
   </PropertyGroup>
 
